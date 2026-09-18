@@ -1,0 +1,13 @@
+{
+ "Guys in the Shed|Thread by Thread: Cases from the Promised Land": {"noSteam": true, "genre": "Detektywistyczna", "note": "Brak strony na Steam/itch w chwili tworzenia apki."},
+ "WelesGamesStudio|Rune Arc": {"appid": 3128940},
+ "WelesGamesStudio|Cook": {"noSteam": true, "note": "Brak publicznej strony. Inne gry studia: Rune Ark, Unemployed, Last Good Festival."},
+ "FastJelloStudio|Arcane Weaver": {"noSteam": true, "itch": "https://fastjellostudio.itch.io/arcane-weaver"},
+ "Armez Games|Gravity Tag": {"noSteam": true, "genre": "Dynamiczna / zręcznościowa", "note": "1. miejsce ZTGK 2025 (game design), finalista Student Games Festival 2025."},
+ "Gleaming Geckos|Nycto": {"noSteam": true, "itch": "https://gleaminggeckos.itch.io/nycto", "note": "Studenci Politechniki Łódzkiej. Wyróżnienia ZTGK 2023, Digital Dragons 2024 (grafika)."},
+ "Gragenos Studio|Mirrorbound": {"noSteam": true, "genre": "Tajemnicza / zagadki"},
+ "Scratched Lizard Studio|The Attic: Fear Of The Dark": {"noSteam": true, "genre": "Horror"},
+ "Piotr Muziński|Cosmobile: Field Echo": {"noSteam": true, "itch": "https://piotr-muzinski.itch.io/cosmobile-field-echo"},
+ "Hello GameJam|TBA": {"noSteam": true, "note": "Projekty z game jamów / studenckie. Tytuł do ustalenia na miejscu."},
+ "Plastic|BFS": {"noSteam": true}
+}

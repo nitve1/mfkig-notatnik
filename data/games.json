@@ -1,0 +1,2166 @@
+[
+ {
+  "id": "threadbythreadcasesfromthepromisedland",
+  "studio": "Guys in the Shed",
+  "title": "Thread by Thread: Cases from the Promised Land",
+  "appid": null,
+  "name": "Thread by Thread: Cases from the Promised Land",
+  "steamUrl": null,
+  "short": "",
+  "shortEn": "",
+  "about": "",
+  "header": null,
+  "capsule": null,
+  "hero": null,
+  "background": null,
+  "screenshots": [],
+  "trailer": null,
+  "developers": [],
+  "publishers": [],
+  "genres": [],
+  "categories": [],
+  "release": null,
+  "platforms": null,
+  "languagesPL": false,
+  "website": null,
+  "devMatch": false,
+  "itchUrl": null,
+  "youtube": null,
+  "genreHint": "Detektywistyczna",
+  "note": "Brak strony na Steam/itch w chwili tworzenia apki.",
+  "candidates": [],
+  "tileImg": null,
+  "heroImg": null
+ },
+ {
+  "id": "rayborne",
+  "studio": "Stoneware Game Studio",
+  "title": "Rayborne",
+  "appid": 4359960,
+  "name": "Rayborne",
+  "steamUrl": "https://store.steampowered.com/app/4359960/",
+  "short": "Rayborne to gra logiczna oparta na laserach, fizyce i symulacji światła w czasie rzeczywistym. Rozwiązuj ręcznie zaprojektowane zagadki, kształtując samo światło, i odkrywaj tajemnicę stojącą za budzącą wątpliwości placówką badawczą AI.",
+  "shortEn": "Rayborne is a puzzle game built around lasers, physics, and real-time light simulation. Solve handcrafted challenges by shaping light itself while uncovering the mystery behind a questionable AI research facility.",
+  "about": "Rayborne\nRayborne to gra logiczna oparta na złożonym i dynamicznym systemie laserów, który łączy fizykę oraz ray tracing w czasie rzeczywistym. Zaginaj, łącz, rozdzielaj i manipuluj wiązkami światła na dziesiątki różnych sposobów, aby rozwiązywać szeroką gamę unikalnych zagadek.\n\nNowy rodzaj zagadek laserowych\nRayborne na nowo interpretuje klasyczne zagadki laserowe, łącząc sprawdzone mechaniki z nowoczesnymi interakcjami opartymi na fizyce. Każda wiązka reaguje na otoczenie, stając się częścią większego, wzajemnie powiązanego systemu. \nGra oferuje wyłącznie ręcznie projektowane poziomy, które nagradzają spostrzegawczość i eksperymentowanie. Każdy etap rozwija wcześniej wprowadzone pomysły, stopniowo pogłębiając mechaniki i wprowadzając nowe interakcje.\n\n \nRay tracing jako element rozgrywki\nRay tracing to nie tylko ulepszenie wizualne — to kluczowy element rozgrywki.\nZachowanie światła jest symulowane w czasie rzeczywistym, co pozwala tworzyć zagadki oparte na dynamicznych odbiciach i logice przestrzennej, wystawiając Twoje myślenie przestrzenne na prawdziwą próbę.\n\nKształtuj światło\nPrzejmij pełną kontrolę nad wiązkami laserów:\n•  Kieruj i prowadź lasery przez złożone, wielopoziomowe przestrzenie\n\n•  Odbijaj wiązki od dynamicznych luster, aby dotrzeć do trudno dostępnych celów\n\n•  Rozdzielaj promienie za pomocą pryzmatów, mieszaj kolory i wykorzystuj elementy otoczenia do tworzenia nowych rozwiązań\n\n•  Światło to nie tylko coś, w co celujesz — to coś, co tworzysz\n\nPlacówka pełna tajemnic\nWejdź do sterylnego kompleksu badawczego, w którym granica między człowiekiem a sztuczną inteligencją niemal całkowicie się zatarła. Wkrótce zorientujesz się, że nie jesteś sam. Niepokojące, chaotyczne rysunki kredą pokrywają nieskazitelne ściany laboratorium, a zza matowego szkła dostrzeżesz milczące sylwetki uważnie obserwujące każdy Twój ruch. Nic tutaj nie jest przypadkowe — a każda rozwiązana zagadka przybliża Cię do odpowiedzi na jedno niepokojące pytanie: kim — lub czym — tak naprawdę jesteś?",
+  "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4359960/122d0cf31e0b586cdd1157e78421c7e8910356d2/header.jpg?t=1789644810",
+  "capsule": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4359960/4c7c9972e250702f146b9364d81e1e1874796266/capsule_184x69.jpg?t=1789644810",
+  "hero": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4359960/d4f1dcd9d403e7164af35945b97de3c9362f2cfc/ss_d4f1dcd9d403e7164af35945b97de3c9362f2cfc.1920x1080.jpg?t=1789644810",
+  "background": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4359960/ffe0fd62161f5a2138e5324d7ed84f3fc614065c/page_bg_raw.jpg?t=1789644810",
+  "screenshots": [
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4359960/d4f1dcd9d403e7164af35945b97de3c9362f2cfc/ss_d4f1dcd9d403e7164af35945b97de3c9362f2cfc.600x338.jpg?t=1789644810",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4359960/d4f1dcd9d403e7164af35945b97de3c9362f2cfc/ss_d4f1dcd9d403e7164af35945b97de3c9362f2cfc.1920x1080.jpg?t=1789644810"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4359960/6ed167a4a4b5438be57e217204af67c224850dd0/ss_6ed167a4a4b5438be57e217204af67c224850dd0.600x338.jpg?t=1789644810",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4359960/6ed167a4a4b5438be57e217204af67c224850dd0/ss_6ed167a4a4b5438be57e217204af67c224850dd0.1920x1080.jpg?t=1789644810"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4359960/150e578d2e3f50d4f2f114f1c210f57cdf51dd4c/ss_150e578d2e3f50d4f2f114f1c210f57cdf51dd4c.600x338.jpg?t=1789644810",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4359960/150e578d2e3f50d4f2f114f1c210f57cdf51dd4c/ss_150e578d2e3f50d4f2f114f1c210f57cdf51dd4c.1920x1080.jpg?t=1789644810"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4359960/c89cfa0096ce37405dd159c10ff432d67357a328/ss_c89cfa0096ce37405dd159c10ff432d67357a328.600x338.jpg?t=1789644810",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4359960/c89cfa0096ce37405dd159c10ff432d67357a328/ss_c89cfa0096ce37405dd159c10ff432d67357a328.1920x1080.jpg?t=1789644810"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4359960/588c813fd72543ce7fd7eee99be8066667fd0fad/ss_588c813fd72543ce7fd7eee99be8066667fd0fad.600x338.jpg?t=1789644810",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4359960/588c813fd72543ce7fd7eee99be8066667fd0fad/ss_588c813fd72543ce7fd7eee99be8066667fd0fad.1920x1080.jpg?t=1789644810"
+   }
+  ],
+  "trailer": {
+   "name": "Rayborne Trailer #1",
+   "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/257271756/03afb5d1c4f2776d5d72affcd2282cf72143978f/movie_600x337.jpg?t=1770399209",
+   "mp4": null,
+   "webm": null,
+   "hls": "https://video.akamai.steamstatic.com/store_trailers/4359960/409571304/4b48537de449e435339325e71d95491e723f2c28/1769235190/hls_264_master.m3u8?t=1770399209",
+   "dash": "https://video.akamai.steamstatic.com/store_trailers/4359960/409571304/4b48537de449e435339325e71d95491e723f2c28/1769235190/dash_h264.mpd?t=1770399209"
+  },
+  "developers": [
+   " Stoneware Game Studio"
+  ],
+  "publishers": [
+   " Stoneware Game Studio"
+  ],
+  "genres": [
+   "Akcja",
+   "Przygodowe",
+   "Rekreacyjne",
+   "Niezależne"
+  ],
+  "categories": [
+   "Jednoosobowa",
+   "Osiągnięcia Steam",
+   "Pełna obsługa kontrolerów",
+   "Dostosowywanie kamery",
+   "Alternatywne opcje kolorystyczne",
+   "Niestandardowa regulacja głośności",
+   "#category_playable_at_your_own_pace",
+   "Grywalne bez działań ograniczonych czasowo",
+   "Zapis w dowolnym momencie",
+   "Dźwięk stereo",
+   "Dźwięk przestrzenny",
+   "Steam Cloud"
+  ],
+  "release": {
+   "soon": true,
+   "date": "2026"
+  },
+  "platforms": {
+   "windows": true,
+   "mac": false,
+   "linux": false
+  },
+  "languagesPL": true,
+  "website": "https://stonewaregamestudio.com/",
+  "devMatch": true,
+  "itchUrl": null,
+  "youtube": null,
+  "genreHint": null,
+  "note": null,
+  "candidates": [
+   "4359960:Rayborne",
+   "4546120:Rayborne Demo"
+  ],
+  "tileImg": "img/games/rayborne-tile.jpg",
+  "heroImg": "img/games/rayborne-hero.jpg"
+ },
+ {
+  "id": "starkheimtournament",
+  "studio": "Project MOX",
+  "title": "Starkheim Tournament",
+  "appid": 1231070,
+  "name": "Starkheim Tournament",
+  "steamUrl": "https://store.steampowered.com/app/1231070/",
+  "short": "Starkheim Tournament to dwuwymiarowa bijatyka osadzona w fantastycznym świecie w stylu pixel-art. Dzięki uproszczonemu, łatwemu do opanowania sterowaniu, gra jest natychmiast przystępna i szybka do opanowania.",
+  "shortEn": "Starkheim Tournament is a 2D fighting game set in a fantasy universe with a pixel-art style. Featuring simplified, easy-to-learn controls, it’s designed to be instantly accessible and quick to master.",
+  "about": "WAŻNE: GRA JEST WE WCZESNEJ FAZIE ALPHA!\nOkazjonalnie mogą występować błędy lub braki w zawartości, lecz rdzeń gry jest w pełni grywalny.\n \nWalcz o przyszłość Starkheimu!\nStarkheim Tournament to bijatyka 2D w uniwersum fantasy, w otoczce pixel-artowej.\nDzięki uproszczonemu i łatwemu do opanowania sterowaniu gra jest natychmiast przystępna i szybka do opanowania.\nPrzyszłość jest pustą kartą\nNiegdyś ludzkość pławiła się w dobrobycie na Południu - do czasu aż ich obsesja na punkcie niebios sprowadziła z nich katastrofalną inwazję. Ocaleni uciekli na Północ do swoich sojuszników Dharati, lecz niedługo później, zdradzając ich, poprzez podbój założyli królestwo Starkheim. \nTeraz, w roku 1462, świat zmierza ku zagładzie. Wojna trwa. Gwiazdy wciąż zsyłają koszmary. Ale z cienia... Niebawem wybudzi się coś jeszcze gorszego.\nBy być wojownikiem nie trzeba wiele\nDzięki uproszczonemu, łatwemu do opanowania sterowaniu, gra jest natychmiast przystępna i szybka do opanowania. Każda postać, mimo wspólnych podstawowych zasad, oferuje unikalny styl gry i własne sztuczki. Niezależnie od tego, czy wolisz miażdżyć przeciwnika czystą siłą, prześcigać go błyskawicznymi ruchami, czy przechytrzyć techniką i strategią – odpowiedni czempion czeka właśnie na Ciebie. \nBądź sobą na arenie\nWalcz jako paladyn szukający odkupienia, królowa piratów, rycerz śmierci, cesarzowa Dharati i wielu innych wojowników. Każda postać oferuje unikalny styl walki, własne mocne i słabe strony, zapewniając unikatowy styl gry",
+  "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1231070/98d0ea1375dfb75d5ed8e6155755d43f735ccaef/header.jpg?t=1778192952",
+  "capsule": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1231070/32301a6fd75c9575b7db5df0fdffe14d31418665/capsule_184x69.jpg?t=1778192952",
+  "hero": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1231070/4422d62604367cf155ef928740ad13409dba3eb9/ss_4422d62604367cf155ef928740ad13409dba3eb9.1920x1080.jpg?t=1778192952",
+  "background": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1231070/page_bg_raw.jpg?t=1778192952",
+  "screenshots": [
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1231070/4422d62604367cf155ef928740ad13409dba3eb9/ss_4422d62604367cf155ef928740ad13409dba3eb9.600x338.jpg?t=1778192952",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1231070/4422d62604367cf155ef928740ad13409dba3eb9/ss_4422d62604367cf155ef928740ad13409dba3eb9.1920x1080.jpg?t=1778192952"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1231070/3b5332097c5d26f03daefb889f953a9578da2d39/ss_3b5332097c5d26f03daefb889f953a9578da2d39.600x338.jpg?t=1778192952",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1231070/3b5332097c5d26f03daefb889f953a9578da2d39/ss_3b5332097c5d26f03daefb889f953a9578da2d39.1920x1080.jpg?t=1778192952"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1231070/652cf4826b0e908db217faa76a4f11768ba43b67/ss_652cf4826b0e908db217faa76a4f11768ba43b67.600x338.jpg?t=1778192952",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1231070/652cf4826b0e908db217faa76a4f11768ba43b67/ss_652cf4826b0e908db217faa76a4f11768ba43b67.1920x1080.jpg?t=1778192952"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1231070/6a972868b1c84defcba937437a702d50f80a04ab/ss_6a972868b1c84defcba937437a702d50f80a04ab.600x338.jpg?t=1778192952",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1231070/6a972868b1c84defcba937437a702d50f80a04ab/ss_6a972868b1c84defcba937437a702d50f80a04ab.1920x1080.jpg?t=1778192952"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1231070/4ee53b44918fa1866ce87c5ae24484c27d05ed02/ss_4ee53b44918fa1866ce87c5ae24484c27d05ed02.600x338.jpg?t=1778192952",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1231070/4ee53b44918fa1866ce87c5ae24484c27d05ed02/ss_4ee53b44918fa1866ce87c5ae24484c27d05ed02.1920x1080.jpg?t=1778192952"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1231070/a5dc3d6d0cd8fa1ed2bc6786ca484f68a18d1ec8/ss_a5dc3d6d0cd8fa1ed2bc6786ca484f68a18d1ec8.600x338.jpg?t=1778192952",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1231070/a5dc3d6d0cd8fa1ed2bc6786ca484f68a18d1ec8/ss_a5dc3d6d0cd8fa1ed2bc6786ca484f68a18d1ec8.1920x1080.jpg?t=1778192952"
+   }
+  ],
+  "trailer": {
+   "name": "STARKHEIM TOURNAMENT Early Access Release",
+   "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/257311904/4a1d1e1e2dfc1a4d8cc41b75dc49dcd1b4571ba7/movie_600x337.jpg?t=1775028751",
+   "mp4": null,
+   "webm": null,
+   "hls": "https://video.akamai.steamstatic.com/store_trailers/1231070/485982076/b73d88e8ce55c613582f40376e5a8a84699fb9ce/1774954290/hls_264_master.m3u8?t=1775028751",
+   "dash": "https://video.akamai.steamstatic.com/store_trailers/1231070/485982076/b73d88e8ce55c613582f40376e5a8a84699fb9ce/1774954290/dash_h264.mpd?t=1775028751"
+  },
+  "developers": [
+   "Project MOX"
+  ],
+  "publishers": [
+   "Project MOX"
+  ],
+  "genres": [
+   "Akcja",
+   "Niezależne",
+   "Wczesny dostęp"
+  ],
+  "categories": [
+   "Jednoosobowa",
+   "Wieloosobowa",
+   "PvP",
+   "PvP na wspólnym/dzielonym ekranie",
+   "Wspólny/dzielony ekran",
+   "Osiągnięcia Steam",
+   "Pełna obsługa kontrolerów",
+   "Niestandardowa regulacja głośności",
+   "Regulowany poziom trudności",
+   "Kontroler zalecany",
+   "Grywalne bez działań ograniczonych czasowo",
+   "Obsługa kontrolerów DUALSHOCK"
+  ],
+  "release": {
+   "soon": false,
+   "date": "24 kwietnia 2026"
+  },
+  "platforms": {
+   "windows": true,
+   "mac": false,
+   "linux": false
+  },
+  "languagesPL": false,
+  "website": null,
+  "devMatch": true,
+  "itchUrl": null,
+  "youtube": null,
+  "genreHint": null,
+  "note": null,
+  "candidates": [
+   "1231070:Starkheim Tournament"
+  ],
+  "tileImg": "img/games/starkheimtournament-tile.jpg",
+  "heroImg": "img/games/starkheimtournament-hero.jpg"
+ },
+ {
+  "id": "runearc",
+  "studio": "WelesGamesStudio",
+  "title": "Rune Arc",
+  "appid": 3128940,
+  "name": "Rune Ark",
+  "steamUrl": "https://store.steampowered.com/app/3128940/",
+  "short": "Mroczny RPG łączący Match-3 i eksplorację lochów. Odkryj sekrety, zawiąż sojusze i zmierz się z potworami. Twoje wybory zdecydują o losie królestwa!",
+  "shortEn": "A dark fantasy RPG where Match-3 combat meets dungeon exploration. As a young squire, uncover ancient secrets, forge alliances, and battle eldritch horrors beneath the castle. Your choices shape the fate of the kingdom—will you rise as a hero or succumb to the darkness?",
+  "about": "Królestwo stoi na skraju zagłady. Echa klęski rozbrzmiewają na ulicach, lecz nikt nie zna prawdy. Pod zamkiem, w dawno zapomnianych głębinach, coś się budzi. Prastara ciemność, uznana za zapieczętowaną na zawsze, powraca — tylko ty możesz odkryć jej tajemnice.\nW Rune Ark strategia i fabuła łączą się w unikalnej mieszance walki Match-3 i mechaniki dungeon crawler RPG. Jako młody giermek próbujesz udowodnić swoją wartość, lecz przypadkowe odkrycie zmienia wszystko — teraz walczysz o przetrwanie i los królestwa. \n\n[p>Każde zejście w otchłań to nowe zagrożenia i zapomniane prawdy. Każda walka to test umiejętności i woli. [b]Łącz kafelki, uwalniaj pradawne moce, odkrywaj tajemnice i toruj sobie drogę przez zmieniające się głębiny[/b]. Losowe lochy kryją nie tylko wrogów, lecz i wybory, które kształtują fabułę, sojusze, konflikty i prowadzą do różnych zakończeń.[/p]Czy odkryjesz prawdę o Rune Ark, zanim ciemność cię pochłonie? Zostaniesz bohaterem czy kolejną zapomnianą duszą?\n\nNajważniejsze cechy\n• Walka Match-3: Rozwiązuj łamigłówki, by atakować, blokować i używać potężnych zdolności.\n\n• RPG z fabułą: Twoje decyzje wpływają na los królestwa i prowadzą do różnych zakończeń.\n\n• Losowo generowane lochy: Za każdym razem nowe wyzwania, przeciwnicy i łupy.\n\n• Rozwój strategiczny: Ulepszaj zdolności, twórz przedmioty i zawieraj sojusze, by przetrwać w podziemiach.\n\n• Interaktywna fabuła: Wpływaj na świat poprzez dialogi i relacje między postaciami.\n\n• Mroczny klimat fantasy: Ręcznie rysowane lokacje i klimatyczna ścieżka dźwiękowa ożywiają tajemnice królestwa.\n\nPrzygotuj się — Rune Ark to więcej niż łamigłówka. Tu liczy się strategia, wytrwałość i wybory kształtujące bohatera.",
+  "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3128940/a1c94fd011b7b30e77a959ab77ac248081427dc4/header.jpg?t=1763485149",
+  "capsule": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3128940/2a26615a61b4375025c0fb1b32a019df4b6c24de/capsule_184x69.jpg?t=1763485149",
+  "hero": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3128940/85334d835dd9bc5c9a76738d8d523b05aa81d8f1/ss_85334d835dd9bc5c9a76738d8d523b05aa81d8f1.1920x1080.jpg?t=1763485149",
+  "background": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3128940/643284e6c070b2bea59db4f513cc0560c0bbc0b4/page_bg_raw.jpg?t=1763485149",
+  "screenshots": [
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3128940/85334d835dd9bc5c9a76738d8d523b05aa81d8f1/ss_85334d835dd9bc5c9a76738d8d523b05aa81d8f1.600x338.jpg?t=1763485149",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3128940/85334d835dd9bc5c9a76738d8d523b05aa81d8f1/ss_85334d835dd9bc5c9a76738d8d523b05aa81d8f1.1920x1080.jpg?t=1763485149"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3128940/f5ca902d7beaf178c25e8d4d4452e4fbd55d3272/ss_f5ca902d7beaf178c25e8d4d4452e4fbd55d3272.600x338.jpg?t=1763485149",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3128940/f5ca902d7beaf178c25e8d4d4452e4fbd55d3272/ss_f5ca902d7beaf178c25e8d4d4452e4fbd55d3272.1920x1080.jpg?t=1763485149"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3128940/001f6ec178844dc136395cd06f88cbe5b08f5246/ss_001f6ec178844dc136395cd06f88cbe5b08f5246.600x338.jpg?t=1763485149",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3128940/001f6ec178844dc136395cd06f88cbe5b08f5246/ss_001f6ec178844dc136395cd06f88cbe5b08f5246.1920x1080.jpg?t=1763485149"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3128940/7d84eec35612d9f2cb153492d2847e57c8190a4c/ss_7d84eec35612d9f2cb153492d2847e57c8190a4c.600x338.jpg?t=1763485149",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3128940/7d84eec35612d9f2cb153492d2847e57c8190a4c/ss_7d84eec35612d9f2cb153492d2847e57c8190a4c.1920x1080.jpg?t=1763485149"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3128940/e64849eca14d02b6d271aaa9fa7a9955008815ce/ss_e64849eca14d02b6d271aaa9fa7a9955008815ce.600x338.jpg?t=1763485149",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3128940/e64849eca14d02b6d271aaa9fa7a9955008815ce/ss_e64849eca14d02b6d271aaa9fa7a9955008815ce.1920x1080.jpg?t=1763485149"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3128940/2f0eec2d6330a449a7880ce28bfa96958afc3075/ss_2f0eec2d6330a449a7880ce28bfa96958afc3075.600x338.jpg?t=1763485149",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3128940/2f0eec2d6330a449a7880ce28bfa96958afc3075/ss_2f0eec2d6330a449a7880ce28bfa96958afc3075.1920x1080.jpg?t=1763485149"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3128940/bdc21d274ed60a58c22f8161e6746676249696ab/ss_bdc21d274ed60a58c22f8161e6746676249696ab.600x338.jpg?t=1763485149",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3128940/bdc21d274ed60a58c22f8161e6746676249696ab/ss_bdc21d274ed60a58c22f8161e6746676249696ab.1920x1080.jpg?t=1763485149"
+   }
+  ],
+  "trailer": {
+   "name": "Launch Trailer",
+   "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/257229867/d7b4b3082005dbd4ed1725608ae04ec0a3cbd6e7/movie_600x337.jpg?t=1763485080",
+   "mp4": null,
+   "webm": null,
+   "hls": "https://video.akamai.steamstatic.com/store_trailers/3128940/999154980/03d65a59d556173c55fb659cbcbde384ee690113/1762920629/hls_264_master.m3u8?t=1763485080",
+   "dash": "https://video.akamai.steamstatic.com/store_trailers/3128940/999154980/03d65a59d556173c55fb659cbcbde384ee690113/1762920629/dash_h264.mpd?t=1763485080"
+  },
+  "developers": [
+   "WelesGames"
+  ],
+  "publishers": [
+   "indie.io"
+  ],
+  "genres": [
+   "Akcja",
+   "Przygodowe",
+   "Rekreacyjne",
+   "Niezależne",
+   "RPG",
+   "Strategie"
+  ],
+  "categories": [
+   "Jednoosobowa",
+   "Udostępnianie gier"
+  ],
+  "release": {
+   "soon": false,
+   "date": "18 listopada 2025"
+  },
+  "platforms": {
+   "windows": true,
+   "mac": false,
+   "linux": false
+  },
+  "languagesPL": true,
+  "website": null,
+  "devMatch": true,
+  "itchUrl": null,
+  "youtube": null,
+  "genreHint": null,
+  "note": null,
+  "candidates": [],
+  "tileImg": "img/games/runearc-tile.jpg",
+  "heroImg": "img/games/runearc-hero.jpg"
+ },
+ {
+  "id": "unemployed",
+  "studio": "WelesGamesStudio",
+  "title": "Unemployed",
+  "appid": 4076660,
+  "name": "Unemployed",
+  "steamUrl": "https://store.steampowered.com/app/4076660/",
+  "short": "You play as an unemployed scavenger from a distant future, scouring a junk-planet to earn enough credits to pay rent, battling rusted machines and harsh environments in a desperate struggle for survival.",
+  "shortEn": "You play as an unemployed scavenger from a distant future, scouring a junk-planet to earn enough credits to pay rent, battling rusted machines and harsh environments in a desperate struggle for survival.",
+  "about": "In Unemployed, you are a down-on-luck wanderer from a distant future where jobs are extinct. With no income and looming debts, you venture to a desolate junk-planet teeming with discarded tech, rusted bots, and hidden dangers. Explore derelict landscapes, salvage materials, craft upgrades, and fight off rogue machines to earn credits and survive the harsh conditions. Every piece of scrap counts as you inch closer to your goal: paying rent and reclaiming some dignity in a world that forgot you.",
+  "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4076660/280d7a0404b8eaade5e28b5380ef38ac196b91fc/header.jpg?t=1759973151",
+  "capsule": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4076660/ff73320a731280ba4a6a99b62bee3f9973c6cee6/capsule_184x69.jpg?t=1759973151",
+  "hero": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4076660/210074c1918b970f4f2bfb28909b6f5750c6bffe/ss_210074c1918b970f4f2bfb28909b6f5750c6bffe.1920x1080.jpg?t=1759973151",
+  "background": "https://store.akamai.steamstatic.com/images/storepagebackground/app/4076660?t=1759973151",
+  "screenshots": [
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4076660/210074c1918b970f4f2bfb28909b6f5750c6bffe/ss_210074c1918b970f4f2bfb28909b6f5750c6bffe.600x338.jpg?t=1759973151",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4076660/210074c1918b970f4f2bfb28909b6f5750c6bffe/ss_210074c1918b970f4f2bfb28909b6f5750c6bffe.1920x1080.jpg?t=1759973151"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4076660/0b815afacfc84f37fc31db2bcd6f7d805b6be5e5/ss_0b815afacfc84f37fc31db2bcd6f7d805b6be5e5.600x338.jpg?t=1759973151",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4076660/0b815afacfc84f37fc31db2bcd6f7d805b6be5e5/ss_0b815afacfc84f37fc31db2bcd6f7d805b6be5e5.1920x1080.jpg?t=1759973151"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4076660/9f9d1b8a1eb5a8febe44bb6cb152bf1df52ca199/ss_9f9d1b8a1eb5a8febe44bb6cb152bf1df52ca199.600x338.jpg?t=1759973151",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4076660/9f9d1b8a1eb5a8febe44bb6cb152bf1df52ca199/ss_9f9d1b8a1eb5a8febe44bb6cb152bf1df52ca199.1920x1080.jpg?t=1759973151"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4076660/5147b4b976f55cf9c823e4738f74de966333e1d8/ss_5147b4b976f55cf9c823e4738f74de966333e1d8.600x338.jpg?t=1759973151",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4076660/5147b4b976f55cf9c823e4738f74de966333e1d8/ss_5147b4b976f55cf9c823e4738f74de966333e1d8.1920x1080.jpg?t=1759973151"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4076660/6e1676c00a535010c2aed9b54b174ee30db8826f/ss_6e1676c00a535010c2aed9b54b174ee30db8826f.600x338.jpg?t=1759973151",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4076660/6e1676c00a535010c2aed9b54b174ee30db8826f/ss_6e1676c00a535010c2aed9b54b174ee30db8826f.1920x1080.jpg?t=1759973151"
+   }
+  ],
+  "trailer": null,
+  "developers": [
+   " WelesGames"
+  ],
+  "publishers": [
+   " WelesGames"
+  ],
+  "genres": [
+   "Akcja"
+  ],
+  "categories": [
+   "Jednoosobowa",
+   "Udostępnianie gier"
+  ],
+  "release": {
+   "soon": true,
+   "date": "Wkrótce dostępne"
+  },
+  "platforms": {
+   "windows": true,
+   "mac": false,
+   "linux": false
+  },
+  "languagesPL": true,
+  "website": null,
+  "devMatch": true,
+  "itchUrl": null,
+  "youtube": null,
+  "genreHint": null,
+  "note": null,
+  "candidates": [
+   "4945580:Unemployed Nightmare Together",
+   "4076660:Unemployed",
+   "2353320:N+1：New life for unemployed youth！"
+  ],
+  "tileImg": "img/games/unemployed-tile.jpg",
+  "heroImg": "img/games/unemployed-hero.jpg"
+ },
+ {
+  "id": "lastgoodfestival",
+  "studio": "WelesGamesStudio",
+  "title": "Last Good Festival",
+  "appid": 4076670,
+  "name": "Last Good Festival",
+  "steamUrl": "https://store.steampowered.com/app/4076670/",
+  "short": "A psychological horror visual novel with rhythm-based mini-games. Play as a student at a special school, organize its final festival, build relationships with three classmates, and make choices leading to multiple endings—all while uncovering what lies behind the students’ conditions.",
+  "shortEn": "A psychological horror visual novel with rhythm-based mini-games. Play as a student at a special school, organize its final festival, build relationships with three classmates, and make choices leading to multiple endings—all while uncovering what lies behind the students’ conditions.",
+  "about": "ABOUT THIS GAME\nYou are John, a student at a special school for young people struggling with mental health conditions and other serious difficulties.\nAfter falling asleep during a school meeting, you wake up to discover that you have been chosen as the main organizer of the school’s final festival. Together with three classmates, you must prepare the paperwork, decorations, music and dances needed to make the event happen.\nAt first, it appears to be an ordinary story about students working together.\nBut John suffers from hallucinations, panic attacks and gaps in his memory. Familiar places can change without warning, voices speak to him when nobody else is around, and the people closest to him may know more than they are willing to admit.\nThe students’ diagnoses may explain their behavior—but they do not explain everything happening inside the school.\nORGANIZE THE FINAL FESTIVAL\nTake responsibility for the school’s final celebration. Help plan the event, choose its decorations, prepare the music and participate in dance rehearsals.\nThe festival gives John a reason to spend time with the other students, but every preparation brings him closer to the secrets hidden beneath the school’s seemingly ordinary life.\nMEET THREE CENTRAL CHARACTERS\nBeatrice is intelligent, organized and emotionally distant. A past misunderstanding has damaged her relationship with John. Earning back her trust will not be easy, but her help may be essential to organizing the festival.\nEmma is cheerful, energetic and passionate about music and dance. Her enthusiasm can be overwhelming, but she refuses to let her physical limitations prevent her from enjoying life.\nRose is a withdrawn gothic artist who prefers to remain inside her own world. Her unsettling imagination makes her perfect for designing the festival decorations—but understanding her may reveal something John was never supposed to see.\nYour conversations and decisions will shape John’s relationships with all three characters.\nTEST YOUR SENSE OF RHYTHM\nThe story is accompanied by rhythm-based mini-games connected to music, dancing and preparations for the festival.\nFollow the beat, match the required actions and complete musical sequences. Your performance may influence how individual scenes unfold.\nQUESTION YOUR PERCEPTION\nJohn’s condition affects the way he experiences the world. During the story, you will encounter distorted locations, unsettling visions and events that may never have happened.\nDecide whether John should take his medication or resist it. Some visions may be symptoms of his illness. Others may show him something real.\nMAKE YOUR OWN DECISIONS\nChoose how John responds to other students, whom he trusts and how he handles his worsening condition.\nYour decisions affect relationships, reveal different parts of the story and lead to multiple endings. A single playthrough will not uncover the entire truth.\nKEY FEATURES\n• A psychological horror visual novel set inside a special school\n• Three central characters with their own stories and secrets\n• Rhythm-based mini-games connected to music and dancing\n• Dialogue choices that affect relationships and story events\n• Distorted environments, hallucinations and unreliable memories\n• Multiple narrative paths and endings\n• A mystery hidden beneath the students’ apparent conditions\nCONTENT WARNING\nThis game contains depictions of mental illness, panic attacks, hallucinations, depression, traumatic experiences, violence, self-harm and disturbing imagery. Some scenes may be unsuitable for sensitive players.",
+  "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4076670/3e59b3893741485cb02f58ea640bac565796deab/header.jpg?t=1788740768",
+  "capsule": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4076670/d2187f6e5921ac35c166eda59aa579747cccd726/capsule_184x69.jpg?t=1788740768",
+  "hero": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4076670/a85225ec9bc1d7ad025e13a673351e3670b0cb78/ss_a85225ec9bc1d7ad025e13a673351e3670b0cb78.1920x1080.jpg?t=1788740768",
+  "background": "https://store.akamai.steamstatic.com/images/storepagebackground/app/4076670?t=1788740768",
+  "screenshots": [
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4076670/a85225ec9bc1d7ad025e13a673351e3670b0cb78/ss_a85225ec9bc1d7ad025e13a673351e3670b0cb78.600x338.jpg?t=1788740768",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4076670/a85225ec9bc1d7ad025e13a673351e3670b0cb78/ss_a85225ec9bc1d7ad025e13a673351e3670b0cb78.1920x1080.jpg?t=1788740768"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4076670/9eefefc730f5498c09f6289f8b044131cd4d2b78/ss_9eefefc730f5498c09f6289f8b044131cd4d2b78.600x338.jpg?t=1788740768",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4076670/9eefefc730f5498c09f6289f8b044131cd4d2b78/ss_9eefefc730f5498c09f6289f8b044131cd4d2b78.1920x1080.jpg?t=1788740768"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4076670/ca9f228a005efb6c3213b3137acf3527706025c7/ss_ca9f228a005efb6c3213b3137acf3527706025c7.600x338.jpg?t=1788740768",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4076670/ca9f228a005efb6c3213b3137acf3527706025c7/ss_ca9f228a005efb6c3213b3137acf3527706025c7.1920x1080.jpg?t=1788740768"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4076670/6726579dc25d1329d31afc396a689b96f04f9796/ss_6726579dc25d1329d31afc396a689b96f04f9796.600x338.jpg?t=1788740768",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4076670/6726579dc25d1329d31afc396a689b96f04f9796/ss_6726579dc25d1329d31afc396a689b96f04f9796.1920x1080.jpg?t=1788740768"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4076670/0cfd04cfddd74aa083d1bf7ce75b33a1a56e36aa/ss_0cfd04cfddd74aa083d1bf7ce75b33a1a56e36aa.600x338.jpg?t=1788740768",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4076670/0cfd04cfddd74aa083d1bf7ce75b33a1a56e36aa/ss_0cfd04cfddd74aa083d1bf7ce75b33a1a56e36aa.1920x1080.jpg?t=1788740768"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4076670/e9adaf71b83b17f9522f045d77e9915b089206b3/ss_e9adaf71b83b17f9522f045d77e9915b089206b3.600x338.jpg?t=1788740768",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4076670/e9adaf71b83b17f9522f045d77e9915b089206b3/ss_e9adaf71b83b17f9522f045d77e9915b089206b3.1920x1080.jpg?t=1788740768"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4076670/d690bd97d15f954098137218129dece3f78a5a25/ss_d690bd97d15f954098137218129dece3f78a5a25.600x338.jpg?t=1788740768",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4076670/d690bd97d15f954098137218129dece3f78a5a25/ss_d690bd97d15f954098137218129dece3f78a5a25.1920x1080.jpg?t=1788740768"
+   }
+  ],
+  "trailer": null,
+  "developers": [
+   " WelesGames"
+  ],
+  "publishers": [
+   " WelesGames"
+  ],
+  "genres": [
+   "Akcja",
+   "Przygodowe",
+   "Niezależne",
+   "Symulacje"
+  ],
+  "categories": [
+   "Jednoosobowa",
+   "Udostępnianie gier"
+  ],
+  "release": {
+   "soon": true,
+   "date": "Wkrótce dostępne"
+  },
+  "platforms": {
+   "windows": true,
+   "mac": false,
+   "linux": false
+  },
+  "languagesPL": true,
+  "website": null,
+  "devMatch": true,
+  "itchUrl": null,
+  "youtube": null,
+  "genreHint": null,
+  "note": null,
+  "candidates": [
+   "4076670:Last Good Festival"
+  ],
+  "tileImg": "img/games/lastgoodfestival-tile.jpg",
+  "heroImg": "img/games/lastgoodfestival-hero.jpg"
+ },
+ {
+  "id": "cook",
+  "studio": "WelesGamesStudio",
+  "title": "Cook",
+  "appid": null,
+  "name": "Cook",
+  "steamUrl": null,
+  "short": "",
+  "shortEn": "",
+  "about": "",
+  "header": null,
+  "capsule": null,
+  "hero": null,
+  "background": null,
+  "screenshots": [],
+  "trailer": null,
+  "developers": [],
+  "publishers": [],
+  "genres": [],
+  "categories": [],
+  "release": null,
+  "platforms": null,
+  "languagesPL": false,
+  "website": null,
+  "devMatch": false,
+  "itchUrl": null,
+  "youtube": null,
+  "genreHint": null,
+  "note": "Brak publicznej strony. Inne gry studia: Rune Ark, Unemployed, Last Good Festival.",
+  "candidates": [],
+  "tileImg": null,
+  "heroImg": null
+ },
+ {
+  "id": "grobnopolislastdays",
+  "studio": "BananaDev",
+  "title": "Grobnopolis: Last Days",
+  "appid": 3851090,
+  "name": "Grobnopolis | Last Days",
+  "steamUrl": "https://store.steampowered.com/app/3851090/",
+  "short": "Grobnopolis to powolny, klimatyczny horror, w którym ciekawość jest zarówno przewodnikiem, jak i przekleństwem. Słońce przepadło, a kopalnie krwawią. Przemierzaj dogorywającą Hutę-Grobno i przetrwaj ostatnie dni w rozkładającym się pod chmurami świecie.",
+  "shortEn": "Grobnopolis is a slow, oppressive atmospheric horror experience where curiosity is both compass and curse. The sun is gone. The mines are bleeding. Walk the dying city of Huta-Grobno, tune into forbidden broadcasts and survive the last days of a world rotting under the clouds.",
+  "about": "Słońce nigdy nie powróciło\nHuta-Grobno, 1983 rok. Niebo od miesięcy jest szczelnie spowite chmurami, a nieprzerwana ich warstwa dławi miasto duszącym, szarym objęciem. Nie ma nadziei, jest tylko powolny i nieunikniony ciężar oraz wstrzymany oddech czegoś olbrzymiego.\n\nTwoim obowiązkiem jest dbanie o budynek\nWcielasz się w rolę inżyniera elektryka, dozorcy bloku, odnajdującego kruchą pociechę w doglądaniu budynku, podczas gdy miasto pogrąża się w panice. Układasz w całość wydarzenia dzięki gazetom, niełatwym rozmowom i radiu własnej roboty odbierającemu prywatną częstotliwość Kościoła.\n\nCoś opanowuje ulice miasta\nZ żył starych kopalni wycieka gęsta, krwistoczerwona ciecz zwana potajemnie przez miejscowych jako „zupa”. Podtapia fundamenty, paskudzi klatki schodowe i gromadzi się w miejscach, w których nie powinno być płynów. Niektórych rzeczy nie należy wydobywać na powierzchnię – powinny zostać pod ziemią.\n\nKościół ma własne plany\nMiasto popada w ruinę, a lokalna parafia zaciska na wszystkim skryty chwyt. Klerycy spisują każdą anomalię z niesamowitą skrupulatnością. Dokonują nocnych najazdów, nie składając żadnych wyjaśnień. W Hucie-Grobno robią, co im się podoba.",
+  "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3851090/8c2dd7a7302c12a8c0f8f5a5f62c4e0425701366/header.jpg?t=1784227062",
+  "capsule": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3851090/01378677e1bbfc8ab47ebb1e84ad2feb40dea625/capsule_184x69.jpg?t=1784227062",
+  "hero": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3851090/3446ffaee1d2d912b650c331acc3847f616ddaef/ss_3446ffaee1d2d912b650c331acc3847f616ddaef.1920x1080.jpg?t=1784227062",
+  "background": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3851090/ad3838926ed1508c4ddac8502c68bcb4069102bd/page_bg_raw.jpg?t=1784227062",
+  "screenshots": [
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3851090/3446ffaee1d2d912b650c331acc3847f616ddaef/ss_3446ffaee1d2d912b650c331acc3847f616ddaef.600x338.jpg?t=1784227062",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3851090/3446ffaee1d2d912b650c331acc3847f616ddaef/ss_3446ffaee1d2d912b650c331acc3847f616ddaef.1920x1080.jpg?t=1784227062"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3851090/6e14b7d67c67d2d6f5c432617f1b2982a40d9a90/ss_6e14b7d67c67d2d6f5c432617f1b2982a40d9a90.600x338.jpg?t=1784227062",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3851090/6e14b7d67c67d2d6f5c432617f1b2982a40d9a90/ss_6e14b7d67c67d2d6f5c432617f1b2982a40d9a90.1920x1080.jpg?t=1784227062"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3851090/e7568568acde36f92ba99c7c2ee6fc9c86df13af/ss_e7568568acde36f92ba99c7c2ee6fc9c86df13af.600x338.jpg?t=1784227062",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3851090/e7568568acde36f92ba99c7c2ee6fc9c86df13af/ss_e7568568acde36f92ba99c7c2ee6fc9c86df13af.1920x1080.jpg?t=1784227062"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3851090/c3f34260ff25dcbaffa0bc444f7da4f793bc9666/ss_c3f34260ff25dcbaffa0bc444f7da4f793bc9666.600x338.jpg?t=1784227062",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3851090/c3f34260ff25dcbaffa0bc444f7da4f793bc9666/ss_c3f34260ff25dcbaffa0bc444f7da4f793bc9666.1920x1080.jpg?t=1784227062"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3851090/657c87e4e04020c5051b194a04f64bcdcbd2093d/ss_657c87e4e04020c5051b194a04f64bcdcbd2093d.600x338.jpg?t=1784227062",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3851090/657c87e4e04020c5051b194a04f64bcdcbd2093d/ss_657c87e4e04020c5051b194a04f64bcdcbd2093d.1920x1080.jpg?t=1784227062"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3851090/16cf0967e34696168bba56a6b0b9d767e17dbdf5/ss_16cf0967e34696168bba56a6b0b9d767e17dbdf5.600x338.jpg?t=1784227062",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3851090/16cf0967e34696168bba56a6b0b9d767e17dbdf5/ss_16cf0967e34696168bba56a6b0b9d767e17dbdf5.1920x1080.jpg?t=1784227062"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3851090/46550873eeb5d3c01a62d71cc8958b4fb89e8113/ss_46550873eeb5d3c01a62d71cc8958b4fb89e8113.600x338.jpg?t=1784227062",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3851090/46550873eeb5d3c01a62d71cc8958b4fb89e8113/ss_46550873eeb5d3c01a62d71cc8958b4fb89e8113.1920x1080.jpg?t=1784227062"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3851090/83cb0aeb0b9c1eec82581505c2f4b365da37c05a/ss_83cb0aeb0b9c1eec82581505c2f4b365da37c05a.600x338.jpg?t=1784227062",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3851090/83cb0aeb0b9c1eec82581505c2f4b365da37c05a/ss_83cb0aeb0b9c1eec82581505c2f4b365da37c05a.1920x1080.jpg?t=1784227062"
+   }
+  ],
+  "trailer": {
+   "name": "Grobnopolis_Convergence_Showcase",
+   "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/257377637/464b3abb6513f29c22a2d1a60bde6c01b7490c8d/movie_600x337.jpg?t=1784226822",
+   "mp4": null,
+   "webm": null,
+   "hls": "https://video.akamai.steamstatic.com/store_trailers/3851090/1542835983/87e4fe13b394e363ac1b3deb7a456da8edd03209/1784130765/hls_264_master.m3u8?t=1784226822",
+   "dash": "https://video.akamai.steamstatic.com/store_trailers/3851090/1542835983/87e4fe13b394e363ac1b3deb7a456da8edd03209/1784130765/dash_h264.mpd?t=1784226822"
+  },
+  "developers": [
+   "BananaDevJeff"
+  ],
+  "publishers": [
+   "CRITICAL REFLEX"
+  ],
+  "genres": [
+   "Niezależne"
+  ],
+  "categories": [
+   "Jednoosobowa",
+   "Udostępnianie gier"
+  ],
+  "release": {
+   "soon": true,
+   "date": "Nie ogłoszono"
+  },
+  "platforms": {
+   "windows": true,
+   "mac": false,
+   "linux": false
+  },
+  "languagesPL": true,
+  "website": null,
+  "devMatch": true,
+  "itchUrl": null,
+  "youtube": null,
+  "genreHint": null,
+  "note": null,
+  "candidates": [
+   "3851090:Grobnopolis | Last Days"
+  ],
+  "tileImg": "img/games/grobnopolislastdays-tile.jpg",
+  "heroImg": "img/games/grobnopolislastdays-hero.jpg"
+ },
+ {
+  "id": "deathpong",
+  "studio": "Circle of Rats",
+  "title": "Death Pong",
+  "appid": 4132010,
+  "name": "Death Pong",
+  "steamUrl": "https://store.steampowered.com/app/4132010/",
+  "short": "Wchodzisz do miejsca, w którym nikt nie gra dla zabawy. Obroża na szyi zaciska się, słychać szepty publiczności, a każdy rzut może zakończyć się wygraną… lub karą. Tutaj nie ma remisów — są zwycięzcy i trupy.",
+  "shortEn": "Death Pong is a brutal beer pong roguelite. Utilize trick throws, toss special balls, and drink game-changing shots to defeat your opponents in high-stakes beer pong matches.",
+  "about": "Brutalny beer pong, w którym przegrany jest rażony prądem.\nZręcznościowa gra z napięciem, pijackimi wspomagaczami i nielegalnymi pojedynkami w podziemnym barze.\nWchodzisz do miejsca, w którym nikt nie gra dla zabawy.\nObroża na szyi zaciska się, słychać szepty publiczności, a każdy rzut może zakończyć się wygraną… lub karą.\nTutaj nie ma remisów - są zwycięzcy i trupy.\n\nOpanuj różne typy rzutów - bezpośrednio do kubeczka lub odbijając. \nIm bardziej ryzykujesz, tym zgarniesz więcej kasy.\nOdblokowuj nowe drinki i rozwijaj swój styl gry, aby zdobyć przewagę nad przeciwnikami.\n\nKażdy mecz to 3 rundy.\nW każdej z nich albo ty, albo przeciwnik zostaje porażony prądem.\nMasz trzy szanse aby wygrać... albo umierasz.\nZmierz się z bossami, którzy mają własne zasady oraz unikalne zagrywki.\n\nMiędzy rundami Gustav poda specjalne drinki, które mogą:\n• pomnożyć twoje zyski,\n\n• sabotować przeciwnika,\n\n• albo odwrócić losy meczu do góry nogami i wiele więcej...\n\nOdblokowuj elementy kosmetyczne i wyróżnij się wśród bywalców podziemnego baru.\n\nTo miejsce skrywa znacznie więcej.\nPytanie brzmi: jak głęboko chcesz zejść?",
+  "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4132010/8e84821231169844efb7639f9847a2d0916c383c/header.jpg?t=1788460642",
+  "capsule": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4132010/072d295b9d946748dfad647fb36042fc67ada2fa/capsule_184x69.jpg?t=1788460642",
+  "hero": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4132010/9bc0285de35182c213bcb2e0bfcacad063de8945/ss_9bc0285de35182c213bcb2e0bfcacad063de8945.1920x1080.jpg?t=1788460642",
+  "background": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4132010/c8fe25c9306b774376a7f336b0a7ca081e547bba/page_bg_raw.jpg?t=1788460642",
+  "screenshots": [
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4132010/9bc0285de35182c213bcb2e0bfcacad063de8945/ss_9bc0285de35182c213bcb2e0bfcacad063de8945.600x338.jpg?t=1788460642",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4132010/9bc0285de35182c213bcb2e0bfcacad063de8945/ss_9bc0285de35182c213bcb2e0bfcacad063de8945.1920x1080.jpg?t=1788460642"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4132010/a1aa6958a1f03ff2f50ca89a472f2c72f6fae6e9/ss_a1aa6958a1f03ff2f50ca89a472f2c72f6fae6e9.600x338.jpg?t=1788460642",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4132010/a1aa6958a1f03ff2f50ca89a472f2c72f6fae6e9/ss_a1aa6958a1f03ff2f50ca89a472f2c72f6fae6e9.1920x1080.jpg?t=1788460642"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4132010/a3ddecb1bc374baa0349831fd61b7cc5f8cbe707/ss_a3ddecb1bc374baa0349831fd61b7cc5f8cbe707.600x338.jpg?t=1788460642",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4132010/a3ddecb1bc374baa0349831fd61b7cc5f8cbe707/ss_a3ddecb1bc374baa0349831fd61b7cc5f8cbe707.1920x1080.jpg?t=1788460642"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4132010/fe44a7472fb09a938319ea75772e8904287d06b1/ss_fe44a7472fb09a938319ea75772e8904287d06b1.600x338.jpg?t=1788460642",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4132010/fe44a7472fb09a938319ea75772e8904287d06b1/ss_fe44a7472fb09a938319ea75772e8904287d06b1.1920x1080.jpg?t=1788460642"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4132010/4ede4ef1d24e7e0d297500a4fab66346724af4c3/ss_4ede4ef1d24e7e0d297500a4fab66346724af4c3.600x338.jpg?t=1788460642",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4132010/4ede4ef1d24e7e0d297500a4fab66346724af4c3/ss_4ede4ef1d24e7e0d297500a4fab66346724af4c3.1920x1080.jpg?t=1788460642"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4132010/06928cc1c5c704d31ffa396788b3211c84125775/ss_06928cc1c5c704d31ffa396788b3211c84125775.600x338.jpg?t=1788460642",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4132010/06928cc1c5c704d31ffa396788b3211c84125775/ss_06928cc1c5c704d31ffa396788b3211c84125775.1920x1080.jpg?t=1788460642"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4132010/41857872e3f9123fc0afacab401d2a57f5d52617/ss_41857872e3f9123fc0afacab401d2a57f5d52617.600x338.jpg?t=1788460642",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4132010/41857872e3f9123fc0afacab401d2a57f5d52617/ss_41857872e3f9123fc0afacab401d2a57f5d52617.1920x1080.jpg?t=1788460642"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4132010/8bdc1ff9a47415f19502e637db076d71c9796cbb/ss_8bdc1ff9a47415f19502e637db076d71c9796cbb.600x338.jpg?t=1788460642",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4132010/8bdc1ff9a47415f19502e637db076d71c9796cbb/ss_8bdc1ff9a47415f19502e637db076d71c9796cbb.1920x1080.jpg?t=1788460642"
+   }
+  ],
+  "trailer": {
+   "name": "Event trailer",
+   "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/257346890/e717f3c2b278da9952082a2c327a3388f9c6249f/movie_600x337.jpg?t=1780217369",
+   "mp4": null,
+   "webm": null,
+   "hls": "https://video.akamai.steamstatic.com/store_trailers/4132010/538858283/54f2704da4cc09c0c2ae0ef5f33de2a4dbb71894/1780217049/hls_264_master.m3u8?t=1780217369",
+   "dash": "https://video.akamai.steamstatic.com/store_trailers/4132010/538858283/54f2704da4cc09c0c2ae0ef5f33de2a4dbb71894/1780217049/dash_h264.mpd?t=1780217369"
+  },
+  "developers": [
+   "Circle of Rats"
+  ],
+  "publishers": [
+   "Circle of Rats"
+  ],
+  "genres": [
+   "Akcja",
+   "Niezależne",
+   "Symulacje"
+  ],
+  "categories": [
+   "Jednoosobowa",
+   "Wieloosobowa",
+   "PvP",
+   "PvP przez internet",
+   "PvP na wspólnym/dzielonym ekranie",
+   "Wspólny/dzielony ekran",
+   "Osiągnięcia Steam",
+   "Niestandardowa regulacja głośności",
+   "Dźwięk stereo",
+   "Rankingi Steam",
+   "Udostępnianie gier"
+  ],
+  "release": {
+   "soon": true,
+   "date": "2026"
+  },
+  "platforms": {
+   "windows": true,
+   "mac": false,
+   "linux": true
+  },
+  "languagesPL": false,
+  "website": null,
+  "devMatch": true,
+  "itchUrl": null,
+  "youtube": null,
+  "genreHint": null,
+  "note": null,
+  "candidates": [
+   "4132010:Death Pong",
+   "4317920:Death Pong Demo"
+  ],
+  "tileImg": "img/games/deathpong-tile.jpg",
+  "heroImg": "img/games/deathpong-hero.jpg"
+ },
+ {
+  "id": "goblinfall",
+  "studio": "SoK",
+  "title": "Goblinfall",
+  "appid": 4998480,
+  "name": "Goblinfall: Defend Da Fort",
+  "steamUrl": "https://store.steampowered.com/app/4998480/",
+  "short": "Goblinfall: Defend Da Fort to chaotyczna gra kooperacyjna od 1 do 4 graczy. Połącz siły, by obronić gobliński fort przed nieskończonymi inwazjami Świń! Zarządzaj amunicją, gaś pożary, ulepszaj sprzęt Kryształami i spróbuj nie panikować!",
+  "shortEn": "Goblinfall: Defend Da Fort is a chaotic 1-4 player co-op defense game. Team up to protect the goblin fort from endless pig invasions! Manage ammo, extinguish fires, swap crystal upgrades, and survive the panic in a fantasy world!",
+  "about": "Powstrzymaj Snoutshire przed zniewoleniem Goblinów!\nGoblinfall: Defend Da Fort to chaotyczna gra kooperacyjna od 1 do 4 graczy, gdzie współpraca to jedyna szansa na przetrwanie ataków bojowych Świń!\n\nWspółpracuj lub zgiń\nKomunikacja i koordynacja to podstawa! Ty i Twoi przyjaciele musicie biegać po forcie jak szaleni, by go obronić. Ładujcie wieżyczki, aktywujcie tarczę i używajcie Kryształów do ulepszania sprzętu. Jeśli sytuacja wymknie się spod kontroli, a na pewno się wymknie, musicie rzucić wszystko, aby dostosować się do sytuacji!\n\n  \nGobliny to nie herosi\n\nNie jesteście nieśmiertelni. Wrogowie mają przewagę liczebną, a Wy desperacko chcecie tylko obronić swój dom.\nKażdy Goblin daje coś od siebie.\nGizmo: Ten od wszystkiego. Dobry po trochu w każdej kwestii. Niezły dla tych, którzy lubią biegać i robić wiele rzeczy naraz.\nSwizzle: Najszybszy w ekipie z przydatnym podwójnym skokiem, ale jego prędkość strzału jest (ironicznie) najwolniejsza.\nHoovee: Gość od ciężkiej broni. Jest naprawdę wolny, ale strzela rozpryskiem pocisków. Niestety nie ma Kanapki.\nEnji: Najlepszy w zarządzaniu amunicją! Dość żwawy na drabinach, ale nieco wolniej chodzi i strzela.\nCo Was czeka?\nChaos od 1 do 4 graczy: Pracujcie razem, aby przetrwać ataki!\nDynamiczna Rozgrywka: Żongluj amunicją, czasami odnowienia i sprzętem w forcie!\nOdpal Goblato: Uratuj sytuację za pomocą wieżyczki ostatecznej!\nNieskończone Inwazje Świń: Przetrwaj jak najwięcej fal, a przy okazji spróbuj pobić swój rekord!\n\nNa co czekasz? Brońże fortu!",
+  "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4998480/780919b3fc2c7f1904ff77124f034ff9ea851e29/header.jpg?t=1788546274",
+  "capsule": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4998480/e0c04db04d4df968544cc7bd46c8af79fc8560a5/capsule_184x69.jpg?t=1788546274",
+  "hero": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4998480/f488b1756cf2f9727b6b529365604f6b9f3ca820/ss_f488b1756cf2f9727b6b529365604f6b9f3ca820.1920x1080.jpg?t=1788546274",
+  "background": "https://store.akamai.steamstatic.com/images/storepagebackground/app/4998480?t=1788546274",
+  "screenshots": [
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4998480/f488b1756cf2f9727b6b529365604f6b9f3ca820/ss_f488b1756cf2f9727b6b529365604f6b9f3ca820.600x338.jpg?t=1788546274",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4998480/f488b1756cf2f9727b6b529365604f6b9f3ca820/ss_f488b1756cf2f9727b6b529365604f6b9f3ca820.1920x1080.jpg?t=1788546274"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4998480/c4c061e7867721745e982877b07a2d8a9909a3bd/ss_c4c061e7867721745e982877b07a2d8a9909a3bd.600x338.jpg?t=1788546274",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4998480/c4c061e7867721745e982877b07a2d8a9909a3bd/ss_c4c061e7867721745e982877b07a2d8a9909a3bd.1920x1080.jpg?t=1788546274"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4998480/bd9339a5b3a75eb5cc1b0e9e49d452d322cc9513/ss_bd9339a5b3a75eb5cc1b0e9e49d452d322cc9513.600x338.jpg?t=1788546274",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4998480/bd9339a5b3a75eb5cc1b0e9e49d452d322cc9513/ss_bd9339a5b3a75eb5cc1b0e9e49d452d322cc9513.1920x1080.jpg?t=1788546274"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4998480/32fc5e7f5bfeb06c2b6d50648b14fe406b0d3937/ss_32fc5e7f5bfeb06c2b6d50648b14fe406b0d3937.600x338.jpg?t=1788546274",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4998480/32fc5e7f5bfeb06c2b6d50648b14fe406b0d3937/ss_32fc5e7f5bfeb06c2b6d50648b14fe406b0d3937.1920x1080.jpg?t=1788546274"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4998480/92b5af8aa5840600a25942ae1a7ce2aa4f123cd5/ss_92b5af8aa5840600a25942ae1a7ce2aa4f123cd5.600x338.jpg?t=1788546274",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4998480/92b5af8aa5840600a25942ae1a7ce2aa4f123cd5/ss_92b5af8aa5840600a25942ae1a7ce2aa4f123cd5.1920x1080.jpg?t=1788546274"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4998480/9fd54f1472ba16221efd07ff64cbb9c2b4e3f657/ss_9fd54f1472ba16221efd07ff64cbb9c2b4e3f657.600x338.jpg?t=1788546274",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4998480/9fd54f1472ba16221efd07ff64cbb9c2b4e3f657/ss_9fd54f1472ba16221efd07ff64cbb9c2b4e3f657.1920x1080.jpg?t=1788546274"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4998480/a3274026749039e7f311c12e9005592b50f99ac6/ss_a3274026749039e7f311c12e9005592b50f99ac6.600x338.jpg?t=1788546274",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4998480/a3274026749039e7f311c12e9005592b50f99ac6/ss_a3274026749039e7f311c12e9005592b50f99ac6.1920x1080.jpg?t=1788546274"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4998480/59ba9726f58ee01e34e4df5ecbbf5930721fc97f/ss_59ba9726f58ee01e34e4df5ecbbf5930721fc97f.600x338.jpg?t=1788546274",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4998480/59ba9726f58ee01e34e4df5ecbbf5930721fc97f/ss_59ba9726f58ee01e34e4df5ecbbf5930721fc97f.1920x1080.jpg?t=1788546274"
+   }
+  ],
+  "trailer": {
+   "name": "Goblinfall Teaser",
+   "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/257388339/7ea5605fc71313c13ba4e6136910a8f070ac5ea7/movie_600x337.jpg?t=1788286787",
+   "mp4": null,
+   "webm": null,
+   "hls": "https://video.akamai.steamstatic.com/store_trailers/4998480/2113510309/94ce78f4704e528acc80d1cc22ecd92e2ca588bd/1788286650/hls_264_master.m3u8?t=1788286787",
+   "dash": "https://video.akamai.steamstatic.com/store_trailers/4998480/2113510309/94ce78f4704e528acc80d1cc22ecd92e2ca588bd/1788286650/dash_h264.mpd?t=1788286787"
+  },
+  "developers": [
+   "SoK"
+  ],
+  "publishers": [
+   "SoK"
+  ],
+  "genres": [
+   "Akcja"
+  ],
+  "categories": [
+   "Jednoosobowa",
+   "Wieloosobowa",
+   "Kooperacja",
+   "Kooperacja na wspólnym/dzielonym ekranie",
+   "Wspólny/dzielony ekran",
+   "Pełna obsługa kontrolerów",
+   "Niestandardowa regulacja głośności",
+   "Kontroler zalecany",
+   "Tylko klawiatura",
+   "Grywalne bez działań ograniczonych czasowo",
+   "Obsługa kontrolerów DUALSHOCK",
+   "Obsługa kontrolerów DUALSHOCK"
+  ],
+  "release": {
+   "soon": true,
+   "date": "Wkrótce dostępne"
+  },
+  "platforms": {
+   "windows": true,
+   "mac": false,
+   "linux": true
+  },
+  "languagesPL": false,
+  "website": "https://impress.games/press-kit/sok/goblinfall-defend-da-fort",
+  "devMatch": true,
+  "itchUrl": null,
+  "youtube": null,
+  "genreHint": null,
+  "note": null,
+  "candidates": [
+   "4998480:Goblinfall: Defend Da Fort",
+   "5036530:Goblinfall: Defend Da Fort Demo"
+  ],
+  "tileImg": "img/games/goblinfall-tile.jpg",
+  "heroImg": "img/games/goblinfall-hero.jpg"
+ },
+ {
+  "id": "sanctuswars",
+  "studio": "DS Studio",
+  "title": "Sanctus Wars",
+  "appid": 4454460,
+  "name": "Sanctus Wars",
+  "steamUrl": "https://store.steampowered.com/app/4454460/",
+  "short": "Mroczna gra akcji pixel art o wojnie, zemście, zdradzie i przetrwaniu. Walcz z falami wrogów, rozwijaj bohatera, używaj zaklęć i wybierz jednostki do przyzwania, by zbudować własną strategię i zagłębić się w historię jeszcze głębiej.",
+  "shortEn": "A dark pixel-art action game about war, revenge, betrayal, and survival. Fight waves of enemies, develop your hero, use spells, and choose summonable units to build your own strategy and dive deeper into the story.",
+  "about": "Stań do walki przeciwko falom przeciwników, rozwijaj swoją postać, odblokowuj nowe możliwości i buduj własny styl rozgrywki. Przed każdą wyprawą wybierasz bohatera, zaklęcia, jednostki do przyzwania oraz artefakt, który może wpłynąć na przebieg całej walki.\nW świecie rozdartego konfliktu liczy się jedno: przetrwać, rosnąć w siłę i krok po kroku odzyskiwać kontrolę nad polem bitwy. To opowieść napędzana motywem zemsty, w której każde starcie przybliża Cię do celu.\nSanctus Wars jest inspirowane historią z powstającej książki, dzięki czemu świat gry i jego klimat mają mocniejszy fundament fabularny.\nNajważniejsze cechy gry\n• Dynamiczne starcia z falami przeciwników\n\n• 6 grywalnych bohaterów\n\n• 15 rozwijanych zaklęć\n\n• 22 jednosteki do przyzwania\n\n• Taktyczny wybór składu przed każdą wyprawą\n\n• Trwałe ulepszenia zdobywane podczas awansu\n\n• Obrona portalu i zróżnicowane cele map\n\n• Walki z bossami oraz odblokowywanie nowej zawartości\n\n• Spotkania z NPC które zmieniają przebieg rozgrywki\n\n• Sklep z ulepszeniami dla single player\n\n• Widowiskowe bitwy z wieloma jednostkami na ekranie\n\n• Mroczny klimat dark fantasy i pixelartowa oprawa\n\n• Rosnący poziom trudności i kolejne mapy do odkrycia\n\n• Szybka, intensywna rozgrywka oparta na dobrych decyzjach i pozycjonowaniu\n\nDla kogo jest Sanctus Wars?\nJeśli lubisz niezależne gry akcji, dark fantasy, rozwój postaci, eksperymentowanie z buildami i budowanie własnego stylu walki, Sanctus Wars jest dla Ciebie.\nPrzygotuj się na brutalne starcia, coraz silniejszych przeciwników i rozgrywkę, która nagradza refleks, dobre decyzje oraz umiejętne zarządzanie bohaterem, zaklęciami i armią przyzwań.",
+  "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4454460/5514a803c1ecd79cb0146e3a3324aa5c3cc6ac41/header.jpg?t=1786634455",
+  "capsule": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4454460/5ed1d71f9e75e5d50c1af457ad6975aa3bd3ccae/capsule_184x69.jpg?t=1786634455",
+  "hero": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4454460/7836130d2aa34302802ad8988c8f694177b688dd/ss_7836130d2aa34302802ad8988c8f694177b688dd.1920x1080.jpg?t=1786634455",
+  "background": "https://store.akamai.steamstatic.com/images/storepagebackground/app/4454460?t=1786634455",
+  "screenshots": [
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4454460/7836130d2aa34302802ad8988c8f694177b688dd/ss_7836130d2aa34302802ad8988c8f694177b688dd.600x338.jpg?t=1786634455",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4454460/7836130d2aa34302802ad8988c8f694177b688dd/ss_7836130d2aa34302802ad8988c8f694177b688dd.1920x1080.jpg?t=1786634455"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4454460/e655c5517ce13eca7562ca0d31b11df95e383dfc/ss_e655c5517ce13eca7562ca0d31b11df95e383dfc.600x338.jpg?t=1786634455",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4454460/e655c5517ce13eca7562ca0d31b11df95e383dfc/ss_e655c5517ce13eca7562ca0d31b11df95e383dfc.1920x1080.jpg?t=1786634455"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4454460/9f63c7114bd7457ba750001626c359fcdf1bd616/ss_9f63c7114bd7457ba750001626c359fcdf1bd616.600x338.jpg?t=1786634455",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4454460/9f63c7114bd7457ba750001626c359fcdf1bd616/ss_9f63c7114bd7457ba750001626c359fcdf1bd616.1920x1080.jpg?t=1786634455"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4454460/9b0961d4872003ebdb73cfc999b59598f578237f/ss_9b0961d4872003ebdb73cfc999b59598f578237f.600x338.jpg?t=1786634455",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4454460/9b0961d4872003ebdb73cfc999b59598f578237f/ss_9b0961d4872003ebdb73cfc999b59598f578237f.1920x1080.jpg?t=1786634455"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4454460/18182152350567953d70d07935734c3acc37bbe0/ss_18182152350567953d70d07935734c3acc37bbe0.600x338.jpg?t=1786634455",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4454460/18182152350567953d70d07935734c3acc37bbe0/ss_18182152350567953d70d07935734c3acc37bbe0.1920x1080.jpg?t=1786634455"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4454460/d9bc3226b26bc032229351e43cb169c69dc1ebef/ss_d9bc3226b26bc032229351e43cb169c69dc1ebef.600x338.jpg?t=1786634455",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4454460/d9bc3226b26bc032229351e43cb169c69dc1ebef/ss_d9bc3226b26bc032229351e43cb169c69dc1ebef.1920x1080.jpg?t=1786634455"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4454460/8f51d3ba42ccebe6f1c5ae4d0510ea7394c4d030/ss_8f51d3ba42ccebe6f1c5ae4d0510ea7394c4d030.600x338.jpg?t=1786634455",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4454460/8f51d3ba42ccebe6f1c5ae4d0510ea7394c4d030/ss_8f51d3ba42ccebe6f1c5ae4d0510ea7394c4d030.1920x1080.jpg?t=1786634455"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4454460/0b982f20d9ce1d8613a806c567209ac8e563d5af/ss_0b982f20d9ce1d8613a806c567209ac8e563d5af.600x338.jpg?t=1786634455",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4454460/0b982f20d9ce1d8613a806c567209ac8e563d5af/ss_0b982f20d9ce1d8613a806c567209ac8e563d5af.1920x1080.jpg?t=1786634455"
+   }
+  ],
+  "trailer": {
+   "name": "trailer_steam",
+   "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/257398273/ebe99d469ff1e8d1a7aa5e50a0c74ed438390836/movie_600x337.jpg?t=1786634454",
+   "mp4": null,
+   "webm": null,
+   "hls": "https://video.akamai.steamstatic.com/store_trailers/4454460/1210410231/40fdfac9f86f20f7d416488a3a51a051bc154f20/1786631726/hls_264_master.m3u8?t=1786634454",
+   "dash": "https://video.akamai.steamstatic.com/store_trailers/4454460/1210410231/40fdfac9f86f20f7d416488a3a51a051bc154f20/1786631726/dash_h264.mpd?t=1786634454"
+  },
+  "developers": [
+   "DS Studio"
+  ],
+  "publishers": [
+   "DS Studio"
+  ],
+  "genres": [
+   "Akcja",
+   "RPG",
+   "Wczesny dostęp"
+  ],
+  "categories": [
+   "Jednoosobowa",
+   "Wieloosobowa",
+   "PvP",
+   "PvP przez internet",
+   "PvP na wspólnym/dzielonym ekranie",
+   "Wspólny/dzielony ekran",
+   "Osiągnięcia Steam",
+   "Pełna obsługa kontrolerów",
+   "Obsługa kontrolerów DualSense",
+   "Obsługa kontrolerów DualSense",
+   "Udostępnianie gier"
+  ],
+  "release": {
+   "soon": true,
+   "date": "Wkrótce dostępne"
+  },
+  "platforms": {
+   "windows": true,
+   "mac": false,
+   "linux": false
+  },
+  "languagesPL": true,
+  "website": null,
+  "devMatch": true,
+  "itchUrl": null,
+  "youtube": null,
+  "genreHint": null,
+  "note": null,
+  "candidates": [
+   "4454460:Sanctus Wars",
+   "4753200:Sanctus Wars Demo"
+  ],
+  "tileImg": "img/games/sanctuswars-tile.jpg",
+  "heroImg": "img/games/sanctuswars-hero.jpg"
+ },
+ {
+  "id": "arcaneweaver",
+  "studio": "FastJelloStudio",
+  "title": "Arcane Weaver",
+  "appid": null,
+  "name": "Arcane Weaver",
+  "steamUrl": null,
+  "short": "Bullet Heaven, Custom spell system",
+  "shortEn": "",
+  "about": "Arcane Weaver features custom spell crafting system in a bullet heaven experience.",
+  "header": "https://img.itch.zone/aW1nLzI4MDcxOTMxLnBuZw==/original/bUxD%2Bn.png",
+  "capsule": null,
+  "hero": "https://img.itch.zone/aW1hZ2UvNDcxMDc1Ni8yODA3MTk1Mi5qcGc=/original/Hx7y70.jpg",
+  "background": null,
+  "screenshots": [
+   {
+    "full": "https://img.itch.zone/aW1hZ2UvNDcxMDc1Ni8yODA3MTk1Mi5qcGc=/original/Hx7y70.jpg",
+    "thumb": "https://img.itch.zone/aW1hZ2UvNDcxMDc1Ni8yODA3MTk1Mi5qcGc=/original/Hx7y70.jpg"
+   },
+   {
+    "full": "https://img.itch.zone/aW1hZ2UvNDcxMDc1Ni8yODA3MTk1NC5qcGc=/original/Rdusk2.jpg",
+    "thumb": "https://img.itch.zone/aW1hZ2UvNDcxMDc1Ni8yODA3MTk1NC5qcGc=/original/Rdusk2.jpg"
+   },
+   {
+    "full": "https://img.itch.zone/aW1hZ2UvNDcxMDc1Ni8yODA3MTk1Ny5qcGc=/original/hrGeVr.jpg",
+    "thumb": "https://img.itch.zone/aW1hZ2UvNDcxMDc1Ni8yODA3MTk1Ny5qcGc=/original/hrGeVr.jpg"
+   }
+  ],
+  "trailer": null,
+  "developers": [],
+  "publishers": [],
+  "genres": [],
+  "categories": [],
+  "release": null,
+  "platforms": null,
+  "languagesPL": false,
+  "website": null,
+  "devMatch": false,
+  "itchUrl": "https://fastjellostudio.itch.io/arcane-weaver",
+  "youtube": null,
+  "genreHint": null,
+  "note": null,
+  "candidates": [],
+  "tileImg": "img/games/arcaneweaver-tile.jpg",
+  "heroImg": "img/games/arcaneweaver-hero.jpg"
+ },
+ {
+  "id": "gunjong",
+  "studio": "Koza Technologies",
+  "title": "GunJong",
+  "appid": 3882690,
+  "name": "GunJong",
+  "steamUrl": "https://store.steampowered.com/app/3882690/",
+  "short": "Celuj. Strzelaj. Łącz. Precyzyjna gra logiczna z bronią. Łącz pary płytek, strzelając do nich. Ciesz się kreatywnym rozwiązywaniem zagadek i satysfakcjonującym strzelaniem. Graj we własnym tempie lub powtarzaj poziomy, by osiągnąć perfekcyjne wyczyszczenie planszy.",
+  "shortEn": "Aim. Shoot. Match. Mahjong Solitaire with guns: shoot matching pairs to clear the board. Relax in Zen mode or chase the leaderboards. Made for mouse and keyboard. VR optional.",
+  "about": "GunJong to precyzyjna strzelanka logiczna. Mówiąc prościej: to Mahjong pasjans z bronią! Nie musisz znać zasad – po prostu celuj, strzelaj i łącz pary. Szybko się uczysz. Trudno opanować.\n \n\nGłówna rozgrywka\nCeluj.\nUstaw strzał i znajdź wolną drogę.\nStrzelaj.\nWybieraj płytki z precyzją i w odpowiednim momencie.\nŁącz.\nUsuwaj pary, aby otwierać nowe ścieżki i oczyścić planszę.\n• Szukaj dostępnych par\n\n• Zaplanuj kąt tak, aby nic nie blokowało strzału\n\n• Usuwaj pary, aby odblokować nowe możliwości\n\n• Kończ planszę czystymi, efektywnymi ruchami\n\nDlaczego warto grać w GunJong?\n• Strzelaj do płytek, aby rozwiązywać Mahjonga w fizyczny, satysfakcjonujący sposób\n\n• Planuj swoją drogę, aby otwierać pary i ograniczać zmarnowane strzały\n\n• Zdobywaj medale za szybkość, celność i efektywność\n\n• Powtarzaj plansze, aby poprawiać czasy i dopracować swoje przejścia\n\n• Graj w krótkich sesjach lub dłuższych, skupionych rozgrywkach\n\n• Importuj własne obrazy jako niestandardowe układy planszy\n\n• Wybierz VR dla zanurzenia lub PC dla wygody\n\nTryby\nKampania\n• ~30 ręcznie wykonanych plansz (i wciąż przybywa)\n\n• Kilkugodzinna kampania, która wprowadza i testuje każdą mechanikę\n\n• Jasne cele na każdym etapie\n\n• Zdobywaj medale w zależności od wyników\n\nWyścigi\n• Skoncentrowane wyzwania na szybkość i precyzję\n\n• Pobijaj swoje najlepsze przejścia i wspinaj się w rankingach\n\nZen\n• Spokojna gra bez presji\n\n• Włącz opcjonalne modyfikacje zasad i graj po swojemu\n\nMechaniki\nKażda plansza wprowadza zmiany, które wpływają na to, jak celujesz, planujesz i łączysz:\n• Blokady wymuszające nowe kąty i trasy\n\n• Ograniczone kąty, przy których pozycja ma kluczowe znaczenie\n\n• Blokady czasowe otwierające się po opóźnieniu\n\n• Ruchome przeszkody zakłócające twoje strzały\n\n• Znikające płytki wymagające szybkich decyzji\n\nPostęp i powtarzalność\n• Postęp w kampanii wprowadza wszystkie mechaniki krok po kroku\n\n• Zdobywaj medale na każdej planszy\n\n• Łącz mechaniki, aby tworzyć głębsze wyzwania\n\n• Popraw celność i liczbę strzałów, aby awansować w rankingu\n\n• Rywalizuj w rankingach o najlepsze czasy i wyniki\n\n• Wracaj do wcześniejszych plansz i pobijaj swoje rekordy\n\nDostępność i opcje\n• W pełni grywalne jedną ręką (lewą lub prawą)\n\n• Dźwięk nie jest wymagany – cała rozgrywka jest w pełni wizualna i czytelna\n\n• Ustawienia komfortu dla VR\n\n• Opcjonalne zasady do dostosowania trudności i tempa\n\nSterowanie i platforma\n• Zaprojektowane pod gogle VR i śledzone kontrolery\n\n• W pełni grywalne na PC z myszą i WASD\n\n• Języki: angielski, polski, niemiecki, francuski, hiszpański, włoski, portugalski, japoński, koreański, chiński uproszczony i wiele innych",
+  "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3882690/574eaf839f77d3a1b912531986f57ae06fe70fed/header.jpg?t=1789578391",
+  "capsule": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3882690/267d65e1b57da5cb96ed6c959cca89f24ec69671/capsule_184x69.jpg?t=1789578391",
+  "hero": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3882690/a6e477932caa41015132126ff7a535ed2d920ff4/ss_a6e477932caa41015132126ff7a535ed2d920ff4.1920x1080.jpg?t=1789578391",
+  "background": "https://store.akamai.steamstatic.com/images/storepagebackground/app/3882690?t=1789578391",
+  "screenshots": [
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3882690/a6e477932caa41015132126ff7a535ed2d920ff4/ss_a6e477932caa41015132126ff7a535ed2d920ff4.600x338.jpg?t=1789578391",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3882690/a6e477932caa41015132126ff7a535ed2d920ff4/ss_a6e477932caa41015132126ff7a535ed2d920ff4.1920x1080.jpg?t=1789578391"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3882690/d8edbf64888090945e892e5b7605e0a1bab0dbe3/ss_d8edbf64888090945e892e5b7605e0a1bab0dbe3.600x338.jpg?t=1789578391",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3882690/d8edbf64888090945e892e5b7605e0a1bab0dbe3/ss_d8edbf64888090945e892e5b7605e0a1bab0dbe3.1920x1080.jpg?t=1789578391"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3882690/982e2dc6e046dddb5ef78ac8e89a9ce8f4221b26/ss_982e2dc6e046dddb5ef78ac8e89a9ce8f4221b26.600x338.jpg?t=1789578391",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3882690/982e2dc6e046dddb5ef78ac8e89a9ce8f4221b26/ss_982e2dc6e046dddb5ef78ac8e89a9ce8f4221b26.1920x1080.jpg?t=1789578391"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3882690/9d2a95766e89c2dd58a46241f6aef6b3c6e00249/ss_9d2a95766e89c2dd58a46241f6aef6b3c6e00249.600x338.jpg?t=1789578391",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3882690/9d2a95766e89c2dd58a46241f6aef6b3c6e00249/ss_9d2a95766e89c2dd58a46241f6aef6b3c6e00249.1920x1080.jpg?t=1789578391"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3882690/689f4bc23a736245357acec1edc18fdbfd542b96/ss_689f4bc23a736245357acec1edc18fdbfd542b96.600x338.jpg?t=1789578391",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3882690/689f4bc23a736245357acec1edc18fdbfd542b96/ss_689f4bc23a736245357acec1edc18fdbfd542b96.1920x1080.jpg?t=1789578391"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3882690/9193ad23505931c29c1f03c91e39d83afede64dc/ss_9193ad23505931c29c1f03c91e39d83afede64dc.600x338.jpg?t=1789578391",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3882690/9193ad23505931c29c1f03c91e39d83afede64dc/ss_9193ad23505931c29c1f03c91e39d83afede64dc.1920x1080.jpg?t=1789578391"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3882690/6a5722c6f78310550111ae174d48336f86b1b2d3/ss_6a5722c6f78310550111ae174d48336f86b1b2d3.600x338.jpg?t=1789578391",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3882690/6a5722c6f78310550111ae174d48336f86b1b2d3/ss_6a5722c6f78310550111ae174d48336f86b1b2d3.1920x1080.jpg?t=1789578391"
+   }
+  ],
+  "trailer": {
+   "name": "MahjongWithGuns",
+   "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/257420917/1373b5778d88d75e84716c066ea747470855b557/movie_600x337.jpg?t=1788964541",
+   "mp4": null,
+   "webm": null,
+   "hls": "https://video.akamai.steamstatic.com/store_trailers/3882690/1788824281/c14df473031b7fc386f6909f1f685aa7e1e8dec0/1788964120/hls_264_master.m3u8?t=1788964541",
+   "dash": "https://video.akamai.steamstatic.com/store_trailers/3882690/1788824281/c14df473031b7fc386f6909f1f685aa7e1e8dec0/1788964120/dash_h264.mpd?t=1788964541"
+  },
+  "developers": [
+   "Koza Technologies"
+  ],
+  "publishers": [
+   "Koza Technologies"
+  ],
+  "genres": [
+   "Akcja",
+   "Rekreacyjne",
+   "Niezależne",
+   "Sportowe"
+  ],
+  "categories": [
+   "Jednoosobowa",
+   "Osiągnięcia Steam",
+   "Udostępnianie gier"
+  ],
+  "release": {
+   "soon": true,
+   "date": "10 września 2027"
+  },
+  "platforms": {
+   "windows": true,
+   "mac": false,
+   "linux": false
+  },
+  "languagesPL": true,
+  "website": null,
+  "devMatch": true,
+  "itchUrl": null,
+  "youtube": null,
+  "genreHint": null,
+  "note": null,
+  "candidates": [
+   "3882690:GunJong"
+  ],
+  "tileImg": "img/games/gunjong-tile.jpg",
+  "heroImg": "img/games/gunjong-hero.jpg"
+ },
+ {
+  "id": "gravitytag",
+  "studio": "Armez Games",
+  "title": "Gravity Tag",
+  "appid": null,
+  "name": "Gravity Tag",
+  "steamUrl": null,
+  "short": "",
+  "shortEn": "",
+  "about": "",
+  "header": null,
+  "capsule": null,
+  "hero": null,
+  "background": null,
+  "screenshots": [],
+  "trailer": null,
+  "developers": [],
+  "publishers": [],
+  "genres": [],
+  "categories": [],
+  "release": null,
+  "platforms": null,
+  "languagesPL": false,
+  "website": null,
+  "devMatch": false,
+  "itchUrl": null,
+  "youtube": null,
+  "genreHint": "Dynamiczna / zręcznościowa",
+  "note": "1. miejsce ZTGK 2025 (game design), finalista Student Games Festival 2025.",
+  "candidates": [],
+  "tileImg": null,
+  "heroImg": null
+ },
+ {
+  "id": "nycto",
+  "studio": "Gleaming Geckos",
+  "title": "Nycto",
+  "appid": null,
+  "name": "Nycto",
+  "steamUrl": null,
+  "short": "A mind-bending puzzle adventure where reality twists and fear lurks in the unknown. Dare to step through the portal?",
+  "shortEn": "",
+  "about": "Enter a world where geometry breaks, and reality bends.\r\n \n\r\nNycto is a mind-twisting logic game with horror elements, set in a surreal, non-Euclidean dimension where space itself is a puzzle. You play as a researcher who, after a catastrophic incident, enters an otherworldly realm in search of his missing daughter. The facility is abandoned, the staff are dead, and something is lurking in the shadows&hellip;\r\n \n\r\nSolve intricate spatial puzzles, navigate impossible environments, and uncover the mystery behind the eerie dimension that defies the laws of physics. But beware-something is watching.\r\n \n\r\nIf you enjoyed games like Antichamber, Nycto will challenge your perception and test your wits.\r\n \n\r\n💠 Features:\n\n\r\n✔ Unique non-Euclidean level design\n ✔ Engaging, logic-based puzzles\n ✔ Mysterious and unsettling atmosphere\n ✔ A gripping story that unfolds as you explore\n ✔ Stunning minimalist visuals with a distinctive art style \n\r\nJoin our Discord, Instagram and TikTok for dev news and more!\n\r\n\n\r\nDev Team:\n\r\nDesign: Wiktor Krawczyk\nArt: Michał Krawczyk, Katarzyna Frykowska\nSound: Hubert Łabuda\nCode: Krystian Baraniecki, Krzysztof Stawinoga, Klaudia Hołonowicz\n\r\nAchievements:\n\r\n• Showcased our game to Spokko & 11bit Studios, receiving industry feedback\n• TOP 3 in Game Design at ZTGK Łódź\n• Won a Digital Dragons ticket at ZTGK Łódź (May 2024)\n• Distinctions from 11bit Studios, Digital Dragons & Afterburn (Best Puzzle Game)\n• Digital Dragons 2024: Indie category recognition from Activision (Shader-Driven Development)\n\nMore games from our team: https://gleaminggeckos.itch.io/",
+  "header": "https://img.itch.zone/aW1nLzIwMjU1Njk3LmpwZw==/original/0F3Jse.jpg",
+  "capsule": null,
+  "hero": "https://img.itch.zone/aW1hZ2UvMzM5MzMxNy8yMDI1NjE0NS5wbmc=/original/62dFhD.png",
+  "background": null,
+  "screenshots": [
+   {
+    "full": "https://img.itch.zone/aW1hZ2UvMzM5MzMxNy8yMDI1NjE0NS5wbmc=/original/62dFhD.png",
+    "thumb": "https://img.itch.zone/aW1hZ2UvMzM5MzMxNy8yMDI1NjE0NS5wbmc=/original/62dFhD.png"
+   },
+   {
+    "full": "https://img.itch.zone/aW1hZ2UvMzM5MzMxNy8yMDI1NjE0Ny5wbmc=/original/7RrLqp.png",
+    "thumb": "https://img.itch.zone/aW1hZ2UvMzM5MzMxNy8yMDI1NjE0Ny5wbmc=/original/7RrLqp.png"
+   },
+   {
+    "full": "https://img.itch.zone/aW1hZ2UvMzM5MzMxNy8yMDI1NjE0Ni5wbmc=/original/R460cg.png",
+    "thumb": "https://img.itch.zone/aW1hZ2UvMzM5MzMxNy8yMDI1NjE0Ni5wbmc=/original/R460cg.png"
+   }
+  ],
+  "trailer": null,
+  "developers": [],
+  "publishers": [],
+  "genres": [],
+  "categories": [],
+  "release": null,
+  "platforms": null,
+  "languagesPL": false,
+  "website": null,
+  "devMatch": false,
+  "itchUrl": "https://gleaminggeckos.itch.io/nycto",
+  "youtube": "h3UkLP0KRkw",
+  "genreHint": null,
+  "note": "Studenci Politechniki Łódzkiej. Wyróżnienia ZTGK 2023, Digital Dragons 2024 (grafika).",
+  "candidates": [],
+  "tileImg": "img/games/nycto-tile.jpg",
+  "heroImg": "img/games/nycto-hero.jpg"
+ },
+ {
+  "id": "mirrorbound",
+  "studio": "Gragenos Studio",
+  "title": "Mirrorbound",
+  "appid": null,
+  "name": "Mirrorbound",
+  "steamUrl": null,
+  "short": "",
+  "shortEn": "",
+  "about": "",
+  "header": null,
+  "capsule": null,
+  "hero": null,
+  "background": null,
+  "screenshots": [],
+  "trailer": null,
+  "developers": [],
+  "publishers": [],
+  "genres": [],
+  "categories": [],
+  "release": null,
+  "platforms": null,
+  "languagesPL": false,
+  "website": null,
+  "devMatch": false,
+  "itchUrl": null,
+  "youtube": null,
+  "genreHint": "Tajemnicza / zagadki",
+  "note": null,
+  "candidates": [],
+  "tileImg": null,
+  "heroImg": null
+ },
+ {
+  "id": "theatticfearofthedark",
+  "studio": "Scratched Lizard Studio",
+  "title": "The Attic: Fear Of The Dark",
+  "appid": null,
+  "name": "The Attic: Fear Of The Dark",
+  "steamUrl": null,
+  "short": "",
+  "shortEn": "",
+  "about": "",
+  "header": null,
+  "capsule": null,
+  "hero": null,
+  "background": null,
+  "screenshots": [],
+  "trailer": null,
+  "developers": [],
+  "publishers": [],
+  "genres": [],
+  "categories": [],
+  "release": null,
+  "platforms": null,
+  "languagesPL": false,
+  "website": null,
+  "devMatch": false,
+  "itchUrl": null,
+  "youtube": null,
+  "genreHint": "Horror",
+  "note": null,
+  "candidates": [],
+  "tileImg": null,
+  "heroImg": null
+ },
+ {
+  "id": "cosmobilefieldecho",
+  "studio": "Piotr Muziński",
+  "title": "Cosmobile: Field Echo",
+  "appid": null,
+  "name": "Cosmobile: Field Echo",
+  "steamUrl": null,
+  "short": "Operational space horror about routine missions, failing systems, hostile anomalies and cost of coming back alive.",
+  "shortEn": "",
+  "about": "COSMOBILE: Field Echo\n\r\nCOSMOBILE: Field Echo is an experimental browser-based space game prototype built around piloting, exploration, ship systems and investigating signals found in space.\r\n\n\r\nYou fly the Harrow, move between points of interest, use its sensors to look for contacts, investigate what you find and manage the ship when something requires your attention.\r\n\n\r\nThe project is still a prototype. It is best approached as a playable systems experiment, rather than a finished space simulator or a complete campaign.\r\n\n\r\nTake your time with it. Fly around, use the scanner, follow signals that look interesting and see how the ship behaves under different conditions.\r\n\n\r\nHow to approach the game\n\r\nMost of the time you will be doing three simple things:\r\n\n\r\nFly. Scan. Investigate.\r\n\n\r\nDuring normal flight, the HUD only shows information that is currently useful. More detailed information about the Harrow, its systems and your current situation can be found in Operations.\r\n\n\r\nThe spatial scanner can be used without selecting a target first.\r\n\n\r\nSend out a sensor pulse and watch for temporary echoes. If something looks interesting, select it, turn the ship toward it and approach it. A detailed scan can then provide more information.\r\n\n\r\nNot every contact needs to be investigated.\r\n\n\r\nPower profiles also change how the Harrow operates:\r\n\n\r\n• CRUISE &mdash; general flight\r\n\n• SILENT &mdash; reduced-signature operation\r\n\n• COMBAT &mdash; combat configuration\r\n\n• EMERGENCY &mdash; maximum-response configuration\r\n\n\r\nYou do not need to understand every ship system immediately. Start by flying and scanning the space around you.\r\n\n\r\nBasic controls\n\r\nW &mdash; thrust\r\nS &mdash; brake\r\nA / D &mdash; turn left / right\r\nMouse / RMB drag &mdash; look and steer\r\nShift &mdash; toggle mouse flight mode\r\nCaps Lock + W &mdash; boost\r\n\n\r\nZ &mdash; spatial sensor sweep\r\nLMB &mdash; select a contact\r\nE &mdash; contextual action / detailed scan\r\nSpace &mdash; GJN jump when available\r\n\n\r\n1 / 2 / 3 / 4 &mdash; CRUISE / SILENT / COMBAT / EMERGENCY\r\n\n\r\nTab &mdash; Operations\r\nEsc &mdash; pause / close current interface\r\n\n\r\nCombat\n\r\nF / LMB &mdash; fire\r\n5 / 6 / 7 &mdash; change weapon\r\nZ &mdash; acquire / cycle hostile contact\r\nQ &mdash; FIELD evade\r\nR &mdash; stabilize / reload, depending on the active weapon\r\n\n\r\nThe HUD will also display contextual controls when a specific action becomes available.\r\n\n\r\nPrototype note\n\r\nCOSMOBILE is being developed iteratively.\r\n\n\r\nSome systems are intentionally more developed than others, and individual runs may expose rough edges, unfinished content or balance that will change in later builds.\r\n\n\r\nFor now, the best way to play is simply to treat the Harrow as a ship you are learning to operate and use the tools available to explore what is around you.",
+  "header": "https://img.itch.zone/aW1nLzI4Njg2MTA5LnBuZw==/original/dmaktg.png",
+  "capsule": null,
+  "hero": null,
+  "background": null,
+  "screenshots": [],
+  "trailer": null,
+  "developers": [],
+  "publishers": [],
+  "genres": [],
+  "categories": [],
+  "release": null,
+  "platforms": null,
+  "languagesPL": false,
+  "website": null,
+  "devMatch": false,
+  "itchUrl": "https://piotr-muzinski.itch.io/cosmobile-field-echo",
+  "youtube": null,
+  "genreHint": null,
+  "note": null,
+  "candidates": [],
+  "tileImg": "img/games/cosmobilefieldecho-tile.jpg",
+  "heroImg": null
+ },
+ {
+  "id": "tba",
+  "studio": "Hello GameJam",
+  "title": "TBA",
+  "appid": null,
+  "name": "TBA",
+  "steamUrl": null,
+  "short": "",
+  "shortEn": "",
+  "about": "",
+  "header": null,
+  "capsule": null,
+  "hero": null,
+  "background": null,
+  "screenshots": [],
+  "trailer": null,
+  "developers": [],
+  "publishers": [],
+  "genres": [],
+  "categories": [],
+  "release": null,
+  "platforms": null,
+  "languagesPL": false,
+  "website": null,
+  "devMatch": false,
+  "itchUrl": null,
+  "youtube": null,
+  "genreHint": null,
+  "note": "Projekty z game jamów / studenckie. Tytuł do ustalenia na miejscu.",
+  "candidates": [],
+  "tileImg": null,
+  "heroImg": null
+ },
+ {
+  "id": "systembreakdown",
+  "studio": "Anarchy Creations",
+  "title": "System Breakdown",
+  "appid": 3300050,
+  "name": "System Breakdown",
+  "steamUrl": "https://store.steampowered.com/app/3300050/",
+  "short": "Brutalny i dynamiczny twin-stick shooter, w którym walczysz z radzieckimi machinami wojennymi. Przełączaj się między broniami, korzystaj z ulepszeń, aby niszczyć pancerze robotów, i uwolnij swoją ostateczną zdolność. Oni nie okażą litości — ty też nie powinieneś.",
+  "shortEn": "Brutal, fast-paced twin-stick shooter, where you fight with Soviet war machines. Cycle between guns, use power-ups to destroy robot armors and unleash your ultimate ability. They won’t have mercy, neither should you!",
+  "about": "System Breakdown to coś więcej niż zwykły twin-stick shooter. Aby przetrwać, musisz grać agresywnie. Przełączaj się między broniami, aby uzupełniać amunicję. Wykonuj finishery, by odzyskać zdrowie. Korzystaj ze specjalnych ulepszeń, aby niszczyć pancerze blaszanych maszyn i ładować swoją FURIĘ.\nJeśli lubisz gry takie jak RUINER czy Kill Knight — poczujesz się tutaj jak w domu.\n\nWielki Brat widzi wszystko. Im lepiej radzisz sobie podczas prób, tym więcej zasobów zdobywasz na zaawansowaną broń i potężne ulepszenia.\nStwórz własny styl destrukcji. Chcesz spychać przeciwników prosto w eksplozje? A może wolisz siać chaos niczym Rambo z dwoma karabinami szturmowymi? Wybór należy do ciebie.\n\nZwiązek Radziecki wygrał zimną wojnę, a następnie stworzył Wielkiego Brata — system nadzorujący tę komunistyczną utopię. Wszyscy są równi. Wszyscy są tacy sami. Nikt niczego nie posiada. Nikt nie ma prawa mówić.\nJesteś jedną z ostatnich iskier ludzkiej nadziei. Uwięziony w laboratorium Wielkiego Brata musisz znaleźć sposób, by raz na zawsze zniszczyć jego władzę.\n\n*Projekt System Breakdown od Anarchy Creations jest współfinansowany ze środków Europejskich Funduszy na rzecz Inteligentnej Gospodarki 2021–2027 w ramach programu KPT ScaleUP Booster.",
+  "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3300050/1d3da3536a4f2b96d2a1c9c53a4ef7db451d385d/header_polish.jpg?t=1789636692",
+  "capsule": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3300050/2a99fa713d3eaa8308ff9a9b2b83cb712325ee96/capsule_184x69_polish.jpg?t=1789636692",
+  "hero": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3300050/e949d48c06a5b35ec9cd864656ddbb500a9b6cf5/ss_e949d48c06a5b35ec9cd864656ddbb500a9b6cf5.1920x1080.jpg?t=1789636692",
+  "background": "https://store.akamai.steamstatic.com/images/storepagebackground/app/3300050?t=1789636692",
+  "screenshots": [
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3300050/e949d48c06a5b35ec9cd864656ddbb500a9b6cf5/ss_e949d48c06a5b35ec9cd864656ddbb500a9b6cf5.600x338.jpg?t=1789636692",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3300050/e949d48c06a5b35ec9cd864656ddbb500a9b6cf5/ss_e949d48c06a5b35ec9cd864656ddbb500a9b6cf5.1920x1080.jpg?t=1789636692"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3300050/ff12ee678344d85f35119fc569ef52e71f9aedc1/ss_ff12ee678344d85f35119fc569ef52e71f9aedc1.600x338.jpg?t=1789636692",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3300050/ff12ee678344d85f35119fc569ef52e71f9aedc1/ss_ff12ee678344d85f35119fc569ef52e71f9aedc1.1920x1080.jpg?t=1789636692"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3300050/dbc9adf629e1d8e4fd7d0adc25b2a3a14a4d0ff3/ss_dbc9adf629e1d8e4fd7d0adc25b2a3a14a4d0ff3.600x338.jpg?t=1789636692",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3300050/dbc9adf629e1d8e4fd7d0adc25b2a3a14a4d0ff3/ss_dbc9adf629e1d8e4fd7d0adc25b2a3a14a4d0ff3.1920x1080.jpg?t=1789636692"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3300050/4ff18c2c700031ecf5b500bb89a534cae812a0e4/ss_4ff18c2c700031ecf5b500bb89a534cae812a0e4.600x338.jpg?t=1789636692",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3300050/4ff18c2c700031ecf5b500bb89a534cae812a0e4/ss_4ff18c2c700031ecf5b500bb89a534cae812a0e4.1920x1080.jpg?t=1789636692"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3300050/cb2bcb7fb3f54e404aad606341b2a966ff3f9e14/ss_cb2bcb7fb3f54e404aad606341b2a966ff3f9e14.600x338.jpg?t=1789636692",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3300050/cb2bcb7fb3f54e404aad606341b2a966ff3f9e14/ss_cb2bcb7fb3f54e404aad606341b2a966ff3f9e14.1920x1080.jpg?t=1789636692"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3300050/f1379398b2f0c79123a82c0291ef8d8ab2780b50/ss_f1379398b2f0c79123a82c0291ef8d8ab2780b50.600x338.jpg?t=1789636692",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3300050/f1379398b2f0c79123a82c0291ef8d8ab2780b50/ss_f1379398b2f0c79123a82c0291ef8d8ab2780b50.1920x1080.jpg?t=1789636692"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3300050/b32a4203de91cdb0474869d7d650e38afbdc4470/ss_b32a4203de91cdb0474869d7d650e38afbdc4470.600x338.jpg?t=1789636692",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3300050/b32a4203de91cdb0474869d7d650e38afbdc4470/ss_b32a4203de91cdb0474869d7d650e38afbdc4470.1920x1080.jpg?t=1789636692"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3300050/feab80aa8fdbfc2c25668a60696f1b4951119e74/ss_feab80aa8fdbfc2c25668a60696f1b4951119e74.600x338.jpg?t=1789636692",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3300050/feab80aa8fdbfc2c25668a60696f1b4951119e74/ss_feab80aa8fdbfc2c25668a60696f1b4951119e74.1920x1080.jpg?t=1789636692"
+   }
+  ],
+  "trailer": {
+   "name": "Announcement Trailer",
+   "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/257390949/21a5f13e726b88b11b7cd01e8a0ed8ca3be11aa2/movie_600x337.jpg?t=1785760891",
+   "mp4": null,
+   "webm": null,
+   "hls": "https://video.akamai.steamstatic.com/store_trailers/3300050/1551492156/c4fdcef1df1453fdd1f1e5bda0d5ef430e8c0d28/1785760330/hls_264_master.m3u8?t=1785760891",
+   "dash": "https://video.akamai.steamstatic.com/store_trailers/3300050/1551492156/c4fdcef1df1453fdd1f1e5bda0d5ef430e8c0d28/1785760330/dash_h264.mpd?t=1785760891"
+  },
+  "developers": [
+   "Anarchy Creations"
+  ],
+  "publishers": [
+   "Anarchy Creations"
+  ],
+  "genres": [
+   "Akcja",
+   "Przygodowe",
+   "Rekreacyjne",
+   "Niezależne"
+  ],
+  "categories": [
+   "Jednoosobowa",
+   "Osiągnięcia Steam",
+   "Pełna obsługa kontrolerów",
+   "Obsługa kontrolerów DUALSHOCK",
+   "Obsługa kontrolerów DualSense",
+   "Udostępnianie gier"
+  ],
+  "release": {
+   "soon": false,
+   "date": "12 sierpnia 2026"
+  },
+  "platforms": {
+   "windows": true,
+   "mac": false,
+   "linux": true
+  },
+  "languagesPL": true,
+  "website": null,
+  "devMatch": true,
+  "itchUrl": null,
+  "youtube": null,
+  "genreHint": null,
+  "note": null,
+  "candidates": [
+   "3300050:System Breakdown",
+   "4303420:Temlegen: System Breakdown",
+   "4776560:System Breakdown Demo"
+  ],
+  "tileImg": "img/games/systembreakdown-tile.jpg",
+  "heroImg": "img/games/systembreakdown-hero.jpg"
+ },
+ {
+  "id": "onerottenoath",
+  "studio": "Piotr Bunkowski",
+  "title": "One Rotten Oath",
+  "appid": 3902710,
+  "name": "One Rotten Oath",
+  "steamUrl": "https://store.steampowered.com/app/3902710/",
+  "short": "\"One Rotten Oath\" to fabularyzowane połączenie gier FMV i FPS z elementami horroru. Stworzona przez twórcę interaktywnego filmu \"A Trip to Yugoslavia\".",
+  "shortEn": "One Rotten Oath is a story-driven FMV+FPS hybrid with horror elements. Created by the director of A Trip to Yugoslavia.",
+  "about": "Ostatni, zwykły, słoneczny dzień. Od tego czasu minęły lata. Wszystko straciło znaczenie po tym, jak nieznany do tej pory związek chemiczny rozlał się na terenach otaczających pobliskie laboratorium. Dziś tutejsi nazywają to NISZCZYCIELSKIM WYCIEKIEM. \n\nChaos pochłonął ulice i wkradł się do życia każdego mieszkańca. Z czasem ludzie, którzy byli wystawieni na działanie chemikaliów zmienili się w potwory. Szybkie, bezwzględne kreatury, kierujące się jedynie instynktem. Ci, którzy mogli, dawno uciekli. Poukrywali się w starych, opuszczonych bunkrach. Niektóre z nich musieli odbudować, by móc się w nich schronić, a inne przypadkowo odkrywali w archiwalnych planach miasta. Pozostali nie żyją, albo gorzej...\n\nA Ty? Ty stajesz się jednym z ocalałych, który jest zmuszony bronić bunkra, gdzie część ludzi próbuje prowadzić normalne życie. Zwykła, nocna warta zmienia się w walkę o przetrwanie, a jedyny działający generator zaczyna szwankować i wyłączać się co 60 sekund. Czy uda Ci się dożyć następnego dnia?\n\nCechy gry:\n• Dwuwymiarowe sprite'y w trójwymiarowych środowiskach. Postaci zostały wycięte ręcznie, w technologii frame-by-frame, co w całości daje nam ok. 3000 klatek,\n\n• Pierwszoosobowy FPS, w którym bronimy bunkra w określonym limicie czasowym. Całość utrudnia sterowanie w formie \"Tank Controls\",\n\n• Przerywniki filmowe FMV z elementami visual noveli,\n\n• Różne typy przeciwników tj. zamaskowane mutanty czy żądni krwi lokalni piłkarze,\n\n• Użyj karabinu, rewolwera i dubeltówki, by zwalczyć zagrożenie,\n\n•  Pokonuj przeciwników i obroń barykady w ciasnym, leśnym terenie,\n\n• Korzystaj z zapadni i kopniaków, by kontrolować atakujący cię tłum,\n\n• Nasłuchuj dźwięków i zwróć uwagę na sensory, by określić pozycję wrogów.\n\nOryginalna ścieżka dźwiękowa skomponowana przez Olgę Lewińską.",
+  "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3902710/20e49befc23cc39ff722545281ce9cbd5dc84400/header.jpg?t=1788494421",
+  "capsule": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3902710/c2918169943bc2c4b70457efcc5af15a84f13eff/capsule_184x69.jpg?t=1788494421",
+  "hero": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3902710/4e5f4ea410363289f4206d07b24fec642c09af7c/ss_4e5f4ea410363289f4206d07b24fec642c09af7c.1920x1080.jpg?t=1788494421",
+  "background": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3902710/adb662b152b653d0157cf25cbb4d422ed617e7e6/page_bg_raw.jpg?t=1788494421",
+  "screenshots": [
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3902710/4e5f4ea410363289f4206d07b24fec642c09af7c/ss_4e5f4ea410363289f4206d07b24fec642c09af7c.600x338.jpg?t=1788494421",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3902710/4e5f4ea410363289f4206d07b24fec642c09af7c/ss_4e5f4ea410363289f4206d07b24fec642c09af7c.1920x1080.jpg?t=1788494421"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3902710/a5ab1fd64ab0d243ea58da868ebfc0d4fb0c4527/ss_a5ab1fd64ab0d243ea58da868ebfc0d4fb0c4527.600x338.jpg?t=1788494421",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3902710/a5ab1fd64ab0d243ea58da868ebfc0d4fb0c4527/ss_a5ab1fd64ab0d243ea58da868ebfc0d4fb0c4527.1920x1080.jpg?t=1788494421"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3902710/827648605b339dd449b98bb5cc7790ef1d7d7ef7/ss_827648605b339dd449b98bb5cc7790ef1d7d7ef7.600x338.jpg?t=1788494421",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3902710/827648605b339dd449b98bb5cc7790ef1d7d7ef7/ss_827648605b339dd449b98bb5cc7790ef1d7d7ef7.1920x1080.jpg?t=1788494421"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3902710/c10c8b2675dfa9016f3d770066be8f3f80287964/ss_c10c8b2675dfa9016f3d770066be8f3f80287964.600x338.jpg?t=1788494421",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3902710/c10c8b2675dfa9016f3d770066be8f3f80287964/ss_c10c8b2675dfa9016f3d770066be8f3f80287964.1920x1080.jpg?t=1788494421"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3902710/802b96f1691c570b9998abbc2e1a62eaa9d2ef9f/ss_802b96f1691c570b9998abbc2e1a62eaa9d2ef9f.600x338.jpg?t=1788494421",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3902710/802b96f1691c570b9998abbc2e1a62eaa9d2ef9f/ss_802b96f1691c570b9998abbc2e1a62eaa9d2ef9f.1920x1080.jpg?t=1788494421"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3902710/7d4f01b117db8cbf463ed127402f5c33d5aa88e4/ss_7d4f01b117db8cbf463ed127402f5c33d5aa88e4.600x338.jpg?t=1788494421",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3902710/7d4f01b117db8cbf463ed127402f5c33d5aa88e4/ss_7d4f01b117db8cbf463ed127402f5c33d5aa88e4.1920x1080.jpg?t=1788494421"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3902710/c56674829e036608d699d49eeb640d473293244e/ss_c56674829e036608d699d49eeb640d473293244e.600x338.jpg?t=1788494421",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3902710/c56674829e036608d699d49eeb640d473293244e/ss_c56674829e036608d699d49eeb640d473293244e.1920x1080.jpg?t=1788494421"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3902710/e21fce47cac192e64be17a41753cbe79eda7812d/ss_e21fce47cac192e64be17a41753cbe79eda7812d.600x338.jpg?t=1788494421",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3902710/e21fce47cac192e64be17a41753cbe79eda7812d/ss_e21fce47cac192e64be17a41753cbe79eda7812d.1920x1080.jpg?t=1788494421"
+   }
+  ],
+  "trailer": {
+   "name": "One Rotten Oath (Launch trailer)",
+   "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/257175735/a6fc5ee6041c19517a7ed1b1f6a738a578faeae9/movie_600x337.jpg?t=1764351525",
+   "mp4": null,
+   "webm": null,
+   "hls": "https://video.akamai.steamstatic.com/store_trailers/3902710/1442427372/457b4d920252cfbe6f9ba097bb717b004efbc43d/1764350163/hls_264_master.m3u8?t=1764351525",
+   "dash": "https://video.akamai.steamstatic.com/store_trailers/3902710/1442427372/457b4d920252cfbe6f9ba097bb717b004efbc43d/1764350163/dash_h264.mpd?t=1764351525"
+  },
+  "developers": [
+   "Piotr Bunkowski"
+  ],
+  "publishers": [
+   "Piotr Bunkowski"
+  ],
+  "genres": [
+   "Akcja",
+   "Rekreacyjne",
+   "Niezależne"
+  ],
+  "categories": [
+   "Jednoosobowa",
+   "Osiągnięcia Steam",
+   "Pełna obsługa kontrolerów",
+   "Dźwięk stereo",
+   "Udostępnianie gier"
+  ],
+  "release": {
+   "soon": false,
+   "date": "28 listopada 2025"
+  },
+  "platforms": {
+   "windows": true,
+   "mac": false,
+   "linux": false
+  },
+  "languagesPL": true,
+  "website": null,
+  "devMatch": true,
+  "itchUrl": null,
+  "youtube": null,
+  "genreHint": null,
+  "note": null,
+  "candidates": [
+   "3902710:One Rotten Oath",
+   "5002530:One Rotten Oath Soundtrack",
+   "3903240:One Rotten Oath Demo"
+  ],
+  "tileImg": "img/games/onerottenoath-tile.jpg",
+  "heroImg": "img/games/onerottenoath-hero.jpg"
+ },
+ {
+  "id": "majorhoof",
+  "studio": "Matrix Reliability",
+  "title": "Major Hoof",
+  "appid": 4242100,
+  "name": "Major Kopyto",
+  "steamUrl": "https://store.steampowered.com/app/4242100/",
+  "short": "Sprawdź! Bo to czysta akcja i chaos! Major Hoof to szybka strzelanka 2D w stylu Metal Slug, łącząca intensywny bullet hell z destrukcją otoczenia i poziomami pełnymi akcji. Walcz z hordami przeciwników i odkrywaj mroczną historię.",
+  "shortEn": "Check it out ! it’s pure action and chaos. Major Hoof is a fast-paced 2D shooter inspired by Metal Slug, combining intense bullet hell with environmental destruction and action-packed levels. Fight through hordes of enemies and uncover a dark story.",
+  "about": "Major Hoof – czym właściwie jest ta gra\nMajor Kopyto to szybka, oldschoolowa strzelanka 2D parodiująca klasyki takie jak Metal Slug, połączona z intensywnym chaosem bullet hell i destrukcją otoczenia.\nWalczysz w długich, pełnych akcji poziomach, gdzie przez cały czas jesteś pod presją. Podstawa rozgrywki jest prosta: poruszaj się szybko, strzelaj bez przerwy i przetrwaj napór przeciwników.\nWcielasz się w cynicznego komandosa, który próbuje uwolnić ofiary handlu ludźmi. Mimo pixelartowej oprawy gra porusza poważniejsze tematy i zawiera subtelny, ironiczny komentarz dotyczący branży gier.\nOprawa wizualna łączy pixel art inspirowany Amigą z nowoczesnymi animacjami szkieletowymi, tworząc wyraźny klimatu retro.\nCo możesz robić w grze:\n• strzelać, biegać, skakać i unikać ataków\n\n• walczyć z dużymi grupami przeciwników w chaotycznych starciach\n\n• łączyć broń palną z walką wręcz\n\n• rozwijać postać i ulepszać broń\n\n• przechodzić duże poziomy pełne akcji i zagrożeń\n\nJeśli lubisz gry takie jak Metal Slug czy Broforce, mechaniki będą Ci znajome — ale tutaj są bardziej intensywne i wymagające.\nDemo jest już dostępne. Jeśli gra wygląda dla Ciebie interesująco, dodanie jej do wishlisty bardzo pomaga na tym etapie.",
+  "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4242100/f3fdddfdcdd25f8615e92a66039771c05a3b9d40/header.jpg?t=1782121785",
+  "capsule": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4242100/756be0b6222f1d75021f4406eb42ea94ac7c4cc8/capsule_184x69.jpg?t=1782121785",
+  "hero": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4242100/83eca7506e2281595831b751fe155d5d6b4101eb/ss_83eca7506e2281595831b751fe155d5d6b4101eb.1920x1080.jpg?t=1782121785",
+  "background": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4242100/11e29d63d8b889d934de83e3e5e35d5e01a0bd0d/page_bg_raw.jpg?t=1782121785",
+  "screenshots": [
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4242100/83eca7506e2281595831b751fe155d5d6b4101eb/ss_83eca7506e2281595831b751fe155d5d6b4101eb.600x338.jpg?t=1782121785",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4242100/83eca7506e2281595831b751fe155d5d6b4101eb/ss_83eca7506e2281595831b751fe155d5d6b4101eb.1920x1080.jpg?t=1782121785"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4242100/91d344dcb48dfd953d7901d19ea6da90ab3d0a01/ss_91d344dcb48dfd953d7901d19ea6da90ab3d0a01.600x338.jpg?t=1782121785",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4242100/91d344dcb48dfd953d7901d19ea6da90ab3d0a01/ss_91d344dcb48dfd953d7901d19ea6da90ab3d0a01.1920x1080.jpg?t=1782121785"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4242100/8e0e7a7ac626461aea26f57c2d3d79ecfcc65e38/ss_8e0e7a7ac626461aea26f57c2d3d79ecfcc65e38.600x338.jpg?t=1782121785",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4242100/8e0e7a7ac626461aea26f57c2d3d79ecfcc65e38/ss_8e0e7a7ac626461aea26f57c2d3d79ecfcc65e38.1920x1080.jpg?t=1782121785"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4242100/aab951d32849d569747bad342c9003802f83c833/ss_aab951d32849d569747bad342c9003802f83c833.600x338.jpg?t=1782121785",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4242100/aab951d32849d569747bad342c9003802f83c833/ss_aab951d32849d569747bad342c9003802f83c833.1920x1080.jpg?t=1782121785"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4242100/97ba588c4f1ccc3c9bd2ab549fd21617c036deed/ss_97ba588c4f1ccc3c9bd2ab549fd21617c036deed.600x338.jpg?t=1782121785",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4242100/97ba588c4f1ccc3c9bd2ab549fd21617c036deed/ss_97ba588c4f1ccc3c9bd2ab549fd21617c036deed.1920x1080.jpg?t=1782121785"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4242100/74c87c38f52619dfcccffed67043496a62c1f1c5/ss_74c87c38f52619dfcccffed67043496a62c1f1c5.600x338.jpg?t=1782121785",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4242100/74c87c38f52619dfcccffed67043496a62c1f1c5/ss_74c87c38f52619dfcccffed67043496a62c1f1c5.1920x1080.jpg?t=1782121785"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4242100/2cb0cbeaa99f14ebe9f5c06a6271412b164d3e73/ss_2cb0cbeaa99f14ebe9f5c06a6271412b164d3e73.600x338.jpg?t=1782121785",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4242100/2cb0cbeaa99f14ebe9f5c06a6271412b164d3e73/ss_2cb0cbeaa99f14ebe9f5c06a6271412b164d3e73.1920x1080.jpg?t=1782121785"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4242100/0c11356bdd2125d018a74c2874e045e652e00556/ss_0c11356bdd2125d018a74c2874e045e652e00556.600x338.jpg?t=1782121785",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4242100/0c11356bdd2125d018a74c2874e045e652e00556/ss_0c11356bdd2125d018a74c2874e045e652e00556.1920x1080.jpg?t=1782121785"
+   }
+  ],
+  "trailer": {
+   "name": "Bullet hell",
+   "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/257350737/aa2d077b339c5afde8bea2c83a9327c0d187b460/movie_600x337.jpg?t=1781552129",
+   "mp4": null,
+   "webm": null,
+   "hls": "https://video.akamai.steamstatic.com/store_trailers/4242100/2129433999/1c8e50f8bcd05198bc51a6dcc510cceacafac99e/1780602983/hls_264_master.m3u8?t=1781552129",
+   "dash": "https://video.akamai.steamstatic.com/store_trailers/4242100/2129433999/1c8e50f8bcd05198bc51a6dcc510cceacafac99e/1780602983/dash_h264.mpd?t=1781552129"
+  },
+  "developers": [
+   "Matrix Reliability"
+  ],
+  "publishers": [
+   "Matrix Reliability"
+  ],
+  "genres": [
+   "Akcja",
+   "Przygodowe"
+  ],
+  "categories": [
+   "Jednoosobowa",
+   "Wieloosobowa",
+   "Kooperacja",
+   "Kooperacja na wspólnym/dzielonym ekranie",
+   "Wspólny/dzielony ekran",
+   "Osiągnięcia Steam",
+   "Pełna obsługa kontrolerów",
+   "Alternatywne opcje kolorystyczne",
+   "Niestandardowa regulacja głośności",
+   "Tylko klawiatura",
+   "Grywalne bez działań ograniczonych czasowo",
+   "Obsługa kontrolerów DUALSHOCK"
+  ],
+  "release": {
+   "soon": true,
+   "date": "24 grudnia 2027"
+  },
+  "platforms": {
+   "windows": true,
+   "mac": true,
+   "linux": true
+  },
+  "languagesPL": true,
+  "website": null,
+  "devMatch": true,
+  "itchUrl": null,
+  "youtube": null,
+  "genreHint": null,
+  "note": null,
+  "candidates": [
+   "4242100:Major Hoof",
+   "4812330:Major Hoof Demo"
+  ],
+  "tileImg": "img/games/majorhoof-tile.jpg",
+  "heroImg": "img/games/majorhoof-hero.jpg"
+ },
+ {
+  "id": "infusion",
+  "studio": "Dragon's Boat Studio",
+  "title": "Infusion",
+  "appid": 4690690,
+  "name": "Infusion",
+  "steamUrl": "https://store.steampowered.com/app/4690690/",
+  "short": "Infusion is a cozy, narrative-focused, coffee-making sim with branching storylines that takes place in a fantasy world full of magic and intrigue. Make different types of coffee, get to know your patrons, help them solve their dilemmas and become the best barista the Cordara has ever seen!",
+  "shortEn": "Infusion is a cozy, narrative-focused, coffee-making sim with branching storylines that takes place in a fantasy world full of magic and intrigue. Make different types of coffee, get to know your patrons, help them solve their dilemmas and become the best barista the Cordara has ever seen!",
+  "about": "Infusion is a cozy, narrative-focused, coffee-making sim with branching storylines that takes place in a fantasy world full of magic and intrigue. Become a barista that has been magically transported into the land of Cordara, and over the course of the magical tournament, introduce your customer to the special potion... The Coffee. Make different types of coffee, get to know your patrons, help them solve their dilemmas - or hinder their attempts, influence the progress of the tournament, and in the end... Perhaps decide the fate of the whole realm. \n\nBECOME THE MASTER COFFEE MAKER\nMake use of different brewing methods, select distinct types of beans, adjust the grind level and temperature of the water - all in order to satisfy your customers and their needs. \n\nMAKE FRIENDS OVER A CUP OF COFFEE\nTalk to your customers in a branching dialogue system. Get to know their personalities, and listen to their problems. Then, decide whether you wish to help them... Or not. The choices (and consequences) are yours to make!\n\nUPGRADE YOUR TOOLS\nEvery well made coffee grants you a tip from your patrons. Spend the coin on different upgrades, which in turn will allow you to be an even better artisan of the coffee-making craft. \n\nDISCOVER THE LORE OF THE REALM... AND DECIDE ITS FATE\nCordara is a magical plane inhabited by the three distinct nations - artistically inclined Weftbondi, mercantile Dravemarkians and nature-loving nomads, the Xelvarini. Get to know their culture and history, and influence which of the nation's champion will become the next ruler of Cordara. \n\nFEATURES\n• Different methods of coffee brewing: make mud coffee, espresso and alternative pour-over (percolation) with dripper\n\n• Upgrade system for different tools in your coffee cart - earn money and spend them to make the coffee preparation faster and easier\n\n• Intricate coffee order system - deduce what kind of brewing method and beans to serve your customers, based on their subtle and descriptive order. \n\n• Different types of beans to choose from - match the proper brewing method. beans, grind level and water temperature for your customer's order.\n\n• Multiple narrative customers with rich and branching dialogues - decide whether to help them with their quests, and be prepared for the consequences of your decisions. \n\n• Cozy atmosphere and visuals that invite you to a fantastical land.",
+  "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4690690/397d16b693b0c455cfd245ac2c8e86498691130d/header.jpg?t=1787943484",
+  "capsule": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4690690/682f5305d087be9943d59b8ba459c6e0d565bfdf/capsule_184x69.jpg?t=1787943484",
+  "hero": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4690690/65a24e1909751e6a026f8860916059b50d6060c0/ss_65a24e1909751e6a026f8860916059b50d6060c0.1920x1080.jpg?t=1787943484",
+  "background": "https://store.akamai.steamstatic.com/images/storepagebackground/app/4690690?t=1787943484",
+  "screenshots": [
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4690690/65a24e1909751e6a026f8860916059b50d6060c0/ss_65a24e1909751e6a026f8860916059b50d6060c0.600x338.jpg?t=1787943484",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4690690/65a24e1909751e6a026f8860916059b50d6060c0/ss_65a24e1909751e6a026f8860916059b50d6060c0.1920x1080.jpg?t=1787943484"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4690690/8cfae08f487e1902764bce3335b1edbed108a419/ss_8cfae08f487e1902764bce3335b1edbed108a419.600x338.jpg?t=1787943484",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4690690/8cfae08f487e1902764bce3335b1edbed108a419/ss_8cfae08f487e1902764bce3335b1edbed108a419.1920x1080.jpg?t=1787943484"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4690690/f194366298dcd47d08b75733d50f5e22002f46ae/ss_f194366298dcd47d08b75733d50f5e22002f46ae.600x338.jpg?t=1787943484",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4690690/f194366298dcd47d08b75733d50f5e22002f46ae/ss_f194366298dcd47d08b75733d50f5e22002f46ae.1920x1080.jpg?t=1787943484"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4690690/a8fbbac3b522e757dc06a66aa8a8b36014c44c3d/ss_a8fbbac3b522e757dc06a66aa8a8b36014c44c3d.600x338.jpg?t=1787943484",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4690690/a8fbbac3b522e757dc06a66aa8a8b36014c44c3d/ss_a8fbbac3b522e757dc06a66aa8a8b36014c44c3d.1920x1080.jpg?t=1787943484"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4690690/a29ed663c0f8f09eddf8e9b3a292138f5eb9feb7/ss_a29ed663c0f8f09eddf8e9b3a292138f5eb9feb7.600x338.jpg?t=1787943484",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4690690/a29ed663c0f8f09eddf8e9b3a292138f5eb9feb7/ss_a29ed663c0f8f09eddf8e9b3a292138f5eb9feb7.1920x1080.jpg?t=1787943484"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4690690/ca8537d783d8cdb14ba31bd23349251ae91fc245/ss_ca8537d783d8cdb14ba31bd23349251ae91fc245.600x338.jpg?t=1787943484",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4690690/ca8537d783d8cdb14ba31bd23349251ae91fc245/ss_ca8537d783d8cdb14ba31bd23349251ae91fc245.1920x1080.jpg?t=1787943484"
+   }
+  ],
+  "trailer": {
+   "name": "Reveal trailer",
+   "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/257411507/4c8f8b5cde688eb358a38ba473f323439c293818/movie_600x337.jpg?t=1787943483",
+   "mp4": null,
+   "webm": null,
+   "hls": "https://video.akamai.steamstatic.com/store_trailers/4690690/325175073/caecb4b3ffb2156b071ef8747e74e0282de7aa5a/1787942664/hls_264_master.m3u8?t=1787943483",
+   "dash": "https://video.akamai.steamstatic.com/store_trailers/4690690/325175073/caecb4b3ffb2156b071ef8747e74e0282de7aa5a/1787942664/dash_h264.mpd?t=1787943483"
+  },
+  "developers": [
+   "Dragon's Boat Studio"
+  ],
+  "publishers": [
+   "Dragon's Boat Studio"
+  ],
+  "genres": [
+   "Rekreacyjne",
+   "Niezależne",
+   "Symulacje",
+   "Wczesny dostęp"
+  ],
+  "categories": [
+   "Jednoosobowa",
+   "Dostosowywanie kamery",
+   "Niestandardowa regulacja głośności",
+   "Grywalne bez działań ograniczonych czasowo",
+   "Dźwięk stereo",
+   "Dźwięk przestrzenny",
+   "Udostępnianie gier"
+  ],
+  "release": {
+   "soon": true,
+   "date": "Nie ogłoszono"
+  },
+  "platforms": {
+   "windows": true,
+   "mac": false,
+   "linux": false
+  },
+  "languagesPL": false,
+  "website": "https://dragonsboatstudio.com/",
+  "devMatch": true,
+  "itchUrl": null,
+  "youtube": null,
+  "genreHint": null,
+  "note": null,
+  "candidates": [
+   "4507920:Cloud Infusion",
+   "694320:UnderRail 2: Infusion",
+   "4690690:Infusion",
+   "4529330:Cloud Infusion Demo"
+  ],
+  "tileImg": "img/games/infusion-tile.jpg",
+  "heroImg": "img/games/infusion-hero.jpg"
+ },
+ {
+  "id": "couchplanes",
+  "studio": "Skylab Interactive",
+  "title": "Couch Planes",
+  "appid": 2431740,
+  "name": "Couch Planes",
+  "steamUrl": "https://store.steampowered.com/app/2431740/",
+  "short": "Couch Planes to turboodrzutowa podniebna gra towarzyska, w której wygrywają tylko najodważniejsi piloci. Unikaj pocisków, zbieraj wzmocnienia i ścigaj się na trasach najeżonych niebezpieczeństwami w różnych trybach gry lokalnie lub online. Łatwo zacząć, trudno opanować, ale liczy się zabawa!",
+  "shortEn": "Couch Planes is a fast-paced airborne party game where the craftiest pilot wins. Dodge missiles, grab power-ups, and race through hazard-filled maps in various game modes in chaotic local or online matches. Easy to learn, wild to master, always a blast.",
+  "about": "Ścigaj się po chwałę w Couch Planes — podniebnej grze imprezowej, w której wygrywają tylko najodważniejsi piloci. To odrzutowa dawka arcade’owej frajdy, gdzie ciasne manewry, szalone power-upy i bezczelne zagrania idą ze sobą w parze. Unikaj pocisków znajomych siedzących tuż obok na kanapie albo strącaj rywali z tabeli wyników w rozgrywce online. Wsiądź za stery nietypowych maszyn, poczuj prędkość i przebij się przez mapy pełne zagrożeń, skrótów i wzmocnień, które potrafią odwrócić losy wyścigu tuż przed metą.\n\nLataj solo, stwórz własną eskadrę albo zmień wieczorne granie w turniej o tytuł asa przestworzy. Couch Planes obsługuje lokalną rozgrywkę na podzielonym ekranie dla maksymalnie 4 graczy oraz mecze online dla maksymalnie 12 pilotów. Możecie też łączyć grę lokalną z online — kanapa kontra kanapa? Jak najbardziej!\nOdprężcie się przy luźnym lataniu albo zdominujcie przestrzeń powietrzną precyzyjnymi manewrami. Tak czy siak, wszystkie systemy gotowe!\n\nNieważne, jak lubicie latać — Couch Planes ma tryb dla was.\n\nRozbijaj balony unoszące się w powietrzu, aby zdobywać power-upy, które błyskawicznie podkręcają tempo rozgrywki: rakiety samonaprowadzające, dopalacze, wybuchające miny i wiele więcej. Przedmioty skalują się z pozycją w tabeli, zatem nikt nie może czuć się zbyt bezpiecznie na prowadzeniu lub bez szans będąc daleko w tyle.\n\nLataj po 15 ręcznie projektowanych mapach pełnych zagrożeń, skrótów i niespodzianek — od tornad i zapadających się klifów po wirujące przeszkody, ruchome elementy i lokomotywy pełne skarbów. Wykonuj ciasne manewry, aby przemykać skrótami, ale uważaj: jeden błąd wystarczy, by przed oczami został ci już tylko ślad dopalaczy znajomych.\n\nProste, arcade’owe sterowanie sprawia, że do gry można wskoczyć od razu, ale pod maską kryje się sporo miejsca na popisy. Naucz się unikać rakiet efektowną beczką, ślizgać się w powietrzu pokonując ostre zakręty i wychodzić z kłopotów jak prawdziwy podniebny kaskader.\n\nW miarę postępów odblokowuj nowe elementy kosmetyczne: skórki, smugi, naklejki i efekty. Żaden z nich nie wpływa na rozgrywkę. Tutaj nie ma pay-to-win. Wszyscy startują na tych samych zasadach, ale nikt nie powiedział, że nie można przy okazji wyglądać obłędnie.\n\nDzięki wydarzeniom sezonowym, rotującym przedmiotom w sklepie, rankingom i rozwijanej zawartości Couch Planes zawsze ma coś nowego do zaoferowania. Niezależnie od tego, czy masz ochotę na szybki mecz, czy też chcesz odblokować kolejny przedmiot, zawsze jest powód, by wskoczyć z powrotem do kokpitu.",
+  "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2431740/13650108c258f24eccb84bb130fe69a97a4498a6/header.jpg?t=1783536340",
+  "capsule": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2431740/bacf1f6e25bc1119ba1c1d792a7f9a37aa46b5c8/capsule_184x69.jpg?t=1783536340",
+  "hero": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2431740/33ed2a26e33757361ce79c6fd86f2fcc99b3cb35/ss_33ed2a26e33757361ce79c6fd86f2fcc99b3cb35.1920x1080.jpg?t=1783536340",
+  "background": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2431740/86801ab28ba09ddec63e7e8ef6c09f908b83befc/page_bg_raw.jpg?t=1783536340",
+  "screenshots": [
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2431740/33ed2a26e33757361ce79c6fd86f2fcc99b3cb35/ss_33ed2a26e33757361ce79c6fd86f2fcc99b3cb35.600x338.jpg?t=1783536340",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2431740/33ed2a26e33757361ce79c6fd86f2fcc99b3cb35/ss_33ed2a26e33757361ce79c6fd86f2fcc99b3cb35.1920x1080.jpg?t=1783536340"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2431740/822c7fb2f2d36b3432bb16583502ba7f63d815ea/ss_822c7fb2f2d36b3432bb16583502ba7f63d815ea.600x338.jpg?t=1783536340",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2431740/822c7fb2f2d36b3432bb16583502ba7f63d815ea/ss_822c7fb2f2d36b3432bb16583502ba7f63d815ea.1920x1080.jpg?t=1783536340"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2431740/a0138b3647292b373de848217c2fea3afc709b90/ss_a0138b3647292b373de848217c2fea3afc709b90.600x338.jpg?t=1783536340",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2431740/a0138b3647292b373de848217c2fea3afc709b90/ss_a0138b3647292b373de848217c2fea3afc709b90.1920x1080.jpg?t=1783536340"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2431740/7936042ca9326d813969dac761a7edc86d3f9bb8/ss_7936042ca9326d813969dac761a7edc86d3f9bb8.600x338.jpg?t=1783536340",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2431740/7936042ca9326d813969dac761a7edc86d3f9bb8/ss_7936042ca9326d813969dac761a7edc86d3f9bb8.1920x1080.jpg?t=1783536340"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2431740/9837210b44759f951882ba2a582822b74cb5226d/ss_9837210b44759f951882ba2a582822b74cb5226d.600x338.jpg?t=1783536340",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2431740/9837210b44759f951882ba2a582822b74cb5226d/ss_9837210b44759f951882ba2a582822b74cb5226d.1920x1080.jpg?t=1783536340"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2431740/0bc8ba262f0a3fb5629a532d0e38db803ca0599f/ss_0bc8ba262f0a3fb5629a532d0e38db803ca0599f.600x338.jpg?t=1783536340",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2431740/0bc8ba262f0a3fb5629a532d0e38db803ca0599f/ss_0bc8ba262f0a3fb5629a532d0e38db803ca0599f.1920x1080.jpg?t=1783536340"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2431740/c7256d06c898cb5891726ee3977268ee7028ce82/ss_c7256d06c898cb5891726ee3977268ee7028ce82.600x338.jpg?t=1783536340",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2431740/c7256d06c898cb5891726ee3977268ee7028ce82/ss_c7256d06c898cb5891726ee3977268ee7028ce82.1920x1080.jpg?t=1783536340"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2431740/4c334c48158260f873b65252f26f99b2e41ad06c/ss_4c334c48158260f873b65252f26f99b2e41ad06c.600x338.jpg?t=1783536340",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2431740/4c334c48158260f873b65252f26f99b2e41ad06c/ss_4c334c48158260f873b65252f26f99b2e41ad06c.1920x1080.jpg?t=1783536340"
+   }
+  ],
+  "trailer": {
+   "name": "Couch Planes Explosive Trailer",
+   "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/257372032/437a9890be0c456ee04027974ba02fe6159ff61d/movie_600x337.jpg?t=1783370527",
+   "mp4": null,
+   "webm": null,
+   "hls": "https://video.akamai.steamstatic.com/store_trailers/2431740/320961420/e736bc86bfabc82e71d21fe3515eeb276d59f80b/1783370131/hls_264_master.m3u8?t=1783370527",
+   "dash": "https://video.akamai.steamstatic.com/store_trailers/2431740/320961420/e736bc86bfabc82e71d21fe3515eeb276d59f80b/1783370131/dash_h264.mpd?t=1783370527"
+  },
+  "developers": [
+   "Skylab Interactive"
+  ],
+  "publishers": [
+   "Skylab Interactive"
+  ],
+  "genres": [
+   "Akcja",
+   "Wyścigowe",
+   "Symulacje"
+  ],
+  "categories": [
+   "Jednoosobowa",
+   "Wieloosobowa",
+   "PvP",
+   "PvP przez internet",
+   "PvP na wspólnym/dzielonym ekranie",
+   "Wspólny/dzielony ekran",
+   "Wieloplatformowa wieloosobowa",
+   "Pełna obsługa kontrolerów",
+   "Dostosowywanie kamery",
+   "Niestandardowa regulacja głośności",
+   "Tylko klawiatura",
+   "Grywalne bez działań ograniczonych czasowo"
+  ],
+  "release": {
+   "soon": true,
+   "date": "Nie ogłoszono"
+  },
+  "platforms": {
+   "windows": true,
+   "mac": false,
+   "linux": false
+  },
+  "languagesPL": true,
+  "website": null,
+  "devMatch": true,
+  "itchUrl": null,
+  "youtube": null,
+  "genreHint": null,
+  "note": null,
+  "candidates": [
+   "2431740:Couch Planes"
+  ],
+  "tileImg": "img/games/couchplanes-tile.jpg",
+  "heroImg": "img/games/couchplanes-hero.jpg"
+ },
+ {
+  "id": "pluckem",
+  "studio": "Hidden Spark Games",
+  "title": "Pluck Em!",
+  "appid": 4859830,
+  "name": "Pluck Em!",
+  "steamUrl": "https://store.steampowered.com/app/4859830/",
+  "short": "Walcz z irytującymi, opierzonymi szkodnikami w wciągającej arcade’owej strzelance inspirowanej klasykami ery 8 i 16-bitowej. Eksploruj dziwaczne biomy, odkrywaj osobliwe gatunki ptaków, zdobywaj medale, ulepszaj sprzęt i trafiaj na sekrety, których być może lepiej było nigdy nie odkrywać.",
+  "shortEn": "Fight off annoying feathered pests in this addictive arcade shooter inspired by the classics of the 8- and 16-bit era. Explore strange biomes, discover bizarre bird species, earn medals, upgrade your gear and uncover secrets that are probably better left undiscovered.",
+  "about": "Walcz z irytującymi, opierzonymi szkodnikami w wciągającej arcade’owej strzelance inspirowanej klasykami ery 8 i 16-bitowej. Eksploruj dziwaczne biomy, odkrywaj osobliwe gatunki ptaków, zdobywaj medale, ulepszaj swój sprzęt i trafiaj na sekrety, których być może lepiej było nigdy nie odkrywać.\n\nPluck Em! to kolorowa arcade’owa strzelanka inspirowana złotą erą gier, kiedy do szczęścia wystarczał szybki refleks, celne oko i zdrowy brak szacunku dla dzikiej przyrody.\nWyrusz w podróż przez świat pełen lasów, bagien, plaż, lodowych pustkowi, pustyń oraz miejsc, które zdecydowanie nie dostały zgody lokalnych władz. Po drodze spotkasz dziesiątki gatunków ptaków, zdobędziesz medale, odblokujesz nowy ekwipunek i stopniowo zapełnisz bestiariusz faktami, legendami oraz okazjonalną kompletną bzdurą.\nBo każdy ptak ma swoją historię.\nNiektóre z tych historii są nawet prawdziwe.\nZostań Certyfikowanym Ekspertem od Ptaków*\n*Certyfikat nie jest prawnie uznawany nigdzie.\nOdkryj dziesiątki gatunków w 11 unikalnych biomach.\nPoznaj fascynujące ciekawostki o naturze, historii i kulturze.\nA potem natychmiast zrujnuj tę edukację, czytając plotkę o tym, że ten sam ptak kiedyś obrabował kupca, założył sektę albo odmawia rzucania cienia.\nNie twierdzimy, że te historie są prawdziwe.\nTwierdzimy tylko, że nikt jeszcze ich nie obalił.\nŚwiat pełen piór\n🦆 Eksploruj 11 różnorodnych biomów\n📖 Uzupełnij swój Bestiariusz\n🏆 Zdobywaj medale i myśliwskie trofea\n🎯 Opanuj zręcznościowe wyzwania strzeleckie\n👑 Zmierz się z bossami biomów\n🛒 Odblokowuj ulepszenia i gadżety\n🌞 Odkrywaj gatunki aktywne o różnych porach dnia\n🌴 Znajduj ukryte sekrety rozsiane po świecie\nStworzone z AI. Wypolerowane uporem.\nPluck Em! to eksperymentalna gra stworzona niemal w całości przy użyciu narzędzi opartych na sztucznej inteligencji.\nGrafiki i kod zostały wygenerowane z pomocą Moonlake AI.\nMuzyka powstała przy użyciu Suno AI.\nSystemy rozgrywki, balans, testowanie, naprawianie błędów, szlifowanie oraz tysiące drobnych decyzji potrzebnych do tego, by sterta wygenerowanej zawartości zaczęła przypominać prawdziwą grę, zostały wykonane ręcznie.\nInnymi słowy:\nAI wykonało ciężką robotę.\nCzłowiek przez tygodnie pytał:\n„Dobrze, ale czy da się zrobić tak, żeby było mniej fatalnie?”\nW kółko.\nI jeszcze jedno...\nGdzieś na pustyni znajduje się miejsce, którego większość łowców nigdy nie odnajduje.\nCicha oaza.\nKilka palm.\nTajemniczy sokół.\nI absolutnie nic dziwnego się tam nie dzieje.\nPrawdopodobnie.",
+  "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4859830/cba0d96d3202ae75297bd071b9ec36654d6037bd/header.jpg?t=1789457284",
+  "capsule": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4859830/9e8f9ef1227fe18daa70d79038416f9187f570b7/capsule_184x69.jpg?t=1789457284",
+  "hero": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4859830/893982221df9db33ea87c40f5ee2b0bbd21b0f06/ss_893982221df9db33ea87c40f5ee2b0bbd21b0f06.1920x1080.jpg?t=1789457284",
+  "background": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4859830/fda211b07daaef388d224bcb4650579c5602a659/page_bg_raw.jpg?t=1789457284",
+  "screenshots": [
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4859830/893982221df9db33ea87c40f5ee2b0bbd21b0f06/ss_893982221df9db33ea87c40f5ee2b0bbd21b0f06.600x338.jpg?t=1789457284",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4859830/893982221df9db33ea87c40f5ee2b0bbd21b0f06/ss_893982221df9db33ea87c40f5ee2b0bbd21b0f06.1920x1080.jpg?t=1789457284"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4859830/4fedca3e587cb1d45be4c7bfc62d967183cdb91c/ss_4fedca3e587cb1d45be4c7bfc62d967183cdb91c.600x338.jpg?t=1789457284",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4859830/4fedca3e587cb1d45be4c7bfc62d967183cdb91c/ss_4fedca3e587cb1d45be4c7bfc62d967183cdb91c.1920x1080.jpg?t=1789457284"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4859830/05f63b5997e5339c7d6ff19ee8eab8b34714cdce/ss_05f63b5997e5339c7d6ff19ee8eab8b34714cdce.600x338.jpg?t=1789457284",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4859830/05f63b5997e5339c7d6ff19ee8eab8b34714cdce/ss_05f63b5997e5339c7d6ff19ee8eab8b34714cdce.1920x1080.jpg?t=1789457284"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4859830/b046c003028081cb021c19219a92054576b16f04/ss_b046c003028081cb021c19219a92054576b16f04.600x338.jpg?t=1789457284",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4859830/b046c003028081cb021c19219a92054576b16f04/ss_b046c003028081cb021c19219a92054576b16f04.1920x1080.jpg?t=1789457284"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4859830/eb2f8aa270a3dab2f1b586023af11ec2af158f9f/ss_eb2f8aa270a3dab2f1b586023af11ec2af158f9f.600x338.jpg?t=1789457284",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4859830/eb2f8aa270a3dab2f1b586023af11ec2af158f9f/ss_eb2f8aa270a3dab2f1b586023af11ec2af158f9f.1920x1080.jpg?t=1789457284"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4859830/16915008fbda76ba3cdf9450309f803c3c0e2902/ss_16915008fbda76ba3cdf9450309f803c3c0e2902.600x338.jpg?t=1789457284",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4859830/16915008fbda76ba3cdf9450309f803c3c0e2902/ss_16915008fbda76ba3cdf9450309f803c3c0e2902.1920x1080.jpg?t=1789457284"
+   }
+  ],
+  "trailer": {
+   "name": "Pluck Em! Steam Trailer",
+   "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/257374728/d01de3adaaf399936ac441987211ee8fc15d621c/movie_600x337.jpg?t=1788613619",
+   "mp4": null,
+   "webm": null,
+   "hls": "https://video.akamai.steamstatic.com/store_trailers/4859830/2033329585/c3b4a3a805733349a55528bbc22280e7575df955/1788612758/hls_264_master.m3u8?t=1788613619",
+   "dash": "https://video.akamai.steamstatic.com/store_trailers/4859830/2033329585/c3b4a3a805733349a55528bbc22280e7575df955/1788612758/dash_h264.mpd?t=1788613619"
+  },
+  "developers": [
+   "Hidden Spark Games"
+  ],
+  "publishers": [
+   "Hidden Spark Games"
+  ],
+  "genres": [
+   "Akcja",
+   "Rekreacyjne",
+   "Sportowe"
+  ],
+  "categories": [
+   "Jednoosobowa",
+   "Pełna obsługa kontrolerów",
+   "Obsługa kontrolerów DUALSHOCK",
+   "Obsługa kontrolerów DUALSHOCK",
+   "Obsługa kontrolerów DualSense",
+   "Obsługa kontrolerów DualSense",
+   "Rankingi Steam",
+   "Udostępnianie gier"
+  ],
+  "release": {
+   "soon": true,
+   "date": "2026"
+  },
+  "platforms": {
+   "windows": true,
+   "mac": true,
+   "linux": false
+  },
+  "languagesPL": true,
+  "website": null,
+  "devMatch": true,
+  "itchUrl": null,
+  "youtube": null,
+  "genreHint": null,
+  "note": null,
+  "candidates": [
+   "4859830:Pluck Em!",
+   "4945700:Pluck Em! Demo"
+  ],
+  "tileImg": "img/games/pluckem-tile.jpg",
+  "heroImg": "img/games/pluckem-hero.jpg"
+ },
+ {
+  "id": "hollowmine",
+  "studio": "Michał Parysz",
+  "title": "Hollow Mine",
+  "appid": 2465060,
+  "name": "Hollow Mine",
+  "steamUrl": "https://store.steampowered.com/app/2465060/",
+  "short": "Zejdź w głąb Hollow Mine, przebij się przez hordy wrogów i obróć kopalnię w źródło swojej siły. Burz ściany, zbieraj surowce, wykuwaj unikalne bronie i łącz zdolności w potężne buildy, schodząc coraz głębiej, by zniszczyć zło ukryte pod ziemią.",
+  "shortEn": "Descend into the Hollow Mine, fight through hordes of enemies, and turn the dungeon itself into your source of power. Break through destructible walls, gather resources, forge unique weapons, and combine abilities into devastating builds as you push deeper to destroy the evil buried below.",
+  "about": "Zejdź w głąb Hollow Mine, przebij się przez hordy wrogów i zmień samą kopalnię w źródło swojej siły. Burz  ściany, zbieraj surowce, wykuwaj unikalne bronie i łącz zdolności w niszczycielskie buildy, schodząc coraz głębiej ku złu ukrytemu pod ziemią.\n\nKop → Walcz → Zbieraj → Twórz → Buduj postać → Pokonuj bossów → Odblokowuj nowe możliwości → Zejdź ponownie\n\nKażdy system napędza kolejny: wydobywanie zasila crafting, crafting wzmacnia twój ekwipunek, a zwycięstwa nad bossami poszerzają możliwości kolejnych wypraw.\nWalcz po swojemu\nWybierz broń do walki wręcz, ataki dystansowe lub magię. Przemykaj dashem przez wzory bullet hell, łącz bronie ze zdolnościami i zmień kruchego bohatera w niszczycielską postać zdolną czyścić całe pomieszczenia w spektakularny sposób.\n\nTwój styl walki wynika bezpośrednio z tego, co znajdziesz, wydobędziesz, stworzysz i odblokujesz podczas wyprawy.\n\nZmień kopalnię w źródło siły\nKopalnia to coś więcej niż poziom. To źródło materiałów, skrótów, dróg ucieczki, możliwości taktycznych i siły.\n\nPrzekopuj się przez całkowicie zniszczalne ściany, odkrywaj rudy i ukryte obszary, twórz tunele ucieczki, flankuj przeciwników, wysadzaj nowe przejścia bombami i używaj wagoników górniczych jako broni.\n\nWszystko, co odkryjesz, może zmienić przebieg wyprawy.\n\nWykuj broń z tego, co znajdziesz\nWydobywaj rudy, zdobywaj cenne drobiazgi ze skrzyń i zamieniaj znalezione materiały w bronie, mikstury i magię podczas wyprawy.\n\nZnajdź odpowiednie materiały, wykuj lepszy ekwipunek i wykorzystaj go, by rozwinąć swój build jeszcze dalej. Ulepszaj, konserwuj i naprawiaj cenne bronie, zanim bezpowrotnie je stracisz.\n\nOdblokowuj możliwości, nie darmową siłę\nPokonywanie bossów odblokowuje trwałe schematy rzadkiego i unikalnego wyposażenia. Po odblokowaniu pozostają dostępne podczas kolejnych wypraw.\n\nBroń nie zostaje jednak po prostu podarowana. Nadal musisz zdobyć odpowiednią walutę, zebrać materiały i stworzyć ją podczas udanej wyprawy.\n\nProgresja poszerza to, co jest możliwe. Na prawdziwą siłę nadal trzeba zapracować wewnątrz kopalni.\n\nStwórz niszczycielski build\nWybieraj spośród ponad 100 zdolności i łącz je z bronią, zaklęciami, wyposażeniem oraz cechami klas, tworząc potężne synergie.\n\nZnajdź odpowiednie narzędzia, kumuluj zdolności i rozwiń swoją postać daleko poza poziom, na którym rozpoczęła wyprawę.\n\nOdblokowuj nowe sposoby gry\nOdblokuj 14 klas postaci, z których każda ma własną zdolność, początkowe wyposażenie i styl walki.\n\nProgresja zwiększa twój potencjał zamiast trwale podnosić statystyki. Nowe postacie, przedmioty i schematy otwierają nowe strategie podczas przyszłych wypraw.\n\nTwoja podstawowa siła nie rośnie po prostu z każdą próbą. Zamiast tego poszerzają się twoje możliwości.\n\n4 kolejne tajemnicze postacie pojawią się w przyszłych aktualizacjach.\n\nJedna spójna pętla roguelite\n\nEksploruj i walcz → Wydobywaj surowce → Twórz i ulepszaj → Buduj bohatera → Pokonuj bossów → Odblokowuj nowe możliwości → Wróć do kryjówki → Zejdź ponownie\n\nTo, co odkryjesz, wpływa na to, co możesz stworzyć. To, co stworzysz, kształtuje twój build. A twój build decyduje, jak daleko zdołasz poprowadzić wyprawę.\nCechy\n• 5 różnorodnych biomów i ponad 90 proceduralnie generowanych pomieszczeń.\n\n• 10 bossów, w tym dwufazowa walka z finałowym bossem.\n\n• Ponad 100 broni i zaklęć.\n\n• Ponad 100 zdolności do tworzenia potężnych buildów.\n\n• Ponad 250 przedmiotów do odkrycia.\n\n• 14 odblokowywanych klas postaci z unikalnymi zdolnościami i początkowym wyposażeniem.\n\n• W pełni zniszczalne środowisko z wydobywaniem, skrótami, tunelami ucieczki, bombami i wykorzystaniem otoczenia w walce.\n\n• Tworzenie, ulepszanie, wytrzymałość i naprawianie broni.\n\n• Trwałe schematy oraz kryjówka z magazynem dostępnym pomiędzy wyprawami.\n\n• Różnorodne cele pomieszczeń, pokoje nagród, NPC, sklepy, sekrety i ukryte przejścia.\n\n• Tryby Standard oraz Shadow Land.\n\n• 100 osiągnięć Steam powiązanych z odblokowywaniem nowej zawartości.",
+  "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2465060/2e72bd64ae7b4ef2da40a956be8242b7a06e3f46/header.jpg?t=1789374975",
+  "capsule": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2465060/1444001e75d1fbdb1dc44064c7616cdbb1c08021/capsule_184x69.jpg?t=1789374975",
+  "hero": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2465060/d33a9472e546331008304fc39f5a1e6227f3fb35/ss_d33a9472e546331008304fc39f5a1e6227f3fb35.1920x1080.jpg?t=1789374975",
+  "background": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2465060/76f3fe63a7e6d92f039f6744e0bc2c1d5f67ff87/page_bg_raw.jpg?t=1789374975",
+  "screenshots": [
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2465060/d33a9472e546331008304fc39f5a1e6227f3fb35/ss_d33a9472e546331008304fc39f5a1e6227f3fb35.600x338.jpg?t=1789374975",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2465060/d33a9472e546331008304fc39f5a1e6227f3fb35/ss_d33a9472e546331008304fc39f5a1e6227f3fb35.1920x1080.jpg?t=1789374975"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2465060/56f3db0b0d01bda2ea848a110900b932aa902ab6/ss_56f3db0b0d01bda2ea848a110900b932aa902ab6.600x338.jpg?t=1789374975",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2465060/56f3db0b0d01bda2ea848a110900b932aa902ab6/ss_56f3db0b0d01bda2ea848a110900b932aa902ab6.1920x1080.jpg?t=1789374975"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2465060/0a7337d243ae947614273eb641e8c0c019cafc10/ss_0a7337d243ae947614273eb641e8c0c019cafc10.600x338.jpg?t=1789374975",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2465060/0a7337d243ae947614273eb641e8c0c019cafc10/ss_0a7337d243ae947614273eb641e8c0c019cafc10.1920x1080.jpg?t=1789374975"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2465060/80a0fa99fc548a4c1c6e8533eaf727754ebfd091/ss_80a0fa99fc548a4c1c6e8533eaf727754ebfd091.600x338.jpg?t=1789374975",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2465060/80a0fa99fc548a4c1c6e8533eaf727754ebfd091/ss_80a0fa99fc548a4c1c6e8533eaf727754ebfd091.1920x1080.jpg?t=1789374975"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2465060/eca9bf80a8bbfbf823e23589769a397a62322190/ss_eca9bf80a8bbfbf823e23589769a397a62322190.600x338.jpg?t=1789374975",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2465060/eca9bf80a8bbfbf823e23589769a397a62322190/ss_eca9bf80a8bbfbf823e23589769a397a62322190.1920x1080.jpg?t=1789374975"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2465060/c1b4ace466b1fbd4a3ba450d105cf57be979f23c/ss_c1b4ace466b1fbd4a3ba450d105cf57be979f23c.600x338.jpg?t=1789374975",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2465060/c1b4ace466b1fbd4a3ba450d105cf57be979f23c/ss_c1b4ace466b1fbd4a3ba450d105cf57be979f23c.1920x1080.jpg?t=1789374975"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2465060/41335f9c080a544f63b5e25e2f01d86a5a255aec/ss_41335f9c080a544f63b5e25e2f01d86a5a255aec.600x338.jpg?t=1789374975",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2465060/41335f9c080a544f63b5e25e2f01d86a5a255aec/ss_41335f9c080a544f63b5e25e2f01d86a5a255aec.1920x1080.jpg?t=1789374975"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2465060/6b7f3a5264a8d67092c6c751a268f6f7b1c85cdb/ss_6b7f3a5264a8d67092c6c751a268f6f7b1c85cdb.600x338.jpg?t=1789374975",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2465060/6b7f3a5264a8d67092c6c751a268f6f7b1c85cdb/ss_6b7f3a5264a8d67092c6c751a268f6f7b1c85cdb.1920x1080.jpg?t=1789374975"
+   }
+  ],
+  "trailer": {
+   "name": "Launch Trailer",
+   "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/257250288/320b5c25b84f3113ee49b045b855dbd6f395fb64/movie_600x337.jpg?t=1766069917",
+   "mp4": null,
+   "webm": null,
+   "hls": "https://video.akamai.steamstatic.com/store_trailers/2465060/1144339599/70be607ee0c42bfcabf592d2ca4e0128a3c66ea0/1765826861/hls_264_master.m3u8?t=1766069917",
+   "dash": "https://video.akamai.steamstatic.com/store_trailers/2465060/1144339599/70be607ee0c42bfcabf592d2ca4e0128a3c66ea0/1765826861/dash_h264.mpd?t=1766069917"
+  },
+  "developers": [
+   "Michał Parysz"
+  ],
+  "publishers": [
+   "Michał Parysz"
+  ],
+  "genres": [
+   "Akcja",
+   "Przygodowe",
+   "Niezależne",
+   "RPG"
+  ],
+  "categories": [
+   "Jednoosobowa",
+   "Osiągnięcia Steam",
+   "Częściowa obsługa kontrolerów",
+   "Steam Cloud",
+   "Udostępnianie gier"
+  ],
+  "release": {
+   "soon": false,
+   "date": "9 października 2025"
+  },
+  "platforms": {
+   "windows": true,
+   "mac": false,
+   "linux": false
+  },
+  "languagesPL": true,
+  "website": "http://hollowmine.com/",
+  "devMatch": true,
+  "itchUrl": null,
+  "youtube": null,
+  "genreHint": null,
+  "note": null,
+  "candidates": [
+   "2465060:Hollow Mine"
+  ],
+  "tileImg": "img/games/hollowmine-tile.jpg",
+  "heroImg": "img/games/hollowmine-hero.jpg"
+ },
+ {
+  "id": "foxydumplings",
+  "studio": "Soft Crunch Games",
+  "title": "Foxy Dumplings",
+  "appid": 4184130,
+  "name": "Foxy Dumplings",
+  "steamUrl": "https://store.steampowered.com/app/4184130/",
+  "short": "W Foxy Dumplings będziesz prowadzić własny food truck i nawiązywać nowe znajomości. Gotuj pierogi z całego świata, dbaj o swoich klientów i odkryj, jak posiłek może zaspokoić nie tylko głód w tej przytulnej symulacji gotowania. Awansuj na szczyt Foxtagramu, serwując kolejne dania prosto z serca.",
+  "shortEn": "In Foxy Dumplings, you’ll run your own food truck and make friends along the way. Cook dumplings from all over the world, take good care of your clients, and discover how a meal can mend more than just hunger in this cozy cooking sim. Rise to the top of Foxtagram, one heartfelt dish at a time.",
+  "about": "Najodważniejsza podróż zaczyna się wtedy, gdy zostawiasz stare życie za sobą.\nDołącz do Lisy w wyprawie, która zaczyna się jako przygoda z food truckiem pełnym pierogów, a powoli zmienia się w opowieść o bliskości, pocieszeniu i odnajdywaniu swojego miejsca. Po drodze odwiedzisz nowe miasta, poznasz niezapomnianych przyjaciół i odkryjesz, że czasem pieróg potrafi dać ciepło tam gdzie słowa zawodzą.\n\nPierogi na każdy gust\nPrzygotowywanie pierogów to podstawa Foxy Dumplings!\nTwoja kuchnia jest w pełni wyposażona, co daje ci swobodę eksperymentowania ze smakami, farszami i stylami z całego świata. Możesz postawić na wegańskie dania, trzymać się tradycji lub stworzyć coś zupełnie nowego, ale pamiętaj, że każde miasto i każdy klient mają swoje własne kulinarne upodobania. Jedni wolą pierogi wytrawne i porządnie kleiste, inni skuszą się na coś słodkiego. Ale po co kurczowo trzymać się starych przepisów, skoro możesz wymyślić własne? Gotowanie to nie tylko receptury, to sztuka słuchania, dopasowywania się i czerpania radości z drobnych, przemyślanych szczegółów.\n\nNie jest to zwykły food truck\nTwoja szklarnia, sypialnia i kuchnia w jednym!\nŻeby Twoja podróż gładko przebiegała, potrzebujesz miejsca, które zawsze będzie „Twoje” niezależnie od tego, gdzie akurat zaparkujesz. A ten trójpoziomowy pojazd to coś znacznie lepszego niż wszystko, co kiedykolwiek jeździło po drogach. Na pierwszym poziomie znajduje się kuchnia i miejsce kierowcy. Na drugim Twoja własna sypialnia. A trzeci został zamieniony w w pełni działającą szklarnię!\nChcesz wiedzieć, co jest w tym najlepsze? Wszystko możesz dostosować do siebie.\n\nDługa podróż pełna przyjaciół\nPodczas swojej przygody w Foxy Dumplings odwiedzisz różne miasta, poznasz nowych przyjaciół i pomożesz im w problemach. Każde miejsce reaguje na Twoje decyzje i stopniowo zmienia się wraz z rozwojem fabuły. Nawet najmniejszy gest życzliwości może pomóc Ci rozwinąć biznes aż w końcu o Twoich pysznych pierogach usłyszy cały świat!\n\nFoxtagram! Zostań gwiazdą pierogów\nProwadzenie food trucka w dzisiejszym świecie oznacza jedno: trzeba dzielić się swoją drogą w sieci, więc wrzucaj foty pierogów na Foxtagrama! Każdy post może odblokować nowe naklejki, filtry i dekoracje. Wykorzystaj je, żeby zbudować własny styl i zostać ulubioną kucharką Foxtagrama w mieście. Dziel się swoimi pierogami z innymi graczami, wymieniaj się inspiracjami i podglądaj cudze pomysły. A kto wie, może z czasem Twoje pierogi trafią na łamy najsłynniejszych magazynów kulinarnych…\n\nGra zawiera:\n• 12 wyjątkowych miast inspirowanych kulturami z całego świata.\n\n• Prawdziwe przepisy, które możesz modyfikować według własnego uznania!\n\n• Przytulna rozgrywka pełna minigier!\n\n• Personalizacja food trucków i postaci!\n\n• Łatwe do opanowania zarządzanie zasobami!\n\n• Ciepła, poruszająca historia\n\n• Mnóstwo przyjaciół, których poznasz po drodze!\n\nCzeka na Ciebie przytulna przygoda, mały food truck i mnóstwo pierogów. Jeszcze dzisiaj dodaj Foxy Dumplings do listy życzeń i wyrusz z Lisą w drogę! 🦊",
+  "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4184130/da7398ff2288f6340f45f7ce5b8c8cd922775643/header.jpg?t=1789736792",
+  "capsule": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4184130/59ff590f4738be268e2460aa5d5b814a54c1fd7f/capsule_184x69.jpg?t=1789736792",
+  "hero": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4184130/ad779a214fc2b372787a57013ac94d92dd1955d2/ss_ad779a214fc2b372787a57013ac94d92dd1955d2.1920x1080.jpg?t=1789736792",
+  "background": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4184130/aa41cae4051240933c0a73e38a8cfe23436f0f79/page_bg_raw.jpg?t=1789736792",
+  "screenshots": [
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4184130/ad779a214fc2b372787a57013ac94d92dd1955d2/ss_ad779a214fc2b372787a57013ac94d92dd1955d2.600x338.jpg?t=1789736792",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4184130/ad779a214fc2b372787a57013ac94d92dd1955d2/ss_ad779a214fc2b372787a57013ac94d92dd1955d2.1920x1080.jpg?t=1789736792"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4184130/16e4ca96e6b1d668af2d740bbb3737f04cd721c4/ss_16e4ca96e6b1d668af2d740bbb3737f04cd721c4.600x338.jpg?t=1789736792",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4184130/16e4ca96e6b1d668af2d740bbb3737f04cd721c4/ss_16e4ca96e6b1d668af2d740bbb3737f04cd721c4.1920x1080.jpg?t=1789736792"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4184130/6be390ee5c39f9026de93c67afe3051c6edda314/ss_6be390ee5c39f9026de93c67afe3051c6edda314.600x338.jpg?t=1789736792",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4184130/6be390ee5c39f9026de93c67afe3051c6edda314/ss_6be390ee5c39f9026de93c67afe3051c6edda314.1920x1080.jpg?t=1789736792"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4184130/c7654fac3ba2e9467318fc7ca55e05c9380871c2/ss_c7654fac3ba2e9467318fc7ca55e05c9380871c2.600x338.jpg?t=1789736792",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4184130/c7654fac3ba2e9467318fc7ca55e05c9380871c2/ss_c7654fac3ba2e9467318fc7ca55e05c9380871c2.1920x1080.jpg?t=1789736792"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4184130/5b738f76fe0675235d23967b56ab1f351d7ac72f/ss_5b738f76fe0675235d23967b56ab1f351d7ac72f.600x338.jpg?t=1789736792",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4184130/5b738f76fe0675235d23967b56ab1f351d7ac72f/ss_5b738f76fe0675235d23967b56ab1f351d7ac72f.1920x1080.jpg?t=1789736792"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4184130/4315c503cf49ab3f7cefb055bc4938f95f73733c/ss_4315c503cf49ab3f7cefb055bc4938f95f73733c.600x338.jpg?t=1789736792",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4184130/4315c503cf49ab3f7cefb055bc4938f95f73733c/ss_4315c503cf49ab3f7cefb055bc4938f95f73733c.1920x1080.jpg?t=1789736792"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4184130/fef3894d30eaddd9efebd2656b93bcee8fc64531/ss_fef3894d30eaddd9efebd2656b93bcee8fc64531.600x338.jpg?t=1789736792",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4184130/fef3894d30eaddd9efebd2656b93bcee8fc64531/ss_fef3894d30eaddd9efebd2656b93bcee8fc64531.1920x1080.jpg?t=1789736792"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4184130/907e023a195f57c0e053f9412398b9743a2cb8e7/ss_907e023a195f57c0e053f9412398b9743a2cb8e7.600x338.jpg?t=1789736792",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4184130/907e023a195f57c0e053f9412398b9743a2cb8e7/ss_907e023a195f57c0e053f9412398b9743a2cb8e7.1920x1080.jpg?t=1789736792"
+   }
+  ],
+  "trailer": {
+   "name": "Foxy Dumplings Coming Soon!",
+   "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/257427299/f9d5adfae3633cb0947b7c54261e96bb68022246/movie_600x337.jpg?t=1789655495",
+   "mp4": null,
+   "webm": null,
+   "hls": "https://video.akamai.steamstatic.com/store_trailers/4184130/1107310657/868d9b276c606c4872be2adc554318c167ca8178/1789639973/hls_264_master.m3u8?t=1789655495",
+   "dash": "https://video.akamai.steamstatic.com/store_trailers/4184130/1107310657/868d9b276c606c4872be2adc554318c167ca8178/1789639973/dash_h264.mpd?t=1789655495"
+  },
+  "developers": [
+   "Soft Crunch Games S.A."
+  ],
+  "publishers": [
+   "Soft Crunch Games S.A."
+  ],
+  "genres": [
+   "Przygodowe",
+   "Rekreacyjne",
+   "Niezależne",
+   "Symulacje"
+  ],
+  "categories": [
+   "Jednoosobowa",
+   "Osiągnięcia Steam",
+   "Pełna obsługa kontrolerów",
+   "Dostępne napisy",
+   "Alternatywne opcje kolorystyczne",
+   "#category_contrast_controls",
+   "Niestandardowa regulacja głośności",
+   "Tylko klawiatura",
+   "Tylko mysz",
+   "Obsługa kontrolerów DUALSHOCK",
+   "Obsługa kontrolerów DUALSHOCK",
+   "Obsługa kontrolerów DualSense"
+  ],
+  "release": {
+   "soon": true,
+   "date": "4. kwartał 2026"
+  },
+  "platforms": {
+   "windows": true,
+   "mac": true,
+   "linux": true
+  },
+  "languagesPL": true,
+  "website": "https://foxydumplings.com/",
+  "devMatch": true,
+  "itchUrl": null,
+  "youtube": null,
+  "genreHint": null,
+  "note": null,
+  "candidates": [
+   "4184130:Foxy Dumplings",
+   "4731190:Foxy Dumplings Demo"
+  ],
+  "tileImg": "img/games/foxydumplings-tile.jpg",
+  "heroImg": "img/games/foxydumplings-hero.jpg"
+ },
+ {
+  "id": "bfs",
+  "studio": "Plastic",
+  "title": "BFS",
+  "appid": null,
+  "name": "BFS",
+  "steamUrl": null,
+  "short": "",
+  "shortEn": "",
+  "about": "",
+  "header": null,
+  "capsule": null,
+  "hero": null,
+  "background": null,
+  "screenshots": [],
+  "trailer": null,
+  "developers": [],
+  "publishers": [],
+  "genres": [],
+  "categories": [],
+  "release": null,
+  "platforms": null,
+  "languagesPL": false,
+  "website": null,
+  "devMatch": false,
+  "itchUrl": null,
+  "youtube": null,
+  "genreHint": null,
+  "note": null,
+  "candidates": [],
+  "tileImg": null,
+  "heroImg": null
+ },
+ {
+  "id": "godmachines",
+  "studio": "Fornixa Games",
+  "title": "God Machines",
+  "appid": 2177890,
+  "name": "God Machines",
+  "steamUrl": "https://store.steampowered.com/app/2177890/",
+  "short": "Wciel się w bezlitosną sztuczną inteligencję w turowej grze RPG. Zbieraj zasoby, aby odbudować swoją infrastrukturę, zmontuj oddział zabójczych bojowników i wyślij ich, aby odkryli sekrety wrogiego świata skażonego przez biologiczne życie.",
+  "shortEn": "Play as a ruthless AI in a post-nuclear RPG with turn-based tactical combat. Gather resources to rebuild your infrastructure, assemble a deadly squad of Combatants, and send them to uncover the secrets of a hostile world, corrupted by remains of biological life.",
+  "about": "Wczesny dostęp to najlepszy sposób na zbudowanie społeczności, zebranie opinii i zbalansowanie mechaniki rozgrywki. Jesteśmy małym ale pełnym pasji zespołem z ograniczonymi zasobami, który szuka wsparcia. Twój wkład przyspieszy rozwój naszego projektu i pozwoli nam stworzyć najmroczniejszy i najbardziej ponury ze światów.\n\nTrudno oszacować, jak długo potrwa proces tworzenia gry, jednak będziemy często publikować aktualizacje i poprawki.\n\nTryb GRID będzie składał się nie z jednej, ale z trzech odrębnych stref, z których każda będzie wypełniona nową zawartością. Obejmuje to nowe moduły, rozkazy i zbieralne banki danych, które poszerzają wiedzę o świecie gry.\n\nObecny stan zapewnia grywalny tryb GRID, który umożliwia eksplorację rozległej, generowanej proceduralnie heksagonalnej mapy wypełnionej skarbami, wrogami, misjami i wiedzą przechowywaną w bankach danych. Dodatkowo, możesz rozgrywać szybkie bitwy, aby zebrać dodatkowe łupy i grać online lub lokalnie przeciwko znajomym. Technicznie rzecz biorąc, podstawowa rozgrywka jest grywalna, jednak należy spodziewać się pewnych błędów i usterek, ponieważ gra jest wciąż w fazie rozwoju.\n\nTak. Najbardziej skorzystają na tym wcześni użytkownicy, ponieważ z czasem będziemy dostosowywać cenę do ilości dostępnej zawartości.\n\nGod Machines to turowa taktyczna gra RPG z elementami roguelike, w której wcielasz się w świadomą sztuczną inteligencję walczącą o przetrwanie we wrogim, postnuklearnym świecie. Kontroluj oddział bojowników za pośrednictwem interfejsu Brainlink, aby zbierać zasoby i odbudowywać infrastrukturę GRID, co pomoże Ci poszerzyć swoje wpływy. Ulepszaj swoich bojowników, ulepszając ich ciało lub zastępując je augmentacjami. Decyduj o losie tych, którzy znajdą się pod Twoim panowaniem. To zależy od Ciebie, czy ich unicestwisz, czy zniewolisz, ale pamiętaj, że w świecie zepsutym przez życie, decyzjami kierują emocje, oszustwo czai się wszędzie i tylko najbardziej bezwzględni będą triumfować.\n\nUżyj Asemblera, aby połączyć trzy gatunki: Ludzi, Synthów i Maszyny w unikalnych i w pełni konfigurowalnych bojowników. Każdy bojownik zaczyna z rozkazami, które zapewniają podstawowe sterowanie, takie jak ruch i ataki w walce wręcz. Wyposaż ich w moduły broni, aby odblokować nowe rozkazy. Każdy bojownik ma dwa miejsca na mody, które zmieniają mechanikę wyposażonych rozkazów. Eksperymentuj z różnymi podejściami i poznaj preferencje i słabości wroga, aby skutecznie je wykorzystać. Los to nic innego jak dobre wykorzystanie danych.\n\nTurowy system walki bez rzutu kostką oparty na pięciu podstawowych statystykach (zdrowie, energia, atak, obrona i szybkość), w którym skumulowany wpływ odległości między walczącymi, umiejscowienia na polu bitwy i efektów wywołanych przez rozkazy może poważnie wpłynąć na statystyki.  Spowalniaj wrogów, aby wykończyć ich zanim się ruszą, otaczaj ich, aby zmniejszyć ich obronę, lub wstrzykuj swoim bojownikom neurochemy, aby zwiększyć ich atak i szybkość kosztem obrony. Obserwuj i kontroluj swoje poziomy energii, ponieważ ich wyczerpanie u każdego walczącego skutkuje automatyczną porażką. Idealny system bitewny dla prawdziwych strategów.\nWejdź do proceduralnie generowanego świata taktycznej strategii w turowej rozgrywce z elementami rogue-like, które oferują nieskończoną regrywalność. Dowódź oddziałami bojowników na heksagonalnych mapach, podbijając zniszczone ziemie. Decyduj o losie prymitywnych form życia, które zamieszkuje tę planetę, nie dopuszczając do samowyłączenia się w miarę kurczenia się zasobów. Ucierpi jedynie twoje ego, bo trudno jest wymazać Boga. Porażka oznacza start na nowej mapie z zachowaniem bojowników i nienaruszonej bazy.\n\n• Eksploruj trzy odrębne strefy wypełnione bandami grasujących wrogów, rozproszonymi zasobami, misjami i silnie bronionymi sektorami, które zapewnią ci cenne nagrody.\n\n• Rozbuduj swoją bazę, aby odblokować nowe moce. Zwiększ mobilność swoich oddziałów, ulepszając ich pojazdy lub wytwarzaj moduły za pomocą zebranych zasobów.\n• Ekspl",
+  "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2177890/header.jpg?t=1717150352",
+  "capsule": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2177890/capsule_184x69.jpg?t=1717150352",
+  "hero": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2177890/ss_6b5579d8780fca9046d2a06f0018d9417c4a9544.1920x1080.jpg?t=1717150352",
+  "background": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2177890/page_bg_raw.jpg?t=1717150352",
+  "screenshots": [
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2177890/ss_6b5579d8780fca9046d2a06f0018d9417c4a9544.600x338.jpg?t=1717150352",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2177890/ss_6b5579d8780fca9046d2a06f0018d9417c4a9544.1920x1080.jpg?t=1717150352"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2177890/ss_4b1cc16f62b5c5f67b06fb46c80be049bac4debb.600x338.jpg?t=1717150352",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2177890/ss_4b1cc16f62b5c5f67b06fb46c80be049bac4debb.1920x1080.jpg?t=1717150352"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2177890/ss_f5057cd97be8e9460a1de1bc81c973aef1d5ef56.600x338.jpg?t=1717150352",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2177890/ss_f5057cd97be8e9460a1de1bc81c973aef1d5ef56.1920x1080.jpg?t=1717150352"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2177890/ss_c2498b6edecab496e71398a6605938238ee5542f.600x338.jpg?t=1717150352",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2177890/ss_c2498b6edecab496e71398a6605938238ee5542f.1920x1080.jpg?t=1717150352"
+   },
+   {
+    "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2177890/ss_475cc254a9c3c5a363fc507afac0fcf06dd99b0a.600x338.jpg?t=1717150352",
+    "full": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2177890/ss_475cc254a9c3c5a363fc507afac0fcf06dd99b0a.1920x1080.jpg?t=1717150352"
+   }
+  ],
+  "trailer": {
+   "name": "Gameplay Trailer",
+   "thumb": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/257027271/movie.293x165.jpg?t=1717150345",
+   "mp4": null,
+   "webm": null,
+   "hls": "https://video.akamai.steamstatic.com/store_trailers/2177890/707480/0a32f83afac1419183255757e65edf1569a18f6b/1751085995/hls_264_master.m3u8?t=1717150345",
+   "dash": "https://video.akamai.steamstatic.com/store_trailers/2177890/707480/0a32f83afac1419183255757e65edf1569a18f6b/1751085995/dash_h264.mpd?t=1717150345"
+  },
+  "developers": [
+   "Fornixa Games"
+  ],
+  "publishers": [
+   "Fornixa Games"
+  ],
+  "genres": [
+   "Niezależne",
+   "RPG",
+   "Strategie",
+   "Wczesny dostęp"
+  ],
+  "categories": [
+   "Jednoosobowa",
+   "Wieloosobowa",
+   "PvP",
+   "PvP przez internet",
+   "PvP na wspólnym/dzielonym ekranie",
+   "Wspólny/dzielony ekran",
+   "Udostępnianie gier"
+  ],
+  "release": {
+   "soon": true,
+   "date": "Wkrótce dostępne"
+  },
+  "platforms": {
+   "windows": true,
+   "mac": false,
+   "linux": true
+  },
+  "languagesPL": true,
+  "website": "https://fornixagames.com",
+  "devMatch": true,
+  "itchUrl": null,
+  "youtube": null,
+  "genreHint": null,
+  "note": null,
+  "candidates": [
+   "2177890:God Machines",
+   "2207470:Gods Against Machines",
+   "2777550:Gods Against Machines Prologue",
+   "2352490:Gods Against Machines Demo",
+   "2613220:Gods Against Machines Soundtrack"
+  ],
+  "tileImg": "img/games/godmachines-tile.jpg",
+  "heroImg": "img/games/godmachines-hero.jpg"
+ }
+]

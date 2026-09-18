@@ -1,0 +1,17 @@
+{
+  "name": "MFKiG Indie Notes",
+  "short_name": "MFKiG Notes",
+  "description": "Notatnik do testowania gier indie na MFKiG 2026",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0e0d14",
+  "theme_color": "#0e0d14",
+  "lang": "pl",
+  "icons": [
+    { "src": "img/icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "img/icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "img/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
