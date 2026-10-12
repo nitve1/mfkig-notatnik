@@ -12,8 +12,9 @@ node ../scripts/build-snapshot.mjs || echo "Uwaga: nie udało się odświeżyć 
 npm install
 npx expo prebuild --platform android --no-install --clean
 echo "sdk.dir=$ANDROID_HOME" > android/local.properties
-# Telefony z ostatnich lat to arm64; armeabi-v7a dla starszych. Bez x86 (emulatory) build jest 2x szybszy.
-sed -i.bak 's/^reactNativeArchitectures=.*/reactNativeArchitectures=arm64-v8a,armeabi-v7a/' android/gradle.properties
+# Telefony z ostatnich lat to arm64 (APK ok. 30 MB). Dla starszych 32-bitowych: ARCHS=arm64-v8a,armeabi-v7a (ok. 43 MB).
+ARCHS="${ARCHS:-arm64-v8a}"
+sed -i.bak "s/^reactNativeArchitectures=.*/reactNativeArchitectures=$ARCHS/" android/gradle.properties
 
 (cd android && NODE_ENV=production ./gradlew assembleRelease --no-daemon)
 

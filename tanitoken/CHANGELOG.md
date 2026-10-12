@@ -18,12 +18,26 @@ Jedno miejsce z historią zmian, decyzjami i otwartymi zadaniami. Aktualizowane 
 
 | Priorytet | Zadanie | Status |
 | --- | --- | --- |
-| 1 | Finalny build APK na Androida (Gradle: plugin `com.ncorti.ktfmt.gradle` nie rozwiązywał się przez proxy) | w toku |
+| 1 | Test APK 1.0.0 na Motoroli użytkownika (zadania w tle, powiadomienia, sprawdzanie cen) | u użytkownika |
 | 2 | Historia cen w snapshocie (np. 30 punktów na ofertę) pod wykresy w karcie modelu | pomysł |
 | 3 | Landing w stylu „Kolorowe kategorie” + wersje językowe | na końcu |
 | 4 | Linki partnerskie: zgłoszenie do Novita / GMI Cloud, wklejenie linków w `core/affiliates.js` | po stronie użytkownika |
 | 5 | Po merge'u: ręczne uruchomienie workflow „TaniToken snapshot” (tworzy gałąź `tanitoken-data`) | po merge'u |
-| 6 | Test na prawdziwym telefonie (build EAS), szczególnie zadania w tle i powiadomienia | przed publikacją |
+| 6 | Klucz release (keystore) do Google Play; obecny APK jest podpisany kluczem debug | przed publikacją |
+
+## 2026-10-12 – sesja 4b: APK 1.0.0
+
+- Zbudowany lokalnie (bez EAS) `TaniToken-1.0.0-arm64.apk` (30 MB, `pl.tanitoken.app`, versionCode 1,
+  podpisany kluczem debug, bundle Hermes ze snapshotem cen z dnia buildu). Wysłany użytkownikowi.
+- Wersja arm64 + armeabi-v7a ma 43 MB i nie mieści się w limicie wysyłki (30 MiB), dlatego
+  `scripts/build-android-apk.sh` domyślnie buduje tylko arm64 (`ARCHS=...` zmienia).
+- `npm run build:apk:local` w `mobile/` uruchamia ten skrypt.
+- Problem w środowisku chmurowym: Maven Central przez proxy zwracał 429 (ktfmt, kotlin serialization).
+  Obejście (poza repo): `~/.gradle/init.d/maven-mirror.gradle` z lustrem
+  `https://maven-central.storage-download.googleapis.com/maven2/` dla pluginManagement i repozytoriów.
+  Android SDK w `~/android-sdk` (cmdline-tools + licencje); NDK 27.1 i CMake 3.22.1 Gradle pobrał sam.
+- Instalacja: plik na telefon → otwórz → zezwól na instalację z tego źródła. Albo przez USB:
+  `adb install -r TaniToken-1.0.0-arm64.apk`. Przy aktualizacji tym samym kluczem debug dane zostają.
 
 ## 2026-10-12 – sesja 4: apka „od A do Z” (sprawdzanie cen na telefonie, 6 języków)
 
