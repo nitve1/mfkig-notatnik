@@ -1,11 +1,19 @@
 import { useMemo, useState } from 'react';
-import { FlatList, Pressable, StyleSheet, TextInput, View } from 'react-native';
-import { CATEGORIES, cheapest, formatContext, formatOfferPrice, searchModels, unitPrice } from '../../../core/pricing.js';
-import { Empty, Row, Segmented, T } from '../ui';
-import { Header, catsText } from '../parts';
-import { font, radius, space, useTheme } from '../theme';
+import { FlatList, StyleSheet, TextInput, View } from 'react-native';
+import { cheapest, formatContext, formatUsd, searchModels, unitPrice } from '../../../core/pricing.js';
+import { Card, CatChip, Empty, PctBadge, Row, Segmented, T } from '../ui';
+import Icon from '../icons';
+import { CAT_LABEL, Header, priceParts, shortName, styles } from '../parts';
+import { font, mainCat, radius, space, useTheme } from '../theme';
 import { useProfile } from '../profile';
 
+const CATS = [
+  { value: 'all', label: 'Wszystko' },
+  { value: 'text', icon: 'text', label: 'Tekst' },
+  { value: 'coding', icon: 'coding', label: 'Kod' },
+  { value: 'image', icon: 'image', label: 'Obraz' },
+  { value: 'video', icon: 'video', label: 'Wideo' },
+];
 const SORTS = [
   { value: 'new', label: 'Najnowsze' },
   { value: 'cheap', label: 'Najtańsze' },
@@ -16,16 +24,19 @@ export default function Search({ snapshot, onOpen }) {
   const t = useTheme();
   const { profile } = useProfile();
   const [q, setQ] = useState('');
-  const [cat, setCat] = useState(profile.cats.length === 1 ? profile.cats[0] : 'all');
+  const [cat, setCat] = useState(profile.cats.length === 1 && profile.cats[0] !== 'all' ? profile.cats[0] : 'all');
   const [sort, setSort] = useState('new');
   const watched = useMemo(() => new Set(profile.watchlist.map((w) => w.modelId)), [profile.watchlist]);
-  const favs = profile.onlyFavorites && profile.providers.length ? new Set(profile.providers) : null;
+  const favs = useMemo(
+    () => (profile.onlyFavorites && profile.providers.length ? new Set(profile.providers) : null),
+    [profile.onlyFavorites, profile.providers],
+  );
 
   const rows = useMemo(() => {
     let models = snapshot.models.filter((m) => cat === 'all' || m.cats.includes(cat));
     models = searchModels(models, q).map((m) => {
       const best = cheapest(m, profile.usage, favs ? (o) => favs.has(o.provider) : null);
-      const promo = Math.max(0, ...m.offers.map((o) => o.discount ?? 0));
+      const promo = Math.round(Math.max(0, ...m.offers.map((o) => o.discount ?? 0)) * 100);
       return { m, best, promo };
     });
     if (favs) models = models.filter((r) => r.best || r.m.freeId);
@@ -36,65 +47,66 @@ export default function Search({ snapshot, onOpen }) {
     return models;
   }, [snapshot, q, cat, sort, profile.usage, favs]);
 
+  const header = (
+    <View style={{ gap: space[3], marginBottom: space[1] }}>
+      <Header kicker={`${snapshot.models.length} modeli, ${rows.length} pasuje`} title="Szukaj" />
+      <View style={[s.search, { backgroundColor: t.card, borderColor: q ? t.text : t.line }]}>
+        <Icon name="search" size={20} color={t.ink2} />
+        <TextInput
+          value={q}
+          onChangeText={setQ}
+          placeholder="deepseek, claude, flux, veo…"
+          placeholderTextColor={t.ink3}
+          autoCorrect={false}
+          autoCapitalize="none"
+          clearButtonMode="while-editing"
+          returnKeyType="search"
+          accessibilityLabel="Szukaj modelu"
+          style={[s.input, { color: t.ink }]}
+        />
+      </View>
+      <Segmented options={CATS.map((c) => ({ value: c.value, icon: c.icon, label: c.icon ? '' : c.label, a11y: c.label }))} value={cat} onChange={setCat} />
+      {!q.trim() ? <Segmented options={SORTS} value={sort} onChange={setSort} /> : null}
+    </View>
+  );
+
   return (
     <FlatList
       data={rows}
       keyExtractor={(r) => r.m.id}
       keyboardShouldPersistTaps="handled"
       keyboardDismissMode="on-drag"
-      contentContainerStyle={{ padding: space[4], paddingBottom: space[6] }}
-      initialNumToRender={20}
-      ListHeaderComponent={
-        <View style={{ gap: space[3], marginBottom: space[2] }}>
-          <Header title="Szukaj" sub={`${snapshot.models.length} modeli u wielu dostawców`} />
-          <TextInput
-            value={q}
-            onChangeText={setQ}
-            placeholder="np. deepseek, claude, flux, veo"
-            placeholderTextColor={t.ink3}
-            autoCorrect={false}
-            autoCapitalize="none"
-            clearButtonMode="while-editing"
-            returnKeyType="search"
-            accessibilityLabel="Szukaj modelu"
-            style={[s.input, { backgroundColor: t.sheet, borderColor: t.ink, color: t.ink }]}
-          />
-          <Segmented options={CATEGORIES.map((c) => ({ value: c.key, label: c.label }))} value={cat} onChange={setCat} />
-          {!q.trim() ? <Segmented options={SORTS} value={sort} onChange={setSort} /> : null}
-        </View>
-      }
-      ListEmptyComponent={<Empty title="Nie znaleźliśmy takiego modelu" body="Spróbuj krótszej nazwy albo innej kategorii." />}
-      renderItem={({ item: { m, best, promo } }) => (
-        <Pressable
-          onPress={() => onOpen(m.id)}
-          accessibilityRole="button"
-          style={({ pressed }) => [s.row, { borderBottomColor: t.rule, backgroundColor: pressed ? t.sheet : 'transparent' }]}
-        >
-          <View style={{ flex: 1, gap: 2 }}>
-            <T kind="strong" numberOfLines={1}>
-              {watched.has(m.id) ? <T kind="strong" style={{ color: t.ink3 }}>★ </T> : null}
-              {m.name}
-            </T>
-            <T kind="small" color="ink3" numberOfLines={1}>
-              {[catsText(m), m.context ? `kontekst ${formatContext(m.context)}` : null, `${m.offers.length} ofert`].filter(Boolean).join(', ')}
-            </T>
-          </View>
-          <View style={{ alignItems: 'flex-end', gap: 2, maxWidth: '45%' }}>
-            <T kind="price" style={{ fontSize: 18 }} numberOfLines={1}>
-              {best ? formatOfferPrice(best) : m.freeId ? '0 $' : '–'}
-            </T>
-            <Row style={{ gap: 6 }}>
-              {promo > 0 ? <T kind="tiny" style={{ color: t.promo }}>−{Math.round(promo * 100)}%</T> : null}
-              <T kind="tiny" color="ink3" numberOfLines={1}>{best ? best.provider : m.freeId ? 'darmowy' : ''}</T>
+      contentContainerStyle={styles.list}
+      initialNumToRender={14}
+      ListHeaderComponent={header}
+      ListEmptyComponent={<Empty title="Nie ma takiego modelu" body="Spróbuj krótszej nazwy albo innej kategorii." />}
+      renderItem={({ item: { m, best, promo } }) => {
+        const c = mainCat(m);
+        const p = priceParts(best);
+        return (
+          <Card stripe={t[c]} onPress={() => onOpen(m.id)} accessibilityLabel={m.name}>
+            <Row style={{ alignItems: 'flex-start' }}>
+              <View style={{ flex: 1, gap: 4 }}>
+                <T kind="strong" numberOfLines={1}>
+                  {shortName(m.name)}
+                  {watched.has(m.id) ? <T kind="strong" style={{ color: t.video }}> ★</T> : null}
+                </T>
+                <CatChip cat={c} label={CAT_LABEL[c]} extra={[m.context ? formatContext(m.context) : null, `${m.offers.length} ofert`].filter(Boolean).join(', ')} />
+              </View>
+              <View style={{ alignItems: 'flex-end', gap: 4 }}>
+                <T kind="num" style={!best && m.freeId ? { color: t.save } : null}>{best ? p.main : m.freeId ? '0 $' : '–'}</T>
+                {promo > 0 ? <PctBadge pct={promo} /> : <T kind="tiny" color="ink3">{best ? p.unit : ''}</T>}
+              </View>
             </Row>
-          </View>
-        </Pressable>
-      )}
+            {best ? <T kind="tiny" color="ink3" style={{ marginTop: 6 }}>najtaniej u {best.provider}{best.unit === 'token' ? `, wyjście ${formatUsd(best.out)}` : ''}</T> : null}
+          </Card>
+        );
+      }}
     />
   );
 }
 
 const s = StyleSheet.create({
-  input: { borderWidth: 1.5, borderRadius: radius.ui, paddingHorizontal: 14, paddingVertical: 12, fontSize: 17, fontFamily: font.textMedium },
-  row: { flexDirection: 'row', alignItems: 'center', gap: space[3], paddingVertical: space[3], paddingHorizontal: space[1], borderBottomWidth: StyleSheet.hairlineWidth },
+  search: { flexDirection: 'row', alignItems: 'center', gap: 10, borderWidth: 1.5, borderRadius: radius.md, paddingHorizontal: 14 },
+  input: { flex: 1, paddingVertical: 13, fontSize: 16, fontFamily: font.textMedium },
 });

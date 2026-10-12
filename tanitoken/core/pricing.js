@@ -207,6 +207,27 @@ export function watchStatus(snapshot, item, usage = DEFAULT_USAGE, filter = null
   return { model, best, used, usedPromo, promos, ended, usedCost, bestCost, overpayPct, typicalDays: typical };
 }
 
+// Ile miesięcznie oszczędzam dzięki promocji u dostawcy, którego używam (0 gdy brak promocji).
+export function promoSavings(status, usage = DEFAULT_USAGE) {
+  const { used, usedPromo } = status ?? {};
+  if (!used || !usedPromo) return 0;
+  const before = usedPromo.type === 'drop' && usedPromo.from ? { ...used, ...usedPromo.from } : priceBeforeDiscount(used);
+  if (!before) return 0;
+  return Math.max(0, offerCost(before, usage) - offerCost(used, usage));
+}
+
+// Jeden wiersz na dostawcę: zostaje najtańszy wariant (np. "upstage" i "upstage/zdr"), plus wybrany przez użytkownika.
+export function onePerProvider(offers, keepKey = null) {
+  const seen = new Set();
+  return offers.filter((o) => {
+    const k = `${o.unit}|${o.provider}`;
+    if (offerKey(o) === keepKey) return true;
+    if (seen.has(k)) return false;
+    seen.add(k);
+    return true;
+  });
+}
+
 // Zdarzenia do powiadomień. Id jest stabilne, apka pamięta już wysłane.
 // filter: ograniczenie porównań (np. do ulubionych dostawców).
 export function computeAlerts(snapshot, watchlist, usage = DEFAULT_USAGE, { now = Date.now(), filter = null } = {}) {

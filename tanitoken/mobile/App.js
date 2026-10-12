@@ -5,9 +5,8 @@ import { StatusBar } from 'expo-status-bar';
 import * as SplashScreen from 'expo-splash-screen';
 import * as Notifications from 'expo-notifications';
 import { useFonts } from 'expo-font';
-import { Barlow_400Regular, Barlow_500Medium, Barlow_600SemiBold } from '@expo-google-fonts/barlow';
-import { BarlowCondensed_600SemiBold, BarlowCondensed_700Bold } from '@expo-google-fonts/barlow-condensed';
-import Svg, { Circle, Path } from 'react-native-svg';
+import { BricolageGrotesque_700Bold, BricolageGrotesque_800ExtraBold } from '@expo-google-fonts/bricolage-grotesque';
+import { Figtree_400Regular, Figtree_500Medium, Figtree_600SemiBold, Figtree_700Bold } from '@expo-google-fonts/figtree';
 import Deals from './src/screens/Deals';
 import Search from './src/screens/Search';
 import Mine from './src/screens/Mine';
@@ -16,47 +15,35 @@ import Model from './src/screens/Model';
 import Intro from './src/screens/Intro';
 import Onboarding from './src/screens/Onboarding';
 import { Button, T } from './src/ui';
+import Icon from './src/icons';
 import { useSnapshot } from './src/data';
 import { ProfileProvider, useProfile } from './src/profile';
 import { checkAndNotify } from './src/alerts';
-import { space, useTheme } from './src/theme';
+import { ThemeContext, space, useTheme } from './src/theme';
 
 SplashScreen.preventAutoHideAsync().catch(() => {});
 
-function Icon({ name, color }) {
-  const p = { stroke: color, strokeWidth: 2, fill: 'none', strokeLinecap: 'round', strokeLinejoin: 'round' };
-  return (
-    <Svg width={24} height={24} viewBox="0 0 24 24">
-      {name === 'deals' ? (<><Path d="M3 8.5 8.5 3H21v18H8.5L3 15.5z" {...p} /><Circle cx={8.5} cy={12} r={1.6} {...p} /></>) : null}
-      {name === 'search' ? (<><Circle cx={10.5} cy={10.5} r={6.5} {...p} /><Path d="m15.5 15.5 5 5" {...p} /></>) : null}
-      {name === 'mine' ? <Path d="m12 3 2.7 5.6 6.1.8-4.5 4.2 1.1 6.1L12 16.8l-5.4 2.9 1.1-6.1-4.5-4.2 6.1-.8z" {...p} /> : null}
-      {name === 'profile' ? (<><Circle cx={12} cy={8} r={4} {...p} /><Path d="M4 21c1.2-4 4.3-6 8-6s6.8 2 8 6" {...p} /></>) : null}
-    </Svg>
-  );
-}
-
 const TABS = [
-  { key: 'deals', label: 'Promocje' },
-  { key: 'search', label: 'Szukaj' },
-  { key: 'mine', label: 'Moje' },
-  { key: 'profile', label: 'Profil' },
+  { key: 'deals', label: 'Promocje', icon: 'tag' },
+  { key: 'search', label: 'Szukaj', icon: 'search' },
+  { key: 'mine', label: 'Moje', icon: 'star' },
+  { key: 'profile', label: 'Profil', icon: 'user' },
 ];
 
 function TabBar({ tab, onChange, bottom, badge }) {
   const t = useTheme();
   return (
-    <View style={[s.tabbar, { backgroundColor: t.sheet, borderTopColor: t.rule, paddingBottom: bottom + 6 }]} accessibilityRole="tablist">
+    <View style={[s.tabbar, { backgroundColor: t.card, borderTopColor: t.line, paddingBottom: bottom + 6 }]} accessibilityRole="tablist">
       {TABS.map((x) => {
         const on = x.key === tab;
         const color = on ? t.ink : t.ink3;
         return (
           <Pressable key={x.key} onPress={() => onChange(x.key)} style={s.tab} accessibilityRole="tab" accessibilityState={{ selected: on }} accessibilityLabel={x.label}>
-            <View>
-              <Icon name={x.key} color={color} />
-              {x.key === 'mine' && badge ? <View style={[s.badge, { backgroundColor: t.promo }]} /> : null}
+            <View style={[s.tabIcon, on && { backgroundColor: t.seg }]}>
+              <Icon name={x.icon} size={22} color={color} width={on ? 2.3 : 2} />
+              {x.key === 'mine' && badge ? <View style={[s.badge, { backgroundColor: t.deal, borderColor: t.card }]} /> : null}
             </View>
             <T kind="tiny" style={{ color }}>{x.label}</T>
-            <View style={[s.tabMark, { backgroundColor: on ? t.tag : 'transparent' }]} />
           </Pressable>
         );
       })}
@@ -72,12 +59,14 @@ function Main() {
   const [intro, setIntro] = useState(true);
   const [tab, setTab] = useState('deals');
   const [openId, setOpenId] = useState(null);
-  const [seenAlerts, setSeenAlerts] = useState(0);
+  const [seenAlerts, setSeenAlerts] = useState(null);
   const ready = profile && snapshot;
+  const endIntro = useCallback(() => setIntro(false), []);
 
   useEffect(() => {
     if (profile) SplashScreen.hideAsync().catch(() => {});
-  }, [profile]);
+    if (profile && seenAlerts == null) setSeenAlerts(profile.alerts.length);
+  }, [profile, seenAlerts]);
 
   // Alerty przy każdym nowym zestawieniu cen (w tle robi to zadanie z alerts.js).
   useEffect(() => {
@@ -120,57 +109,61 @@ function Main() {
     setTab(k);
     if (k === 'mine') setSeenAlerts(profile?.alerts.length ?? 0);
   }, [profile?.alerts.length]);
+  const newAlerts = (profile?.alerts.length ?? 0) > (seenAlerts ?? 0);
 
+  const onboarding = !!(profile && snapshot && !profile.onboarded);
   let body = null;
   if (!profile || (!snapshot && !error)) {
-    body = <View style={s.center}><ActivityIndicator color={t.ink} size="large" /></View>;
+    body = <View style={s.center}><ActivityIndicator color={t.text} size="large" /></View>;
   } else if (!snapshot) {
     body = (
-      <View style={[s.center, { padding: space[5] }]}>
+      <View style={[s.center, { padding: space[5], gap: space[3] }]}>
         <T kind="h2" style={{ textAlign: 'center' }}>Nie udało się pobrać cen</T>
-        <T color="ink2" style={{ textAlign: 'center', marginVertical: space[3] }}>Sprawdź połączenie z internetem. Szczegóły: {error}</T>
-        <Button label="Spróbuj ponownie" onPress={refresh} />
+        <T color="ink2" style={{ textAlign: 'center' }}>Sprawdź połączenie z internetem i spróbuj ponownie.</T>
+        <Button label="Spróbuj ponownie" onPress={refresh} style={{ flex: 0 }} />
       </View>
     );
   } else if (!profile.onboarded) {
-    return (
-      <View style={{ flex: 1, backgroundColor: t.paper }}>
-        <StatusBar style={t.dark ? 'light' : 'dark'} />
-        <Onboarding snapshot={snapshot} insets={insets} />
-        {intro ? <Intro onDone={() => setIntro(false)} /> : null}
-      </View>
-    );
+    body = <Onboarding snapshot={snapshot} insets={insets} />;
   } else {
     const model = openId ? snapshot.models.find((m) => m.id === openId) : null;
     const common = { snapshot, refreshing, onRefresh: refresh, onOpen: setOpenId };
     if (model) body = <Model key={model.id} model={model} snapshot={snapshot} onBack={() => setOpenId(null)} />;
-    else if (tab === 'deals') body = <Deals {...common} />;
+    else if (tab === 'deals') body = <Deals {...common} onBell={() => changeTab('mine')} bellDot={newAlerts} />;
     else if (tab === 'search') body = <Search {...common} />;
     else if (tab === 'mine') body = <Mine {...common} onGoSearch={() => changeTab('search')} onGoProfile={() => changeTab('profile')} />;
     else body = <Profile snapshot={snapshot} />;
   }
 
   return (
-    <View style={[s.root, { backgroundColor: t.paper, paddingTop: insets.top }]}>
+    <View style={[s.root, { backgroundColor: t.bg, paddingTop: onboarding ? 0 : insets.top }]}>
       <StatusBar style={t.dark ? 'light' : 'dark'} />
       <View style={{ flex: 1 }}>{body}</View>
-      {ready && profile.onboarded ? (
-        <TabBar tab={tab} onChange={changeTab} bottom={insets.bottom} badge={(profile.alerts.length ?? 0) > seenAlerts && tab !== 'mine'} />
-      ) : null}
-      {intro && profile ? <Intro onDone={() => setIntro(false)} /> : null}
+      {ready && profile.onboarded ? <TabBar tab={tab} onChange={changeTab} bottom={insets.bottom} badge={newAlerts && tab !== 'mine'} /> : null}
+      {intro && profile ? <Intro onDone={endIntro} /> : null}
     </View>
+  );
+}
+
+function Themed() {
+  const { profile } = useProfile();
+  return (
+    <ThemeContext.Provider value={profile?.theme ?? 'system'}>
+      <Main />
+    </ThemeContext.Provider>
   );
 }
 
 export default function App() {
   const [fontsLoaded] = useFonts({
-    Barlow_400Regular, Barlow_500Medium, Barlow_600SemiBold, BarlowCondensed_600SemiBold, BarlowCondensed_700Bold,
+    BricolageGrotesque_700Bold, BricolageGrotesque_800ExtraBold,
+    Figtree_400Regular, Figtree_500Medium, Figtree_600SemiBold, Figtree_700Bold,
   });
   if (!fontsLoaded) return null;
   return (
     <SafeAreaProvider>
       <ProfileProvider>
-        <Main />
+        <Themed />
       </ProfileProvider>
     </SafeAreaProvider>
   );
@@ -179,8 +172,8 @@ export default function App() {
 const s = StyleSheet.create({
   root: { flex: 1 },
   center: { flex: 1, alignItems: 'center', justifyContent: 'center' },
-  tabbar: { flexDirection: 'row', borderTopWidth: StyleSheet.hairlineWidth, paddingTop: 8 },
+  tabbar: { flexDirection: 'row', borderTopWidth: StyleSheet.hairlineWidth, paddingTop: 6 },
   tab: { flex: 1, alignItems: 'center', gap: 2 },
-  tabMark: { width: 22, height: 3, borderRadius: 2, marginTop: 3 },
-  badge: { position: 'absolute', right: -3, top: -2, width: 9, height: 9, borderRadius: 5 },
+  tabIcon: { width: 56, height: 30, borderRadius: 15, alignItems: 'center', justifyContent: 'center' },
+  badge: { position: 'absolute', right: 12, top: 2, width: 10, height: 10, borderRadius: 5, borderWidth: 2 },
 });

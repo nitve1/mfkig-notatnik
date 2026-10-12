@@ -108,11 +108,11 @@ UOKiK) i nie wpływa na kolejność ofert, sortujemy wyłącznie po cenie. Wszys
 
 ## Wygląd
 
-Kierunek „półka z promocjami” według skilla `frontend-design` (`.claude/skills/frontend-design`): papier
-`#F1F3F6`, granatowy atrament `#172036`, żółta etykieta cenowa `#FFD60A` z dziurką jako jedyny głośny
-element, czerwień promocji, zieleń oszczędności. Typografia: Barlow Condensed (ceny, nagłówki, jak szyldy
-cenowe) i Barlow (tekst), obie darmowe (OFL). Ten sam system tokenów na landingu (`landing/style.css`) i w
-apce (`mobile/src/theme.js`), z trybem ciemnym.
+Apka: kierunek „Kolorowe kategorie” (wybrany z makiet w `mockups/`). Każda kategoria ma kolor (Tekst
+niebieski, Kod fioletowy, Obraz różowy, Wideo pomarańczowy), karty z kolorowym paskiem, filtry na całą
+szerokość, fonty Bricolage Grotesque + Figtree. Motyw systemowy, jasny albo ciemny (Profil → Wygląd).
+Tokeny w `mobile/src/theme.js`, komponenty w `mobile/src/ui.js`. Landing jest jeszcze w starym stylu
+„półka z promocjami” i zostanie przerobiony na końcu.
 
 ## Snapshot co 15 minut
 

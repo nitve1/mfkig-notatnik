@@ -1,67 +1,126 @@
 import { useMemo, useState } from 'react';
-import { FlatList, RefreshControl, View } from 'react-native';
-import { CATEGORIES, collectDeals, timeAgo } from '../../../core/pricing.js';
+import { FlatList, Pressable, RefreshControl, StyleSheet, View } from 'react-native';
+import { collectDeals, timeAgo } from '../../../core/pricing.js';
 import { Button, Empty, Segmented, T } from '../ui';
-import { DealRow, Header } from '../parts';
-import { space, useTheme } from '../theme';
+import Icon from '../icons';
+import { BellButton, CAT_LABEL, DealCard, Header, styles } from '../parts';
+import { radius, space, useTheme } from '../theme';
 import { useProfile } from '../profile';
 
 const TYPES = [
   { value: 'discount', label: 'Zniżki' },
-  { value: 'drop', label: 'Obniżki cen' },
+  { value: 'drop', label: 'Obniżki' },
   { value: 'free', label: 'Darmowe' },
 ];
 
-export default function Deals({ snapshot, refreshing, onRefresh, onOpen }) {
+function Tile({ cat, count, best, type, on, dim, onPress, wide }) {
+  const t = useTheme();
+  const bg = cat === 'all' ? t.hero : t[cat];
+  const note = count === 0
+    ? type === 'free' ? 'brak darmowych' : 'brak zniżek'
+    : type === 'free' ? 'darmowe modele' : `do −${best}%`;
+  return (
+    <Pressable
+      onPress={onPress}
+      accessibilityRole="button"
+      accessibilityState={{ selected: on }}
+      accessibilityLabel={`${CAT_LABEL[cat]}, ${count}, ${note}`}
+      style={({ pressed }) => [
+        s.tile,
+        wide && s.wide,
+        { backgroundColor: bg, opacity: dim ? 0.45 : pressed ? 0.85 : 1, borderColor: on ? t.ink : 'transparent' },
+      ]}
+    >
+      {wide ? (
+        <>
+          <View style={{ flex: 1 }}>
+            <T kind="small" style={s.tileTxt}>Wszystkie promocje</T>
+            <T kind="big" style={s.tileTxt}>{count}</T>
+          </View>
+          <View style={{ alignItems: 'flex-end' }}>
+            <T kind="small" style={s.tileTxt}>{type === 'free' ? 'za darmo' : 'największa'}</T>
+            <T kind="big" style={s.tileTxt}>{type === 'free' ? '0 $' : count ? `−${best}%` : '–'}</T>
+          </View>
+        </>
+      ) : (
+        <>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Icon name={cat} size={22} color="#fff" />
+            <T kind="big" style={s.tileTxt}>{count}</T>
+          </View>
+          <View>
+            <T kind="strong" style={s.tileTxt}>{CAT_LABEL[cat]}</T>
+            <T kind="tiny" style={[s.tileTxt, { opacity: 0.9 }]}>{note}</T>
+          </View>
+        </>
+      )}
+      {on && !wide ? <View style={[s.check, { backgroundColor: '#fff' }]}><Icon name="check" size={13} color={bg} width={3} /></View> : null}
+    </Pressable>
+  );
+}
+
+export default function Deals({ snapshot, refreshing, onRefresh, onOpen, onBell, bellDot }) {
   const t = useTheme();
   const { profile, update } = useProfile();
-  const [cat, setCat] = useState(profile.cats.length === 1 ? profile.cats[0] : 'all');
+  const [cat, setCat] = useState(profile.cats.length === 1 && profile.cats[0] !== 'all' ? profile.cats[0] : 'all');
   const [type, setType] = useState('discount');
-  const favs = profile.onlyFavorites && profile.providers.length ? new Set(profile.providers) : null;
+  const favs = useMemo(
+    () => (profile.onlyFavorites && profile.providers.length ? new Set(profile.providers) : null),
+    [profile.onlyFavorites, profile.providers],
+  );
   const watched = useMemo(() => new Set(profile.watchlist.map((w) => w.modelId)), [profile.watchlist]);
 
-  const deals = useMemo(() => collectDeals(snapshot), [snapshot]);
-  const visible = useMemo(
-    () => deals.filter((d) => !favs || d.type === 'free' || favs.has(d.provider)),
-    [deals, favs],
-  );
+  const all = useMemo(() => collectDeals(snapshot), [snapshot]);
+  const visible = useMemo(() => all.filter((d) => !favs || d.type === 'free' || favs.has(d.provider)), [all, favs]);
+  const ofType = visible.filter((d) => d.type === type);
   const inCat = (d, c) => c === 'all' || d.model.cats.includes(c);
-  const list = visible.filter((d) => d.type === type && inCat(d, cat));
-  const cats = CATEGORIES.filter((c) => c.key === 'all' || profile.cats.includes('all') || profile.cats.includes(c.key) || c.key === cat)
-    .map((c) => ({ value: c.key, label: c.label, count: visible.filter((d) => d.type === type && inCat(d, c.key)).length }));
-  const hello = profile.name ? `${profile.name}, ` : '';
+  const stat = (c) => {
+    const list = ofType.filter((d) => inCat(d, c));
+    return { count: list.length, best: list.reduce((m, d) => Math.max(m, d.pct), 0) };
+  };
+  const list = ofType.filter((d) => inCat(d, cat));
+  const typeCounts = Object.fromEntries(TYPES.map((x) => [x.value, visible.filter((d) => d.type === x.value).length]));
+  const pick = (c) => setCat(cat === c ? 'all' : c);
+
+  const header = (
+    <View style={{ gap: space[3], marginBottom: space[1] }}>
+      <Header
+        kicker={snapshot.partial ? 'Ceny bazowe, pełne zestawienie chwilowo niedostępne' : `${profile.name ? `Cześć ${profile.name}, ` : ''}ceny sprzed ${timeAgo(snapshot.generatedAt).replace(' temu', '')}`}
+        title="Co dziś tanieje?"
+        right={<BellButton onPress={onBell} dot={bellDot} />}
+      />
+      <View style={s.grid}>
+        <Tile wide cat="all" type={type} {...stat('all')} on={cat === 'all'} onPress={() => setCat('all')} />
+        {['text', 'coding', 'image', 'video'].map((c) => (
+          <Tile key={c} cat={c} type={type} {...stat(c)} on={cat === c} dim={cat !== 'all' && cat !== c} onPress={() => pick(c)} />
+        ))}
+      </View>
+      <Segmented options={TYPES.map((x) => ({ ...x, count: typeCounts[x.value] }))} value={type} onChange={setType} />
+      {favs ? <T kind="small" color="ink2">Tylko ulubieni dostawcy ({favs.size})</T> : null}
+    </View>
+  );
 
   return (
     <FlatList
       data={list}
       keyExtractor={(d) => `${d.modelId}|${d.key}|${d.type}`}
-      renderItem={({ item }) => <DealRow deal={item} watched={watched.has(item.modelId)} onPress={() => onOpen(item.modelId)} />}
-      contentContainerStyle={{ padding: space[4], paddingBottom: space[6] }}
-      initialNumToRender={14}
-      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={t.ink} colors={[t.ink]} />}
-      ListHeaderComponent={
-        <View style={{ gap: space[3], marginBottom: space[3] }}>
-          <Header
-            title="Promocje"
-            sub={snapshot.partial
-              ? 'Ceny bazowe z OpenRouter, pełne zestawienie chwilowo niedostępne'
-              : `${hello}ceny sprzed ${timeAgo(snapshot.generatedAt).replace(' temu', '')}`}
-          />
-          <Segmented options={cats} value={cat} onChange={setCat} />
-          <Segmented options={TYPES} value={type} onChange={setType} />
-          {favs ? <T kind="small" color="ink3">Tylko ulubieni dostawcy ({favs.size}).</T> : null}
-        </View>
-      }
+      renderItem={({ item }) => <DealCard deal={item} watched={watched.has(item.modelId)} onPress={() => onOpen(item.modelId)} />}
+      contentContainerStyle={styles.list}
+      initialNumToRender={10}
+      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={t.ink2} colors={[t.text]} />}
+      ListHeaderComponent={header}
       ListEmptyComponent={
-        favs && deals.some((d) => d.type === type && inCat(d, cat)) ? (
+        favs && all.some((d) => d.type === type && inCat(d, cat)) ? (
           <Empty
-            title="U ulubionych dostawców nic teraz nie ma"
-            body="Inni dostawcy mają promocje w tej kategorii."
-            action={<Button kind="line" label="Pokaż wszystkich dostawców" onPress={() => update({ onlyFavorites: false })} />}
+            icon="star"
+            title="Ulubieni nie mają teraz promocji"
+            body="Inni dostawcy mają okazje w tej kategorii."
+            action={<Button kind="line" label="Pokaż wszystkich" onPress={() => update({ onlyFavorites: false })} />}
           />
         ) : (
           <Empty
-            title={type === 'drop' ? 'Nikt ostatnio nie obniżył cen' : 'Brak promocji w tej kategorii'}
+            icon="tag"
+            title={type === 'drop' ? 'Nikt ostatnio nie obniżył cen' : `Brak promocji: ${CAT_LABEL[cat]}`}
             body={type === 'drop' ? 'Obniżki wykrywamy co 15 minut i pokazujemy przez 7 dni.' : 'Wybierz inną kategorię albo rodzaj promocji.'}
           />
         )
@@ -69,3 +128,12 @@ export default function Deals({ snapshot, refreshing, onRefresh, onOpen }) {
     />
   );
 }
+
+const s = StyleSheet.create({
+  grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
+  tile: { width: '48.8%', minHeight: 84, borderRadius: radius.lg, padding: 12, justifyContent: 'space-between', borderWidth: 2 },
+  wide: { width: '100%', minHeight: 0, flexDirection: 'row', alignItems: 'center' },
+  tileTxt: { color: '#fff' },
+  check: { position: 'absolute', right: 8, bottom: 8, width: 20, height: 20, borderRadius: 10, alignItems: 'center', justifyContent: 'center' },
+});
+

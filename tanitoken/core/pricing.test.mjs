@@ -3,7 +3,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
   perMillion, modelKey, offerKey, offerCost, cheapest, sortOffers, priceBeforeDiscount,
-  detectDrops, trackPromos, promoStats, collectDeals, computeAlerts, watchStatus,
+  detectDrops, trackPromos, promoStats, collectDeals, computeAlerts, watchStatus, promoSavings, onePerProvider,
 } from './pricing.js';
 import { openrouterModels, openrouterOffers, vercelEntries, requestyEntries } from './sources.js';
 
@@ -103,4 +103,14 @@ test('detectDrops + collectDeals + alerty dla obserwowanych', () => {
   assert.equal(status.overpayPct, 75);
   const kinds = computeAlerts(snap, [used]).map((a) => a.kind);
   assert.ok(kinds.includes('cheaper'));
+});
+
+test('promoSavings i onePerProvider', () => {
+  const o = tok('openrouter', 'P', 0.5, 1, { discount: 0.5 });
+  const status = { used: o, usedPromo: { type: 'discount', pct: 50 } };
+  assert.equal(promoSavings(status, { token: { in: 10, out: 2 } }), 7); // 14 $ przed, 7 $ teraz
+  assert.equal(promoSavings({ used: o, usedPromo: null }), 0);
+  const list = [tok('openrouter', 'A', 1, 1), { ...tok('openrouter', 'A', 2, 2), tag: 'a/zdr' }, tok('direct', 'B', 3, 3)];
+  assert.deepEqual(onePerProvider(list).map((x) => x.provider), ['A', 'B']);
+  assert.equal(onePerProvider(list, 'openrouter:a/zdr').length, 3);
 });

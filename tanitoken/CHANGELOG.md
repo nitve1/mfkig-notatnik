@@ -18,13 +18,44 @@ Jedno miejsce z historią zmian, decyzjami i otwartymi zadaniami. Aktualizowane 
 
 | Priorytet | Zadanie | Status |
 | --- | --- | --- |
-| 1 | Wybór kierunku wizualnego z 5 makiet (`tanitoken/mockups/`) | czeka na decyzję użytkownika |
-| 2 | Przebudowa apki według wybranej makiety: czytelność, mniej tekstu ciągłego, filtry na całą szerokość, nowe fonty | po wyborze |
-| 3 | Języki: EN (domyślny), PL, ES, FR, IT, DE. Wykrywanie języka telefonu, przełącznik w Profilu, teksty alertów w `core` też tłumaczone | po przebudowie (teksty i tak się zmienią) |
-| 4 | Landing w wybranym kierunku + wersje językowe | na końcu |
-| 5 | Linki partnerskie: zgłoszenie do Novita / GMI Cloud, wklejenie linków w `core/affiliates.js` | po stronie użytkownika |
-| 6 | Po merge'u: ręczne uruchomienie workflow „TaniToken snapshot” (tworzy gałąź `tanitoken-data`) | po merge'u |
-| 7 | Test na prawdziwym telefonie (build EAS), szczególnie zadania w tle i powiadomienia | przed publikacją |
+| 1 | Języki: EN (domyślny), PL, ES, FR, IT, DE. Wykrywanie języka telefonu, przełącznik w Profilu obok motywu, teksty alertów w `core` też tłumaczone | następne |
+| 2 | Historia cen w snapshocie (np. 30 punktów na ofertę) pod wykresy w karcie modelu | pomysł |
+| 3 | Landing w stylu „Kolorowe kategorie” + wersje językowe | na końcu |
+| 4 | Linki partnerskie: zgłoszenie do Novita / GMI Cloud, wklejenie linków w `core/affiliates.js` | po stronie użytkownika |
+| 5 | Po merge'u: ręczne uruchomienie workflow „TaniToken snapshot” (tworzy gałąź `tanitoken-data`) | po merge'u |
+| 6 | Test na prawdziwym telefonie (build EAS), szczególnie zadania w tle i powiadomienia | przed publikacją |
+
+## 2026-10-12 – sesja 3b: apka w stylu „Kolorowe kategorie” + motyw
+
+Decyzja użytkownika: kierunek 5 („Kolorowe kategorie”) z makiet + opcja zmiany motywu (dzienny / nocny).
+
+- Nowy system wyglądu w apce (`mobile/src/theme.js`): tokeny jasne i ciemne, kolor na kategorię
+  (Tekst `#3d63ff`, Kod `#8b3dff`, Obraz `#ff4f8b`, Wideo `#ff8a00`, w ciemnym motywie rozjaśnione),
+  czerwień zniżek, zieleń oszczędności. Fonty: Bricolage Grotesque (nagłówki, liczby) + Figtree (tekst),
+  paczki `@expo-google-fonts/*` (Barlow usunięty).
+- Motyw: ustawienie `profile.theme` = `system` | `light` | `dark`. Przełącznik w Profilu (sekcja Wygląd)
+  i w ostatnim kroku onboardingu (podgląd od razu). `ThemeContext` w `App.js`, `useTheme()` wszędzie.
+- Nowe komponenty (`mobile/src/ui.js`): Card z kolorowym paskiem, Segmented na całą szerokość (też z
+  ikonami), PctBadge, StatusBadge, CatChip, Stat, Progress, Section, IconButton z kropką, Empty z ikoną.
+  Ikony SVG w `mobile/src/icons.js`, znak TaniToken = 4 kafle kategorii.
+- Ekrany przepisane według makiety:
+  - Promocje: kafel „Wszystkie promocje” + 4 kafle kategorii (liczba, „do −X%” albo „brak zniżek”),
+    dotknięcie filtruje, przełącznik Zniżki / Obniżki / Darmowe z licznikami, karty z paskiem kategorii,
+    dzwonek z kropką prowadzi do alertów.
+  - Szukaj: pole z ikoną, kategorie jako ikony, sortowanie, karty z ceną i zniżką.
+  - Karta modelu: dwa kafle (najtaniej / oszczędzasz), Używam / Obserwuj, zużycie, oferty z paskiem
+    (zielony = najtaniej, niebieski = używasz), filtr Wszyscy / Ulubieni / Z promocją, jeden wiersz na
+    dostawcę (`onePerProvider`), link „Otwórz” / „Partner”.
+  - Moje: kafle „Oszczędzasz” (suma zniżek używanych ofert, `promoSavings`) i „Do sprawdzenia”, karty
+    Używam z odznaką stanu i paskiem postępu promocji, alerty z ikonami, Obserwuję.
+  - Profil: sekcje w kartach, Wygląd na górze.
+  - Onboarding: kolorowe kafle kategorii, pasek kroków w kolorach kategorii.
+  - Intro: 4 kafle wskakują po kolei, potem napis. Naprawione znikanie intro (remount przy zmianie gałęzi
+    w `App.js`, callback tylko po `finished`).
+- Ikona apki, adaptive icon, splash i ikona powiadomień w nowym znaku.
+- `core/pricing.js`: `promoSavings`, `onePerProvider` (+ test, 9/9).
+- Sprawdzone: eksport Android + iOS, expo-doctor 21/21, przejście całej ścieżki w podglądzie web w obu
+  motywach (onboarding, promocje, filtr kategorii, szukaj, model, wybór dostawcy, Moje, Profil).
 
 ## 2026-10-12 – sesja 3: makiety i porządek
 

@@ -2,22 +2,24 @@ import { useEffect, useMemo, useState } from 'react';
 import { Linking, Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
 import {
   SOURCES, UNIT_LABEL, formatContext, formatOfferPrice, formatUsd, isFreeOffer, liveOpenrouterOffers, offerCost,
-  offerKey, priceBeforeDiscount, promoAgeText, sortOffers,
+  offerKey, onePerProvider, priceBeforeDiscount, sortOffers,
 } from '../../../core/pricing.js';
 import { offerLink } from '../../../core/affiliates.js';
-import { Button, Row, Segmented, T } from '../ui';
-import { CAT_LABEL } from '../parts';
+import { Button, Card, CatChip, IconButton, PctBadge, Row, Segmented, Stat, StatusBadge, T } from '../ui';
+import Icon from '../icons';
+import { CAT_LABEL, authorName, daysLabel, shortName } from '../parts';
 import { font, radius, space, useTheme } from '../theme';
 import { useProfile } from '../profile';
 
 const LIVE_MS = 60 * 1000;
+const SRC_SHORT = { openrouter: 'OpenRouter', vercel: 'Vercel', requesty: 'Requesty', direct: 'bezpośrednio' };
 
 function UsageInput({ label, value, onChange }) {
   const t = useTheme();
   const [text, setText] = useState(String(value));
   return (
     <View style={{ flex: 1 }}>
-      <T kind="tiny" color="ink3" style={{ marginBottom: 4 }}>{label}</T>
+      <T kind="tiny" color="ink2" style={{ marginBottom: 4 }}>{label}</T>
       <TextInput
         value={text}
         onChangeText={(v) => {
@@ -27,7 +29,7 @@ function UsageInput({ label, value, onChange }) {
         }}
         keyboardType="decimal-pad"
         accessibilityLabel={label}
-        style={[s.input, { borderColor: t.rule, color: t.ink, backgroundColor: t.paper }]}
+        style={[s.input, { borderColor: t.line, color: t.ink, backgroundColor: t.bg }]}
       />
     </View>
   );
@@ -42,7 +44,7 @@ export default function Model({ model: base, snapshot, onBack }) {
   const [scope, setScope] = useState(profile.onlyFavorites && profile.providers.length ? 'fav' : 'all');
   const item = watchItem(base.id);
   const usage = profile.usage;
-  const favs = new Set(profile.providers);
+  const favs = useMemo(() => new Set(profile.providers), [profile.providers]);
 
   // Oferty OpenRouter na żywo, co minutę; reszta źródeł ze snapshotu.
   useEffect(() => {
@@ -64,64 +66,76 @@ export default function Model({ model: base, snapshot, onBack }) {
     };
   }, [base]);
 
-  const filter = scope === 'fav' && favs.size ? (o) => favs.has(o.provider) : null;
-  const offers = useMemo(() => sortOffers(model, usage, filter), [model, usage, scope, profile.providers]);
-  const paid = offers.filter((o) => o.unit === model.unit && !isFreeOffer(o));
-  const best = paid[0];
-  const worst = paid[paid.length - 1];
   const promos = Object.values(snapshot.promos ?? {}).filter((p) => p.modelId === model.id);
+  const promoKeys = new Set(promos.map((p) => p.key));
+  const filter = scope === 'fav' ? (o) => favs.has(o.provider) : scope === 'promo' ? (o) => promoKeys.has(offerKey(o)) : null;
+  const offers = useMemo(
+    () => onePerProvider(sortOffers(model, usage, filter), item?.offerKey),
+    [model, usage, scope, favs, item?.offerKey], // eslint-disable-line react-hooks/exhaustive-deps
+  );
+  const allPaid = sortOffers(model, usage).filter((o) => o.unit === model.unit && !isFreeOffer(o));
+  const best = allPaid[0];
+  const worst = allPaid[allPaid.length - 1];
   const used = item?.offerKey ? model.offers.find((o) => offerKey(o) === item.offerKey) : null;
-
+  const cats = model.cats.length > 1 ? model.cats.filter((c) => c !== 'text') : model.cats;
   const setUsage = (patch) => update({ usage: { ...usage, [model.unit]: { ...usage[model.unit], ...patch } } });
 
   return (
-    <ScrollView contentContainerStyle={{ padding: space[4], paddingBottom: space[7] }} keyboardShouldPersistTaps="handled">
-      <Pressable onPress={onBack} hitSlop={12} accessibilityRole="button" accessibilityLabel="Wróć" style={{ alignSelf: 'flex-start', marginBottom: space[3] }}>
-        <T kind="strong">‹ Wróć</T>
-      </Pressable>
-
-      <T kind="h1">{model.name}</T>
-      <T kind="small" color="ink3" selectable style={{ marginTop: 2 }}>
-        {model.id}{model.context ? `, kontekst ${formatContext(model.context)}` : ''}
-      </T>
-      <Row style={{ flexWrap: 'wrap', gap: 6, marginTop: space[2] }}>
-        {model.cats.map((c) => (
-          <View key={c} style={[s.chip, { borderColor: t.rule }]}><T kind="tiny" color="ink2">{CAT_LABEL[c]}</T></View>
-        ))}
+    <ScrollView contentContainerStyle={{ padding: space[4], paddingBottom: space[7], gap: space[3] }} keyboardShouldPersistTaps="handled">
+      <Row style={{ justifyContent: 'space-between' }}>
+        <View style={{ marginLeft: -10 }}><IconButton name="back" label="Wróć" onPress={onBack} /></View>
+        <IconButton name="star" label={item ? 'Przestań obserwować' : 'Obserwuj'} active={!!item} onPress={() => toggleWatch(model.id)} />
       </Row>
-      {model.freeId ? (
-        <T kind="small" style={{ marginTop: space[3], color: t.save }} selectable>
-          Darmowy wariant: {model.freeId}. Zwykle z limitami zapytań.
-        </T>
-      ) : null}
-      {model.expires ? <T kind="small" style={{ marginTop: space[2], color: t.promo }}>Model zostanie wycofany {model.expires}.</T> : null}
 
-      <Row style={{ marginTop: space[4], flexWrap: 'wrap' }}>
-        <Button
-          kind={item ? 'ink' : 'line'}
-          label={item ? '★ Obserwujesz' : '☆ Obserwuj'}
-          onPress={() => { toggleWatch(model.id); setPicking(false); }}
-          accessibilityHint="Dodaje model do zakładki Moje"
+      <View style={{ gap: 4 }}>
+        <Row style={{ gap: space[3] }}>
+          {cats.map((c) => <CatChip key={c} cat={c} label={CAT_LABEL[c]} />)}
+        </Row>
+        <T kind="display">{shortName(model.name)}</T>
+        <T kind="small" color="ink2">
+          {[authorName(model), model.context ? `${formatContext(model.context)} kontekstu` : null, `${model.offers.length} ofert`].filter(Boolean).join(', ')}
+        </T>
+        {model.freeId ? <StatusBadge tone="save" icon="check" label={`Darmowy wariant: ${model.freeId}`} /> : null}
+        {model.expires ? <StatusBadge tone="deal" icon="warn" label={`Wycofanie ${model.expires}`} /> : null}
+      </View>
+
+      <Row style={{ alignItems: 'stretch', gap: space[2] }}>
+        <Stat label="Najtaniej miesięcznie" value={best ? formatUsd(offerCost(best, usage)) : '–'} sub={best?.provider} />
+        <Stat
+          label="Oszczędzasz"
+          value={best && worst ? formatUsd(offerCost(worst, usage) - offerCost(best, usage)) : '–'}
+          sub="względem najdroższej"
+          color={t.save}
         />
-        <Button kind={item?.mode === 'use' ? 'ink' : 'line'} label={item?.mode === 'use' ? 'Używam' : 'Używam…'} onPress={() => setPicking(!picking)} />
       </Row>
-      {item?.mode === 'use' && used && !picking ? (
-        <T kind="small" color="ink2" style={{ marginTop: space[2] }}>
-          Płacisz u {used.provider}, {formatOfferPrice(used)}. Ostrzeżemy Cię, gdy ta cena się zmieni.
-        </T>
+
+      <Row style={{ gap: space[2] }}>
+        <Button
+          label={item?.mode === 'use' ? 'Używam' : 'Używam…'}
+          icon={item?.mode === 'use' ? 'check' : null}
+          kind={item?.mode === 'use' ? 'ink' : 'line'}
+          onPress={() => setPicking(!picking)}
+        />
+        <Button label={item ? 'Obserwujesz' : 'Obserwuj'} icon="star" kind={item ? 'ink' : 'line'} onPress={() => toggleWatch(model.id)} />
+      </Row>
+      {used && !picking ? (
+        <Card stripe={t.text} style={{ paddingVertical: 10 }}>
+          <T kind="small">Płacisz u <T kind="small" style={{ fontFamily: font.textBold }}>{used.provider}</T>, {formatOfferPrice(used)}. Ostrzeżemy Cię, gdy cena się zmieni.</T>
+        </Card>
       ) : null}
       {picking ? (
-        <View style={[s.pickNote, { backgroundColor: t.tag }]}>
-          <T kind="strong" style={{ color: t.tagInk }}>Wybierz dostawcę, u którego płacisz za ten model.</T>
+        <Card stripe={t.video} style={{ backgroundColor: t.dark ? t.card : '#fff4e6' }}>
+          <T kind="strong">Wybierz dostawcę, u którego płacisz</T>
+          <T kind="small" color="ink2">Dotknij oferty poniżej.</T>
           {item?.mode === 'use' ? (
-            <Pressable onPress={() => { setUsing(model.id, null); setPicking(false); }} accessibilityRole="button">
-              <T kind="small" style={{ color: t.tagInk, textDecorationLine: 'underline', marginTop: 4 }}>Już nie używam, tylko obserwuję</T>
+            <Pressable onPress={() => { setUsing(model.id, null); setPicking(false); }} accessibilityRole="button" style={{ marginTop: 6 }}>
+              <T kind="small" style={{ color: t.text, fontFamily: font.textBold }}>Już nie używam, tylko obserwuję</T>
             </Pressable>
           ) : null}
-        </View>
+        </Card>
       ) : null}
 
-      <View style={[s.calc, { backgroundColor: t.sheet, borderColor: t.rule }]}>
+      <Card>
         <T kind="strong" style={{ marginBottom: space[2] }}>Twoje zużycie miesięcznie</T>
         <Row>
           {model.unit === 'token' ? (
@@ -130,32 +144,27 @@ export default function Model({ model: base, snapshot, onBack }) {
               <UsageInput label="Wyjście, mln tokenów" value={usage.token.out} onChange={(v) => setUsage({ out: v })} />
             </>
           ) : (
-            <UsageInput
-              label={model.unit === 'image' ? 'Obrazów' : 'Sekund wideo'}
-              value={usage[model.unit].count}
-              onChange={(v) => setUsage({ count: v })}
-            />
+            <UsageInput label={model.unit === 'image' ? 'Obrazów' : 'Sekund wideo'} value={usage[model.unit].count} onChange={(v) => setUsage({ count: v })} />
           )}
         </Row>
-        {best ? (
-          <T style={{ marginTop: space[3] }}>
-            Najtaniej: <T kind="strong">{best.provider}</T>, {formatUsd(offerCost(best, usage))} miesięcznie.
-            {worst && offerCost(worst, usage) > offerCost(best, usage) ? (
-              <T style={{ color: t.save }}>{` Oszczędzasz ${formatUsd(offerCost(worst, usage) - offerCost(best, usage))} względem najdroższej oferty.`}</T>
-            ) : null}
-          </T>
-        ) : null}
-      </View>
+      </Card>
 
-      <Row style={{ justifyContent: 'space-between', marginTop: space[5], marginBottom: space[2] }}>
-        <T kind="h2">Oferty</T>
-        {favs.size ? (
-          <Segmented scroll={false} value={scope} onChange={setScope} options={[{ value: 'all', label: 'Wszyscy' }, { value: 'fav', label: 'Ulubieni' }]} />
-        ) : null}
-      </Row>
-      <T kind="tiny" color="ink3" style={{ marginBottom: space[2] }}>
-        USD {UNIT_LABEL[model.unit]}. {live ? 'Oferty OpenRouter pobrane przed chwilą.' : 'Z ostatniej aktualizacji.'}
-      </T>
+      <View style={{ gap: space[2], marginTop: space[2] }}>
+        <Row style={{ justifyContent: 'space-between' }}>
+          <T kind="h2">Oferty</T>
+          <T kind="tiny" color="ink3">{live ? 'OpenRouter na żywo' : 'z ostatniej aktualizacji'}</T>
+        </Row>
+        <Segmented
+          value={scope}
+          onChange={setScope}
+          options={[
+            { value: 'all', label: 'Wszyscy' },
+            { value: 'fav', label: 'Ulubieni', count: favs.size || null },
+            { value: 'promo', label: 'Z promocją', count: promos.filter((p) => p.type !== 'free').length },
+          ]}
+        />
+        <T kind="tiny" color="ink3">USD {UNIT_LABEL[model.unit]}</T>
+      </View>
 
       {offers.map((o) => {
         const k = offerKey(o);
@@ -165,56 +174,56 @@ export default function Model({ model: base, snapshot, onBack }) {
         const isBest = o === best;
         const isUsed = item?.offerKey === k;
         const other = o.unit !== model.unit;
-        const Wrap = picking && !other ? Pressable : View;
         return (
-          <Wrap
+          <Card
             key={k}
-            onPress={picking ? () => { setUsing(model.id, k); setPicking(false); } : undefined}
-            accessibilityRole={picking ? 'radio' : undefined}
-            accessibilityState={picking ? { checked: isUsed } : undefined}
-            style={[s.offer, { borderColor: isUsed ? t.ink : isBest ? t.tag : t.rule, backgroundColor: isBest ? `${t.tag}30` : t.sheet, borderWidth: isUsed || isBest ? 2 : 1 }]}
+            stripe={isUsed ? t.text : isBest ? t.save : t.line}
+            onPress={picking && !other ? () => { setUsing(model.id, k); setPicking(false); } : undefined}
+            accessibilityLabel={picking ? `Używam ${o.provider}` : undefined}
           >
-            <Row style={{ justifyContent: 'space-between', alignItems: 'flex-start' }}>
-              <View style={{ flex: 1 }}>
-                <T kind="strong">
-                  {picking && !other ? (isUsed ? '◉ ' : '○ ') : ''}{o.provider}
-                  {favs.has(o.provider) ? <T kind="strong" style={{ color: t.ink3 }}> ★</T> : null}
-                </T>
-                <T kind="tiny" color="ink3">
-                  {[SOURCES[o.src]?.name, o.quant, o.uptime != null ? `dostępność ${o.uptime}%` : null, isBest ? 'najtaniej' : null, isUsed ? 'używasz' : null].filter(Boolean).join(', ')}
+            <Row style={{ alignItems: 'flex-start' }}>
+              <View style={{ flex: 1, gap: 2 }}>
+                <Row style={{ gap: 6 }}>
+                  {picking && !other ? <Icon name={isUsed ? 'check' : 'plus'} size={16} color={t.text} /> : null}
+                  {isBest ? <Icon name="trophy" size={16} color={t.save} /> : null}
+                  <T kind="strong" numberOfLines={1} style={{ flexShrink: 1 }}>{o.provider}</T>
+                  {favs.has(o.provider) ? <Icon name="star" size={14} color={t.video} fill={t.video} /> : null}
+                </Row>
+                <T kind="small" color="ink2">
+                  {before ? <T kind="small" color="ink3" style={{ textDecorationLine: 'line-through' }}>{formatOfferPrice(before)}  </T> : null}
+                  {formatOfferPrice(o)}
                 </T>
               </View>
-              <T kind="price" style={{ fontSize: 19 }}>{other ? '' : `${formatUsd(offerCost(o, usage))}`}</T>
+              <View style={{ alignItems: 'flex-end', gap: 4 }}>
+                <T kind="num">{other ? '' : formatUsd(offerCost(o, usage))}</T>
+                {promo && promo.type !== 'free' ? <PctBadge pct={promo.pct} /> : null}
+              </View>
             </Row>
-            <Row style={{ marginTop: 4, flexWrap: 'wrap', gap: space[2] }}>
-              {before ? <T kind="small" color="ink3" style={{ textDecorationLine: 'line-through' }}>{formatOfferPrice(before)}</T> : null}
-              <T kind="small" style={{ fontFamily: font.textSemi, fontVariant: ['tabular-nums'] }}>{formatOfferPrice(o)}</T>
-              {promo ? <T kind="small" style={{ color: t.promo, fontFamily: font.textSemi }}>−{promo.pct}%, {promoAgeText(promo)}</T> : null}
-              {other ? <T kind="tiny" color="ink3">inna jednostka</T> : null}
-            </Row>
-            {!picking && link ? (
-              <Row style={{ marginTop: space[2] }}>
-                <Pressable onPress={() => Linking.openURL(link.url)} accessibilityRole="link" hitSlop={8}>
-                  <T kind="small" style={{ textDecorationLine: 'underline', fontFamily: font.textMedium }}>{link.label}</T>
+            <Row style={{ marginTop: 8, justifyContent: 'space-between' }}>
+              <T kind="tiny" color="ink3" style={{ flex: 1 }} numberOfLines={1}>
+                {[SRC_SHORT[o.src] ?? SOURCES[o.src]?.name, o.quant, o.uptime != null ? `dostępność ${o.uptime}%` : null, promo ? `promocja ${daysLabel(promo)}` : null, other ? 'inna jednostka' : null, isUsed ? 'używasz' : null].filter(Boolean).join(' · ')}
+              </T>
+              {!picking && link ? (
+                <Pressable onPress={() => Linking.openURL(link.url)} accessibilityRole="link" hitSlop={10} style={s.link}>
+                  <T kind="tiny" style={{ color: t.text }}>{link.sponsored ? 'Partner' : 'Otwórz'}</T>
+                  <Icon name="external" size={13} color={t.text} />
                 </Pressable>
-                {link.sponsored ? <T kind="tiny" color="ink3">link partnerski</T> : null}
-              </Row>
-            ) : null}
-          </Wrap>
+              ) : null}
+            </Row>
+          </Card>
         );
       })}
-      {!offers.length ? <T color="ink2">Żaden z ulubionych dostawców nie sprzedaje tego modelu.</T> : null}
-      <T kind="tiny" color="ink3" style={{ marginTop: space[3] }}>
-        Cenniki bezpośrednie pochodzą z katalogu models.dev i mogą być nieaktualne. Sprawdź cenę u dostawcy przed zakupem.
+      {!offers.length ? (
+        <T color="ink2">{scope === 'fav' ? 'Żaden z ulubionych dostawców nie sprzedaje tego modelu.' : 'Brak ofert z promocją.'}</T>
+      ) : null}
+      <T kind="tiny" color="ink3">
+        Cenniki „bezpośrednio” pochodzą z katalogu models.dev i mogą być nieaktualne. Linki „Partner” są partnerskie, kolejność zależy tylko od ceny.
       </T>
     </ScrollView>
   );
 }
 
 const s = StyleSheet.create({
-  chip: { borderWidth: 1, borderRadius: 99, paddingHorizontal: 8, paddingVertical: 2 },
-  pickNote: { borderRadius: radius.tag, padding: space[3], marginTop: space[3] },
-  calc: { borderWidth: 1, borderRadius: radius.ui, padding: space[4], marginTop: space[5] },
-  input: { borderWidth: 1.5, borderRadius: 6, paddingHorizontal: 10, paddingVertical: 8, fontSize: 17, fontFamily: font.textSemi },
-  offer: { borderRadius: radius.ui, padding: space[3], marginBottom: space[2] },
+  input: { borderWidth: 1.5, borderRadius: radius.sm, paddingHorizontal: 12, paddingVertical: 9, fontSize: 17, fontFamily: font.textBold },
+  link: { flexDirection: 'row', alignItems: 'center', gap: 4, marginLeft: 8 },
 });

@@ -1,156 +1,179 @@
 import { useMemo } from 'react';
-import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
-import { formatDays, formatOfferPrice, formatUsd, promoAgeDays, promoAgeText, timeAgo, watchStatus } from '../../../core/pricing.js';
-import { Button, Empty, MiniTag, Row, T } from '../ui';
-import { Header, priceParts } from '../parts';
-import { radius, space, useTheme } from '../theme';
+import { ScrollView, StyleSheet, View } from 'react-native';
+import { formatDays, formatOfferPrice, formatUsd, promoAgeDays, promoSavings, timeAgo, watchStatus } from '../../../core/pricing.js';
+import { Button, Card, CatChip, Empty, PctBadge, Progress, Row, Stat, StatusBadge, T } from '../ui';
+import Icon from '../icons';
+import { CAT_LABEL, Header, priceParts, shortName } from '../parts';
+import { mainCat, space, useTheme } from '../theme';
 import { useProfile } from '../profile';
 import { favoritesFilter } from '../alerts';
 
-const KIND_LABEL = {
-  'promo-start': 'Nowa promocja',
-  'promo-end': 'Koniec promocji',
-  'promo-aging': 'Promocja może się kończyć',
-  cheaper: 'Taniej gdzie indziej',
-  expires: 'Model znika',
+const KIND = {
+  'promo-start': { label: 'Nowa promocja', icon: 'tag', tone: 'info' },
+  'promo-end': { label: 'Koniec promocji', icon: 'warn', tone: 'deal' },
+  'promo-aging': { label: 'Kończy się', icon: 'clock', tone: 'deal' },
+  cheaper: { label: 'Taniej gdzie indziej', icon: 'tag', tone: 'save' },
+  expires: { label: 'Model znika', icon: 'warn', tone: 'deal' },
 };
 
-// Karta modelu, którego używam: czy jestem w promocji, ile przepłacam, co się skończyło.
-function UsingCard({ status, item, onOpen }) {
-  const t = useTheme();
-  const { profile } = useProfile();
-  const { model, used, usedPromo, best, overpayPct, usedCost, bestCost, typicalDays, ended } = status;
-  const lastEnd = ended.find((e) => e.key === item.offerKey);
-  const aging = usedPromo && typicalDays && promoAgeDays(usedPromo) >= typicalDays * 0.8;
-  let line;
-  let tone = 'ink2';
-  if (!used) {
-    line = 'Ten dostawca nie sprzedaje już modelu. Wybierz innego.';
-    tone = 'promo';
-  } else if (usedPromo) {
-    line = `Jesteś w promocji −${usedPromo.pct}%, ${promoAgeText(usedPromo)}.`;
-    if (aging) {
-      line += ` U ${usedPromo.provider} zniżki trwają zwykle ok. ${formatDays(typicalDays)}, może się zaraz skończyć.`;
-      tone = 'promo';
-    } else if (typicalDays) line += ` Zwykle trwają ok. ${formatDays(typicalDays)}.`;
-  } else if (lastEnd) {
-    line = `Promocja skończyła się ${timeAgo(lastEnd.endedAt)}. Płacisz pełną cenę.`;
-    tone = 'promo';
-  } else {
-    line = 'Płacisz cenę regularną.';
+// Stan używanego modelu jako jedna odznaka + opcjonalny pasek postępu promocji.
+function usingState(st) {
+  const lastEnd = st.ended[0]; // już przefiltrowane do używanej oferty
+  if (!st.used) return { tone: 'deal', label: 'Dostawca zniknął', stripe: 'deal' };
+  if (st.usedPromo) {
+    const age = promoAgeDays(st.usedPromo);
+    const aging = st.typicalDays && age >= st.typicalDays * 0.8;
+    return {
+      tone: aging ? 'deal' : 'save',
+      label: aging ? 'Kończy się' : `Promocja −${st.usedPromo.pct}%`,
+      stripe: aging ? 'deal' : 'save',
+      progress: st.typicalDays ? Math.min(1, age / st.typicalDays) : null,
+      progressText: st.typicalDays ? `dzień ${Math.max(1, Math.round(age))} z ~${Math.round(st.typicalDays)} typowych` : null,
+    };
   }
-  return (
-    <Pressable onPress={() => onOpen(model.id)} accessibilityRole="button" style={[s.card, { backgroundColor: t.sheet, borderColor: aging || lastEnd ? t.promo : t.rule }]}>
-      <Row style={{ justifyContent: 'space-between', alignItems: 'flex-start' }}>
-        <View style={{ flex: 1 }}>
-          <T kind="h3">{model.name}</T>
-          <T kind="small" color="ink3">u {used?.provider ?? 'nieznanego dostawcy'}</T>
-        </View>
-        {used ? <MiniTag pct={usedPromo?.pct} price={priceParts(used).main} unit={priceParts(used).unit} /> : null}
-      </Row>
-      <T kind="small" color={tone} style={{ marginTop: space[2] }}>{line}</T>
-      {used && best && overpayPct >= 5 ? (
-        <T kind="small" style={{ marginTop: space[1], color: t.save }}>
-          {best.provider} jest tańszy o {overpayPct}%{profile.providers.length ? ' (wśród ulubionych)' : ''}: {formatUsd(bestCost)} zamiast {formatUsd(usedCost)} miesięcznie.
-        </T>
-      ) : used && best ? (
-        <T kind="small" color="ink3" style={{ marginTop: space[1] }}>To najtańsza oferta dla Twojego zużycia.</T>
-      ) : null}
-    </Pressable>
-  );
+  if (lastEnd) return { tone: 'deal', label: 'Promocja minęła', stripe: 'deal' };
+  if (st.overpayPct >= 5) return { tone: 'info', label: `Taniej o ${st.overpayPct}% gdzie indziej`, stripe: 'text' };
+  return { tone: 'save', label: 'Najtaniej', stripe: 'save' };
 }
 
 export default function Mine({ snapshot, onOpen, onGoSearch, onGoProfile }) {
   const t = useTheme();
   const { profile } = useProfile();
-  const statuses = useMemo(
+  const filter = favoritesFilter(profile);
+  const rows = useMemo(
     () => profile.watchlist
-      .map((item) => ({ item, status: watchStatus(snapshot, item, profile.usage, favoritesFilter(profile)) }))
-      .filter((x) => x.status.model),
-    [snapshot, profile.watchlist, profile.usage, profile.providers],
+      .map((item) => {
+        let st = watchStatus(snapshot, item, profile.usage, filter);
+        // Ulubieni nie sprzedają tego modelu: pokaż najtańszą ofertę ogólnie.
+        if (filter && !st.best) st = watchStatus(snapshot, item, profile.usage);
+        return { item, st: { ...st, usedKey: item.offerKey, ended: (st.ended ?? []).filter((e) => e.key === item.offerKey) } };
+      })
+      .filter((x) => x.st.model),
+    [snapshot, profile.watchlist, profile.usage, filter],
   );
-  const using = statuses.filter((x) => x.item.mode === 'use');
-  const watching = statuses.filter((x) => x.item.mode !== 'use');
+  const using = rows.filter((r) => r.item.mode === 'use');
+  const watching = rows.filter((r) => r.item.mode !== 'use');
+  const savings = using.reduce((sum, r) => sum + promoSavings(r.st, profile.usage), 0);
+  const toCheck = using.filter((r) => ['deal', 'info'].includes(usingState(r.st).tone)).length;
   const alerts = profile.alerts.slice(0, 4);
 
   if (!profile.watchlist.length) {
     return (
-      <ScrollView contentContainerStyle={{ padding: space[4] }}>
+      <ScrollView contentContainerStyle={{ padding: space[4], gap: space[3] }}>
         <Header title="Moje" />
         <Empty
+          icon="star"
           title="Nic jeszcze nie obserwujesz"
-          body="Otwórz model i dotknij Obserwuj, żeby widzieć jego promocje. Jeśli już z niego korzystasz, wybierz Używam i wskaż dostawcę. Wtedy ostrzeżemy Cię, zanim skończy się zniżka."
-          action={<Button label="Znajdź model" onPress={onGoSearch} />}
+          body="Otwórz model i dotknij gwiazdki. Jeśli już z niego korzystasz, wybierz „Używam” i wskaż dostawcę, a ostrzeżemy Cię, zanim skończy się promocja."
+          action={<Button label="Znajdź model" icon="search" onPress={onGoSearch} style={{ flex: 0 }} />}
         />
       </ScrollView>
     );
   }
 
   return (
-    <ScrollView contentContainerStyle={{ padding: space[4], paddingBottom: space[7] }}>
-      <Header title="Moje" sub={`${using.length} używanych, ${watching.length} obserwowanych`} />
+    <ScrollView contentContainerStyle={{ padding: space[4], paddingBottom: space[7], gap: space[2] }}>
+      <Header kicker={`${using.length} używane, ${watching.length} obserwowane`} title="Moje" />
+
+      <Row style={{ alignItems: 'stretch', gap: space[2] }}>
+        <Stat label="Oszczędzasz" value={formatUsd(savings)} sub="na miesiąc z promocji" color={t.save} />
+        <Stat label="Do sprawdzenia" value={String(toCheck)} sub={toCheck === 1 ? 'model wymaga uwagi' : 'modele wymagają uwagi'} color={toCheck ? t.deal : t.ink} />
+      </Row>
 
       {!profile.notify.enabled ? (
-        <View style={[s.note, { borderColor: t.ink }]}>
-          <T kind="small">Powiadomienia są wyłączone. Alerty zobaczysz tylko tutaj, po otwarciu apki.</T>
-          <Pressable onPress={onGoProfile} accessibilityRole="button">
-            <T kind="small" style={{ textDecorationLine: 'underline', marginTop: 4 }}>Włącz powiadomienia</T>
-          </Pressable>
-        </View>
+        <Card stripe={t.video} onPress={onGoProfile} accessibilityLabel="Włącz powiadomienia">
+          <Row>
+            <Icon name="bell" size={20} color={t.video} />
+            <View style={{ flex: 1 }}>
+              <T kind="strong">Powiadomienia są wyłączone</T>
+              <T kind="small" color="ink2">Włącz, żeby nie przegapić końca promocji.</T>
+            </View>
+          </Row>
+        </Card>
       ) : null}
 
-      {using.length ? (
-        <View style={{ marginBottom: space[5], gap: space[3] }}>
-          <T kind="h2">Używam</T>
-          {using.map(({ item, status }) => <UsingCard key={item.modelId} item={item} status={status} onOpen={onOpen} />)}
-        </View>
-      ) : null}
+      {using.length ? <T kind="h2" style={s.h2}>Używam</T> : null}
+      {using.map(({ item, st }) => {
+        const state = usingState(st);
+        const c = mainCat(st.model);
+        return (
+          <Card key={item.modelId} stripe={t[state.stripe]} onPress={() => onOpen(st.model.id)} accessibilityLabel={`${st.model.name}, ${state.label}`}>
+            <Row style={{ alignItems: 'flex-start' }}>
+              <View style={{ flex: 1, gap: 4 }}>
+                <T kind="strong">{shortName(st.model.name)}</T>
+                <CatChip cat={c} label={CAT_LABEL[c]} extra={st.used ? `u ${st.used.provider}` : ''} />
+              </View>
+              <View style={{ alignItems: 'flex-end', gap: 4 }}>
+                <T kind="num">{st.used ? priceParts(st.used).main : '–'}</T>
+                {st.usedPromo ? <PctBadge pct={st.usedPromo.pct} /> : null}
+              </View>
+            </Row>
+            <View style={{ marginTop: 10, gap: 6 }}>
+              <StatusBadge tone={state.tone} label={state.label} icon={state.tone === 'deal' ? 'warn' : 'check'} />
+              {state.progress != null ? (
+                <>
+                  <Progress value={state.progress} color={state.tone === 'deal' ? t.deal : t.save} />
+                  <T kind="tiny" color="ink2">{state.progressText}</T>
+                </>
+              ) : null}
+              {st.best && st.overpayPct >= 5 && st.used ? (
+                <T kind="small" style={{ color: t.save }}>
+                  {st.best.provider}: {formatUsd(st.bestCost)} zamiast {formatUsd(st.usedCost)} miesięcznie
+                </T>
+              ) : null}
+            </View>
+          </Card>
+        );
+      })}
 
-      {alerts.length ? (
-        <View style={{ marginBottom: space[5] }}>
-          <T kind="h2" style={{ marginBottom: space[2] }}>Ostatnie alerty</T>
-          {alerts.map((a) => (
-            <Pressable key={a.id} onPress={() => onOpen(a.modelId)} style={[s.alert, { borderBottomColor: t.rule }]} accessibilityRole="button">
-              <Row style={{ justifyContent: 'space-between' }}>
-                <T kind="tiny" style={{ color: a.urgent ? t.promo : t.ink3 }}>{KIND_LABEL[a.kind]}</T>
-                <T kind="tiny" color="ink3">{timeAgo(a.at)}</T>
-              </Row>
-              <T kind="strong">{a.title}</T>
-              <T kind="small" color="ink2">{a.body}</T>
-            </Pressable>
-          ))}
-        </View>
-      ) : null}
+      {alerts.length ? <T kind="h2" style={s.h2}>Ostatnie alerty</T> : null}
+      {alerts.map((a) => {
+        const k = KIND[a.kind] ?? KIND['promo-start'];
+        const fg = k.tone === 'deal' ? t.deal : k.tone === 'save' ? t.save : t.text;
+        const bg = k.tone === 'deal' ? t.dealSoft : k.tone === 'save' ? t.saveSoft : t.infoSoft;
+        return (
+          <Card key={a.id} onPress={() => onOpen(a.modelId)} accessibilityLabel={`${k.label}: ${a.title}`}>
+            <Row style={{ alignItems: 'flex-start' }}>
+              <View style={[s.alertIcon, { backgroundColor: bg }]}><Icon name={k.icon} size={18} color={fg} /></View>
+              <View style={{ flex: 1, gap: 1 }}>
+                <T kind="tiny" style={{ color: fg }}>{k.label}</T>
+                <T kind="strong">{a.title}</T>
+                <T kind="small" color="ink2">{a.body}</T>
+              </View>
+              <T kind="tiny" color="ink3">{timeAgo(a.at).replace(' temu', '')}</T>
+            </Row>
+          </Card>
+        );
+      })}
 
-      {watching.length ? (
-        <View>
-          <T kind="h2" style={{ marginBottom: space[1] }}>Obserwuję</T>
-          {watching.map(({ item, status }) => {
-            const promo = status.promos.filter((p) => p.type !== 'free').sort((a, b) => b.pct - a.pct)[0];
-            return (
-              <Pressable key={item.modelId} onPress={() => onOpen(item.modelId)} style={[s.watch, { borderBottomColor: t.rule }]} accessibilityRole="button">
-                <View style={{ flex: 1 }}>
-                  <T kind="strong" numberOfLines={1}>{status.model.name}</T>
-                  <T kind="small" color="ink3" numberOfLines={1}>
-                    {promo ? `−${promo.pct}% u ${promo.provider}` : status.model.freeId ? 'Dostępny za darmo' : 'Bez promocji'}
-                  </T>
-                </View>
-                <View style={{ alignItems: 'flex-end' }}>
-                  <T kind="price" style={{ fontSize: 18 }}>{status.best ? formatOfferPrice(status.best) : '–'}</T>
-                  <T kind="tiny" color="ink3">{status.best?.provider ?? ''}</T>
-                </View>
-              </Pressable>
-            );
-          })}
-        </View>
-      ) : null}
+      {watching.length ? <T kind="h2" style={s.h2}>Obserwuję</T> : null}
+      {watching.map(({ item, st }) => {
+        const promo = st.promos.filter((p) => p.type !== 'free').sort((a, b) => b.pct - a.pct)[0];
+        const c = mainCat(st.model);
+        return (
+          <Card key={item.modelId} stripe={t[c]} onPress={() => onOpen(st.model.id)} accessibilityLabel={st.model.name}>
+            <Row style={{ alignItems: 'flex-start' }}>
+              <View style={{ flex: 1, gap: 4 }}>
+                <T kind="strong" numberOfLines={1}>{shortName(st.model.name)}</T>
+                <CatChip cat={c} label={CAT_LABEL[c]} extra={promo ? `promocja u ${promo.provider}` : st.model.freeId ? 'darmowy wariant' : st.best?.provider} />
+              </View>
+              <View style={{ alignItems: 'flex-end', gap: 4 }}>
+                <T kind="num">{st.best ? priceParts(st.best).main : '–'}</T>
+                {promo ? <PctBadge pct={promo.pct} /> : null}
+              </View>
+            </Row>
+            {promo && st.typicalDays == null && promoAgeDays(promo) > 3 ? (
+              <T kind="tiny" color="ink3" style={{ marginTop: 6 }}>promocja trwa {formatDays(promoAgeDays(promo))}</T>
+            ) : null}
+            {st.best ? <T kind="tiny" color="ink3" style={{ marginTop: 6 }}>{formatOfferPrice(st.best)}</T> : null}
+          </Card>
+        );
+      })}
     </ScrollView>
   );
 }
 
 const s = StyleSheet.create({
-  card: { borderWidth: 1.5, borderRadius: radius.ui, padding: space[4] },
-  note: { borderWidth: 1.5, borderStyle: 'dashed', borderRadius: radius.ui, padding: space[3], marginBottom: space[5] },
-  alert: { paddingVertical: space[3], borderBottomWidth: StyleSheet.hairlineWidth, gap: 2 },
-  watch: { flexDirection: 'row', alignItems: 'center', gap: space[3], paddingVertical: space[3], borderBottomWidth: StyleSheet.hairlineWidth },
+  h2: { marginTop: space[3] },
+  alertIcon: { width: 34, height: 34, borderRadius: 10, alignItems: 'center', justifyContent: 'center' },
 });

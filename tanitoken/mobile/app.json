@@ -6,7 +6,7 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
-    "backgroundColor": "#f1f3f6",
+    "backgroundColor": "#f7f7fb",
     "ios": {
       "bundleIdentifier": "pl.tanitoken.app",
       "supportsTablet": true,
@@ -24,7 +24,7 @@
       "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#172036"
+        "backgroundColor": "#1a1530"
       },
       "allowBackup": true
     },
@@ -34,12 +34,12 @@
         "expo-splash-screen",
         {
           "image": "./assets/splash.png",
-          "imageWidth": 200,
+          "imageWidth": 120,
           "resizeMode": "contain",
-          "backgroundColor": "#f1f3f6",
+          "backgroundColor": "#f7f7fb",
           "dark": {
             "image": "./assets/splash.png",
-            "backgroundColor": "#121a2b"
+            "backgroundColor": "#100e1b"
           }
         }
       ],
@@ -51,7 +51,7 @@
         "expo-notifications",
         {
           "icon": "./assets/notification-icon.png",
-          "color": "#172036"
+          "color": "#3d63ff"
         }
       ]
     ],

@@ -1,28 +1,28 @@
-import { Pressable, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
-import Svg, { Circle, Path } from 'react-native-svg';
+import { Pressable, StyleSheet, Switch, Text, View } from 'react-native';
+import Icon from './icons';
 import { font, radius, space, useTheme } from './theme';
+
+const KINDS = StyleSheet.create({
+  display: { fontFamily: font.display, fontSize: 30, lineHeight: 34, letterSpacing: -0.6 },
+  h1: { fontFamily: font.display, fontSize: 28, lineHeight: 32, letterSpacing: -0.5 },
+  h2: { fontFamily: font.displayBold, fontSize: 20, lineHeight: 24, letterSpacing: -0.3 },
+  num: { fontFamily: font.display, fontSize: 20, lineHeight: 24, letterSpacing: -0.3, fontVariant: ['tabular-nums'] },
+  big: { fontFamily: font.display, fontSize: 26, lineHeight: 30, letterSpacing: -0.5, fontVariant: ['tabular-nums'] },
+  body: { fontFamily: font.text, fontSize: 15, lineHeight: 21 },
+  strong: { fontFamily: font.textBold, fontSize: 15.5, lineHeight: 21 },
+  small: { fontFamily: font.textMedium, fontSize: 13, lineHeight: 18 },
+  tiny: { fontFamily: font.textSemi, fontSize: 11.5, lineHeight: 15 },
+});
 
 export function T({ style, kind = 'body', color, ...rest }) {
   const t = useTheme();
-  const k = KINDS[kind];
-  return <Text {...rest} style={[{ color: color ? t[color] ?? color : t.ink }, k, style]} />;
+  return <Text {...rest} style={[KINDS[kind], { color: color ? t[color] ?? color : t.ink }, style]} />;
 }
 
-const KINDS = StyleSheet.create({
-  display: { fontFamily: font.sign, fontSize: 40, lineHeight: 40, letterSpacing: -0.3 },
-  h1: { fontFamily: font.sign, fontSize: 32, lineHeight: 34 },
-  h2: { fontFamily: font.sign, fontSize: 24, lineHeight: 26 },
-  h3: { fontFamily: font.signSemi, fontSize: 20, lineHeight: 22 },
-  body: { fontFamily: font.text, fontSize: 16, lineHeight: 23 },
-  strong: { fontFamily: font.textSemi, fontSize: 16, lineHeight: 22 },
-  small: { fontFamily: font.text, fontSize: 14, lineHeight: 19 },
-  tiny: { fontFamily: font.textMedium, fontSize: 12, lineHeight: 16 },
-  price: { fontFamily: font.sign, fontSize: 22, lineHeight: 24, fontVariant: ['tabular-nums'] },
-});
-
-export function Button({ label, onPress, kind = 'ink', disabled, style, accessibilityHint }) {
+export function Button({ label, onPress, kind = 'ink', icon, disabled, style, accessibilityHint }) {
   const t = useTheme();
-  const ink = kind === 'ink';
+  const solid = kind === 'ink';
+  const fg = solid ? t.onInk : t.ink;
   return (
     <Pressable
       onPress={onPress}
@@ -31,90 +31,136 @@ export function Button({ label, onPress, kind = 'ink', disabled, style, accessib
       accessibilityHint={accessibilityHint}
       style={({ pressed }) => [
         s.btn,
-        { borderColor: t.ink, backgroundColor: ink ? t.ink : 'transparent', opacity: disabled ? 0.4 : pressed ? 0.75 : 1 },
+        { backgroundColor: solid ? t.ink : t.card, borderColor: solid ? t.ink : t.line, opacity: disabled ? 0.4 : pressed ? 0.8 : 1 },
         style,
       ]}
     >
-      <T kind="strong" style={{ color: ink ? t.paper : t.ink }}>{label}</T>
+      {icon ? <Icon name={icon} size={18} color={fg} fill={icon === 'star' && solid ? fg : 'none'} /> : null}
+      <T kind="strong" style={{ color: fg }}>{label}</T>
     </Pressable>
   );
 }
 
-// Przełącznik segmentowy (kategorie, typ promocji).
-export function Segmented({ options, value, onChange, scroll = true }) {
+// Przełącznik na całą szerokość (równe segmenty).
+export function Segmented({ options, value, onChange, style }) {
   const t = useTheme();
-  const body = (
-    <View style={[s.seg, { borderColor: t.ink }]}>
-      {options.map((o, i) => {
+  return (
+    <View style={[s.seg, { backgroundColor: t.seg }, style]} accessibilityRole="tablist">
+      {options.map((o) => {
         const on = o.value === value;
         return (
           <Pressable
             key={o.value}
             onPress={() => onChange(o.value)}
-            accessibilityRole="button"
+            accessibilityRole="tab"
+            accessibilityLabel={o.a11y ?? o.label}
             accessibilityState={{ selected: on }}
-            style={[s.segItem, { backgroundColor: on ? t.ink : 'transparent', borderLeftColor: t.ink, borderLeftWidth: i ? 1.5 : 0 }]}
+            style={[s.segItem, on && { backgroundColor: t.card, shadowColor: '#000', shadowOpacity: t.dark ? 0 : 0.08, shadowRadius: 3, shadowOffset: { width: 0, height: 1 }, elevation: on && !t.dark ? 1 : 0 }]}
           >
-            <T kind="small" style={{ color: on ? t.paper : t.ink, fontFamily: font.textMedium }}>
+            {o.icon ? <Icon name={o.icon} size={15} color={on ? t.ink : t.ink2} /> : null}
+            {o.label ? <T kind="small" numberOfLines={1} style={{ color: on ? t.ink : t.ink2, fontFamily: font.textBold }}>
               {o.label}
-              {o.count != null ? <T kind="small" style={{ color: on ? t.paper : t.ink3 }}>{` ${o.count}`}</T> : null}
-            </T>
+              {o.count != null ? <T kind="small" style={{ color: t.ink3, fontFamily: font.textSemi }}>{` ${o.count}`}</T> : null}
+            </T> : null}
           </Pressable>
         );
       })}
     </View>
   );
-  return scroll ? (
-    <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingRight: space[4] }}>
+}
+
+// Karta z kolorowym paskiem po lewej.
+export function Card({ stripe, children, onPress, style, accessibilityLabel }) {
+  const t = useTheme();
+  const body = (
+    <>
+      {stripe ? <View style={[s.stripe, { backgroundColor: stripe }]} /> : null}
+      {children}
+    </>
+  );
+  const base = [s.card, { backgroundColor: t.card, paddingLeft: stripe ? 18 : 14 }, style];
+  if (!onPress) return <View style={base}>{body}</View>;
+  return (
+    <Pressable onPress={onPress} accessibilityRole="button" accessibilityLabel={accessibilityLabel} style={({ pressed }) => [...base, pressed && { opacity: 0.85 }]}>
       {body}
-    </ScrollView>
-  ) : (
-    body
+    </Pressable>
   );
 }
 
-// Wybór wielu opcji (kategorie, dostawcy).
-export function Pill({ label, on, onPress }) {
+export function PctBadge({ pct, style }) {
   const t = useTheme();
+  return (
+    <View style={[s.badge, { backgroundColor: t.deal }, style]}>
+      <T kind="tiny" style={{ color: '#fff', fontFamily: font.textBold }}>−{pct}%</T>
+    </View>
+  );
+}
+
+// Odznaka stanu: tone = deal | save | info | muted
+export function StatusBadge({ label, tone = 'muted', icon }) {
+  const t = useTheme();
+  const map = {
+    deal: [t.dealSoft, t.deal],
+    save: [t.saveSoft, t.save],
+    info: [t.infoSoft, t.text],
+    muted: [t.seg, t.ink2],
+  };
+  const [bg, fg] = map[tone];
+  return (
+    <View style={[s.status, { backgroundColor: bg }]}>
+      {icon ? <Icon name={icon} size={12} color={fg} width={2.4} /> : null}
+      <T kind="tiny" style={{ color: fg, fontFamily: font.textBold }}>{label}</T>
+    </View>
+  );
+}
+
+// Kolorowa etykieta kategorii z ikoną.
+export function CatChip({ cat, label, extra }) {
+  const t = useTheme();
+  return (
+    <View style={s.catChip}>
+      <Icon name={cat} size={14} color={t[cat]} width={2.2} />
+      <T kind="small" numberOfLines={1} style={{ color: t[cat], fontFamily: font.textSemi, flexShrink: 1 }}>
+        {label}
+        {extra ? <T kind="small" style={{ color: t.ink2 }}>{`  ${extra}`}</T> : null}
+      </T>
+    </View>
+  );
+}
+
+export function Stat({ label, value, sub, color, style }) {
+  const t = useTheme();
+  return (
+    <View style={[s.stat, { backgroundColor: t.card }, style]}>
+      <T kind="small" color="ink2">{label}</T>
+      <T kind="big" style={{ color: color ?? t.ink, marginTop: 2 }} numberOfLines={1} adjustsFontSizeToFit>{value}</T>
+      {sub ? <T kind="small" color="ink2" numberOfLines={2}>{sub}</T> : null}
+    </View>
+  );
+}
+
+export function Progress({ value, color }) {
+  const t = useTheme();
+  return (
+    <View style={[s.progress, { backgroundColor: t.seg }]}>
+      <View style={{ width: `${Math.min(100, Math.max(4, value * 100))}%`, backgroundColor: color ?? t.deal, height: '100%', borderRadius: 9 }} />
+    </View>
+  );
+}
+
+export function Pill({ label, on, onPress, color, icon }) {
+  const t = useTheme();
+  const c = color ?? t.ink;
   return (
     <Pressable
       onPress={onPress}
       accessibilityRole="checkbox"
       accessibilityState={{ checked: on }}
-      style={[s.pill, { borderColor: on ? t.ink : t.rule, backgroundColor: on ? t.ink : t.sheet }]}
+      style={[s.pill, { borderColor: on ? c : t.line, backgroundColor: on ? c : t.card }]}
     >
-      <T kind="small" style={{ color: on ? t.paper : t.ink, fontFamily: font.textMedium }}>{label}</T>
+      {icon ? <Icon name={icon} size={15} color={on ? '#fff' : c} /> : null}
+      <T kind="small" style={{ color: on ? (color ? '#fff' : t.onInk) : t.ink, fontFamily: font.textSemi }}>{label}</T>
     </Pressable>
-  );
-}
-
-// Mała etykieta cenowa w listach.
-export function MiniTag({ pct, price, unit, free }) {
-  const t = useTheme();
-  if (free) {
-    return (
-      <View style={[s.mini, { backgroundColor: t.sheet, borderWidth: 1.5, borderStyle: 'dashed', borderColor: t.ink3 }]}>
-        <T kind="price" style={{ color: t.save }}>0 $</T>
-        <T kind="tiny" color="ink2">wariant :free</T>
-      </View>
-    );
-  }
-  return (
-    <View style={[s.mini, { backgroundColor: t.tag }]}>
-      <View style={[s.miniNotch, { borderRightColor: t.tag }]} />
-      {pct ? <T kind="price" style={{ color: t.tagPromo, fontSize: 18 }}>−{pct}%</T> : null}
-      <T kind="price" style={{ color: t.tagInk }}>{price}</T>
-      <T kind="tiny" style={{ color: t.tagInk }}>{unit}</T>
-    </View>
-  );
-}
-
-export function TagMark({ size = 28 }) {
-  return (
-    <Svg width={size} height={size} viewBox="0 0 32 32">
-      <Path d="M3 9.5 9.5 3H29v26H9.5L3 22.5z" fill="#ffd60a" stroke="#172036" strokeWidth={1.6} />
-      <Circle cx={10} cy={16} r={2.4} fill="#f1f3f6" stroke="#172036" strokeWidth={1.6} />
-    </Svg>
   );
 }
 
@@ -122,45 +168,72 @@ export function Row({ children, style }) {
   return <View style={[{ flexDirection: 'row', alignItems: 'center', gap: space[3] }, style]}>{children}</View>;
 }
 
-export function Rule() {
-  const t = useTheme();
-  return <View style={{ height: StyleSheet.hairlineWidth, backgroundColor: t.rule }} />;
-}
-
-export function ToggleRow({ title, body, value, onChange }) {
+export function Section({ title, children, style }) {
   const t = useTheme();
   return (
-    <Row style={{ paddingVertical: space[3], alignItems: 'flex-start' }}>
+    <View style={[{ marginTop: space[5] }, style]}>
+      {title ? <T kind="h2" style={{ marginBottom: space[2] }}>{title}</T> : null}
+      <View style={[s.section, { backgroundColor: t.card }]}>{children}</View>
+    </View>
+  );
+}
+
+export function ToggleRow({ title, body, value, onChange, last }) {
+  const t = useTheme();
+  return (
+    <Row style={{ paddingVertical: space[3], alignItems: 'flex-start', borderBottomWidth: last ? 0 : StyleSheet.hairlineWidth, borderBottomColor: t.line }}>
       <View style={{ flex: 1 }}>
         <T kind="strong">{title}</T>
-        {body ? <T kind="small" color="ink3" style={{ marginTop: 2 }}>{body}</T> : null}
+        {body ? <T kind="small" color="ink2" style={{ marginTop: 2 }}>{body}</T> : null}
       </View>
       <Switch
         value={value}
         onValueChange={onChange}
-        trackColor={{ true: t.ink, false: t.rule }}
-        thumbColor={value ? t.tag : t.sheet}
+        trackColor={{ true: t.text, false: t.seg }}
+        thumbColor="#ffffff"
         accessibilityLabel={title}
       />
     </Row>
   );
 }
 
-export function Empty({ title, body, action }) {
+export function IconButton({ name, onPress, label, dot, active }) {
+  const t = useTheme();
   return (
-    <View style={{ paddingVertical: space[6], gap: space[2] }}>
-      <T kind="h3">{title}</T>
-      {body ? <T color="ink2">{body}</T> : null}
-      {action ? <View style={{ marginTop: space[3], alignSelf: 'flex-start' }}>{action}</View> : null}
+    <Pressable onPress={onPress} hitSlop={8} accessibilityRole="button" accessibilityLabel={label} style={s.iconBtn}>
+      <Icon name={name} size={23} color={active ? t.video : t.ink} fill={active ? t.video : 'none'} />
+      {dot ? <View style={[s.dot, { backgroundColor: t.deal, borderColor: t.bg }]} /> : null}
+    </Pressable>
+  );
+}
+
+export function Empty({ title, body, action, icon = 'search' }) {
+  const t = useTheme();
+  return (
+    <View style={[s.empty, { backgroundColor: t.card }]}>
+      <View style={[s.emptyIcon, { backgroundColor: t.infoSoft }]}><Icon name={icon} size={22} color={t.text} /></View>
+      <T kind="h2" style={{ textAlign: 'center' }}>{title}</T>
+      {body ? <T color="ink2" style={{ textAlign: 'center' }}>{body}</T> : null}
+      {action ? <View style={{ marginTop: space[2] }}>{action}</View> : null}
     </View>
   );
 }
 
 const s = StyleSheet.create({
-  btn: { minHeight: 46, paddingHorizontal: space[5], borderRadius: radius.ui, borderWidth: 1.5, alignItems: 'center', justifyContent: 'center' },
-  seg: { flexDirection: 'row', borderWidth: 1.5, borderRadius: radius.ui, overflow: 'hidden' },
-  segItem: { paddingHorizontal: 13, paddingVertical: 8 },
-  pill: { paddingHorizontal: 14, paddingVertical: 8, borderRadius: 99, borderWidth: 1.5 },
-  mini: { flexDirection: 'row', alignItems: 'baseline', gap: 6, paddingVertical: 5, paddingLeft: 14, paddingRight: 10, borderRadius: radius.tag, alignSelf: 'flex-start' },
-  miniNotch: { position: 'absolute', left: -8, top: 0, bottom: 0, width: 0, borderTopWidth: 15, borderBottomWidth: 15, borderRightWidth: 8, borderTopColor: 'transparent', borderBottomColor: 'transparent' },
+  btn: { flex: 1, minHeight: 48, paddingHorizontal: space[4], borderRadius: radius.md, borderWidth: 1.5, alignItems: 'center', justifyContent: 'center', flexDirection: 'row', gap: 8 },
+  seg: { flexDirection: 'row', borderRadius: 12, padding: 3 },
+  segItem: { flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 5, paddingVertical: 9, borderRadius: 9 },
+  card: { borderRadius: radius.lg, padding: 14, overflow: 'hidden' },
+  stripe: { position: 'absolute', left: 0, top: 0, bottom: 0, width: 6 },
+  badge: { paddingHorizontal: 7, paddingVertical: 2, borderRadius: 7, alignSelf: 'flex-end' },
+  status: { flexDirection: 'row', alignItems: 'center', gap: 4, paddingHorizontal: 8, paddingVertical: 3, borderRadius: 99, alignSelf: 'flex-start' },
+  catChip: { flexDirection: 'row', alignItems: 'center', gap: 5, flexShrink: 1 },
+  stat: { flex: 1, borderRadius: radius.lg, padding: 14 },
+  progress: { height: 7, borderRadius: 9, overflow: 'hidden' },
+  pill: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 14, paddingVertical: 9, borderRadius: 99, borderWidth: 1.5 },
+  section: { borderRadius: radius.lg, paddingHorizontal: 14, paddingVertical: 4 },
+  iconBtn: { width: 42, height: 42, alignItems: 'center', justifyContent: 'center' },
+  dot: { position: 'absolute', right: 8, top: 8, width: 10, height: 10, borderRadius: 5, borderWidth: 2 },
+  empty: { borderRadius: radius.lg, padding: space[5], alignItems: 'center', gap: space[2] },
+  emptyIcon: { width: 48, height: 48, borderRadius: 14, alignItems: 'center', justifyContent: 'center', marginBottom: space[1] },
 });

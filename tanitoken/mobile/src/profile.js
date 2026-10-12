@@ -17,6 +17,7 @@ export const DEFAULT_PROFILE = {
   version: 1,
   onboarded: false,
   name: '',
+  theme: 'system', // 'system' | 'light' | 'dark'
   cats: ['all'],
   providers: [], // ulubieni dostawcy (nazwy jak w ofertach)
   onlyFavorites: false,
