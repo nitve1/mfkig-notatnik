@@ -11,3 +11,4 @@ ios/
 *.mobileprovision
 *.keystore
 dist-web/
+dist-android/

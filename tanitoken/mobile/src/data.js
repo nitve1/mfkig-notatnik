@@ -6,6 +6,7 @@ import { liveSnapshot } from '../../core/pricing.js';
 
 const DEFAULT_URLS = [
   'https://raw.githubusercontent.com/nitve1/mfkig-notatnik/tanitoken-data/snapshot.json',
+  'https://raw.githubusercontent.com/nitve1/mfkig-notatnik/claude/hopeful-gauss-8su545/tanitoken/data/snapshot.json',
   'https://nitve1.github.io/mfkig-notatnik/tanitoken/data/snapshot.json',
 ];
 // Podgląd web (scripts/web-preview.mjs) ma snapshot obok strony.
@@ -14,6 +15,8 @@ const SNAPSHOT_URLS = [
   ...(Constants.expoConfig?.extra?.snapshotUrls ?? DEFAULT_URLS),
 ];
 const CACHE_KEY = 'tanitoken:snapshot:v2';
+// Zestawienie z dnia buildu, gdy nie ma internetu przy pierwszym uruchomieniu.
+const BUNDLED = require('../../data/snapshot.json');
 const REFRESH_MS = 5 * 60 * 1000;
 
 // Gałąź danych (świeża) -> GitHub Pages (kopia z repo) -> OpenRouter na żywo (tylko ceny bazowe).
@@ -28,6 +31,9 @@ export async function fetchSnapshot() {
       // następne źródło
     }
   }
+  // Bez sieci do GitHub: zestawienie wbudowane w apkę (z dnia buildu) ma promocje,
+  // a samo /models z OpenRouter tylko ceny bazowe.
+  if (BUNDLED?.v === 2) return BUNDLED;
   return liveSnapshot();
 }
 
