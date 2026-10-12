@@ -207,6 +207,21 @@ export function watchStatus(snapshot, item, usage = DEFAULT_USAGE, filter = null
   return { model, best, used, usedPromo, promos, ended, usedCost, bestCost, overpayPct, typicalDays: typical };
 }
 
+// Platformy, na których zakłada się konto i kupuje dostęp do wielu modeli naraz.
+export const PLATFORMS = ['OpenRouter', 'Vercel AI Gateway', 'Requesty'];
+const SRC_PLATFORM = { openrouter: 'OpenRouter', vercel: 'Vercel AI Gateway', requesty: 'Requesty' };
+
+export function platformOf(o) {
+  return SRC_PLATFORM[o?.src] ?? null;
+}
+
+// Filtr ofert "u ulubionych": pasuje dostawca (np. Novita) albo platforma, przez którą idzie oferta (np. OpenRouter).
+export function favoriteMatcher(names) {
+  if (!names?.length) return null;
+  const set = new Set(names);
+  return (o) => set.has(o.provider) || set.has(platformOf(o));
+}
+
 // Ile miesięcznie oszczędzam dzięki promocji u dostawcy, którego używam (0 gdy brak promocji).
 export function promoSavings(status, usage = DEFAULT_USAGE) {
   const { used, usedPromo } = status ?? {};

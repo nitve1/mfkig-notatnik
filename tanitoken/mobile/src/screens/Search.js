@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { FlatList, StyleSheet, TextInput, View } from 'react-native';
-import { cheapest, formatContext, formatUsd, searchModels, unitPrice } from '../../../core/pricing.js';
+import { cheapest, favoriteMatcher, formatContext, formatUsd, searchModels, unitPrice } from '../../../core/pricing.js';
 import { Card, CatChip, Empty, PctBadge, Row, Segmented, T } from '../ui';
 import Icon from '../icons';
 import { CAT_LABEL, Header, priceParts, shortName, styles } from '../parts';
@@ -28,14 +28,14 @@ export default function Search({ snapshot, onOpen }) {
   const [sort, setSort] = useState('new');
   const watched = useMemo(() => new Set(profile.watchlist.map((w) => w.modelId)), [profile.watchlist]);
   const favs = useMemo(
-    () => (profile.onlyFavorites && profile.providers.length ? new Set(profile.providers) : null),
+    () => (profile.onlyFavorites ? favoriteMatcher(profile.providers) : null),
     [profile.onlyFavorites, profile.providers],
   );
 
   const rows = useMemo(() => {
     let models = snapshot.models.filter((m) => cat === 'all' || m.cats.includes(cat));
     models = searchModels(models, q).map((m) => {
-      const best = cheapest(m, profile.usage, favs ? (o) => favs.has(o.provider) : null);
+      const best = cheapest(m, profile.usage, favs);
       const promo = Math.round(Math.max(0, ...m.offers.map((o) => o.discount ?? 0)) * 100);
       return { m, best, promo };
     });

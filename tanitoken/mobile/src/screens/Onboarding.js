@@ -98,7 +98,7 @@ function Body({ snapshot, insets, draft, set, step, setStep, finish }) {
     body = (
       <>
         <T kind="display">U kogo masz konto?</T>
-        <T color="ink2" style={{ marginTop: space[2] }}>Ulubionych dostawców wyróżnimy i pozwolimy filtrować oferty tylko do nich.</T>
+        <T color="ink2" style={{ marginTop: space[2] }}>Zaznacz platformy i dostawców, u których płacisz. Wyróżnimy ich oferty i pozwolimy filtrować tylko do nich.</T>
         <View style={[s.card, { backgroundColor: t.card, marginTop: space[4] }]}>
           <ProviderPicker
             snapshot={snapshot}

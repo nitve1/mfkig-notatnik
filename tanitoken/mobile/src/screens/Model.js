@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Linking, Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
 import {
   SOURCES, UNIT_LABEL, formatContext, formatOfferPrice, formatUsd, isFreeOffer, liveOpenrouterOffers, offerCost,
-  offerKey, onePerProvider, priceBeforeDiscount, sortOffers,
+  favoriteMatcher, offerKey, onePerProvider, priceBeforeDiscount, sortOffers,
 } from '../../../core/pricing.js';
 import { offerLink } from '../../../core/affiliates.js';
 import { Button, Card, CatChip, IconButton, PctBadge, Row, Segmented, Stat, StatusBadge, T } from '../ui';
@@ -44,7 +44,8 @@ export default function Model({ model: base, snapshot, onBack }) {
   const [scope, setScope] = useState(profile.onlyFavorites && profile.providers.length ? 'fav' : 'all');
   const item = watchItem(base.id);
   const usage = profile.usage;
-  const favs = useMemo(() => new Set(profile.providers), [profile.providers]);
+  const isFav = useMemo(() => favoriteMatcher(profile.providers) ?? (() => false), [profile.providers]);
+  const favCount = profile.providers.length;
 
   // Oferty OpenRouter na żywo, co minutę; reszta źródeł ze snapshotu.
   useEffect(() => {
@@ -68,10 +69,10 @@ export default function Model({ model: base, snapshot, onBack }) {
 
   const promos = Object.values(snapshot.promos ?? {}).filter((p) => p.modelId === model.id);
   const promoKeys = new Set(promos.map((p) => p.key));
-  const filter = scope === 'fav' ? (o) => favs.has(o.provider) : scope === 'promo' ? (o) => promoKeys.has(offerKey(o)) : null;
+  const filter = scope === 'fav' ? isFav : scope === 'promo' ? (o) => promoKeys.has(offerKey(o)) : null;
   const offers = useMemo(
     () => onePerProvider(sortOffers(model, usage, filter), item?.offerKey),
-    [model, usage, scope, favs, item?.offerKey], // eslint-disable-line react-hooks/exhaustive-deps
+    [model, usage, scope, isFav, item?.offerKey], // eslint-disable-line react-hooks/exhaustive-deps
   );
   const allPaid = sortOffers(model, usage).filter((o) => o.unit === model.unit && !isFreeOffer(o));
   const best = allPaid[0];
@@ -159,7 +160,7 @@ export default function Model({ model: base, snapshot, onBack }) {
           onChange={setScope}
           options={[
             { value: 'all', label: 'Wszyscy' },
-            { value: 'fav', label: 'Ulubieni', count: favs.size || null },
+            { value: 'fav', label: 'Ulubieni', count: favCount ? model.offers.filter(isFav).length : null },
             { value: 'promo', label: 'Z promocją', count: promos.filter((p) => p.type !== 'free').length },
           ]}
         />
@@ -187,7 +188,7 @@ export default function Model({ model: base, snapshot, onBack }) {
                   {picking && !other ? <Icon name={isUsed ? 'check' : 'plus'} size={16} color={t.text} /> : null}
                   {isBest ? <Icon name="trophy" size={16} color={t.save} /> : null}
                   <T kind="strong" numberOfLines={1} style={{ flexShrink: 1 }}>{o.provider}</T>
-                  {favs.has(o.provider) ? <Icon name="star" size={14} color={t.video} fill={t.video} /> : null}
+                  {isFav(o) ? <Icon name="star" size={14} color={t.video} fill={t.video} /> : null}
                 </Row>
                 <T kind="small" color="ink2">
                   {before ? <T kind="small" color="ink3" style={{ textDecorationLine: 'line-through' }}>{formatOfferPrice(before)}  </T> : null}

@@ -4,7 +4,7 @@ import { Platform } from 'react-native';
 import * as Notifications from 'expo-notifications';
 import * as TaskManager from 'expo-task-manager';
 import * as BackgroundTask from 'expo-background-task';
-import { computeAlerts } from '../../core/pricing.js';
+import { computeAlerts, favoriteMatcher } from '../../core/pricing.js';
 import { fetchSnapshot } from './data';
 import { readProfile, writeProfile } from './profile';
 
@@ -18,9 +18,7 @@ Notifications.setNotificationHandler({
 
 // Przy ustawionych ulubionych dostawcach porównujemy ceny tylko z nimi.
 export function favoritesFilter(profile) {
-  if (!profile?.providers?.length) return null;
-  const favs = new Set(profile.providers);
-  return (o) => favs.has(o.provider);
+  return favoriteMatcher(profile?.providers);
 }
 
 export function newAlerts(snapshot, profile) {

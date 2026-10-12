@@ -25,6 +25,22 @@ Jedno miejsce z historią zmian, decyzjami i otwartymi zadaniami. Aktualizowane 
 | 5 | Po merge'u: ręczne uruchomienie workflow „TaniToken snapshot” (tworzy gałąź `tanitoken-data`) | po merge'u |
 | 6 | Test na prawdziwym telefonie (build EAS), szczególnie zadania w tle i powiadomienia | przed publikacją |
 
+## 2026-10-12 – sesja 3d: platformy w ulubionych
+
+- Pytanie użytkownika: czemu na liście dostawców nie ma OpenRouter. Powód: oferty z OpenRouter są
+  podpisane firmą, która uruchamia model (DeepInfra, Novita…), a OpenRouter był tylko źródłem. Vercel i
+  Requesty trafiały za to na listę jako „dostawcy”, co było niespójne.
+- Wybór ulubionych (`ProviderPicker`) ma teraz dwie części: Platformy (OpenRouter, Vercel AI Gateway,
+  Requesty, z liczbą ofert, przycisk „Mam konto”) i Dostawcy bezpośredni (bez Vercel / Requesty).
+- `core/pricing.js`: `PLATFORMS`, `platformOf(offer)`, `favoriteMatcher(names)` – oferta pasuje, gdy
+  zgadza się dostawca albo platforma, przez którą idzie. Używane w Promocjach, Szukaj, karcie modelu
+  (filtr „Ulubieni”, gwiazdka) i alertach „taniej”. Test 10/10.
+- Sekcja w Profilu: „Gdzie masz konto”. Podgląd web zaktualizowany pod tym samym linkiem.
+- Opcje testów na iPhonie bez konta deweloperskiego (rozmowa): Expo Go (bez konta, wymaga komputera
+  z `npx expo start`; tunel z chmury Claude zablokowany), Mac + Xcode + zwykłe Apple ID (7 dni),
+  GitHub Actions macOS → niepodpisane .ipa → Sideloadly / AltStore z Apple ID (7 dni, bez Maca;
+  workflow do zrobienia, jeśli użytkownik zechce).
+
 ## 2026-10-12 – sesja 3c: podgląd na telefonie przez przeglądarkę
 
 - `mobile/scripts/web-preview.mjs`: buduje apkę na web (react-native-web) do jednego pliku

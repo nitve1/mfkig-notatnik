@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { FlatList, Pressable, RefreshControl, StyleSheet, View } from 'react-native';
-import { collectDeals, timeAgo } from '../../../core/pricing.js';
+import { collectDeals, favoriteMatcher, timeAgo } from '../../../core/pricing.js';
 import { Button, Empty, Segmented, T } from '../ui';
 import Icon from '../icons';
 import { BellButton, CAT_LABEL, DealCard, Header, styles } from '../parts';
@@ -65,13 +65,13 @@ export default function Deals({ snapshot, refreshing, onRefresh, onOpen, onBell,
   const [cat, setCat] = useState(profile.cats.length === 1 && profile.cats[0] !== 'all' ? profile.cats[0] : 'all');
   const [type, setType] = useState('discount');
   const favs = useMemo(
-    () => (profile.onlyFavorites && profile.providers.length ? new Set(profile.providers) : null),
+    () => (profile.onlyFavorites ? favoriteMatcher(profile.providers) : null),
     [profile.onlyFavorites, profile.providers],
   );
   const watched = useMemo(() => new Set(profile.watchlist.map((w) => w.modelId)), [profile.watchlist]);
 
   const all = useMemo(() => collectDeals(snapshot), [snapshot]);
-  const visible = useMemo(() => all.filter((d) => !favs || d.type === 'free' || favs.has(d.provider)), [all, favs]);
+  const visible = useMemo(() => all.filter((d) => !favs || d.type === 'free' || favs(d.offer)), [all, favs]);
   const ofType = visible.filter((d) => d.type === type);
   const inCat = (d, c) => c === 'all' || d.model.cats.includes(c);
   const stat = (c) => {
@@ -96,7 +96,7 @@ export default function Deals({ snapshot, refreshing, onRefresh, onOpen, onBell,
         ))}
       </View>
       <Segmented options={TYPES.map((x) => ({ ...x, count: typeCounts[x.value] }))} value={type} onChange={setType} />
-      {favs ? <T kind="small" color="ink2">Tylko ulubieni dostawcy ({favs.size})</T> : null}
+      {favs ? <T kind="small" color="ink2">Tylko ulubieni: {profile.providers.join(', ')}</T> : null}
     </View>
   );
 

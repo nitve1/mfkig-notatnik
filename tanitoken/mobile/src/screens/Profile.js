@@ -95,14 +95,14 @@ export default function Profile({ snapshot }) {
         </View>
       </Section>
 
-      <Section title="Ulubieni dostawcy">
+      <Section title="Gdzie masz konto">
         <View style={{ paddingTop: space[3] }}>
           <ProviderPicker snapshot={snapshot} selected={profile.providers} onToggle={toggleProvider} />
         </View>
         <ToggleRow
           last
           title="Pokazuj tylko ich oferty"
-          body={profile.providers.length ? `Zaznaczonych: ${profile.providers.length}. Alerty „taniej” też porównują tylko z nimi.` : 'Najpierw zaznacz dostawców powyżej.'}
+          body={profile.providers.length ? 'Alerty „taniej” też porównują tylko z nimi.' : 'Najpierw zaznacz platformę albo dostawcę powyżej.'}
           value={profile.onlyFavorites && profile.providers.length > 0}
           onChange={(onlyFavorites) => update({ onlyFavorites })}
         />

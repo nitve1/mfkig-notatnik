@@ -3,7 +3,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
   perMillion, modelKey, offerKey, offerCost, cheapest, sortOffers, priceBeforeDiscount,
-  detectDrops, trackPromos, promoStats, collectDeals, computeAlerts, watchStatus, promoSavings, onePerProvider,
+  detectDrops, trackPromos, promoStats, collectDeals, computeAlerts, watchStatus, promoSavings, onePerProvider, favoriteMatcher,
 } from './pricing.js';
 import { openrouterModels, openrouterOffers, vercelEntries, requestyEntries } from './sources.js';
 
@@ -113,4 +113,14 @@ test('promoSavings i onePerProvider', () => {
   const list = [tok('openrouter', 'A', 1, 1), { ...tok('openrouter', 'A', 2, 2), tag: 'a/zdr' }, tok('direct', 'B', 3, 3)];
   assert.deepEqual(onePerProvider(list).map((x) => x.provider), ['A', 'B']);
   assert.equal(onePerProvider(list, 'openrouter:a/zdr').length, 3);
+});
+
+test('favoriteMatcher: dostawca albo platforma', () => {
+  const match = favoriteMatcher(['OpenRouter', 'Groq']);
+  assert.equal(match(tok('openrouter', 'Novita', 1, 1)), true); // przez OpenRouter
+  assert.equal(match(tok('direct', 'Groq', 1, 1)), true);
+  assert.equal(match(tok('direct', 'Novita', 1, 1)), false);
+  assert.equal(match({ ...tok('requesty', 'Requesty (bedrock)', 1, 1) }), false);
+  assert.equal(favoriteMatcher(['Requesty'])(tok('requesty', 'Requesty (bedrock)', 1, 1)), true);
+  assert.equal(favoriteMatcher([]), null);
 });
