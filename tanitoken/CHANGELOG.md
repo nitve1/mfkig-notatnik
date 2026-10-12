@@ -27,8 +27,9 @@ Jedno miejsce z historią zmian, decyzjami i otwartymi zadaniami. Aktualizowane 
 
 ## 2026-10-12 – sesja 3e: sztywny układ i tryb Zwykły / Pro
 
-Uwaga użytkownika: **nie publikować nowej wersji podglądu (artifact), dopóki nie poprosi.** Zmiany są w
-repo, link https://claude.ai/artifact/ChpcuMw9ReTwQSvRt4BsEe pokazuje jeszcze wersję 2.
+Uwaga użytkownika: **nie publikować nowej wersji podglądu (artifact), dopóki nie poprosi.**
+Na prośbę użytkownika opublikowana wersja 3 podglądu (świeży snapshot, sztywny układ, tryb Zwykły / Pro):
+https://claude.ai/artifact/ChpcuMw9ReTwQSvRt4BsEe
 
 Sztywny układ (feedback: w podglądzie na iPhonie można było „latać po bokach”):
 - Przyczyna: Safari robi zoom przy fokusie na polu z czcionką < 16 px (wyszukiwarka dostawców miała 15 px)
