@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>TaniToken – najtańsze API AI w czasie rzeczywistym</title>
+  <meta name="description" content="Porównuj ceny modeli AI u providerów OpenRouter, łap promocje i darmowe modele. Aktualizacja co 15 minut.">
+  <meta name="theme-color" content="#0b1210">
+  <meta property="og:title" content="TaniToken – gdzie dziś najtaniej korzystać z API AI">
+  <meta property="og:description" content="Promocje, zniżki i darmowe modele u providerów AI na żywo.">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="nav">
+    <a class="brand" href="#"><img src="icon.svg" alt="" width="28" height="28"> TaniToken</a>
+    <nav>
+      <a href="#promocje">Promocje</a>
+      <a href="#porownaj">Porównaj</a>
+      <a href="#aplikacja" class="btn btn-small">Pobierz apkę</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <p class="live"><span class="dot"></span> <span id="updated">Ładowanie cen…</span></p>
+      <h1>Gdzie <em>dziś</em> najtaniej odpalisz swój model AI?</h1>
+      <p class="lead">TaniToken śledzi ceny wszystkich providerów w OpenRouter, wyłapuje zniżki, obniżki i darmowe modele. Sprawdzasz w 5 sekund, płacisz mniej.</p>
+      <div class="stats">
+        <div><strong id="stat-models">–</strong><span>modeli</span></div>
+        <div><strong id="stat-offers">–</strong><span>ofert providerów</span></div>
+        <div><strong id="stat-deals">–</strong><span>aktywnych zniżek</span></div>
+        <div><strong id="stat-free">–</strong><span>darmowych modeli</span></div>
+      </div>
+      <div class="cta">
+        <a href="#promocje" class="btn">Zobacz promocje</a>
+        <a href="#aplikacja" class="btn btn-ghost">Android i iOS</a>
+      </div>
+    </section>
+
+    <section id="promocje">
+      <div class="section-head">
+        <h2>Promocje teraz</h2>
+        <div class="chips" role="tablist">
+          <button class="chip active" data-filter="discount">Zniżki</button>
+          <button class="chip" data-filter="drop">Obniżki cen</button>
+          <button class="chip" data-filter="free">Darmowe</button>
+        </div>
+      </div>
+      <div id="deals" class="deals" aria-live="polite"></div>
+      <button id="more-deals" class="btn btn-ghost more" hidden>Pokaż więcej</button>
+    </section>
+
+    <section id="porownaj">
+      <div class="section-head">
+        <h2>Porównaj providerów</h2>
+        <p class="muted">Ceny w USD za 1M tokenów. Najtańsza oferta dla Twojego zużycia na górze.</p>
+      </div>
+      <div class="search">
+        <input id="q" type="search" placeholder="Szukaj modelu, np. deepseek, claude, llama…" autocomplete="off">
+        <div id="results" class="results"></div>
+      </div>
+      <div id="model" class="model" hidden></div>
+    </section>
+
+    <section id="aplikacja" class="app">
+      <div>
+        <h2>Ceny w kieszeni</h2>
+        <ul class="ticks">
+          <li>Lista promocji odświeżana na żywo</li>
+          <li>Ulubione modele i kalkulator miesięcznego kosztu</li>
+          <li>Pełna tabela providerów: cena, kontekst, kwantyzacja, uptime</li>
+        </ul>
+        <div class="stores">
+          <a class="store" href="#" aria-disabled="true"><span>Wkrótce w</span>Google Play</a>
+          <a class="store" href="#" aria-disabled="true"><span>Wkrótce w</span>App Store</a>
+        </div>
+      </div>
+      <div class="phone" aria-hidden="true">
+        <div class="screen" id="phone-screen"></div>
+      </div>
+    </section>
+
+    <section class="faq">
+      <h2>Pytania</h2>
+      <details><summary>Skąd są dane?</summary><p>Z publicznego API OpenRouter: lista modeli i oferty wszystkich providerów każdego modelu. Snapshot odświeżamy co 15 minut, a po otwarciu modelu ceny pobierane są na żywo.</p></details>
+      <details><summary>Co to jest „zniżka”?</summary><p>Provider sam obniżył cenę (pole <code>discount</code> w OpenRouter). Pokazana cena już ją uwzględnia, przekreślona to cena regularna.</p></details>
+      <details><summary>Jak liczona jest cena „mieszana”?</summary><p>Średnia ważona 3:1 tokenów wejścia do wyjścia, typowa dla czatu i agentów. W kalkulatorze możesz wpisać własne zużycie.</p></details>
+      <details><summary>Czy darmowe modele mają haczyk?</summary><p>Zwykle limity zapytań na minutę i dzień, czasem logowanie promptów. Sprawdź warunki na stronie modelu przed użyciem w produkcji.</p></details>
+    </section>
+  </main>
+
+  <footer>
+    <p>TaniToken nie jest powiązany z OpenRouter ani providerami. Ceny orientacyjne, sprawdź przed zakupem.</p>
+  </footer>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>

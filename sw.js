@@ -1,5 +1,5 @@
 /* Offline: powloka apki + dane gier + okladki w cache; screeny ze Steama/itch dociagane i cache'owane w locie */
-const VERSION = 'v1';
+const VERSION = 'v2';
 const SHELL = `shell-${VERSION}`;
 const RUNTIME = 'runtime-v1';
 const CORE = [
@@ -31,6 +31,7 @@ self.addEventListener('fetch', e => {
   const req = e.request;
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
+  if (url.pathname.includes('/tanitoken/')) return; // osobna apka TaniToken, zawsze z sieci
 
   // Wlasne pliki: z cache od razu, w tle odswiezenie (stale-while-revalidate)
   if (url.origin === location.origin) {

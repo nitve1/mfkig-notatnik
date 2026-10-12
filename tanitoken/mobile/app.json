@@ -1,0 +1,45 @@
+{
+  "expo": {
+    "name": "TaniToken",
+    "slug": "tanitoken",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "backgroundColor": "#0b1210",
+    "ios": {
+      "bundleIdentifier": "pl.tanitoken.app",
+      "supportsTablet": true,
+      "buildNumber": "1",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
+    },
+    "android": {
+      "package": "pl.tanitoken.app",
+      "versionCode": 1,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#0e1d18"
+      }
+    },
+    "plugins": [
+      "expo-status-bar",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/splash.png",
+          "imageWidth": 220,
+          "resizeMode": "contain",
+          "backgroundColor": "#0b1210"
+        }
+      ]
+    ],
+    "extra": {
+      "snapshotUrls": [
+        "https://raw.githubusercontent.com/nitve1/mfkig-notatnik/tanitoken-data/snapshot.json",
+        "https://nitve1.github.io/mfkig-notatnik/tanitoken/data/snapshot.json"
+      ]
+    }
+  }
+}

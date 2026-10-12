@@ -36,3 +36,9 @@ node tools/fetch-images.mjs   # okładki do img/games (offline)
 
 Line-up: `tools/lineup.json`. Ręczne poprawki (appid, link itch, brak Steama): `tools/overrides.json`.
 Po zmianie plików apki podbij `VERSION` w `sw.js`, żeby telefony pobrały nową wersję.
+
+---
+
+## TaniToken (osobny projekt)
+
+W katalogu [`tanitoken/`](tanitoken/) jest niezależna apka: porównywarka cen API modeli AI (OpenRouter) z promocjami na żywo. Landing page, apka Android/iOS (Expo) i snapshot cen co 15 min z GitHub Actions. Szczegóły w [`tanitoken/README.md`](tanitoken/README.md).

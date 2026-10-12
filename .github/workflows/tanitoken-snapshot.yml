@@ -1,0 +1,47 @@
+name: TaniToken snapshot
+
+# Co 15 min pobiera ceny z OpenRouter i publikuje tanitoken/data/snapshot.json
+# na gałęzi "tanitoken-data" (1 commit, nadpisywany), żeby nie zaśmiecać historii main.
+# Apka i landing czytają: https://raw.githubusercontent.com/<repo>/tanitoken-data/snapshot.json
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: tanitoken-snapshot
+  cancel-in-progress: false
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Poprzedni snapshot (do wykrywania obniżek)
+        run: |
+          curl -fsSL "https://raw.githubusercontent.com/${{ github.repository }}/tanitoken-data/snapshot.json" \
+            -o tanitoken/data/snapshot.json || echo "Brak poprzedniego snapshotu, używam pliku z repo"
+
+      - name: Zbuduj snapshot
+        run: node tanitoken/scripts/build-snapshot.mjs
+
+      - name: Opublikuj na gałęzi tanitoken-data
+        run: |
+          mkdir -p /tmp/out && cp tanitoken/data/snapshot.json /tmp/out/
+          cd /tmp/out
+          git init -q -b tanitoken-data
+          git config user.name "github-actions[bot]"
+          git config user.email "41898699+github-actions[bot]@users.noreply.github.com"
+          git add snapshot.json
+          git commit -qm "snapshot $(date -u +%FT%TZ)"
+          git push -qf "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" tanitoken-data
