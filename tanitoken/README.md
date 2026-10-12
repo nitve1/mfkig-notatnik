@@ -87,7 +87,8 @@ wystarcza na start):
 
 | Cel | Komenda |
 | --- | --- |
-| APK do testów na Androidzie | `npm run build:android:apk` |
+| APK lokalnie, bez konta Expo | `npm run build:apk:local` (JDK 17+, Android SDK, `ANDROID_HOME`) |
+| APK do testów na Androidzie (EAS) | `npm run build:android:apk` |
 | Google Play (AAB) | `npm run build:android` |
 | App Store / TestFlight | `npm run build:ios` (Apple Developer, 99 USD/rok) |
 | Wysyłka do sklepów | `eas submit -p android` / `eas submit -p ios` |

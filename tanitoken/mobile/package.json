@@ -9,6 +9,7 @@
     "ios": "expo run:ios",
     "build:android": "eas build -p android --profile production",
     "build:android:apk": "eas build -p android --profile preview",
+    "build:apk:local": "bash scripts/build-android-apk.sh",
     "build:ios": "eas build -p ios --profile production",
     "export": "expo export"
   },
