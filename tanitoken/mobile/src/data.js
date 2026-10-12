@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { AppState } from 'react-native';
+import { AppState, Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Constants from 'expo-constants';
 import { liveSnapshot } from '../../core/pricing.js';
@@ -8,7 +8,11 @@ const DEFAULT_URLS = [
   'https://raw.githubusercontent.com/nitve1/mfkig-notatnik/tanitoken-data/snapshot.json',
   'https://nitve1.github.io/mfkig-notatnik/tanitoken/data/snapshot.json',
 ];
-const SNAPSHOT_URLS = Constants.expoConfig?.extra?.snapshotUrls ?? DEFAULT_URLS;
+// Podgląd web (scripts/web-preview.mjs) ma snapshot obok strony.
+const SNAPSHOT_URLS = [
+  ...(Platform.OS === 'web' ? ['snapshot.json'] : []),
+  ...(Constants.expoConfig?.extra?.snapshotUrls ?? DEFAULT_URLS),
+];
 const CACHE_KEY = 'tanitoken:snapshot:v2';
 const REFRESH_MS = 5 * 60 * 1000;
 

@@ -25,6 +25,20 @@ Jedno miejsce z historią zmian, decyzjami i otwartymi zadaniami. Aktualizowane 
 | 5 | Po merge'u: ręczne uruchomienie workflow „TaniToken snapshot” (tworzy gałąź `tanitoken-data`) | po merge'u |
 | 6 | Test na prawdziwym telefonie (build EAS), szczególnie zadania w tle i powiadomienia | przed publikacją |
 
+## 2026-10-12 – sesja 3c: podgląd na telefonie przez przeglądarkę
+
+- `mobile/scripts/web-preview.mjs`: buduje apkę na web (react-native-web) do jednego pliku
+  `dist-web/index.html` (kod i 6 fontów jako data URI w środku) + `dist-web/snapshot.json`.
+  Strona nie pobiera nic z zewnątrz, więc działa jako prywatny artifact na claude.ai.
+- Opublikowane: https://claude.ai/artifact/ChpcuMw9ReTwQSvRt4BsEe (prywatne, tylko właściciel).
+  Aktualizacja: `node scripts/web-preview.mjs`, potem ponowna publikacja tego samego pliku / URL.
+- W podglądzie nie działają: powiadomienia, zadania w tle, eksport/import profilu, ceny OpenRouter na
+  żywo (ceny ze snapshotu z chwili budowania). Profil zapisuje się w przeglądarce.
+- `src/data.js`: na webie najpierw `snapshot.json` obok strony. `enableNotifications` nie rzuca błędu
+  na platformach bez powiadomień. Dodane `react-dom` i `react-native-web` do zależności.
+- GitHub Pages jako alternatywa: na darmowym planie strona jest zawsze publiczna, a Pages w tym repo
+  publikuje z `main`. Do rozważenia po merge'u (np. `tanitoken/app/`), jeśli publiczny link wystarczy.
+
 ## 2026-10-12 – sesja 3b: apka w stylu „Kolorowe kategorie” + motyw
 
 Decyzja użytkownika: kierunek 5 („Kolorowe kategorie”) z makiet + opcja zmiany motywu (dzienny / nocny).

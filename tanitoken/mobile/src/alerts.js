@@ -69,6 +69,14 @@ TaskManager.defineTask(TASK, async () => {
 });
 
 export async function enableNotifications() {
+  try {
+    return await enableNotificationsUnsafe();
+  } catch {
+    return false; // np. podgląd web bez powiadomień
+  }
+}
+
+async function enableNotificationsUnsafe() {
   if (Platform.OS === 'android') {
     await Notifications.setNotificationChannelAsync('urgent', {
       name: 'Koniec promocji',
