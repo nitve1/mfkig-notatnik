@@ -3,95 +3,120 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>TaniToken – najtańsze API AI w czasie rzeczywistym</title>
-  <meta name="description" content="Porównuj ceny modeli AI u providerów OpenRouter, łap promocje i darmowe modele. Aktualizacja co 15 minut.">
-  <meta name="theme-color" content="#0b1210">
-  <meta property="og:title" content="TaniToken – gdzie dziś najtaniej korzystać z API AI">
-  <meta property="og:description" content="Promocje, zniżki i darmowe modele u providerów AI na żywo.">
+  <title>TaniToken – najtańsze API modeli AI</title>
+  <meta name="description" content="Porównaj ceny API modeli AI u ponad 180 dostawców. Promocje, darmowe modele i ostrzeżenia o końcu promocji. Aktualizacja co 15 minut.">
+  <meta name="theme-color" content="#172036">
+  <meta property="og:title" content="TaniToken – gdzie dziś najtaniej zapłacisz za tokeny">
+  <meta property="og:description" content="Promocje i ceny API modeli AI na żywo: tekst, kod, obraz, wideo.">
   <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header class="nav">
-    <a class="brand" href="#"><img src="icon.svg" alt="" width="28" height="28"> TaniToken</a>
-    <nav>
+  <a class="skip" href="#promocje">Przejdź do promocji</a>
+  <header class="top">
+    <a class="brand" href="./" aria-label="TaniToken, strona główna">
+      <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><path d="M3 9.5 9.5 3H29v26H9.5L3 22.5z"/><circle cx="10" cy="16" r="2.4"/></svg>
+      TaniToken
+    </a>
+    <nav aria-label="Główna">
       <a href="#promocje">Promocje</a>
       <a href="#porownaj">Porównaj</a>
-      <a href="#aplikacja" class="btn btn-small">Pobierz apkę</a>
+      <a href="#aplikacja" class="nav-app">Aplikacja</a>
     </nav>
   </header>
 
   <main>
-    <section class="hero">
-      <p class="live"><span class="dot"></span> <span id="updated">Ładowanie cen…</span></p>
-      <h1>Gdzie <em>dziś</em> najtaniej odpalisz swój model AI?</h1>
-      <p class="lead">TaniToken śledzi ceny wszystkich providerów w OpenRouter, wyłapuje zniżki, obniżki i darmowe modele. Sprawdzasz w 5 sekund, płacisz mniej.</p>
-      <div class="stats">
-        <div><strong id="stat-models">–</strong><span>modeli</span></div>
-        <div><strong id="stat-offers">–</strong><span>ofert providerów</span></div>
-        <div><strong id="stat-deals">–</strong><span>aktywnych zniżek</span></div>
-        <div><strong id="stat-free">–</strong><span>darmowych modeli</span></div>
-      </div>
-      <div class="cta">
-        <a href="#promocje" class="btn">Zobacz promocje</a>
-        <a href="#aplikacja" class="btn btn-ghost">Android i iOS</a>
-      </div>
-    </section>
-
-    <section id="promocje">
-      <div class="section-head">
-        <h2>Promocje teraz</h2>
-        <div class="chips" role="tablist">
-          <button class="chip active" data-filter="discount">Zniżki</button>
-          <button class="chip" data-filter="drop">Obniżki cen</button>
-          <button class="chip" data-filter="free">Darmowe</button>
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <h1 id="hero-title">Zobacz, gdzie dziś najtaniej zapłacisz za tokeny.</h1>
+        <p class="lead">Porównujemy ceny modeli AI u <span data-stat="providers">ponad 180</span> dostawców: OpenRouter, Vercel AI Gateway, Requesty i cenniki bezpośrednie. Wyłapujemy promocje i ostrzegamy, zanim się skończą.</p>
+        <p class="status" id="status" aria-live="polite"><span class="pulse" aria-hidden="true"></span>Pobieram aktualne ceny…</p>
+        <div class="hero-actions">
+          <a href="#promocje" class="btn btn-ink">Przeglądaj promocje</a>
+          <a href="#porownaj" class="btn btn-line">Porównaj model</a>
         </div>
       </div>
-      <div id="deals" class="deals" aria-live="polite"></div>
-      <button id="more-deals" class="btn btn-ghost more" hidden>Pokaż więcej</button>
+      <figure class="hero-tag-wrap" aria-live="polite">
+        <div class="tag tag-hero" id="hero-tag">
+          <span class="tag-hole" aria-hidden="true"></span>
+          <span class="tag-skeleton">Szukam największej zniżki…</span>
+        </div>
+        <figcaption id="hero-caption">Największa zniżka w tej chwili</figcaption>
+      </figure>
     </section>
 
-    <section id="porownaj">
-      <div class="section-head">
-        <h2>Porównaj providerów</h2>
-        <p class="muted">Ceny w USD za 1M tokenów. Najtańsza oferta dla Twojego zużycia na górze.</p>
+    <section id="promocje" class="block" aria-labelledby="promo-title">
+      <div class="block-head">
+        <h2 id="promo-title">Promocje</h2>
+        <p class="muted" id="promo-summary"></p>
+      </div>
+      <div class="toolbar">
+        <div class="segmented" role="group" aria-label="Kategoria" data-group="cat"></div>
+        <div class="segmented" role="group" aria-label="Rodzaj promocji" data-group="type">
+          <button aria-pressed="true" data-value="discount">Zniżki</button>
+          <button aria-pressed="false" data-value="drop">Obniżki cen</button>
+          <button aria-pressed="false" data-value="free">Darmowe</button>
+        </div>
+      </div>
+      <ol class="deals" id="deals" aria-live="polite"></ol>
+      <button id="more-deals" class="btn btn-line more" hidden>Pokaż kolejne</button>
+    </section>
+
+    <section id="porownaj" class="block" aria-labelledby="cmp-title">
+      <div class="block-head">
+        <h2 id="cmp-title">Porównaj dostawców</h2>
+        <p class="muted">Wpisz model, a ułożymy oferty od najtańszej dla Twojego zużycia.</p>
       </div>
       <div class="search">
-        <input id="q" type="search" placeholder="Szukaj modelu, np. deepseek, claude, llama…" autocomplete="off">
-        <div id="results" class="results"></div>
+        <label class="sr-only" for="q">Szukaj modelu</label>
+        <input id="q" type="search" placeholder="np. deepseek, claude, flux, veo" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="results">
+        <ul id="results" class="results" role="listbox"></ul>
       </div>
-      <div id="model" class="model" hidden></div>
+      <div class="popular" id="popular"></div>
+      <article id="model" class="model" hidden></article>
     </section>
 
-    <section id="aplikacja" class="app">
+    <section id="aplikacja" class="block app" aria-labelledby="app-title">
       <div>
-        <h2>Ceny w kieszeni</h2>
-        <ul class="ticks">
-          <li>Lista promocji odświeżana na żywo</li>
-          <li>Ulubione modele i kalkulator miesięcznego kosztu</li>
-          <li>Pełna tabela providerów: cena, kontekst, kwantyzacja, uptime</li>
-        </ul>
+        <h2 id="app-title">Aplikacja pilnuje promocji za Ciebie</h2>
+        <p class="lead">Zaznacz modele, których używasz. Gdy promocja się kończy albo ktoś daje taniej, dostaniesz powiadomienie.</p>
+        <dl class="features">
+          <dt>Obserwuję i Używam</dt>
+          <dd>Obserwowane modele pokazują każdą nową zniżkę. Przy używanych wskazujesz dostawcę, a apka liczy, ile przepłacasz.</dd>
+          <dt>Ostrzeżenie o końcu promocji</dt>
+          <dd>Wiemy, jak długo zwykle trwają zniżki u danego dostawcy, i przypominamy, zanim wrócisz do pełnej ceny.</dd>
+          <dt>Ulubieni dostawcy</dt>
+          <dd>Wybierz, u kogo masz konto, i filtruj oferty tylko do nich.</dd>
+          <dt>Profil tylko na telefonie</dt>
+          <dd>Bez konta i logowania. Kopia zapasowa idzie do Twojego Google lub iCloud, nie do nas.</dd>
+        </dl>
         <div class="stores">
-          <a class="store" href="#" aria-disabled="true"><span>Wkrótce w</span>Google Play</a>
-          <a class="store" href="#" aria-disabled="true"><span>Wkrótce w</span>App Store</a>
+          <span class="store" aria-disabled="true"><small>Wkrótce</small>Google Play</span>
+          <span class="store" aria-disabled="true"><small>Wkrótce</small>App Store</span>
         </div>
       </div>
-      <div class="phone" aria-hidden="true">
-        <div class="screen" id="phone-screen"></div>
+      <div class="notif-stack" aria-label="Przykładowe powiadomienia">
+        <div class="notif" id="notif-1"></div>
+        <div class="notif" id="notif-2"></div>
       </div>
     </section>
 
-    <section class="faq">
-      <h2>Pytania</h2>
-      <details><summary>Skąd są dane?</summary><p>Z publicznego API OpenRouter: lista modeli i oferty wszystkich providerów każdego modelu. Snapshot odświeżamy co 15 minut, a po otwarciu modelu ceny pobierane są na żywo.</p></details>
-      <details><summary>Co to jest „zniżka”?</summary><p>Provider sam obniżył cenę (pole <code>discount</code> w OpenRouter). Pokazana cena już ją uwzględnia, przekreślona to cena regularna.</p></details>
-      <details><summary>Jak liczona jest cena „mieszana”?</summary><p>Średnia ważona 3:1 tokenów wejścia do wyjścia, typowa dla czatu i agentów. W kalkulatorze możesz wpisać własne zużycie.</p></details>
-      <details><summary>Czy darmowe modele mają haczyk?</summary><p>Zwykle limity zapytań na minutę i dzień, czasem logowanie promptów. Sprawdź warunki na stronie modelu przed użyciem w produkcji.</p></details>
+    <section class="block faq" aria-labelledby="faq-title">
+      <h2 id="faq-title">Pytania</h2>
+      <details><summary>Skąd są ceny?</summary><p>Z publicznych API OpenRouter (wszyscy dostawcy każdego modelu), Vercel AI Gateway i Requesty oraz z otwartego katalogu models.dev z cennikami bezpośrednimi. Zestawienie odświeżamy co 15 minut. Po otwarciu modelu oferty OpenRouter pobieramy na żywo.</p></details>
+      <details><summary>Skąd wiecie, że promocja się kończy?</summary><p>Dostawcy nie podają dat końca. Zapisujemy, kiedy każda zniżka się pojawiła i ile trwały poprzednie u tego samego dostawcy. Gdy obecna zbliża się do typowej długości, ostrzegamy. Gdy zniknie, powiadamiamy od razu i podajemy najtańszą alternatywę.</p></details>
+      <details><summary>Jak liczycie koszt miesięczny?</summary><p>Dla modeli tekstowych mnożymy cenę wejścia i wyjścia przez Twoje zużycie w milionach tokenów. Dla obrazów liczymy cenę za obraz, dla wideo cenę za sekundę (720p, jeśli dostępne).</p></details>
+      <details><summary>Czy darmowe modele mają haczyk?</summary><p>Zwykle limity zapytań i czasem zapisywanie promptów przez dostawcę. Przed użyciem w produkcji sprawdź warunki na stronie modelu.</p></details>
+      <details><summary>Jak na tym zarabiacie?</summary><p>Część linków może być partnerska: jeśli założysz konto u dostawcy z takiego linku, dostajemy prowizję. Takie linki zawsze oznaczamy. Nie wpływa to na kolejność ofert, sortujemy wyłącznie po cenie.</p></details>
     </section>
   </main>
 
-  <footer>
-    <p>TaniToken nie jest powiązany z OpenRouter ani providerami. Ceny orientacyjne, sprawdź przed zakupem.</p>
+  <footer class="foot">
+    <p>TaniToken nie jest powiązany z OpenRouter, Vercel, Requesty ani dostawcami modeli. Ceny są orientacyjne, sprawdź je przed zakupem.</p>
+    <p><a href="prywatnosc.html">Prywatność</a></p>
   </footer>
 
   <script type="module" src="app.js"></script>

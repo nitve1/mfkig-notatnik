@@ -1,91 +1,132 @@
 # TaniToken
 
-Gdzie dziś najtaniej korzystać z API danego modelu AI. Ceny wszystkich providerów z OpenRouter,
-zniżki, obniżki cen i darmowe modele w czasie (prawie) rzeczywistym.
-
-Osobny projekt w tym repo, niezależny od notatnika MFKiG.
+Gdzie dziś najtaniej korzystać z API danego modelu AI. Ceny z wielu źródeł, promocje i ostrzeżenia, zanim
+promocja się skończy. Osobny projekt w tym repo, niezależny od notatnika MFKiG.
 
 ```
 tanitoken/
-├── core/pricing.js          wspólna logika cen (Node, przeglądarka, React Native)
-├── scripts/build-snapshot.mjs  pobiera modele + oferty providerów -> data/snapshot.json
-├── data/snapshot.json       kopia startowa (fallback)
-├── landing/                 landing page (statyczny HTML/CSS/JS, dane na żywo)
-└── mobile/                  apka Android + iOS (Expo / React Native, jeden kod)
+├── core/
+│   ├── sources.js          adaptery źródeł cen + kategorie (tekst, kod, obraz, wideo)
+│   ├── pricing.js          koszty, promocje, historia promocji, alerty dla obserwowanych
+│   ├── affiliates.js       linki wyjściowe, UTM, programy partnerskie
+│   └── pricing.test.mjs    testy (node --test)
+├── scripts/build-snapshot.mjs   zbiera wszystko do data/snapshot.json
+├── data/snapshot.json      kopia startowa (fallback)
+├── landing/                landing page + strona prywatności (statyczne, bez builda)
+└── mobile/                 apka Android + iOS (Expo SDK 57 / React Native, jeden kod)
 ```
 
-## Skąd są dane
+## Źródła danych
 
-Publiczne API OpenRouter, bez klucza:
+Wszystkie publiczne, bez klucza i bez opłat:
 
-- `GET /api/v1/models` – lista modeli i cena bazowa,
-- `GET /api/v1/models/{id}/endpoints` – oferty wszystkich providerów modelu: cena wejścia/wyjścia,
-  pole `discount` (zniżka providera, cena w API jest już po zniżce), kontekst, kwantyzacja, uptime.
+| Źródło | Co daje | Odświeżanie |
+| --- | --- | --- |
+| OpenRouter `/models?output_modalities=all` + `/models/{id}/endpoints` | katalog, oferty każdego providera, pole `discount` (zniżka), uptime, kwantyzacja | co 15 min, karta modelu na żywo |
+| OpenRouter `/models?category=programming` | które modele są do kodu | co 15 min |
+| Vercel AI Gateway `/v1/models` | ceny tekstu, obrazów (za obraz) i wideo (za sekundę) | co 15 min |
+| Requesty `/v1/models` | ceny z Bedrock, Vertex, Azure i innych przez Requesty | co 15 min |
+| models.dev `api.json` | cenniki bezpośrednie ~180 providerów (społeczność, mogą być nieaktualne) | co 15 min |
 
-Typy okazji:
+Ten sam model łączymy między źródłami po znormalizowanej nazwie (`modelKey`). Aktualnie: ~540 modeli,
+~6800 ofert, ~240 dostawców. Snapshot ma ~1,4 MB, po kompresji ~130 KB.
 
-| Typ | Skąd |
-| --- | --- |
-| Zniżka | `discount > 0` u providera |
-| Obniżka ceny | cena spadła o ≥2% względem poprzedniego snapshotu (trzymane 7 dni, znika gdy cena wróci) |
-| Darmowy | model ma wariant `:free` |
+OpenRouter nie podaje cen wideo (zwraca 0), więc te modele wyceniamy z Vercel. Nigdy nie oznaczamy ich jako darmowe.
 
-## Jak to działa „na żywo”
+## Promocje i ostrzeżenia o końcu
 
-1. GitHub Actions (`.github/workflows/tanitoken-snapshot.yml`) co 15 min pobiera ~370 modeli i ~1300 ofert providerów
-   (ok. 5 s) i publikuje `snapshot.json` na gałęzi `tanitoken-data` (jeden nadpisywany commit, `main` zostaje czysty).
-2. Landing i apka czytają snapshot z `raw.githubusercontent.com`, odświeżają co 5 min.
-3. Po otwarciu modelu ceny providerów są pobierane prosto z OpenRouter (w apce co 60 s).
-4. Fallbacki: `tanitoken/data/snapshot.json` z repo, a na końcu samo `/models` z OpenRouter.
+Dostawcy nie publikują dat końca promocji. Dlatego skrypt przy każdym przebiegu:
 
-Workflow z `schedule` działa dopiero na domyślnej gałęzi. Po merge’u odpal go raz ręcznie
-(Actions → TaniToken snapshot → Run workflow), żeby od razu powstała gałąź `tanitoken-data`.
-GitHub przy dużym obciążeniu potrafi opóźniać crony o kilka-kilkanaście minut.
+1. zapisuje, kiedy pojawiła się każda zniżka (`promos[*].since`),
+2. wykrywa obniżki cen względem poprzedniego przebiegu (`drops`, trzymane 7 dni),
+3. zapisuje zakończone promocje (`ended`, 14 dni) i historię (`history`, 400 ostatnich),
+4. liczy, ile średnio trwają zniżki u danego dostawcy (`promoStats`).
 
-## Landing page
+Na tej podstawie apka ostrzega: „promocja trwa już prawie tyle, ile zwykle u tego dostawcy”, a gdy zniknie,
+od razu podaje najtańszą alternatywę. Statystyki pojawią się po kilku dniach działania workflow. Promocje
+zastane przy pierwszym pomiarze mają nieznaną datę startu i nie wchodzą do średnich.
 
-Statyczny, bez builda. Na GitHub Pages: `https://nitve1.github.io/mfkig-notatnik/tanitoken/landing/`.
-Lokalnie:
+## Apka mobilna
 
-```
-python3 -m http.server   # w katalogu głównym repo
-# http://localhost:8000/tanitoken/landing/
-```
+Ekrany: ekran powitalny (animowana etykieta), onboarding w 4 krokach, Promocje, Szukaj, Moje, Profil,
+karta modelu.
 
-## Apka mobilna (Android + iOS)
+- **Obserwuj**: model trafia do zakładki Moje, widać jego promocje i najtańszą ofertę.
+- **Używam**: wskazujesz dostawcę, u którego płacisz. Apka pokazuje, czy jesteś w promocji, jak długo trwa,
+  ile przepłacasz i kiedy zniżka może się skończyć.
+- **Kategorie**: Wszystko, Tekst, Kod, Obraz, Wideo. Koszt liczony w jednostce modelu (tokeny, obraz, sekunda).
+- **Ulubieni dostawcy**: wybór z ~240 dostawców, filtr „tylko ich oferty”, porównania i alerty tylko wśród nich.
+- **Powiadomienia**: lokalne, bez serwera push. Sprawdzane przy otwarciu apki i w tle przez
+  `expo-background-task` (system uruchamia je co ~30+ minut, według własnego uznania). Na Androidzie dwa
+  kanały: „Koniec promocji” (wysoki priorytet) i „Nowe okazje”.
 
-Expo SDK 57 / React Native. Jeden kod, dwa sklepy. Ekrany: Promocje (zniżki / obniżki / darmowe),
-Modele (wyszukiwarka, sortowanie po cenie), Ulubione, karta modelu z kalkulatorem miesięcznego kosztu
-i rankingiem providerów.
+### Profil, kopia i RODO
+
+Profil (imię, kategorie, ulubieni, obserwowane, zużycie) leży tylko na telefonie. Nie ma kont ani serwera.
+
+| Platforma | Kopia | Po odinstalowaniu |
+| --- | --- | --- |
+| Android | Auto Backup na koncie Google użytkownika (`allowBackup: true`) | wraca po instalacji z kopią |
+| iOS | opcja „Zachowaj po odinstalowaniu”: lustrzana kopia w Keychain | wraca po ponownej instalacji |
+| obie | eksport/import pliku JSON | ręcznie |
+
+Ponieważ nie przetwarzamy danych osobowych na własnych serwerach, nie potrzeba rejestracji, zgód cookie
+ani umowy powierzenia. Sklepy i tak wymagają polityki prywatności: jest w `landing/prywatnosc.html`.
+Dodanie analityki, kont, serwera push albo synchronizacji w chmurze zmieni tę sytuację.
+
+### Uruchomienie i buildy
 
 ```
 cd tanitoken/mobile
 npm install
-npx expo start          # skanujesz QR w Expo Go (Android / iOS)
+npx expo start          # podgląd w Expo Go (bez zadań w tle)
 ```
 
-Buildy w chmurze przez EAS (konto na expo.dev, `npm i -g eas-cli`, `eas login`):
+Zadania w tle i pełne powiadomienia działają w buildzie deweloperskim lub produkcyjnym (EAS, darmowy plan
+wystarcza na start):
 
 | Cel | Komenda |
 | --- | --- |
 | APK do testów na Androidzie | `npm run build:android:apk` |
 | Google Play (AAB) | `npm run build:android` |
-| App Store / TestFlight | `npm run build:ios` (wymaga Apple Developer, 99 USD/rok) |
+| App Store / TestFlight | `npm run build:ios` (Apple Developer, 99 USD/rok) |
 | Wysyłka do sklepów | `eas submit -p android` / `eas submit -p ios` |
 
-Natywne projekty `android/` i `ios/` są generowane (`npx expo prebuild`) i nie siedzą w repo.
-Identyfikator apki: `pl.tanitoken.app` (zmień w `mobile/app.json` przed publikacją, jeśli chcesz inny).
+## Afiliacja (stan na październik 2026)
+
+| Program | Warunki | Status |
+| --- | --- | --- |
+| [Novita AI Affiliate](https://novita.ai/affiliate) | 10% wydatków poleconych przez 180 dni | publiczny, trzeba się zgłosić |
+| [GMI Cloud Ambassador](https://www.gmicloud.ai/en/company/ambassador-program) | 20% prowizji | publiczny |
+| [fal](https://openaffiliate.dev/programs/fal) | cookie 60 dni, wypłata od 50 USD | dane z katalogu, niepotwierdzone u źródła |
+| OpenRouter, Requesty, Vercel | brak publicznego programu | OpenRouter ma tylko program startupowy przez partnerów |
+
+Jak włączyć: po akceptacji wklej swój link w `core/affiliates.js` (pole `link`). Apka i landing od razu
+kierują tam ruch i oznaczają ofertę jako „link partnerski”. Oznaczenie jest obowiązkowe (UCPD, wytyczne
+UOKiK) i nie wpływa na kolejność ofert, sortujemy wyłącznie po cenie. Wszystkie linki wyjściowe mają UTM
+`utm_source=tanitoken`, więc dostawcy widzą ruch od nas, co pomaga przy rozmowach o partnerstwie.
+
+## Wygląd
+
+Kierunek „półka z promocjami” według skilla `frontend-design` (`.claude/skills/frontend-design`): papier
+`#F1F3F6`, granatowy atrament `#172036`, żółta etykieta cenowa `#FFD60A` z dziurką jako jedyny głośny
+element, czerwień promocji, zieleń oszczędności. Typografia: Barlow Condensed (ceny, nagłówki, jak szyldy
+cenowe) i Barlow (tekst), obie darmowe (OFL). Ten sam system tokenów na landingu (`landing/style.css`) i w
+apce (`mobile/src/theme.js`), z trybem ciemnym.
+
+## Snapshot co 15 minut
+
+`.github/workflows/tanitoken-snapshot.yml` publikuje `snapshot.json` na gałęzi `tanitoken-data` (jeden
+nadpisywany commit, `main` zostaje czysty). Landing i apka czytają go z `raw.githubusercontent.com`, z
+fallbackiem na kopię w repo i na samo `/models` z OpenRouter.
+
+Workflow z `schedule` działa dopiero na domyślnej gałęzi. Po merge’u odpal go raz ręcznie
+(Actions → TaniToken snapshot → Run workflow), żeby powstała gałąź `tanitoken-data`.
 
 ## Testy i skrypty
 
 ```
 node --test tanitoken/core/pricing.test.mjs
-node tanitoken/scripts/build-snapshot.mjs   # odświeża data/snapshot.json lokalnie
+node tanitoken/scripts/build-snapshot.mjs
+python3 -m http.server   # landing: http://localhost:8000/tanitoken/landing/
 ```
-
-## Dalsze pomysły
-
-- więcej źródeł niż OpenRouter (bezpośrednie cenniki providerów, Requesty, Together, Groq…) –
-  `core/pricing.js` operuje na znormalizowanym formacie, wystarczy nowy adapter w `build-snapshot.mjs`,
-- push o nowych zniżkach dla ulubionych modeli (expo-notifications + porównanie snapshotów),
-- historia cen i wykresy.

@@ -1,142 +1,89 @@
-// Wspólna logika cen TaniToken: używana przez skrypt snapshotu, landing page i apkę mobilną.
-// Czysty ESM bez zależności, działa w Node, przeglądarce i React Native.
+// Wspólna logika cen TaniToken: skrypt snapshotu, landing page i apka mobilna.
+// Czysty ESM bez zależności (Node, przeglądarka, React Native).
+export {
+  OPENROUTER_API, SOURCES, CATEGORIES, modelKey, baseId, perMillion, liveSnapshot, liveOpenrouterOffers,
+} from './sources.js';
 
-export const OPENROUTER_API = 'https://openrouter.ai/api/v1';
+// Domyślne zużycie miesięczne do porównań, osobno dla każdej jednostki.
+export const DEFAULT_USAGE = {
+  token: { in: 10, out: 2 }, // mln tokenów
+  image: { count: 500 }, // obrazów
+  second: { count: 300 }, // sekund wideo
+};
 
-// Domyślny stosunek tokenów wejście:wyjście do ceny "mieszanej" (typowy czat / agent).
-export const DEFAULT_RATIO = { in: 3, out: 1 };
+export const UNIT_LABEL = {
+  token: 'za 1M tokenów (wejście / wyjście)',
+  image: 'za obraz',
+  second: 'za sekundę wideo',
+};
 
-const M = 1e6;
+const DAY = 86400 * 1000;
 
-// Cena z API to string w USD za 1 token; zwracamy USD za 1M tokenów albo null.
-export function perMillion(value) {
-  if (value === undefined || value === null || value === '') return null;
-  const n = Number(value);
-  if (!Number.isFinite(n) || n < 0) return null; // "-1" = cena dynamiczna (np. openrouter/auto)
-  return Math.round(n * M * 1e6) / 1e6;
+export function offerKey(o) {
+  return `${o.src}:${o.tag ?? o.provider}`;
 }
 
-export function blended(price, ratio = DEFAULT_RATIO) {
-  if (!price || price.in == null || price.out == null) return null;
-  return (price.in * ratio.in + price.out * ratio.out) / (ratio.in + ratio.out);
+export function isFreeOffer(o) {
+  return o.unit === 'token' ? o.in === 0 && o.out === 0 : o.price === 0;
 }
 
-// Koszt w USD dla zadanej liczby tokenów (np. miesięczne zużycie).
-export function usageCost(price, inTokens, outTokens) {
-  if (!price || price.in == null || price.out == null) return null;
-  return (price.in * inTokens + price.out * outTokens) / M;
+// Cena jednostkowa do sortowania (dla tokenów średnia ważona 3:1).
+export function unitPrice(o) {
+  if (!o) return null;
+  if (o.unit === 'token') return o.in == null || o.out == null ? null : (o.in * 3 + o.out) / 4;
+  return o.price ?? null;
 }
 
-export function isFree(price) {
-  return !!price && price.in === 0 && price.out === 0;
-}
-
-export function baseId(id) {
-  return id.split(':')[0];
-}
-
-function author(id) {
-  return id.split('/')[0];
-}
-
-// /models -> lista modeli (warianty ":free" sklejone z modelem bazowym, inne warianty pominięte).
-export function modelsFromApi(apiData) {
-  const byId = new Map();
-  const make = (m, id, paid) => ({
-    id,
-    name: (m.name ?? id).replace(/\s*\(free\)\s*$/i, ''),
-    author: author(id),
-    created: m.created ?? null,
-    context: m.context_length ?? null,
-    modality: m.architecture?.modality ?? null,
-    listPrice: paid
-      ? { in: perMillion(m.pricing?.prompt), out: perMillion(m.pricing?.completion) }
-      : { in: null, out: null },
-    freeId: null,
-    endpoints: [],
-  });
-  for (const m of apiData) {
-    if (!m.id.includes(':')) byId.set(m.id, make(m, m.id, true));
+// Koszt miesięczny przy zadanym zużyciu (USD).
+export function offerCost(o, usage = DEFAULT_USAGE) {
+  if (!o) return null;
+  if (o.unit === 'token') {
+    const u = usage.token ?? DEFAULT_USAGE.token;
+    return o.in * u.in + o.out * u.out;
   }
-  for (const m of apiData) {
-    if (!m.id.endsWith(':free')) continue;
-    const id = baseId(m.id);
-    if (!byId.has(id)) byId.set(id, make(m, id, false)); // model dostępny tylko jako :free
-    byId.get(id).freeId = m.id;
-  }
-  return [...byId.values()];
+  const u = usage[o.unit] ?? DEFAULT_USAGE[o.unit];
+  return o.price * u.count;
 }
 
-// /models/{id}/endpoints -> uproszczone oferty providerów, od najtańszej.
-export function endpointsFromApi(apiEndpoints, ratio = DEFAULT_RATIO) {
-  const seen = new Set();
-  const list = [];
-  for (const e of apiEndpoints ?? []) {
-    const key = e.tag ?? e.name;
-    if (seen.has(key)) continue;
-    seen.add(key);
-    const price = { in: perMillion(e.pricing?.prompt), out: perMillion(e.pricing?.completion) };
-    if (price.in == null || price.out == null) continue;
-    const discount = Number(e.pricing?.discount) || 0;
-    list.push({
-      provider: e.provider_name,
-      tag: e.tag ?? null,
-      quant: e.quantization && e.quantization !== 'unknown' ? e.quantization : null,
-      in: price.in,
-      out: price.out,
-      cacheRead: perMillion(e.pricing?.input_cache_read),
-      // Ceny z API są już po zniżce; discount to ułamek zniżki (0.3 = -30%). Ujemny = narzut, nie promocja.
-      discount: discount > 0 ? Math.round(discount * 1000) / 1000 : 0,
-      context: e.context_length ?? null,
-      uptime: e.uptime_last_1d != null ? Math.round(e.uptime_last_1d * 10) / 10 : null,
-      status: e.status ?? 0,
-    });
-  }
-  return sortEndpoints(list, ratio);
+// Oferty w głównej jednostce modelu od najtańszej, potem pozostałe (np. inna jednostka).
+export function sortOffers(model, usage = DEFAULT_USAGE, filter = null) {
+  const list = filter ? model.offers.filter(filter) : model.offers;
+  const main = list.filter((o) => o.unit === model.unit).sort((a, b) => offerCost(a, usage) - offerCost(b, usage));
+  const rest = list.filter((o) => o.unit !== model.unit);
+  return [...main, ...rest];
 }
 
-export function sortEndpoints(list, ratio = DEFAULT_RATIO) {
-  return [...list].sort((a, b) => blended(a, ratio) - blended(b, ratio));
+// Najtańsza płatna oferta (darmowe warianty z limitami pomijamy).
+export function cheapest(model, usage = DEFAULT_USAGE, filter = null) {
+  return sortOffers(model, usage, filter).find((o) => o.unit === model.unit && !isFreeOffer(o)) ?? null;
 }
 
-// Cena przed zniżką (do przekreślenia w UI).
-export function priceBeforeDiscount(ep) {
-  if (!ep.discount || ep.discount >= 1) return null;
-  const k = 1 / (1 - ep.discount);
-  return { in: ep.in * k, out: ep.out * k };
+export function priceBeforeDiscount(o) {
+  if (!o?.discount || o.discount >= 1) return null;
+  const k = 1 / (1 - o.discount);
+  return o.unit === 'token' ? { ...o, in: o.in * k, out: o.out * k } : { ...o, price: o.price * k };
 }
 
-// Najtańsza płatna oferta modelu (ignoruje warianty darmowe z limitami).
-export function cheapest(model, ratio = DEFAULT_RATIO) {
-  const eps = model.endpoints?.length ? sortEndpoints(model.endpoints, ratio) : [];
-  const paid = eps.find((e) => !isFree(e));
-  if (paid) return paid;
-  if (model.listPrice?.in != null && !isFree(model.listPrice)) {
-    return { provider: 'OpenRouter', tag: null, ...model.listPrice, discount: 0 };
-  }
-  return null;
-}
+// ---------- historia promocji (liczone w skrypcie snapshotu) ----------
 
-// Porównanie cen między dwoma snapshotami -> obniżki cen u providerów.
+// Porównanie z poprzednim snapshotem: obniżki cen u tego samego providera.
 export function detectDrops(prevModels, nextModels, now = new Date().toISOString()) {
   const prev = new Map();
-  for (const m of prevModels ?? []) {
-    for (const e of m.endpoints ?? []) prev.set(`${m.id}|${e.tag ?? e.provider}`, e);
-  }
+  for (const m of prevModels ?? []) for (const o of m.offers ?? []) prev.set(`${m.id}|${offerKey(o)}`, o);
   const drops = [];
   for (const m of nextModels) {
-    for (const e of m.endpoints ?? []) {
-      const p = prev.get(`${m.id}|${e.tag ?? e.provider}`);
-      if (!p) continue;
-      const before = blended(p);
-      const after = blended(e);
+    for (const o of m.offers) {
+      const p = prev.get(`${m.id}|${offerKey(o)}`);
+      if (!p || p.unit !== o.unit) continue;
+      const before = unitPrice(p);
+      const after = unitPrice(o);
       if (before > 0 && after < before * 0.98) {
         drops.push({
           modelId: m.id,
-          provider: e.provider,
-          tag: e.tag,
-          from: { in: p.in, out: p.out },
-          to: { in: e.in, out: e.out },
+          key: offerKey(o),
+          provider: o.provider,
+          src: o.src,
+          from: o.unit === 'token' ? { in: p.in, out: p.out } : { price: p.price },
           pct: Math.round((1 - after / before) * 100),
           at: now,
         });
@@ -146,60 +93,243 @@ export function detectDrops(prevModels, nextModels, now = new Date().toISOString
   return drops;
 }
 
-// Wszystkie aktualne okazje w jednej liście, od najmocniejszej.
-export function collectDeals(snapshot, ratio = DEFAULT_RATIO) {
-  const models = new Map(snapshot.models.map((m) => [m.id, m]));
-  const deals = [];
-  for (const m of snapshot.models) {
-    for (const e of m.endpoints ?? []) {
-      if (e.discount > 0 && !isFree(e)) {
-        deals.push({ type: 'discount', model: m, endpoint: e, pct: Math.round(e.discount * 100), score: e.discount });
+// Aktywne promocje (zniżka providera albo świeża obniżka) z datą startu oraz te, które się skończyły.
+export function trackPromos(prev, models, drops, now = new Date().toISOString(), keepMs = 14 * DAY) {
+  const prevPromos = prev?.promos ?? {};
+  const firstRun = !prev?.promos;
+  const promos = {};
+  const offerIndex = new Map();
+  for (const m of models) {
+    for (const o of m.offers) {
+      offerIndex.set(`${m.id}|${offerKey(o)}`, { m, o });
+      if (o.discount > 0) {
+        const id = `${m.id}|${offerKey(o)}`;
+        const old = prevPromos[id];
+        promos[id] = {
+          modelId: m.id,
+          key: offerKey(o),
+          provider: o.provider,
+          src: o.src,
+          type: 'discount',
+          pct: Math.round(o.discount * 100),
+          since: old?.since ?? now,
+          sinceKnown: old ? old.sinceKnown : !firstRun,
+        };
       }
     }
     if (m.freeId) {
-      deals.push({ type: 'free', model: m, endpoint: null, pct: 100, score: 0 });
+      const id = `${m.id}|free`;
+      const old = prevPromos[id];
+      promos[id] = {
+        modelId: m.id, key: 'free', provider: 'OpenRouter', src: 'openrouter', type: 'free', pct: 100,
+        since: old?.since ?? now, sinceKnown: old ? old.sinceKnown : !firstRun,
+      };
     }
   }
-  for (const d of snapshot.drops ?? []) {
-    const m = models.get(d.modelId);
-    if (!m) continue;
-    const e = m.endpoints?.find((x) => (x.tag ?? x.provider) === (d.tag ?? d.provider));
-    if (!e || blended(e) > blended(d.to) * 1.001) continue; // cena już wróciła
-    deals.push({ type: 'drop', model: m, endpoint: e, pct: d.pct, at: d.at, from: d.from, score: d.pct / 100 });
+  for (const d of drops ?? []) {
+    const id = `${d.modelId}|${d.key}`;
+    if (promos[id]) continue;
+    const cur = offerIndex.get(id);
+    const before = d.from.price ?? (d.from.in * 3 + d.from.out) / 4;
+    if (!cur || unitPrice(cur.o) > before * 0.98) continue; // cena już wróciła
+    promos[id] = {
+      modelId: d.modelId, key: d.key, provider: d.provider, src: d.src, type: 'drop', pct: d.pct,
+      since: prevPromos[id]?.since ?? d.at, sinceKnown: true, from: d.from,
+    };
   }
-  // Jedna najlepsza okazja na parę model+provider.
-  const best = new Map();
-  for (const d of deals) {
-    const key = `${d.model.id}|${d.endpoint?.provider ?? 'free'}`;
-    const cur = best.get(key);
-    if (!cur || d.score > cur.score) best.set(key, d);
+  const ended = (prev?.ended ?? []).filter((e) => Date.parse(now) - Date.parse(e.endedAt) < keepMs);
+  for (const [id, p] of Object.entries(prevPromos)) {
+    if (promos[id]) continue;
+    const cur = offerIndex.get(id)?.o ?? null;
+    ended.unshift({
+      ...p,
+      endedAt: now,
+      now: cur ? (cur.unit === 'token' ? { in: cur.in, out: cur.out } : { price: cur.price }) : null,
+    });
   }
-  return [...best.values()].sort((a, b) => b.score - a.score || (blended(a.endpoint, ratio) ?? 0) - (blended(b.endpoint, ratio) ?? 0));
+  return { promos, ended };
 }
 
+// Średni czas trwania zakończonych promocji per provider (tylko z pewną datą startu).
+export function promoStats(history) {
+  const acc = {};
+  for (const e of history ?? []) {
+    if (!e.sinceKnown || e.type === 'free') continue;
+    const days = (Date.parse(e.endedAt) - Date.parse(e.since)) / DAY;
+    const a = (acc[e.provider] ??= { n: 0, sum: 0 });
+    a.n++;
+    a.sum += days;
+  }
+  return Object.fromEntries(Object.entries(acc).map(([k, v]) => [k, { n: v.n, avgDays: Math.round((v.sum / v.n) * 10) / 10 }]));
+}
+
+// ---------- okazje i alerty (apka, landing) ----------
+
+export function collectDeals(snapshot) {
+  const models = new Map(snapshot.models.map((m) => [m.id, m]));
+  const deals = [];
+  for (const p of Object.values(snapshot.promos ?? {})) {
+    const m = models.get(p.modelId);
+    if (!m) continue;
+    const offer = p.type === 'free' ? null : m.offers.find((o) => offerKey(o) === p.key);
+    if (p.type !== 'free' && !offer) continue;
+    deals.push({ ...p, model: m, offer, score: p.type === 'free' ? 0 : p.pct / 100 });
+  }
+  deals.sort((a, b) => b.score - a.score || Date.parse(b.since) - Date.parse(a.since));
+  // Ten sam dostawca w kilku wariantach (np. "upstage" i "upstage/zdr") -> jedna pozycja.
+  const seen = new Set();
+  return deals.filter((d) => {
+    const k = `${d.modelId}|${d.type}|${d.provider}`;
+    if (seen.has(k)) return false;
+    seen.add(k);
+    return true;
+  });
+}
+
+export function promoAgeDays(p, now = Date.now()) {
+  return (now - Date.parse(p.since)) / DAY;
+}
+
+// Stan obserwowanego modelu: czy jestem w promocji, ile przepłacam, co się skończyło.
+export function watchStatus(snapshot, item, usage = DEFAULT_USAGE, filter = null) {
+  const model = snapshot.models.find((m) => m.id === item.modelId);
+  if (!model) return { model: null, missing: true };
+  const best = cheapest(model, usage, filter);
+  const used = item.offerKey ? model.offers.find((o) => offerKey(o) === item.offerKey) ?? null : null;
+  const promos = Object.values(snapshot.promos ?? {}).filter((p) => p.modelId === model.id);
+  const usedPromo = used ? promos.find((p) => p.key === item.offerKey) ?? null : null;
+  const ended = (snapshot.ended ?? []).filter((e) => e.modelId === model.id && (!item.offerKey || e.key === item.offerKey || e.key === 'free'));
+  const usedCost = used ? offerCost(used, usage) : null;
+  const bestCost = best ? offerCost(best, usage) : null;
+  const overpayPct = usedCost && bestCost != null && usedCost > 0 ? Math.round((1 - bestCost / usedCost) * 100) : 0;
+  const stats = snapshot.promoStats ?? {};
+  const typical = usedPromo ? stats[usedPromo.provider]?.avgDays ?? null : null;
+  return { model, best, used, usedPromo, promos, ended, usedCost, bestCost, overpayPct, typicalDays: typical };
+}
+
+// Zdarzenia do powiadomień. Id jest stabilne, apka pamięta już wysłane.
+// filter: ograniczenie porównań (np. do ulubionych dostawców).
+export function computeAlerts(snapshot, watchlist, usage = DEFAULT_USAGE, { now = Date.now(), filter = null } = {}) {
+  const alerts = [];
+  for (const item of watchlist) {
+    const s = watchStatus(snapshot, item, usage, filter);
+    if (!s.model) continue;
+    const name = s.model.name;
+    const watchedSince = item.since ? Date.parse(item.since) : 0;
+    for (const p of s.promos) {
+      if (item.offerKey && p.key !== item.offerKey && p.type !== 'free') continue;
+      if (!p.sinceKnown || Date.parse(p.since) < watchedSince) continue; // trwała już wcześniej, widać ją w apce
+      alerts.push({
+        id: `start|${p.modelId}|${p.key}|${p.since}`,
+        kind: 'promo-start',
+        modelId: s.model.id,
+        title: p.type === 'free' ? `${name}: darmowy wariant` : `${name}: −${p.pct}% u ${p.provider}`,
+        body: p.type === 'free' ? `Model jest dostępny za darmo (${s.model.freeId}).` : `Promocja ${promoAgeText(p, now)}.`,
+      });
+    }
+    for (const e of s.ended) {
+      if (Date.parse(e.endedAt) < watchedSince) continue;
+      alerts.push({
+        id: `end|${e.modelId}|${e.key}|${e.endedAt}`,
+        kind: 'promo-end',
+        modelId: s.model.id,
+        urgent: item.mode === 'use',
+        title: e.type === 'free' ? `${name}: koniec darmowego wariantu` : `${name}: koniec promocji u ${e.provider}`,
+        body: s.best
+          ? `Teraz najtaniej: ${s.best.provider}, ${formatOfferPrice(s.best)}.`
+          : 'Sprawdź aktualne ceny.',
+      });
+    }
+    if (s.usedPromo && s.typicalDays && promoAgeDays(s.usedPromo, now) >= s.typicalDays * 0.8) {
+      alerts.push({
+        id: `aging|${s.model.id}|${s.usedPromo.key}|${s.usedPromo.since}`,
+        kind: 'promo-aging',
+        modelId: s.model.id,
+        urgent: true,
+        title: `${name}: promocja może się kończyć`,
+        body: `Trwa ${formatDays(promoAgeDays(s.usedPromo, now))}, u ${s.usedPromo.provider} zwykle ok. ${formatDays(s.typicalDays)}.`,
+      });
+    }
+    if (item.mode === 'use' && s.used && s.overpayPct >= 20 && s.best) {
+      alerts.push({
+        id: `cheaper|${s.model.id}|${offerKey(s.best)}|${Math.round(unitPrice(s.best) * 1e4)}`,
+        kind: 'cheaper',
+        modelId: s.model.id,
+        title: `${name}: taniej o ${s.overpayPct}%`,
+        body: `${s.best.provider} oferuje ${formatOfferPrice(s.best)}.`,
+      });
+    }
+    if (s.model.expires) {
+      const days = (Date.parse(s.model.expires) - now) / DAY;
+      if (days <= 14) {
+        alerts.push({
+          id: `expires|${s.model.id}|${s.model.expires}`,
+          kind: 'expires',
+          modelId: s.model.id,
+          urgent: item.mode === 'use',
+          title: `${name}: model zostanie wyłączony`,
+          body: `Data wycofania: ${s.model.expires}.`,
+        });
+      }
+    }
+  }
+  return alerts;
+}
+
+// Wyszukiwanie: wszystkie słowa muszą pasować; dokładne i krótsze nazwy wyżej.
 export function searchModels(models, query) {
   const q = query.trim().toLowerCase();
   if (!q) return models;
   const words = q.split(/\s+/);
-  return models.filter((m) => {
+  const scored = [];
+  for (const m of models) {
+    const name = m.name.toLowerCase().replace(/^[^:]+:\s*/, '');
     const hay = `${m.id} ${m.name}`.toLowerCase();
-    return words.every((w) => hay.includes(w));
-  });
+    if (!words.every((w) => hay.includes(w))) continue;
+    let score = name.length;
+    if (name === q) score -= 1000;
+    else if (name.startsWith(q)) score -= 500;
+    score -= Math.min(m.offers?.length ?? 0, 50);
+    scored.push([score, m]);
+  }
+  return scored.sort((a, b) => a[0] - b[0]).map(([, m]) => m);
 }
 
+// Opis wieku promocji. Dla promocji zastanych przy pierwszym pomiarze nie znamy startu.
+export function promoAgeText(p, now = Date.now()) {
+  const age = formatDays(promoAgeDays(p, now));
+  if (p.sinceKnown) return `trwa ${age}`;
+  return promoAgeDays(p, now) < 1 / 24 ? 'aktywna od pierwszego pomiaru' : `trwa co najmniej ${age}`;
+}
+
+// ---------- formatowanie ----------
+
 export function formatUsd(v) {
-  if (v == null) return '—';
+  if (v == null) return '–';
   if (v === 0) return '0 $';
-  if (v < 0.01) return `${v.toFixed(4)} $`;
-  if (v < 1) return `${v.toFixed(3)} $`;
+  if (v < 0.01) return `${+v.toFixed(4)} $`;
+  if (v < 1) return `${+v.toFixed(3)} $`;
   if (v < 100) return `${v.toFixed(2)} $`;
-  return `${Math.round(v)} $`;
+  return `${Math.round(v).toLocaleString('pl-PL')} $`;
+}
+
+export function formatOfferPrice(o) {
+  if (!o) return '–';
+  if (o.unit === 'token') return `${formatUsd(o.in)} / ${formatUsd(o.out)}`;
+  return `${formatUsd(o.price)} ${o.unit === 'image' ? 'za obraz' : 'za s'}`;
 }
 
 export function formatContext(n) {
-  if (!n) return '—';
+  if (!n) return '–';
   if (n >= 1e6) return `${+(n / 1e6).toFixed(1)}M`;
   return `${Math.round(n / 1000)}K`;
+}
+
+export function formatDays(d) {
+  if (d < 1 / 24) return 'mniej niż godzinę';
+  if (d < 1) return `${Math.round(d * 24)} h`;
+  const n = Math.round(d);
+  return n === 1 ? '1 dzień' : `${n} dni`;
 }
 
 export function timeAgo(iso, now = Date.now()) {
@@ -208,24 +338,4 @@ export function timeAgo(iso, now = Date.now()) {
   if (s < 3600) return `${Math.round(s / 60)} min temu`;
   if (s < 86400) return `${Math.round(s / 3600)} h temu`;
   return `${Math.round(s / 86400)} d temu`;
-}
-
-// Snapshot "awaryjny" zbudowany z samego /models (1 zapytanie) gdy gotowy plik jest niedostępny.
-export async function liveSnapshot(fetchImpl = fetch) {
-  const r = await fetchImpl(`${OPENROUTER_API}/models`);
-  if (!r.ok) throw new Error(`OpenRouter /models: HTTP ${r.status}`);
-  const json = await r.json();
-  const models = modelsFromApi(json.data);
-  for (const m of models) {
-    if (m.listPrice.in != null) m.endpoints = [{ provider: 'OpenRouter (cena bazowa)', tag: null, ...m.listPrice, discount: 0 }];
-  }
-  return { generatedAt: new Date().toISOString(), source: 'openrouter-live', partial: true, models, drops: [] };
-}
-
-// Oferty providerów dla jednego modelu na żywo.
-export async function liveEndpoints(modelId, fetchImpl = fetch) {
-  const r = await fetchImpl(`${OPENROUTER_API}/models/${baseId(modelId)}/endpoints`);
-  if (!r.ok) throw new Error(`OpenRouter endpoints: HTTP ${r.status}`);
-  const json = await r.json();
-  return endpointsFromApi(json.data?.endpoints);
 }

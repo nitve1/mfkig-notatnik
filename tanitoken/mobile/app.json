@@ -6,13 +6,17 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
-    "backgroundColor": "#0b1210",
+    "backgroundColor": "#f1f3f6",
     "ios": {
       "bundleIdentifier": "pl.tanitoken.app",
       "supportsTablet": true,
       "buildNumber": "1",
       "infoPlist": {
-        "ITSAppUsesNonExemptEncryption": false
+        "ITSAppUsesNonExemptEncryption": false,
+        "UIBackgroundModes": [
+          "fetch",
+          "processing"
+        ]
       }
     },
     "android": {
@@ -20,8 +24,9 @@
       "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#0e1d18"
-      }
+        "backgroundColor": "#172036"
+      },
+      "allowBackup": true
     },
     "plugins": [
       "expo-status-bar",
@@ -29,9 +34,24 @@
         "expo-splash-screen",
         {
           "image": "./assets/splash.png",
-          "imageWidth": 220,
+          "imageWidth": 200,
           "resizeMode": "contain",
-          "backgroundColor": "#0b1210"
+          "backgroundColor": "#f1f3f6",
+          "dark": {
+            "image": "./assets/splash.png",
+            "backgroundColor": "#121a2b"
+          }
+        }
+      ],
+      "expo-background-task",
+      "expo-secure-store",
+      "expo-sharing",
+      "expo-font",
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/notification-icon.png",
+          "color": "#172036"
         }
       ]
     ],
