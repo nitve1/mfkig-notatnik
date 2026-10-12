@@ -1,0 +1,123 @@
+<!doctype html><html lang="pl"><head><meta charset="utf-8"><title>Makieta: Gazetka promocyjna</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&display=swap">
+<style>
+  *{box-sizing:border-box} body{margin:0;background:#d9dbe1;font-family:system-ui,sans-serif;color:#111}
+  .sheet{padding:28px 32px 36px}
+  .sheet h2{font:800 30px/1.1 system-ui;margin:0 0 6px} .sheet p.pitch{max-width:900px;margin:0 0 22px;color:#333;font-size:16px;line-height:1.5}
+  .phones{display:flex;gap:28px;align-items:flex-start}
+  .phone{width:390px;height:844px;border-radius:44px;overflow:hidden;position:relative;display:flex;flex-direction:column;box-shadow:0 30px 60px -30px #0007,0 0 0 10px #111}
+  .status{height:44px;flex:none;display:flex;justify-content:space-between;align-items:center;padding:0 28px;font-weight:600;font-size:14px}
+  .scr{flex:1;overflow:hidden;padding:4px 16px 0;display:flex;flex-direction:column;gap:12px}
+  .top{display:flex;justify-content:space-between;align-items:flex-end}
+  .bell{position:relative;width:40px;height:40px;border-radius:12px;display:grid;place-items:center}
+  .bell i{position:absolute;right:9px;top:8px;width:8px;height:8px;border-radius:9px;background:#e8333a}
+  .backb{width:40px;height:40px;display:grid;place-items:center;margin-left:-8px}
+  .list{display:flex;flex-direction:column;gap:8px}
+  .tabs{position:absolute;left:0;right:0;bottom:0;display:flex;padding:8px 0 26px}
+  .tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;opacity:.55} .tab.on{opacity:1}
+  .tab b{font-size:11px;font-weight:600}
+  .caption{text-align:center;font:600 14px system-ui;color:#333;margin-top:14px}
+
+  :root{--bg:#f6f6f2;--card:#fff;--ink:#16161d;--ink2:#5d5d6b;--line:#e7e6df;--yellow:#ffd400;--red:#e0262f;--green:#12805c}
+  .phone{background:var(--bg);color:var(--ink);font-family:Archivo,sans-serif;font-stretch:100%}
+  h1{font-size:30px;font-weight:800;font-stretch:80%;letter-spacing:-.01em;margin:0}
+  .sub{color:var(--ink2);font-size:13px}
+  .seg{display:flex;background:#ebeae3;border-radius:14px;padding:4px;gap:4px}
+  .seg span{flex:1;text-align:center;padding:8px 0;border-radius:10px;font-size:13px;font-weight:600;color:var(--ink2)}
+  .seg span.on{background:var(--card);color:var(--ink);box-shadow:0 1px 3px #0002}
+  .seg small{display:block;font-size:11px;font-weight:500;color:var(--ink2)}
+  .cats{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+  .cats span{display:flex;flex-direction:column;align-items:center;gap:3px;padding:9px 0 7px;border-radius:14px;background:var(--card);font-size:11.5px;font-weight:600;border:1.5px solid transparent}
+  .cats span.on{border-color:var(--ink);background:var(--yellow)}
+  .cats em{font-style:normal;font-weight:500;color:var(--ink2);font-size:10.5px}
+  .card{background:var(--card);border-radius:18px;padding:14px;display:grid;grid-template-columns:1fr auto;gap:4px 12px;box-shadow:0 1px 0 var(--line)}
+  .card .nm{font-weight:700;font-size:16px}
+  .chips{display:flex;gap:6px;flex-wrap:wrap;align-self:start;align-items:center}
+  .chip{font-size:11.5px;font-weight:600;padding:3px 8px;border-radius:99px;background:#f0efe8;color:var(--ink2)}
+  .price{grid-row:span 2;text-align:right;align-self:center}
+  .tagp{display:inline-flex;align-items:baseline;gap:6px;background:var(--yellow);padding:4px 10px 4px 14px;border-radius:6px;clip-path:polygon(8px 0,100% 0,100% 100%,8px 100%,0 50%)}
+  .tagp b{font-size:24px;font-weight:800;font-stretch:75%}
+  .pct{background:var(--red);color:#fff;font-weight:800;font-size:13px;padding:2px 7px;border-radius:6px}
+  .old{font-size:12px;color:var(--ink2);text-decoration:line-through}
+  .meta{font-size:12px;color:var(--ink2);display:flex;gap:4px;align-items:center}
+  .tabs{background:var(--card);border-top:1px solid var(--line)}
+  .tab.on{color:var(--ink)} .tab.on .ic{color:var(--ink);fill:var(--yellow)}
+  .hero{background:var(--yellow);border-radius:20px;padding:16px}
+  .hero b{font-size:44px;font-weight:800;font-stretch:72%;line-height:1}
+  .btn{flex:1;text-align:center;padding:12px;border-radius:14px;font-weight:700;font-size:14px;background:var(--ink);color:#fff}
+  .btn.ghost{background:var(--card);color:var(--ink);border:1.5px solid var(--ink)}
+  .row{background:var(--card);border-radius:14px;padding:12px;display:grid;grid-template-columns:22px 1fr auto;gap:2px 10px;align-items:center}
+  .rank{font-weight:800;font-stretch:75%;font-size:20px;color:var(--ink2)}
+  .row.best{outline:2.5px solid var(--yellow)}
+  .cost{font-weight:800;font-stretch:75%;font-size:20px}
+  .stat{border-radius:18px;padding:14px;background:var(--ink);color:#fff}
+  .stat b{font-size:34px;font-weight:800;font-stretch:72%;color:var(--yellow)}
+  .use{background:var(--card);border-radius:18px;padding:14px;border-left:6px solid var(--line)}
+  .use.aging{border-left-color:var(--red)} .use.ended{border-left-color:var(--red)} .use.ok{border-left-color:var(--green)}
+  .badge{font-size:11.5px;font-weight:700;padding:3px 8px;border-radius:99px}
+  .badge.red{background:#fde5e6;color:var(--red)} .badge.green{background:#dff3ea;color:var(--green)}
+  .bar{height:6px;border-radius:9px;background:#eee;overflow:hidden} .bar i{display:block;height:100%;background:var(--red)}
+  .save{color:var(--green);font-weight:600;font-size:13px}
+  </style></head><body><div class="sheet">
+<h2>1. Gazetka promocyjna</h2><p class="pitch">Ewolucja obecnego stylu. Żółta etykieta zostaje jako znak rozpoznawczy, ale wokół niej są zaokrąglone karty, większa cena i krótkie etykiety zamiast zdań. Najbardziej „okazyjny” charakter.</p>
+<div class="phones"><div><div class="phone"><div class="status"><span>14:05</span><span>●●● ▮</span></div><div class="scr">
+    <div class="top"><div><h1>Promocje</h1><div class="sub">Cześć Ola, ceny sprzed 4 min</div></div><span class="bell"><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg><i></i></span></div>
+    <div class="cats"><span class="on"><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/></svg>Wszystko<em>96</em></span><span class=""><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 6h14M5 12h14M5 18h9"/></svg>Tekst<em>96</em></span><span class=""><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 7-5 5 5 5M16 7l5 5-5 5"/></svg>Kod<em>44</em></span><span class=""><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="14" rx="2"/><circle cx="9" cy="10" r="1.8"/><path d="m4 18 5.5-5 4 3.5 2.5-2 4 3.5"/></svg>Obraz<em>0</em></span><span class=""><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="13" height="12" rx="2"/><path d="m16 10 5-3v10l-5-3z"/></svg>Wideo<em>0</em></span></div>
+    <div class="seg"><span class="on">Zniżki<small>96</small></span><span>Obniżki<small>0</small></span><span>Darmowe<small>15</small></span></div>
+    <div class="list">
+      <div class="card"><div class="nm">GLM 5.3</div>
+        <div class="price"><span class="pct">−86%</span><br><span class="tagp"><b>0.199</b><small>$/1M</small></span><br><span class="old">było 1.40</span></div>
+        <div class="chips"><span class="chip">Baidu</span><span class="chip">Kod</span></div>
+        <div class="meta"><svg class="ic" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg> trwa 1 d</div></div>
+      <div class="card"><div class="nm">Mercury 2.5</div>
+        <div class="price"><span class="pct">−80%</span><br><span class="tagp"><b>0.04</b><small>$/1M</small></span><br><span class="old">było 0.2</span></div>
+        <div class="chips"><span class="chip">Inception</span><span class="chip">Tekst</span></div>
+        <div class="meta"><svg class="ic" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg> trwa 1 d</div></div>
+      <div class="card"><div class="nm">Qwen3 235B A22B Instruct 2507</div>
+        <div class="price"><span class="pct">−75%</span><br><span class="tagp"><b>0.087</b><small>$/1M</small></span><br><span class="old">było 0.35</span></div>
+        <div class="chips"><span class="chip">GMICloud</span><span class="chip">Tekst</span></div>
+        <div class="meta"><svg class="ic" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg> trwa 1 d</div></div>
+      <div class="card"><div class="nm">DeepSeek V4 Pro 0423</div>
+        <div class="price"><span class="pct">−74%</span><br><span class="tagp"><b>0.446</b><small>$/1M</small></span><br><span class="old">było 1.74</span></div>
+        <div class="chips"><span class="chip">StreamLake</span><span class="chip">Tekst</span></div>
+        <div class="meta"><svg class="ic" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg> trwa 1 d</div></div>
+      <div class="card"><div class="nm">DeepSeek V4 Pro 0423</div>
+        <div class="price"><span class="pct">−74%</span><br><span class="tagp"><b>0.448</b><small>$/1M</small></span><br><span class="old">było 1.69</span></div>
+        <div class="chips"><span class="chip">Baidu</span><span class="chip">Tekst</span></div>
+        <div class="meta"><svg class="ic" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg> trwa 1 d</div></div></div>
+    <nav class="tabs "><span class="tab on"><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5 8.5 3H21v18H8.5L3 15.5z"/><circle cx="8.5" cy="12" r="1.6"/></svg><b>Promocje</b></span><span class="tab "><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg><b>Szukaj</b></span><span class="tab "><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 2.7 5.6 6.1.8-4.5 4.2 1.1 6.1L12 16.8l-5.4 2.9 1.1-6.1-4.5-4.2 6.1-.8z"/></svg><b>Moje</b></span><span class="tab "><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.2-4 4.3-6 8-6s6.8 2 8 6"/></svg><b>Profil</b></span></nav></div></div><div class="caption">Promocje</div></div><div><div class="phone"><div class="status"><span>14:05</span><span>●●● ▮</span></div><div class="scr">
+    <div class="top"><span class="backb"><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 5-7 7 7 7"/></svg></span><span class="bell"><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 2.7 5.6 6.1.8-4.5 4.2 1.1 6.1L12 16.8l-5.4 2.9 1.1-6.1-4.5-4.2 6.1-.8z"/></svg></span></div>
+    <div><h1>GLM 5.2</h1><div class="chips" style="margin-top:6px"><span class="chip">Z.ai</span><span class="chip">Tekst</span><span class="chip">Kod</span><span class="chip">1M kontekstu</span></div></div>
+    <div class="hero"><div class="sub" style="color:#16161d">Najtaniej przy 10M / 2M tokenów</div><b>5.10 $</b><span style="font-weight:700"> / mies.</span><div style="font-weight:600;margin-top:4px">CrofAI · oszczędzasz 30.00 $</div></div>
+    <div style="display:flex;gap:8px"><span class="btn">Używam</span><span class="btn ghost">Obserwuj</span></div>
+    <div class="seg"><span class="on">Wszyscy 129</span><span>Ulubieni 4</span><span>Promocje 6</span></div>
+    <div class="list">
+      <div class="row best"><span class="rank">1</span><b>CrofAI</b><span class="cost">5.10 $</span>
+      <span></span><span class="sub">0.3 / 1.05 $</span><span class="sub">Bezpośrednio</span></div>
+      <div class="row "><span class="rank">2</span><b>Decart</b><span class="cost">5.80 $</span>
+      <span></span><span class="sub"><span class="pct" style="font-size:11px">−60%</span> 0.26 / 1.60 $</span><span class="sub">OpenRouter</span></div>
+      <div class="row "><span class="rank">3</span><b>InferenceNet</b><span class="cost">6.78 $</span>
+      <span></span><span class="sub">0.198 / 2.40 $</span><span class="sub">OpenRouter</span></div>
+      <div class="row "><span class="rank">4</span><b>NanoGPT</b><span class="cost">6.84 $</span>
+      <span></span><span class="sub">0.42 / 1.32 $</span><span class="sub">Bezpośrednio</span></div></div>
+    <nav class="tabs "><span class="tab "><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5 8.5 3H21v18H8.5L3 15.5z"/><circle cx="8.5" cy="12" r="1.6"/></svg><b>Promocje</b></span><span class="tab on"><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg><b>Szukaj</b></span><span class="tab "><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 2.7 5.6 6.1.8-4.5 4.2 1.1 6.1L12 16.8l-5.4 2.9 1.1-6.1-4.5-4.2 6.1-.8z"/></svg><b>Moje</b></span><span class="tab "><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.2-4 4.3-6 8-6s6.8 2 8 6"/></svg><b>Profil</b></span></nav></div></div><div class="caption">Karta modelu</div></div><div><div class="phone"><div class="status"><span>14:05</span><span>●●● ▮</span></div><div class="scr">
+    <div class="top"><div><h1>Moje</h1><div class="sub">3 używane, 3 obserwowane</div></div></div>
+    <div class="stat"><div style="font-size:13px;opacity:.8">Dzięki promocjom oszczędzasz</div><b>41.30 $</b> <span>/ miesiąc</span></div>
+    
+      <div class="use aging"><div style="display:flex;justify-content:space-between;align-items:center"><b style="font-size:16px">GLM 5.2</b>
+      <span class="badge red">Kończy się</span></div>
+      <div class="sub">u Novita · 0.65 / 2.04 $ · −54%</div>
+      <div class="bar" style="margin:8px 0 4px"><i style="width:85.71428571428571%"></i></div><div class="sub">dzień 6 z ~7 typowych</div>
+      <div class="save" style="margin-top:6px">DeepInfra taniej o 13%</div></div>
+      <div class="use ended"><div style="display:flex;justify-content:space-between;align-items:center"><b style="font-size:16px">DeepSeek V4.1 Flash</b>
+      <span class="badge red">Promocja minęła</span></div>
+      <div class="sub">u StreamLake · 0.300 / 1.20 $</div>
+      
+      <div class="save" style="margin-top:6px">DeepInfra taniej o 47%</div></div>
+      <div class="use ok"><div style="display:flex;justify-content:space-between;align-items:center"><b style="font-size:16px">Kimi K3</b>
+      <span class="badge green">Najtaniej</span></div>
+      <div class="sub">u Moonshot AI · 0.60 / 2.50 $</div>
+      
+      </div>
+    <nav class="tabs "><span class="tab "><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5 8.5 3H21v18H8.5L3 15.5z"/><circle cx="8.5" cy="12" r="1.6"/></svg><b>Promocje</b></span><span class="tab "><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg><b>Szukaj</b></span><span class="tab on"><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 2.7 5.6 6.1.8-4.5 4.2 1.1 6.1L12 16.8l-5.4 2.9 1.1-6.1-4.5-4.2 6.1-.8z"/></svg><b>Moje</b></span><span class="tab "><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.2-4 4.3-6 8-6s6.8 2 8 6"/></svg><b>Profil</b></span></nav></div></div><div class="caption">Moje</div></div></div>
+</div></body></html>

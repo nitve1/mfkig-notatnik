@@ -1,0 +1,97 @@
+<!doctype html><html lang="pl"><head><meta charset="utf-8"><title>Makieta: Portfel</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400..800&display=swap">
+<style>
+  *{box-sizing:border-box} body{margin:0;background:#d9dbe1;font-family:system-ui,sans-serif;color:#111}
+  .sheet{padding:28px 32px 36px}
+  .sheet h2{font:800 30px/1.1 system-ui;margin:0 0 6px} .sheet p.pitch{max-width:900px;margin:0 0 22px;color:#333;font-size:16px;line-height:1.5}
+  .phones{display:flex;gap:28px;align-items:flex-start}
+  .phone{width:390px;height:844px;border-radius:44px;overflow:hidden;position:relative;display:flex;flex-direction:column;box-shadow:0 30px 60px -30px #0007,0 0 0 10px #111}
+  .status{height:44px;flex:none;display:flex;justify-content:space-between;align-items:center;padding:0 28px;font-weight:600;font-size:14px}
+  .scr{flex:1;overflow:hidden;padding:4px 16px 0;display:flex;flex-direction:column;gap:12px}
+  .top{display:flex;justify-content:space-between;align-items:flex-end}
+  .bell{position:relative;width:40px;height:40px;border-radius:12px;display:grid;place-items:center}
+  .bell i{position:absolute;right:9px;top:8px;width:8px;height:8px;border-radius:9px;background:#e8333a}
+  .backb{width:40px;height:40px;display:grid;place-items:center;margin-left:-8px}
+  .list{display:flex;flex-direction:column;gap:8px}
+  .tabs{position:absolute;left:0;right:0;bottom:0;display:flex;padding:8px 0 26px}
+  .tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;opacity:.55} .tab.on{opacity:1}
+  .tab b{font-size:11px;font-weight:600}
+  .caption{text-align:center;font:600 14px system-ui;color:#333;margin-top:14px}
+
+  :root{--bg:#f2f4f7;--card:#fff;--ink:#101828;--ink2:#667085;--line:#e4e7ec;--brand:#0b6b63;--brand2:#e3f3f1;--hot:#ef4a3c;--hot2:#fdecea}
+  .phone{background:var(--bg);color:var(--ink);font-family:Manrope,sans-serif}
+  h1{font-size:26px;font-weight:800;margin:0;letter-spacing:-.02em}
+  .sub{color:var(--ink2);font-size:13px}
+  .seg{display:flex;background:var(--card);border-radius:99px;padding:4px;border:1px solid var(--line)}
+  .seg span{flex:1;text-align:center;padding:9px 0;border-radius:99px;font-size:13px;font-weight:700;color:var(--ink2)}
+  .seg span.on{background:var(--brand);color:#fff}
+  .cats{display:flex;gap:6px}
+  .cats span{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11.5px;font-weight:700;color:var(--ink2)}
+  .cats span i{width:48px;height:48px;border-radius:16px;background:var(--card);display:grid;place-items:center;border:1px solid var(--line)}
+  .cats span.on{color:var(--brand)} .cats span.on i{background:var(--brand);color:#fff;border-color:var(--brand)}
+  .summary{background:var(--brand);color:#fff;border-radius:22px;padding:16px}
+  .summary b{font-size:32px;font-weight:800;letter-spacing:-.02em}
+  .group{background:var(--card);border-radius:20px;padding:4px 14px}
+  .item{display:grid;grid-template-columns:40px 1fr auto;gap:2px 12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
+  .item:last-child{border:0}
+  .av{grid-row:span 2;width:40px;height:40px;border-radius:12px;display:grid;place-items:center;font-weight:800;font-size:15px;background:var(--brand2);color:var(--brand)}
+  .nm{font-weight:700;font-size:15px}
+  .pr{text-align:right;font-weight:800;font-size:16px}
+  .pct{display:inline-block;font-size:12px;font-weight:800;color:var(--hot);background:var(--hot2);padding:2px 7px;border-radius:99px}
+  .tabs{background:var(--card);border-top:1px solid var(--line)} .tab.on{color:var(--brand)}
+  .btn{flex:1;text-align:center;padding:13px;border-radius:14px;font-weight:800;font-size:14px;background:var(--brand);color:#fff}
+  .btn.ghost{background:var(--card);color:var(--ink);border:1px solid var(--line)}
+  .kv{display:flex;justify-content:space-between;font-size:13px;color:var(--ink2);padding:2px 0}
+  .kv b{color:var(--ink)}
+  .status{font-size:12px;font-weight:700;padding:3px 9px;border-radius:99px}
+  .s-red{background:var(--hot2);color:var(--hot)} .s-green{background:var(--brand2);color:var(--brand)}
+  .meter{height:8px;border-radius:9px;background:var(--line);margin-top:8px;overflow:hidden} .meter i{display:block;height:100%;background:var(--hot);border-radius:9px}
+  .h2{font-size:15px;font-weight:800;margin:4px 2px 0}
+  </style></head><body><div class="sheet">
+<h2>2. Portfel</h2><p class="pitch">Spokojny styl aplikacji bankowej. Na górze zawsze jedna liczba (ile oszczędzasz albo ile zapłacisz), niżej czyste karty z ikoną dostawcy. Najlepsza czytelność, najmniej „krzykliwy”.</p>
+<div class="phones"><div><div class="phone"><div class="status"><span>14:05</span><span>●●● ▮</span></div><div class="scr">
+    <div class="top"><div><div class="sub">Cześć Ola 👋</div><h1>Dzisiejsze okazje</h1></div><span class="bell"><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg><i></i></span></div>
+    <div class="summary"><div style="font-size:13px;opacity:.85">Aktywnych zniżek teraz</div><b>96</b><div style="font-size:13px;opacity:.85">największa −86% · aktualizacja 4 min temu</div></div>
+    <div class="cats"><span class="on"><i><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/></svg></i>Wszystko</span><span class=""><i><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 6h14M5 12h14M5 18h9"/></svg></i>Tekst</span><span class=""><i><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 7-5 5 5 5M16 7l5 5-5 5"/></svg></i>Kod</span><span class=""><i><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="14" rx="2"/><circle cx="9" cy="10" r="1.8"/><path d="m4 18 5.5-5 4 3.5 2.5-2 4 3.5"/></svg></i>Obraz</span><span class=""><i><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="13" height="12" rx="2"/><path d="m16 10 5-3v10l-5-3z"/></svg></i>Wideo</span></div>
+    <div class="seg"><span class="on">Zniżki</span><span>Obniżki</span><span>Darmowe</span></div>
+    <div class="group">
+      <div class="item"><span class="av">Z</span><span class="nm">GLM 5.3</span><span class="pr">0.199 $</span>
+      <span class="sub">Baidu · Kod</span><span style="text-align:right"><span class="pct">−86%</span></span></div>
+      <div class="item"><span class="av">I</span><span class="nm">Mercury 2.5</span><span class="pr">0.04 $</span>
+      <span class="sub">Inception · Tekst</span><span style="text-align:right"><span class="pct">−80%</span></span></div>
+      <div class="item"><span class="av">Q</span><span class="nm">Qwen3 235B A22B Instruct 2507</span><span class="pr">0.087 $</span>
+      <span class="sub">GMICloud · Tekst</span><span style="text-align:right"><span class="pct">−75%</span></span></div>
+      <div class="item"><span class="av">D</span><span class="nm">DeepSeek V4 Pro 0423</span><span class="pr">0.446 $</span>
+      <span class="sub">StreamLake · Tekst</span><span style="text-align:right"><span class="pct">−74%</span></span></div></div>
+    <nav class="tabs "><span class="tab on"><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5 8.5 3H21v18H8.5L3 15.5z"/><circle cx="8.5" cy="12" r="1.6"/></svg><b>Promocje</b></span><span class="tab "><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg><b>Szukaj</b></span><span class="tab "><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 2.7 5.6 6.1.8-4.5 4.2 1.1 6.1L12 16.8l-5.4 2.9 1.1-6.1-4.5-4.2 6.1-.8z"/></svg><b>Moje</b></span><span class="tab "><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.2-4 4.3-6 8-6s6.8 2 8 6"/></svg><b>Profil</b></span></nav></div></div><div class="caption">Promocje</div></div><div><div class="phone"><div class="status"><span>14:05</span><span>●●● ▮</span></div><div class="scr">
+    <div class="top"><span class="backb"><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 5-7 7 7 7"/></svg></span><span class="bell"><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 2.7 5.6 6.1.8-4.5 4.2 1.1 6.1L12 16.8l-5.4 2.9 1.1-6.1-4.5-4.2 6.1-.8z"/></svg></span></div>
+    <div style="display:flex;gap:12px;align-items:center"><span class="av" style="width:52px;height:52px;font-size:20px">Z</span><div><h1 style="font-size:24px">GLM 5.2</h1><div class="sub">Tekst, Kod · 1M kontekstu · 129 ofert</div></div></div>
+    <div class="summary"><div style="font-size:13px;opacity:.85">Zapłacisz najmniej u CrofAI</div><b>5.10 $</b> <span style="opacity:.85">miesięcznie</span>
+      <div style="display:flex;gap:8px;margin-top:10px"><span style="flex:1;background:#ffffff22;border-radius:12px;padding:8px;font-size:12px">Wejście<br><b style="font-size:16px">10M</b></span><span style="flex:1;background:#ffffff22;border-radius:12px;padding:8px;font-size:12px">Wyjście<br><b style="font-size:16px">2M</b></span><span style="flex:1;background:#ffffff22;border-radius:12px;padding:8px;font-size:12px">Oszczędność<br><b style="font-size:16px">30.00 $</b></span></div></div>
+    <div style="display:flex;gap:8px"><span class="btn">Używam</span><span class="btn ghost">Obserwuj</span></div>
+    <div class="group">
+      <div class="item"><span class="av">C</span><span class="nm">CrofAI</span><span class="pr">5.10 $</span>
+      <span class="sub">0.3 / 1.05 $ · Bezpośrednio</span><span style="text-align:right"></span></div>
+      <div class="item"><span class="av">D</span><span class="nm">Decart</span><span class="pr">5.80 $</span>
+      <span class="sub">0.26 / 1.60 $ · OpenRouter</span><span style="text-align:right"><span class="pct">−60%</span></span></div>
+      <div class="item"><span class="av">I</span><span class="nm">InferenceNet</span><span class="pr">6.78 $</span>
+      <span class="sub">0.198 / 2.40 $ · OpenRouter</span><span style="text-align:right"></span></div>
+      <div class="item"><span class="av">N</span><span class="nm">NanoGPT</span><span class="pr">6.84 $</span>
+      <span class="sub">0.42 / 1.32 $ · Bezpośrednio</span><span style="text-align:right"></span></div></div>
+    <nav class="tabs "><span class="tab "><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5 8.5 3H21v18H8.5L3 15.5z"/><circle cx="8.5" cy="12" r="1.6"/></svg><b>Promocje</b></span><span class="tab on"><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg><b>Szukaj</b></span><span class="tab "><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 2.7 5.6 6.1.8-4.5 4.2 1.1 6.1L12 16.8l-5.4 2.9 1.1-6.1-4.5-4.2 6.1-.8z"/></svg><b>Moje</b></span><span class="tab "><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.2-4 4.3-6 8-6s6.8 2 8 6"/></svg><b>Profil</b></span></nav></div></div><div class="caption">Karta modelu</div></div><div><div class="phone"><div class="status"><span>14:05</span><span>●●● ▮</span></div><div class="scr">
+    <div class="top"><div><h1>Moje modele</h1><div class="sub">3 używane, 3 obserwowane</div></div></div>
+    <div class="summary"><div style="font-size:13px;opacity:.85">Oszczędzasz dzięki promocjom</div><b>41.30 $</b> <span style="opacity:.85">/ miesiąc</span></div>
+    <div class="h2">Używam</div>
+    
+      <div class="group" style="padding:14px"><div style="display:flex;justify-content:space-between;align-items:center"><span class="nm">GLM 5.2</span>
+      <span class="status s-red">Kończy się</span></div>
+      <div class="kv"><span>Dostawca</span><b>Novita</b></div><div class="kv"><span>Cena /1M</span><b>0.65 / 2.04 $</b></div>
+      <div class="meter"><i style="width:85.71428571428571%"></i></div><div class="kv"><span>Dzień 6</span><span>zwykle ~7 dni</span></div>
+      <div class="kv" style="color:var(--brand);font-weight:700"><span>DeepInfra</span><span>taniej o 13%</span></div></div>
+      <div class="group" style="padding:14px"><div style="display:flex;justify-content:space-between;align-items:center"><span class="nm">DeepSeek V4.1 Flash</span>
+      <span class="status s-red">Promocja minęła</span></div>
+      <div class="kv"><span>Dostawca</span><b>StreamLake</b></div><div class="kv"><span>Cena /1M</span><b>0.300 / 1.20 $</b></div>
+      
+      <div class="kv" style="color:var(--brand);font-weight:700"><span>DeepInfra</span><span>taniej o 47%</span></div></div>
+    <nav class="tabs "><span class="tab "><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5 8.5 3H21v18H8.5L3 15.5z"/><circle cx="8.5" cy="12" r="1.6"/></svg><b>Promocje</b></span><span class="tab "><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg><b>Szukaj</b></span><span class="tab on"><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 2.7 5.6 6.1.8-4.5 4.2 1.1 6.1L12 16.8l-5.4 2.9 1.1-6.1-4.5-4.2 6.1-.8z"/></svg><b>Moje</b></span><span class="tab "><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.2-4 4.3-6 8-6s6.8 2 8 6"/></svg><b>Profil</b></span></nav></div></div><div class="caption">Moje</div></div></div>
+</div></body></html>

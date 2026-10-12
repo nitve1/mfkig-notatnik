@@ -1,0 +1,87 @@
+<!doctype html><html lang="pl"><head><meta charset="utf-8"><title>Makieta: Notowania</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400..800&family=Geist+Mono:wght@400..700&display=swap">
+<style>
+  *{box-sizing:border-box} body{margin:0;background:#d9dbe1;font-family:system-ui,sans-serif;color:#111}
+  .sheet{padding:28px 32px 36px}
+  .sheet h2{font:800 30px/1.1 system-ui;margin:0 0 6px} .sheet p.pitch{max-width:900px;margin:0 0 22px;color:#333;font-size:16px;line-height:1.5}
+  .phones{display:flex;gap:28px;align-items:flex-start}
+  .phone{width:390px;height:844px;border-radius:44px;overflow:hidden;position:relative;display:flex;flex-direction:column;box-shadow:0 30px 60px -30px #0007,0 0 0 10px #111}
+  .status{height:44px;flex:none;display:flex;justify-content:space-between;align-items:center;padding:0 28px;font-weight:600;font-size:14px}
+  .scr{flex:1;overflow:hidden;padding:4px 16px 0;display:flex;flex-direction:column;gap:12px}
+  .top{display:flex;justify-content:space-between;align-items:flex-end}
+  .bell{position:relative;width:40px;height:40px;border-radius:12px;display:grid;place-items:center}
+  .bell i{position:absolute;right:9px;top:8px;width:8px;height:8px;border-radius:9px;background:#e8333a}
+  .backb{width:40px;height:40px;display:grid;place-items:center;margin-left:-8px}
+  .list{display:flex;flex-direction:column;gap:8px}
+  .tabs{position:absolute;left:0;right:0;bottom:0;display:flex;padding:8px 0 26px}
+  .tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;opacity:.55} .tab.on{opacity:1}
+  .tab b{font-size:11px;font-weight:600}
+  .caption{text-align:center;font:600 14px system-ui;color:#333;margin-top:14px}
+
+  :root{--bg:#fbfbfc;--card:#fff;--ink:#0d1117;--ink2:#6a7280;--line:#eceef2;--up:#d33a2c;--down:#0f9d58;--down2:#e6f6ee;--accent:#2b59ff}
+  .phone{background:var(--bg);color:var(--ink);font-family:Geist,sans-serif}
+  .mono{font-family:'Geist Mono',monospace;font-variant-numeric:tabular-nums}
+  h1{font-size:28px;font-weight:700;margin:0;letter-spacing:-.03em}
+  .sub{color:var(--ink2);font-size:13px}
+  .seg{display:flex;border-bottom:1px solid var(--line)}
+  .seg span{flex:1;text-align:center;padding:10px 0;font-size:13.5px;font-weight:600;color:var(--ink2);border-bottom:2px solid transparent}
+  .seg span.on{color:var(--ink);border-color:var(--ink)}
+  .cats{display:flex;gap:6px}
+  .cats span{flex:1;text-align:center;padding:8px 0;border-radius:10px;font-size:12.5px;font-weight:600;background:#f1f2f5;color:var(--ink2)}
+  .cats span.on{background:var(--ink);color:#fff}
+  .tick{display:grid;grid-template-columns:1fr 92px 86px;gap:2px 10px;align-items:center;padding:12px 2px;border-bottom:1px solid var(--line)}
+  .nm{font-weight:650;font-size:15px}
+  .chg{grid-row:span 2;text-align:right}
+  .chg .p{font-size:16px;font-weight:600}
+  .down{display:inline-block;background:var(--down2);color:var(--down);font-weight:700;font-size:12.5px;border-radius:6px;padding:2px 6px;margin-top:3px}
+  .spark{grid-row:span 2;color:var(--down)}
+  .tabs{background:var(--card);border-top:1px solid var(--line)} .tab.on{color:var(--ink)}
+  .big{font-size:40px;font-weight:700;letter-spacing:-.03em}
+  .btn{flex:1;text-align:center;padding:12px;border-radius:12px;font-weight:700;font-size:14px;background:var(--ink);color:#fff}
+  .btn.ghost{background:var(--card);color:var(--ink);border:1px solid var(--line)}
+  .tbl{width:100%;border-collapse:collapse;font-size:13px}
+  .tbl td{padding:9px 2px;border-bottom:1px solid var(--line)} .tbl td:last-child{text-align:right}
+  .tbl tr.best td{background:#f3f6ff}
+  .badge{font-size:12px;font-weight:700;border-radius:6px;padding:2px 6px}
+  .b-up{background:#fdeceb;color:var(--up)} .b-down{background:var(--down2);color:var(--down)}
+  .pill{display:flex;justify-content:space-between;align-items:center;padding:12px 2px;border-bottom:1px solid var(--line)}
+  .chart{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px}
+  </style></head><body><div class="sheet">
+<h2>3. Notowania</h2><p class="pitch">Ceny jak kursy na giełdzie: przy każdej promocji mały wykres pokazuje, kiedy cena spadła, a zielone i czerwone zmiany od razu mówią, co tanieje. Wymaga zapisywania historii cen w snapshocie (do zrobienia).</p>
+<div class="phones"><div><div class="phone"><div class="status"><span>14:05</span><span>●●● ▮</span></div><div class="scr">
+    <div class="top"><div><h1>Rynek</h1><div class="sub">Ola · 96 zniżek · 4 min temu</div></div><span class="bell"><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg><i></i></span></div>
+    <div class="cats"><span class="on">Wszystko</span><span class="">Tekst</span><span class="">Kod</span><span class="">Obraz</span><span class="">Wideo</span></div>
+    <div class="seg"><span class="on">Zniżki 96</span><span>Obniżki 0</span><span>Darmowe 15</span></div>
+    <div class="list" style="gap:0">
+      <div class="tick"><span class="nm">GLM 5.3</span><svg class="spark" width="92" height="34" viewBox="0 0 92 34" aria-hidden="true"><path d="M0 6 H85.4 V9.1 H92" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="90.5" cy="9.1" r="2.5" fill="currentColor"/></svg><span class="chg"><span class="p mono">0.199</span><br><span class="down mono">▼ 86%</span></span>
+      <span class="sub">Baidu · 1 d</span></div>
+      <div class="tick"><span class="nm">Mercury 2.5</span><svg class="spark" width="92" height="34" viewBox="0 0 92 34" aria-hidden="true"><path d="M0 6 H85.4 V10.4 H92" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="90.5" cy="10.4" r="2.5" fill="currentColor"/></svg><span class="chg"><span class="p mono">0.04</span><br><span class="down mono">▼ 80%</span></span>
+      <span class="sub">Inception · 1 d</span></div>
+      <div class="tick"><span class="nm">Qwen3 235B A22B Instruct 2507</span><svg class="spark" width="92" height="34" viewBox="0 0 92 34" aria-hidden="true"><path d="M0 6 H85.4 V11.5 H92" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="90.5" cy="11.5" r="2.5" fill="currentColor"/></svg><span class="chg"><span class="p mono">0.087</span><br><span class="down mono">▼ 75%</span></span>
+      <span class="sub">GMICloud · 1 d</span></div>
+      <div class="tick"><span class="nm">DeepSeek V4 Pro 0423</span><svg class="spark" width="92" height="34" viewBox="0 0 92 34" aria-hidden="true"><path d="M0 6 H85.4 V11.7 H92" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="90.5" cy="11.7" r="2.5" fill="currentColor"/></svg><span class="chg"><span class="p mono">0.446</span><br><span class="down mono">▼ 74%</span></span>
+      <span class="sub">StreamLake · 1 d</span></div>
+      <div class="tick"><span class="nm">DeepSeek V4 Pro 0423</span><svg class="spark" width="92" height="34" viewBox="0 0 92 34" aria-hidden="true"><path d="M0 6 H85.4 V11.7 H92" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="90.5" cy="11.7" r="2.5" fill="currentColor"/></svg><span class="chg"><span class="p mono">0.448</span><br><span class="down mono">▼ 74%</span></span>
+      <span class="sub">Baidu · 1 d</span></div>
+      <div class="tick"><span class="nm">Ling 3.0 Flash VL</span><svg class="spark" width="92" height="34" viewBox="0 0 92 34" aria-hidden="true"><path d="M0 6 H85.4 V12.2 H92" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="90.5" cy="12.2" r="2.5" fill="currentColor"/></svg><span class="chg"><span class="p mono">0.021</span><br><span class="down mono">▼ 72%</span></span>
+      <span class="sub">Novita · 1 d</span></div></div>
+    <nav class="tabs "><span class="tab on"><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5 8.5 3H21v18H8.5L3 15.5z"/><circle cx="8.5" cy="12" r="1.6"/></svg><b>Promocje</b></span><span class="tab "><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg><b>Szukaj</b></span><span class="tab "><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 2.7 5.6 6.1.8-4.5 4.2 1.1 6.1L12 16.8l-5.4 2.9 1.1-6.1-4.5-4.2 6.1-.8z"/></svg><b>Moje</b></span><span class="tab "><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.2-4 4.3-6 8-6s6.8 2 8 6"/></svg><b>Profil</b></span></nav></div></div><div class="caption">Promocje</div></div><div><div class="phone"><div class="status"><span>14:05</span><span>●●● ▮</span></div><div class="scr">
+    <div class="top"><span class="backb"><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 5-7 7 7 7"/></svg></span><span class="bell"><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 2.7 5.6 6.1.8-4.5 4.2 1.1 6.1L12 16.8l-5.4 2.9 1.1-6.1-4.5-4.2 6.1-.8z"/></svg></span></div>
+    <div><div class="sub">Z.ai · Tekst, Kod · 1M</div><h1>GLM 5.2</h1></div>
+    <div><span class="big mono">5.10 $</span> <span class="sub">/ mies. u CrofAI</span><br><span class="badge b-down mono">▼ 30.00 $ vs najdroższy</span></div>
+    <div class="chart"><svg class="spark" width="322" height="70" viewBox="0 0 322 70" aria-hidden="true"><path d="M0 6 H207.0 V29.2 H322" fill="none" stroke="#0f9d58" stroke-width="2"/><circle cx="320.5" cy="29.2" r="2.5" fill="#0f9d58"/></svg><div class="sub" style="display:flex;justify-content:space-between"><span>14 dni temu</span><span>zniżka −60% od 5 dni</span><span>dziś</span></div></div>
+    <div style="display:flex;gap:8px"><span class="btn">Używam</span><span class="btn ghost">Obserwuj</span></div>
+    <table class="tbl mono"><tr class="best"><td style="font-family:Geist;font-weight:600">CrofAI</td><td>0.3/1.05</td><td></td><td><b>5.10 $</b></td></tr><tr class=""><td style="font-family:Geist;font-weight:600">Decart</td><td>0.26/1.60</td><td><span class="badge b-down">−60%</span></td><td><b>5.80 $</b></td></tr><tr class=""><td style="font-family:Geist;font-weight:600">InferenceNet</td><td>0.198/2.40</td><td></td><td><b>6.78 $</b></td></tr><tr class=""><td style="font-family:Geist;font-weight:600">NanoGPT</td><td>0.42/1.32</td><td></td><td><b>6.84 $</b></td></tr></table>
+    <nav class="tabs "><span class="tab "><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5 8.5 3H21v18H8.5L3 15.5z"/><circle cx="8.5" cy="12" r="1.6"/></svg><b>Promocje</b></span><span class="tab on"><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg><b>Szukaj</b></span><span class="tab "><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 2.7 5.6 6.1.8-4.5 4.2 1.1 6.1L12 16.8l-5.4 2.9 1.1-6.1-4.5-4.2 6.1-.8z"/></svg><b>Moje</b></span><span class="tab "><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.2-4 4.3-6 8-6s6.8 2 8 6"/></svg><b>Profil</b></span></nav></div></div><div class="caption">Karta modelu</div></div><div><div class="phone"><div class="status"><span>14:05</span><span>●●● ▮</span></div><div class="scr">
+    <div class="top"><div><h1>Portfolio</h1><div class="sub">3 używane · 3 obserwowane</div></div></div>
+    <div><span class="sub">Oszczędność miesięczna</span><br><span class="big mono" style="color:var(--down)">41.30 $</span></div>
+    <div class="seg"><span class="on">Używam</span><span>Obserwuję</span><span>Alerty 3</span></div>
+    <div>
+      <div class="pill"><div><div style="font-weight:650">GLM 5.2</div><div class="sub">Novita · <span class="mono">0.65 / 2.04</span></div></div>
+      <div style="text-align:right"><span class="badge b-up">kończy się · 6/7 d</span><div class="sub" style="margin-top:4px">DeepInfra −13%</div></div></div>
+      <div class="pill"><div><div style="font-weight:650">DeepSeek V4.1 Flash</div><div class="sub">StreamLake · <span class="mono">0.300 / 1.20</span></div></div>
+      <div style="text-align:right"><span class="badge b-up">▲ koniec promocji</span><div class="sub" style="margin-top:4px">DeepInfra −47%</div></div></div>
+      <div class="pill"><div><div style="font-weight:650">Kimi K3</div><div class="sub">Moonshot AI · <span class="mono">0.60 / 2.50</span></div></div>
+      <div style="text-align:right"><span class="badge b-down">najtaniej</span></div></div></div>
+    <nav class="tabs "><span class="tab "><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5 8.5 3H21v18H8.5L3 15.5z"/><circle cx="8.5" cy="12" r="1.6"/></svg><b>Promocje</b></span><span class="tab "><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg><b>Szukaj</b></span><span class="tab on"><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 2.7 5.6 6.1.8-4.5 4.2 1.1 6.1L12 16.8l-5.4 2.9 1.1-6.1-4.5-4.2 6.1-.8z"/></svg><b>Moje</b></span><span class="tab "><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.2-4 4.3-6 8-6s6.8 2 8 6"/></svg><b>Profil</b></span></nav></div></div><div class="caption">Moje</div></div></div>
+</div></body></html>
