@@ -1,10 +1,10 @@
 import { useMemo, useState } from 'react';
 import { FlatList, Pressable, RefreshControl, StyleSheet, View } from 'react-native';
-import { collectDeals, timeAgo } from '../../../core/pricing.js';
+import { collectDeals } from '../../../core/pricing.js';
 import { isPro, viewFilter } from '../filters';
 import { Button, Empty, Segmented, T } from '../ui';
 import Icon from '../icons';
-import { BellButton, CAT_LABEL, DealCard, Header, styles } from '../parts';
+import { BellButton, CAT_LABEL, DealCard, Header, PriceStatus, styles } from '../parts';
 import { radius, space, useTheme } from '../theme';
 import { useProfile } from '../profile';
 
@@ -60,7 +60,7 @@ function Tile({ cat, count, best, type, on, dim, onPress, wide }) {
   );
 }
 
-export default function Deals({ snapshot, refreshing, onRefresh, onOpen, onBell, bellDot }) {
+export default function Deals({ snapshot, refreshing, onRefresh, onOpen, onBell, bellDot, priceStatus }) {
   const t = useTheme();
   const { profile, update } = useProfile();
   const [cat, setCat] = useState(profile.cats.length === 1 && profile.cats[0] !== 'all' ? profile.cats[0] : 'all');
@@ -86,10 +86,11 @@ export default function Deals({ snapshot, refreshing, onRefresh, onOpen, onBell,
   const header = (
     <View style={{ gap: space[3], marginBottom: space[1] }}>
       <Header
-        kicker={snapshot.partial ? 'Ceny bazowe, pełne zestawienie chwilowo niedostępne' : `${profile.name ? `Cześć ${profile.name}, ` : ''}ceny sprzed ${timeAgo(snapshot.generatedAt).replace(' temu', '')}`}
+        kicker={profile.name ? `Cześć ${profile.name}` : null}
         title="Co dziś tanieje?"
         right={<BellButton onPress={onBell} dot={bellDot} />}
       />
+      <PriceStatus snapshot={snapshot} status={priceStatus} onRefresh={onRefresh} />
       <View style={s.grid}>
         <Tile wide cat="all" type={type} {...stat('all')} on={cat === 'all'} onPress={() => setCat('all')} />
         {['text', 'coding', 'image', 'video'].map((c) => (
@@ -112,7 +113,7 @@ export default function Deals({ snapshot, refreshing, onRefresh, onOpen, onBell,
       renderItem={({ item }) => <DealCard deal={item} pro={isPro(profile)} watched={watched.has(item.modelId)} onPress={() => onOpen(item.modelId)} />}
       contentContainerStyle={styles.list}
       initialNumToRender={10}
-      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={t.ink2} colors={[t.text]} />}
+      refreshControl={<RefreshControl refreshing={false} onRefresh={onRefresh} tintColor={t.ink2} colors={[t.text]} />}
       ListHeaderComponent={header}
       ListEmptyComponent={
         profile.onlyFavorites && all.some((d) => d.type === type && inCat(d, cat)) ? (

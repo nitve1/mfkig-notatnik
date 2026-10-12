@@ -1,85 +1,173 @@
+// Ceny w apce. Źródła, od najświeższego:
+// 1. sprawdzenie na telefonie (OpenRouter, Vercel, Requesty) przy otwarciu i co 30 min,
+// 2. zestawienie z GitHub (raz na kilka godzin: cenniki bezpośrednie i dłuższa historia promocji),
+// 3. zapis na telefonie z poprzedniego razu,
+// 4. zestawienie wbudowane w apkę (z dnia buildu), gdy nie ma internetu przy pierwszym starcie.
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { AppState, Platform } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import Constants from 'expo-constants';
-import { liveSnapshot } from '../../core/pricing.js';
+import * as Network from 'expo-network';
+import { buildSnapshot, refreshModels } from '../../core/snapshot.js';
+import { readMeta, readSnapshot, writeMeta, writeSnapshot } from './store';
 
 const DEFAULT_URLS = [
   'https://raw.githubusercontent.com/nitve1/mfkig-notatnik/tanitoken-data/snapshot.json',
   'https://raw.githubusercontent.com/nitve1/mfkig-notatnik/claude/hopeful-gauss-8su545/tanitoken/data/snapshot.json',
   'https://nitve1.github.io/mfkig-notatnik/tanitoken/data/snapshot.json',
 ];
-// Podgląd web (scripts/web-preview.mjs) ma snapshot obok strony.
+// Podgląd web (scripts/web-preview.mjs) ma snapshot obok strony i nie może pytać innych serwerów.
 const SNAPSHOT_URLS = [
   ...(Platform.OS === 'web' ? ['snapshot.json'] : []),
   ...(Constants.expoConfig?.extra?.snapshotUrls ?? DEFAULT_URLS),
 ];
-const CACHE_KEY = 'tanitoken:snapshot:v2';
-// Zestawienie z dnia buildu, gdy nie ma internetu przy pierwszym uruchomieniu.
 const BUNDLED = require('../../data/snapshot.json');
-const REFRESH_MS = 5 * 60 * 1000;
 
-// Gałąź danych (świeża) -> GitHub Pages (kopia z repo) -> OpenRouter na żywo (tylko ceny bazowe).
-export async function fetchSnapshot() {
+export const LIVE_EVERY_MS = 30 * 60 * 1000;
+const REMOTE_EVERY_MS = 6 * 60 * 60 * 1000;
+const PARTIAL_EVERY_MS = 5 * 60 * 1000;
+const TICK_MS = 60 * 1000;
+// Web: tylko lokalny podgląd do testów (opublikowana strona nie może pytać innych serwerów).
+const CAN_LIVE = Platform.OS !== 'web' || (typeof location !== 'undefined' && location.hostname === 'localhost');
+
+export async function getJson(url) {
+  const r = await fetch(url, { headers: { Accept: 'application/json' } });
+  if (!r.ok) throw new Error(`HTTP ${r.status}`);
+  return r.json();
+}
+
+const newer = (a, b) => !b || (a && Date.parse(a.generatedAt) > Date.parse(b.generatedAt));
+
+export async function fetchRemoteSnapshot() {
   for (const url of SNAPSHOT_URLS) {
     try {
-      const r = await fetch(`${url}?t=${Math.floor(Date.now() / 60000)}`);
-      if (!r.ok) continue;
-      const s = await r.json();
-      if (s.v === 2) return s;
+      const s = await getJson(`${url}?t=${Math.floor(Date.now() / 60000)}`);
+      if (s?.v === 2) return s;
     } catch {
       // następne źródło
     }
   }
-  // Bez sieci do GitHub: zestawienie wbudowane w apkę (z dnia buildu) ma promocje,
-  // a samo /models z OpenRouter tylko ceny bazowe.
-  if (BUNDLED?.v === 2) return BUNDLED;
-  return liveSnapshot();
+  return null;
 }
 
-export async function cachedSnapshot() {
+// Czy wolno teraz zrobić pełne sprawdzenie (ustawienie "tylko Wi-Fi").
+export async function liveAllowed(wifiOnly) {
+  if (!CAN_LIVE) return false;
   try {
-    const raw = await AsyncStorage.getItem(CACHE_KEY);
-    return raw ? JSON.parse(raw) : null;
+    const st = await Network.getNetworkStateAsync();
+    if (st.isConnected === false || st.isInternetReachable === false) return false;
+    if (wifiOnly && st.type !== Network.NetworkStateType.WIFI && st.type !== Network.NetworkStateType.ETHERNET) return false;
+    return true;
   } catch {
-    return null;
+    return !wifiOnly;
   }
 }
 
-// Snapshot cen: od razu z cache, potem z sieci; odświeżanie co 5 min i po powrocie do apki.
-export function useSnapshot() {
+// Jeden krok odświeżenia, wspólny dla apki i zadania w tle.
+export async function refreshPrices(current, { force = false, wifiOnly = false, onProgress, watchIds = null } = {}) {
+  const meta = await readMeta();
+  const now = Date.now();
+  let snap = current ?? (await readSnapshot()) ?? BUNDLED;
+  if (newer(BUNDLED, snap)) snap = BUNDLED;
+  let changed = false;
+  let error = null;
+
+  // Zestawienie z GitHub: na start bez danych, potem co kilka godzin albo gdy nie wolno sprawdzać samemu.
+  const canLive = await liveAllowed(wifiOnly);
+  const remoteDue = !meta.remoteAt || now - meta.remoteAt > REMOTE_EVERY_MS || !canLive;
+  if (remoteDue && (force || !meta.remoteAt || now - (meta.remoteTryAt ?? 0) > 15 * 60 * 1000)) {
+    await writeMeta({ remoteTryAt: now });
+    const remote = await fetchRemoteSnapshot();
+    if (remote) {
+      await writeMeta({ remoteAt: now });
+      if (newer(remote, snap)) {
+        snap = remote;
+        changed = true;
+      }
+    }
+  }
+
+  if (canLive) {
+    const fullDue = force || !meta.liveAt || now - meta.liveAt > LIVE_EVERY_MS;
+    try {
+      if (fullDue) {
+        snap = await buildSnapshot({ getJson, prev: snap, base: snap, includeDirect: false, concurrency: 8, onProgress });
+        snap.fullAt = snap.generatedAt;
+        await writeMeta({ liveAt: now });
+        changed = true;
+      } else if (watchIds?.length && (force || !meta.partialAt || now - meta.partialAt > PARTIAL_EVERY_MS)) {
+        // Między pełnymi sprawdzeniami: tylko obserwowane modele (kilka zapytań).
+        snap = await refreshModels(snap, watchIds, { getJson });
+        await writeMeta({ partialAt: now });
+        changed = true;
+      }
+    } catch (e) {
+      error = e.message;
+    }
+  } else if (!CAN_LIVE) {
+    error = null; // web: tylko zestawienie z pliku
+  } else {
+    error = wifiOnly ? 'wifi-only' : 'offline';
+  }
+
+  if (changed) await writeSnapshot(snap);
+  return { snapshot: snap, changed, error, live: canLive };
+}
+
+// Stan cen w apce: od razu z pamięci telefonu, potem odświeżanie.
+export function useSnapshot({ wifiOnly = false, watchIds = [] } = {}) {
   const [snapshot, setSnapshot] = useState(null);
   const [error, setError] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
+  const [progress, setProgress] = useState(null);
+  const [meta, setMeta] = useState({});
   const busy = useRef(false);
+  const current = useRef(null);
+  const opts = useRef({ wifiOnly, watchIds });
+  opts.current = { wifiOnly, watchIds };
 
-  const refresh = useCallback(async () => {
+  const refresh = useCallback(async (force = false) => {
     if (busy.current) return;
     busy.current = true;
     setRefreshing(true);
     try {
-      const s = await fetchSnapshot();
-      setSnapshot(s);
-      setError(null);
-      if (!s.partial) AsyncStorage.setItem(CACHE_KEY, JSON.stringify(s)).catch(() => {});
-    } catch (e) {
-      setError(e.message);
+      const res = await refreshPrices(current.current, {
+        force,
+        wifiOnly: opts.current.wifiOnly,
+        watchIds: opts.current.watchIds,
+        onProgress: (p) => setProgress(p),
+      });
+      if (res.changed || !current.current) {
+        current.current = res.snapshot;
+        setSnapshot(res.snapshot);
+      }
+      setError(res.error);
+      setMeta(await readMeta());
     } finally {
       busy.current = false;
       setRefreshing(false);
+      setProgress(null);
     }
   }, []);
 
   useEffect(() => {
-    cachedSnapshot().then((s) => s && setSnapshot((cur) => cur ?? s));
-    refresh();
-    const timer = setInterval(refresh, REFRESH_MS);
-    const sub = AppState.addEventListener('change', (st) => st === 'active' && refresh());
+    let alive = true;
+    readSnapshot().then((s) => {
+      if (!alive) return;
+      const start = newer(BUNDLED, s) ? BUNDLED : s;
+      current.current = start;
+      setSnapshot(start);
+      readMeta().then(setMeta);
+      refresh(false);
+    });
+    // Co minutę sprawdzamy, czy minęło 30 min od ostatniego pełnego sprawdzenia.
+    const timer = setInterval(() => AppState.currentState === 'active' && refresh(false), TICK_MS);
+    const sub = AppState.addEventListener('change', (st) => st === 'active' && refresh(false));
     return () => {
+      alive = false;
       clearInterval(timer);
       sub.remove();
     };
   }, [refresh]);
 
-  return { snapshot, error, refreshing, refresh };
+  return { snapshot, error, refreshing, progress, meta, refresh: () => refresh(true) };
 }

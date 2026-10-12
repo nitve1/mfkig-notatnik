@@ -6,7 +6,7 @@ import * as TaskManager from 'expo-task-manager';
 import * as BackgroundTask from 'expo-background-task';
 import { computeAlerts } from '../../core/pricing.js';
 import { compareFilter } from './filters';
-import { fetchSnapshot } from './data';
+import { refreshPrices } from './data';
 import { readProfile, writeProfile } from './profile';
 
 export const TASK = 'tanitoken-price-check';
@@ -54,7 +54,11 @@ TaskManager.defineTask(TASK, async () => {
   try {
     const profile = await readProfile();
     if (!profile.notify.enabled || !profile.watchlist.length) return BackgroundTask.BackgroundTaskResult.Success;
-    const snapshot = await fetchSnapshot();
+    // Ceny obserwowanych modeli (kilka zapytań), a co 30 min pełne sprawdzenie, jeśli wolno (Wi-Fi).
+    const { snapshot } = await refreshPrices(null, {
+      wifiOnly: profile.refresh?.wifiOnly,
+      watchIds: profile.watchlist.map((w) => w.modelId),
+    });
     const next = await checkAndNotify(snapshot, profile);
     if (next !== profile) await writeProfile(next);
     return BackgroundTask.BackgroundTaskResult.Success;

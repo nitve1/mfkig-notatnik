@@ -18,6 +18,7 @@ export const DEFAULT_PROFILE = {
   onboarded: false,
   name: '',
   theme: 'system', // 'system' | 'light' | 'dark'
+  refresh: { wifiOnly: false }, // pełne sprawdzenie cen (~3 MB) tylko przez Wi-Fi
   mode: 'simple', // 'simple' = tylko platformy, 'pro' = też ~200 dostawców bezpośrednich
   cats: ['all'],
   providers: [], // ulubieni dostawcy (nazwy jak w ofertach)
@@ -33,6 +34,7 @@ export const DEFAULT_PROFILE = {
 function merge(raw) {
   const p = { ...DEFAULT_PROFILE, ...raw };
   p.notify = { ...DEFAULT_PROFILE.notify, ...(raw?.notify ?? {}) };
+  p.refresh = { ...DEFAULT_PROFILE.refresh, ...(raw?.refresh ?? {}) };
   p.usage = { ...DEFAULT_USAGE, ...(raw?.usage ?? {}) };
   return p;
 }

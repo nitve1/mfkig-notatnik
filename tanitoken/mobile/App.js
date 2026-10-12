@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ActivityIndicator, BackHandler, Pressable, StyleSheet, View } from 'react-native';
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
@@ -55,7 +55,9 @@ function Main() {
   const t = useTheme();
   const insets = useSafeAreaInsets();
   const { profile, update } = useProfile();
-  const { snapshot, error, refreshing, refresh } = useSnapshot();
+  const watchIds = useMemo(() => profile?.watchlist.map((w) => w.modelId) ?? [], [profile?.watchlist]);
+  const { snapshot, error, refreshing, progress, meta, refresh } = useSnapshot({ wifiOnly: profile?.refresh?.wifiOnly, watchIds });
+  const priceStatus = { refreshing, progress, meta, error };
   const [intro, setIntro] = useState(true);
   const [tab, setTab] = useState('deals');
   const [openId, setOpenId] = useState(null);
@@ -70,11 +72,12 @@ function Main() {
 
   // Alerty przy każdym nowym zestawieniu cen (w tle robi to zadanie z alerts.js).
   useEffect(() => {
-    if (!ready || snapshot.partial || !profile.onboarded || !profile.watchlist.length) return;
+    if (!ready || !profile.onboarded || !profile.watchlist.length) return;
     checkAndNotify(snapshot, profile).then((next) => {
       if (next !== profile) update((cur) => ({ ...cur, sent: next.sent, alerts: next.alerts }));
     });
   }, [snapshot?.generatedAt, profile?.watchlist, profile?.onboarded]); // eslint-disable-line react-hooks/exhaustive-deps
+
 
   // Dotknięcie powiadomienia otwiera model (także gdy apka startuje z powiadomienia).
   useEffect(() => {
@@ -127,12 +130,12 @@ function Main() {
     body = <Onboarding snapshot={snapshot} insets={insets} />;
   } else {
     const model = openId ? snapshot.models.find((m) => m.id === openId) : null;
-    const common = { snapshot, refreshing, onRefresh: refresh, onOpen: setOpenId };
+    const common = { snapshot, refreshing, onRefresh: refresh, onOpen: setOpenId, priceStatus };
     if (model) body = <Model key={model.id} model={model} snapshot={snapshot} onBack={() => setOpenId(null)} />;
     else if (tab === 'deals') body = <Deals {...common} onBell={() => changeTab('mine')} bellDot={newAlerts} />;
     else if (tab === 'search') body = <Search {...common} />;
     else if (tab === 'mine') body = <Mine {...common} onGoSearch={() => changeTab('search')} onGoProfile={() => changeTab('profile')} />;
-    else body = <Profile snapshot={snapshot} />;
+    else body = <Profile snapshot={snapshot} priceStatus={priceStatus} onRefresh={refresh} />;
   }
 
   return (

@@ -1,6 +1,6 @@
-import { StyleSheet, View } from 'react-native';
-import { CATEGORIES, formatUsd, platformOf, promoAgeDays } from '../../core/pricing.js';
-import { Card, CatChip, IconButton, PctBadge, Row, T } from './ui';
+import { Pressable, StyleSheet, View } from 'react-native';
+import { CATEGORIES, formatUsd, platformOf, promoAgeDays, timeAgo } from '../../core/pricing.js';
+import { Card, CatChip, IconButton, PctBadge, Progress, Row, T } from './ui';
 import { mainCat, space, useTheme } from './theme';
 
 export const CAT_LABEL = Object.fromEntries(CATEGORIES.map((c) => [c.key, c.label]));
@@ -74,6 +74,37 @@ export function Header({ kicker, title, right }) {
 
 export function BellButton({ onPress, dot }) {
   return <IconButton name="bell" label="Alerty" onPress={onPress} dot={dot} />;
+}
+
+// Stan cen: trwa sprawdzanie / kiedy ostatnio / czemu nie sprawdzamy. Dotknięcie = sprawdź teraz.
+export function PriceStatus({ snapshot, status, onRefresh }) {
+  const t = useTheme();
+  const { refreshing, progress, error } = status ?? {};
+  const age = snapshot ? timeAgo(snapshot.generatedAt) : '';
+  let text;
+  let color = t.save;
+  if (refreshing) {
+    text = progress != null ? `Sprawdzam ceny… ${Math.round(progress * 100)}%` : 'Sprawdzam ceny…';
+    color = t.text;
+  } else if (error === 'wifi-only') {
+    text = `Czekam na Wi-Fi, ceny sprawdzone ${age}`;
+    color = t.video;
+  } else if (error) {
+    text = `Brak połączenia, ceny sprawdzone ${age}`;
+    color = t.deal;
+  } else {
+    text = `Ceny sprawdzone ${age}`;
+  }
+  return (
+    <Pressable onPress={onRefresh} disabled={refreshing} accessibilityRole="button" accessibilityHint="Sprawdza ceny teraz" style={{ gap: 6 }}>
+      <Row style={{ gap: 8 }}>
+        <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: color }} />
+        <T kind="small" color="ink2" style={{ flex: 1 }}>{text}</T>
+        {!refreshing ? <T kind="small" style={{ color: t.text }}>Odśwież</T> : null}
+      </Row>
+      {refreshing && progress != null ? <Progress value={progress} color={t.text} /> : null}
+    </Pressable>
+  );
 }
 
 export const styles = StyleSheet.create({

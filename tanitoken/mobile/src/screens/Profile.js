@@ -1,6 +1,6 @@
 import { Alert, Linking, Platform, ScrollView, StyleSheet, TextInput, View } from 'react-native';
 import { Button, Pill, Row, Section, Segmented, T, ToggleRow, MAX_FONT_SCALE } from '../ui';
-import { Header } from '../parts';
+import { Header, PriceStatus } from '../parts';
 import { font, radius, space, useTheme } from '../theme';
 import { exportProfile, importProfile, useProfile } from '../profile';
 import { disableBackground, enableNotifications } from '../alerts';
@@ -27,7 +27,7 @@ export const THEME_OPTIONS = [
   { value: 'dark', label: 'Ciemny', icon: 'moon' },
 ];
 
-export default function Profile({ snapshot }) {
+export default function Profile({ snapshot, priceStatus, onRefresh }) {
   const t = useTheme();
   const { profile, update, toggleProvider, replace, reset } = useProfile();
   const n = profile.notify;
@@ -82,6 +82,19 @@ export default function Profile({ snapshot }) {
           <Segmented options={THEME_OPTIONS} value={profile.theme ?? 'system'} onChange={(theme) => update({ theme })} />
           <T kind="small" color="ink2">Systemowy przełącza się razem z trybem nocnym telefonu.</T>
         </View>
+      </Section>
+
+      <Section title="Sprawdzanie cen">
+        <View style={{ paddingVertical: space[3] }}>
+          <PriceStatus snapshot={snapshot} status={priceStatus} onRefresh={onRefresh} />
+        </View>
+        <ToggleRow
+          title="Pełne sprawdzenie tylko przez Wi-Fi"
+          body="Gdy apka jest otwarta, co 30 minut sprawdzamy wszystkie ceny (ok. 3 MB). Obserwowane modele sprawdzamy zawsze, to kilka kB."
+          value={profile.refresh?.wifiOnly ?? false}
+          onChange={(wifiOnly) => update({ refresh: { ...profile.refresh, wifiOnly } })}
+          last
+        />
       </Section>
 
       <Section title="Tryb">
