@@ -14,9 +14,12 @@ const KINDS = StyleSheet.create({
   tiny: { fontFamily: font.textSemi, fontSize: 11.5, lineHeight: 15 },
 });
 
+// Duży tekst systemowy (Dynamic Type) skaluje się, ale najwyżej 1,3x, żeby nie rozsadzić układu.
+export const MAX_FONT_SCALE = 1.3;
+
 export function T({ style, kind = 'body', color, ...rest }) {
   const t = useTheme();
-  return <Text {...rest} style={[KINDS[kind], { color: color ? t[color] ?? color : t.ink }, style]} />;
+  return <Text maxFontSizeMultiplier={MAX_FONT_SCALE} {...rest} style={[KINDS[kind], { color: color ? t[color] ?? color : t.ink }, style]} />;
 }
 
 export function Button({ label, onPress, kind = 'ink', icon, disabled, style, accessibilityHint }) {

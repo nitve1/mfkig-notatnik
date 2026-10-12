@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { Alert, KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
-import { Button, Row, Section, Segmented, T, ToggleRow } from '../ui';
+import { Button, Row, Section, Segmented, T, ToggleRow, MAX_FONT_SCALE } from '../ui';
 import Icon from '../icons';
 import { ThemeContext, font, radius, space, useTheme } from '../theme';
 import { importProfile, useProfile } from '../profile';
 import { enableNotifications } from '../alerts';
 import ProviderPicker from './ProviderPicker';
-import { THEME_OPTIONS } from './Profile';
+import { MODE_NOTE, MODE_OPTIONS, THEME_OPTIONS } from './Profile';
 
 const STEPS = 4;
 const CATS = [
@@ -46,6 +46,7 @@ function Body({ snapshot, insets, draft, set, step, setStep, finish }) {
         <View style={[s.card, { backgroundColor: t.card, marginTop: space[5] }]}>
           <T kind="strong">Jak mamy się do Ciebie zwracać?</T>
           <TextInput
+          maxFontSizeMultiplier={MAX_FONT_SCALE}
             value={draft.name}
             onChangeText={(name) => set({ name })}
             placeholder="Imię lub pseudonim, opcjonalnie"
@@ -98,9 +99,12 @@ function Body({ snapshot, insets, draft, set, step, setStep, finish }) {
     body = (
       <>
         <T kind="display">U kogo masz konto?</T>
-        <T color="ink2" style={{ marginTop: space[2] }}>Zaznacz platformy i dostawców, u których płacisz. Wyróżnimy ich oferty i pozwolimy filtrować tylko do nich.</T>
+        <T color="ink2" style={{ marginTop: space[2] }}>Wybierz tryb i zaznacz, gdzie płacisz. Wyróżnimy te oferty i pozwolimy filtrować tylko do nich.</T>
         <View style={[s.card, { backgroundColor: t.card, marginTop: space[4] }]}>
+          <Segmented options={MODE_OPTIONS} value={draft.mode ?? 'simple'} onChange={(mode) => set({ mode })} />
+          <T kind="small" color="ink2" style={{ marginBottom: space[2] }}>{MODE_NOTE[draft.mode ?? 'simple']}</T>
           <ProviderPicker
+            pro={draft.mode === 'pro'}
             snapshot={snapshot}
             selected={draft.providers}
             onToggle={(name) => set({ providers: draft.providers.includes(name) ? draft.providers.filter((x) => x !== name) : [...draft.providers, name] })}

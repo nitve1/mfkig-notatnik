@@ -18,6 +18,7 @@ export const DEFAULT_PROFILE = {
   onboarded: false,
   name: '',
   theme: 'system', // 'system' | 'light' | 'dark'
+  mode: 'simple', // 'simple' = tylko platformy, 'pro' = też ~200 dostawców bezpośrednich
   cats: ['all'],
   providers: [], // ulubieni dostawcy (nazwy jak w ofertach)
   onlyFavorites: false,

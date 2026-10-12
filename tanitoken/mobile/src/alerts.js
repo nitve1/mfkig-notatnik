@@ -4,7 +4,8 @@ import { Platform } from 'react-native';
 import * as Notifications from 'expo-notifications';
 import * as TaskManager from 'expo-task-manager';
 import * as BackgroundTask from 'expo-background-task';
-import { computeAlerts, favoriteMatcher } from '../../core/pricing.js';
+import { computeAlerts } from '../../core/pricing.js';
+import { compareFilter } from './filters';
 import { fetchSnapshot } from './data';
 import { readProfile, writeProfile } from './profile';
 
@@ -16,14 +17,10 @@ Notifications.setNotificationHandler({
   handleNotification: async () => ({ shouldShowBanner: true, shouldShowList: true, shouldPlaySound: false, shouldSetBadge: false }),
 });
 
-// Przy ustawionych ulubionych dostawcach porównujemy ceny tylko z nimi.
-export function favoritesFilter(profile) {
-  return favoriteMatcher(profile?.providers);
-}
 
 export function newAlerts(snapshot, profile) {
   if (!snapshot || !profile) return [];
-  return computeAlerts(snapshot, profile.watchlist, profile.usage, { filter: favoritesFilter(profile) }).filter(
+  return computeAlerts(snapshot, profile.watchlist, profile.usage, { filter: compareFilter(profile) }).filter(
     (a) => !profile.sent[a.id] && profile.notify[PREF[a.kind]] !== false,
   );
 }

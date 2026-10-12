@@ -138,8 +138,11 @@ function Main() {
   return (
     <View style={[s.root, { backgroundColor: t.bg, paddingTop: onboarding ? 0 : insets.top }]}>
       <StatusBar style={t.dark ? 'light' : 'dark'} />
-      <View style={{ flex: 1 }}>{body}</View>
-      {ready && profile.onboarded ? <TabBar tab={tab} onChange={changeTab} bottom={insets.bottom} badge={newAlerts && tab !== 'mine'} /> : null}
+      {/* Stała kolumna: na telefonie pełna szerokość, na tablecie i w przeglądarce max 600 px pośrodku. */}
+      <View style={s.column}>
+        <View style={{ flex: 1 }}>{body}</View>
+        {ready && profile.onboarded ? <TabBar tab={tab} onChange={changeTab} bottom={insets.bottom} badge={newAlerts && tab !== 'mine'} /> : null}
+      </View>
       {intro && profile ? <Intro onDone={endIntro} /> : null}
     </View>
   );
@@ -170,7 +173,8 @@ export default function App() {
 }
 
 const s = StyleSheet.create({
-  root: { flex: 1 },
+  root: { flex: 1, alignItems: 'center', overflow: 'hidden' },
+  column: { flex: 1, width: '100%', maxWidth: 600 },
   center: { flex: 1, alignItems: 'center', justifyContent: 'center' },
   tabbar: { flexDirection: 'row', borderTopWidth: StyleSheet.hairlineWidth, paddingTop: 6 },
   tab: { flex: 1, alignItems: 'center', gap: 2 },

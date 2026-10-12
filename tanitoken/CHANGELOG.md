@@ -25,6 +25,29 @@ Jedno miejsce z historią zmian, decyzjami i otwartymi zadaniami. Aktualizowane 
 | 5 | Po merge'u: ręczne uruchomienie workflow „TaniToken snapshot” (tworzy gałąź `tanitoken-data`) | po merge'u |
 | 6 | Test na prawdziwym telefonie (build EAS), szczególnie zadania w tle i powiadomienia | przed publikacją |
 
+## 2026-10-12 – sesja 3e: sztywny układ i tryb Zwykły / Pro
+
+Uwaga użytkownika: **nie publikować nowej wersji podglądu (artifact), dopóki nie poprosi.** Zmiany są w
+repo, link https://claude.ai/artifact/ChpcuMw9ReTwQSvRt4BsEe pokazuje jeszcze wersję 2.
+
+Sztywny układ (feedback: w podglądzie na iPhonie można było „latać po bokach”):
+- Przyczyna: Safari robi zoom przy fokusie na polu z czcionką < 16 px (wyszukiwarka dostawców miała 15 px)
+  oraz pozwala na pinch-zoom i sprężynowanie strony. Sprawdzone: przy 320 / 375 / 430 px żaden element
+  nie wychodzi poza ekran.
+- Wszystkie pola tekstowe ≥ 16 px. Tekst i pola mają `maxFontSizeMultiplier` 1,3 (Dynamic Type nie
+  rozsadza układu). Na tablecie i w szerokiej przeglądarce treść to kolumna max 600 px pośrodku.
+- Podgląd web (`scripts/web-preview.mjs`): viewport `maximum-scale=1`, blokada gestów pinch,
+  `overscroll-behavior: none`, `body` przypięte (`position: fixed`), `touch-action: pan-x pan-y`.
+
+Tryb Zwykły / Pro (`profile.mode`, domyślnie `simple`):
+- Zwykły: tylko oferty z platform (OpenRouter, Vercel AI Gateway, Requesty). W karcie modelu jeden wiersz
+  na platformę (najtańsza oferta, dopisek „przez Decart”), karty promocji „OpenRouter, przez Baidu”,
+  w wyborze ulubionych tylko platformy.
+- Pro: wszystko jak wcześniej, z ~200 dostawcami bezpośrednimi i każdym wariantem osobno.
+- Wybór w onboardingu (krok „U kogo masz konto?”) i w Profilu (sekcja Tryb).
+- `mobile/src/filters.js`: `modeFilter`, `viewFilter` (tryb + „tylko ulubieni”), `compareFilter`
+  (tryb + ulubieni, do alertów i Moje). `core/pricing.js`: `isPlatformOffer`, `onePerPlatform` (+ test, 11/11).
+
 ## 2026-10-12 – sesja 3d: platformy w ulubionych
 
 - Pytanie użytkownika: czemu na liście dostawców nie ma OpenRouter. Powód: oferty z OpenRouter są

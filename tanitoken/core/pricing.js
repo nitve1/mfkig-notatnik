@@ -222,6 +222,24 @@ export function favoriteMatcher(names) {
   return (o) => set.has(o.provider) || set.has(platformOf(o));
 }
 
+// Tryb Zwykły: tylko oferty z platform. Jeden wiersz na platformę (najtańszy, oferty muszą być posortowane).
+export function isPlatformOffer(o) {
+  return platformOf(o) != null;
+}
+
+export function onePerPlatform(offers, keepKey = null) {
+  const seen = new Set();
+  return offers.filter((o) => {
+    const p = platformOf(o);
+    if (!p) return false;
+    if (offerKey(o) === keepKey) return true;
+    const k = `${o.unit}|${p}`;
+    if (seen.has(k)) return false;
+    seen.add(k);
+    return true;
+  });
+}
+
 // Ile miesięcznie oszczędzam dzięki promocji u dostawcy, którego używam (0 gdy brak promocji).
 export function promoSavings(status, usage = DEFAULT_USAGE) {
   const { used, usedPromo } = status ?? {};

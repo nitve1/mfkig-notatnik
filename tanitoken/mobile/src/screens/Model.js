@@ -2,10 +2,11 @@ import { useEffect, useMemo, useState } from 'react';
 import { Linking, Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
 import {
   SOURCES, UNIT_LABEL, formatContext, formatOfferPrice, formatUsd, isFreeOffer, liveOpenrouterOffers, offerCost,
-  favoriteMatcher, offerKey, onePerProvider, priceBeforeDiscount, sortOffers,
+  favoriteMatcher, offerKey, onePerPlatform, onePerProvider, platformOf, priceBeforeDiscount, sortOffers,
 } from '../../../core/pricing.js';
+import { isPro, modeFilter } from '../filters';
 import { offerLink } from '../../../core/affiliates.js';
-import { Button, Card, CatChip, IconButton, PctBadge, Row, Segmented, Stat, StatusBadge, T } from '../ui';
+import { Button, Card, CatChip, IconButton, PctBadge, Row, Segmented, Stat, StatusBadge, T, MAX_FONT_SCALE } from '../ui';
 import Icon from '../icons';
 import { CAT_LABEL, authorName, daysLabel, shortName } from '../parts';
 import { font, radius, space, useTheme } from '../theme';
@@ -21,6 +22,7 @@ function UsageInput({ label, value, onChange }) {
     <View style={{ flex: 1 }}>
       <T kind="tiny" color="ink2" style={{ marginBottom: 4 }}>{label}</T>
       <TextInput
+          maxFontSizeMultiplier={MAX_FONT_SCALE}
         value={text}
         onChangeText={(v) => {
           setText(v);
@@ -69,12 +71,15 @@ export default function Model({ model: base, snapshot, onBack }) {
 
   const promos = Object.values(snapshot.promos ?? {}).filter((p) => p.modelId === model.id);
   const promoKeys = new Set(promos.map((p) => p.key));
-  const filter = scope === 'fav' ? isFav : scope === 'promo' ? (o) => promoKeys.has(offerKey(o)) : null;
+  const pro = isPro(profile);
+  const modeOnly = modeFilter(profile); // tryb Zwykły: tylko platformy
+  const scoped = scope === 'fav' ? isFav : scope === 'promo' ? (o) => promoKeys.has(offerKey(o)) : null;
+  const filter = modeOnly && scoped ? (o) => modeOnly(o) && scoped(o) : modeOnly ?? scoped;
   const offers = useMemo(
-    () => onePerProvider(sortOffers(model, usage, filter), item?.offerKey),
-    [model, usage, scope, isFav, item?.offerKey], // eslint-disable-line react-hooks/exhaustive-deps
+    () => (pro ? onePerProvider : onePerPlatform)(sortOffers(model, usage, filter), item?.offerKey),
+    [model, usage, scope, isFav, pro, item?.offerKey], // eslint-disable-line react-hooks/exhaustive-deps
   );
-  const allPaid = sortOffers(model, usage).filter((o) => o.unit === model.unit && !isFreeOffer(o));
+  const allPaid = sortOffers(model, usage, modeOnly).filter((o) => o.unit === model.unit && !isFreeOffer(o));
   const best = allPaid[0];
   const worst = allPaid[allPaid.length - 1];
   const used = item?.offerKey ? model.offers.find((o) => offerKey(o) === item.offerKey) : null;
@@ -94,7 +99,7 @@ export default function Model({ model: base, snapshot, onBack }) {
         </Row>
         <T kind="display">{shortName(model.name)}</T>
         <T kind="small" color="ink2">
-          {[authorName(model), model.context ? `${formatContext(model.context)} kontekstu` : null, `${model.offers.length} ofert`].filter(Boolean).join(', ')}
+          {[authorName(model), model.context ? `${formatContext(model.context)} kontekstu` : null, `${modeOnly ? model.offers.filter(modeOnly).length : model.offers.length} ofert`].filter(Boolean).join(', ')}
         </T>
         {model.freeId ? <StatusBadge tone="save" icon="check" label={`Darmowy wariant: ${model.freeId}`} /> : null}
         {model.expires ? <StatusBadge tone="deal" icon="warn" label={`Wycofanie ${model.expires}`} /> : null}
@@ -121,7 +126,7 @@ export default function Model({ model: base, snapshot, onBack }) {
       </Row>
       {used && !picking ? (
         <Card stripe={t.text} style={{ paddingVertical: 10 }}>
-          <T kind="small">Płacisz u <T kind="small" style={{ fontFamily: font.textBold }}>{used.provider}</T>, {formatOfferPrice(used)}. Ostrzeżemy Cię, gdy cena się zmieni.</T>
+          <T kind="small">Płacisz u <T kind="small" style={{ fontFamily: font.textBold }}>{pro ? used.provider : platformOf(used) ?? used.provider}</T>, {formatOfferPrice(used)}. Ostrzeżemy Cię, gdy cena się zmieni.</T>
         </Card>
       ) : null}
       {picking ? (
@@ -160,7 +165,7 @@ export default function Model({ model: base, snapshot, onBack }) {
           onChange={setScope}
           options={[
             { value: 'all', label: 'Wszyscy' },
-            { value: 'fav', label: 'Ulubieni', count: favCount ? model.offers.filter(isFav).length : null },
+            { value: 'fav', label: 'Ulubieni', count: favCount ? model.offers.filter((o) => isFav(o) && (!modeOnly || modeOnly(o))).length : null },
             { value: 'promo', label: 'Z promocją', count: promos.filter((p) => p.type !== 'free').length },
           ]}
         />
@@ -180,14 +185,14 @@ export default function Model({ model: base, snapshot, onBack }) {
             key={k}
             stripe={isUsed ? t.text : isBest ? t.save : t.line}
             onPress={picking && !other ? () => { setUsing(model.id, k); setPicking(false); } : undefined}
-            accessibilityLabel={picking ? `Używam ${o.provider}` : undefined}
+            accessibilityLabel={picking ? `Używam ${pro ? o.provider : platformOf(o)}` : undefined}
           >
             <Row style={{ alignItems: 'flex-start' }}>
               <View style={{ flex: 1, gap: 2 }}>
                 <Row style={{ gap: 6 }}>
                   {picking && !other ? <Icon name={isUsed ? 'check' : 'plus'} size={16} color={t.text} /> : null}
                   {isBest ? <Icon name="trophy" size={16} color={t.save} /> : null}
-                  <T kind="strong" numberOfLines={1} style={{ flexShrink: 1 }}>{o.provider}</T>
+                  <T kind="strong" numberOfLines={1} style={{ flexShrink: 1 }}>{pro ? o.provider : platformOf(o)}</T>
                   {isFav(o) ? <Icon name="star" size={14} color={t.video} fill={t.video} /> : null}
                 </Row>
                 <T kind="small" color="ink2">
@@ -202,7 +207,7 @@ export default function Model({ model: base, snapshot, onBack }) {
             </Row>
             <Row style={{ marginTop: 8, justifyContent: 'space-between' }}>
               <T kind="tiny" color="ink3" style={{ flex: 1 }} numberOfLines={1}>
-                {[SRC_SHORT[o.src] ?? SOURCES[o.src]?.name, o.quant, o.uptime != null ? `dostępność ${o.uptime}%` : null, promo ? `promocja ${daysLabel(promo)}` : null, other ? 'inna jednostka' : null, isUsed ? 'używasz' : null].filter(Boolean).join(' · ')}
+                {[pro ? SRC_SHORT[o.src] ?? SOURCES[o.src]?.name : o.provider !== platformOf(o) ? `przez ${o.provider}` : null, o.quant, o.uptime != null ? `dostępność ${o.uptime}%` : null, promo ? `promocja ${daysLabel(promo)}` : null, other ? 'inna jednostka' : null, isUsed ? 'używasz' : null].filter(Boolean).join(' · ')}
               </T>
               {!picking && link ? (
                 <Pressable onPress={() => Linking.openURL(link.url)} accessibilityRole="link" hitSlop={10} style={s.link}>

@@ -6,7 +6,7 @@ import Icon from '../icons';
 import { CAT_LABEL, Header, priceParts, shortName } from '../parts';
 import { mainCat, space, useTheme } from '../theme';
 import { useProfile } from '../profile';
-import { favoritesFilter } from '../alerts';
+import { compareFilter, modeFilter } from '../filters';
 
 const KIND = {
   'promo-start': { label: 'Nowa promocja', icon: 'tag', tone: 'info' },
@@ -39,13 +39,14 @@ function usingState(st) {
 export default function Mine({ snapshot, onOpen, onGoSearch, onGoProfile }) {
   const t = useTheme();
   const { profile } = useProfile();
-  const filter = favoritesFilter(profile);
+  const filter = compareFilter(profile);
   const rows = useMemo(
     () => profile.watchlist
       .map((item) => {
         let st = watchStatus(snapshot, item, profile.usage, filter);
         // Ulubieni nie sprzedają tego modelu: pokaż najtańszą ofertę ogólnie.
-        if (filter && !st.best) st = watchStatus(snapshot, item, profile.usage);
+        if (filter && !st.best) st = watchStatus(snapshot, item, profile.usage, modeFilter(profile));
+        if (!st.best) st = watchStatus(snapshot, item, profile.usage);
         return { item, st: { ...st, usedKey: item.offerKey, ended: (st.ended ?? []).filter((e) => e.key === item.offerKey) } };
       })
       .filter((x) => x.st.model),

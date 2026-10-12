@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { FlatList, Pressable, RefreshControl, StyleSheet, View } from 'react-native';
-import { collectDeals, favoriteMatcher, timeAgo } from '../../../core/pricing.js';
+import { collectDeals, timeAgo } from '../../../core/pricing.js';
+import { isPro, viewFilter } from '../filters';
 import { Button, Empty, Segmented, T } from '../ui';
 import Icon from '../icons';
 import { BellButton, CAT_LABEL, DealCard, Header, styles } from '../parts';
@@ -65,8 +66,8 @@ export default function Deals({ snapshot, refreshing, onRefresh, onOpen, onBell,
   const [cat, setCat] = useState(profile.cats.length === 1 && profile.cats[0] !== 'all' ? profile.cats[0] : 'all');
   const [type, setType] = useState('discount');
   const favs = useMemo(
-    () => (profile.onlyFavorites ? favoriteMatcher(profile.providers) : null),
-    [profile.onlyFavorites, profile.providers],
+    () => viewFilter(profile),
+    [profile.mode, profile.onlyFavorites, profile.providers], // eslint-disable-line react-hooks/exhaustive-deps
   );
   const watched = useMemo(() => new Set(profile.watchlist.map((w) => w.modelId)), [profile.watchlist]);
 
@@ -96,7 +97,11 @@ export default function Deals({ snapshot, refreshing, onRefresh, onOpen, onBell,
         ))}
       </View>
       <Segmented options={TYPES.map((x) => ({ ...x, count: typeCounts[x.value] }))} value={type} onChange={setType} />
-      {favs ? <T kind="small" color="ink2">Tylko ulubieni: {profile.providers.join(', ')}</T> : null}
+      {profile.onlyFavorites && profile.providers.length ? (
+        <T kind="small" color="ink2">Tylko ulubieni: {profile.providers.join(', ')}</T>
+      ) : !isPro(profile) ? (
+        <T kind="small" color="ink2">Tryb Zwykły: ceny z OpenRouter, Vercel AI Gateway i Requesty</T>
+      ) : null}
     </View>
   );
 
@@ -104,13 +109,13 @@ export default function Deals({ snapshot, refreshing, onRefresh, onOpen, onBell,
     <FlatList
       data={list}
       keyExtractor={(d) => `${d.modelId}|${d.key}|${d.type}`}
-      renderItem={({ item }) => <DealCard deal={item} watched={watched.has(item.modelId)} onPress={() => onOpen(item.modelId)} />}
+      renderItem={({ item }) => <DealCard deal={item} pro={isPro(profile)} watched={watched.has(item.modelId)} onPress={() => onOpen(item.modelId)} />}
       contentContainerStyle={styles.list}
       initialNumToRender={10}
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={t.ink2} colors={[t.text]} />}
       ListHeaderComponent={header}
       ListEmptyComponent={
-        favs && all.some((d) => d.type === type && inCat(d, cat)) ? (
+        profile.onlyFavorites && all.some((d) => d.type === type && inCat(d, cat)) ? (
           <Empty
             icon="star"
             title="Ulubieni nie mają teraz promocji"

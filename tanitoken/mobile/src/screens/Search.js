@@ -1,7 +1,8 @@
 import { useMemo, useState } from 'react';
 import { FlatList, StyleSheet, TextInput, View } from 'react-native';
-import { cheapest, favoriteMatcher, formatContext, formatUsd, searchModels, unitPrice } from '../../../core/pricing.js';
-import { Card, CatChip, Empty, PctBadge, Row, Segmented, T } from '../ui';
+import { cheapest, formatContext, formatUsd, searchModels, unitPrice } from '../../../core/pricing.js';
+import { viewFilter } from '../filters';
+import { Card, CatChip, Empty, PctBadge, Row, Segmented, T, MAX_FONT_SCALE } from '../ui';
 import Icon from '../icons';
 import { CAT_LABEL, Header, priceParts, shortName, styles } from '../parts';
 import { font, mainCat, radius, space, useTheme } from '../theme';
@@ -28,21 +29,22 @@ export default function Search({ snapshot, onOpen }) {
   const [sort, setSort] = useState('new');
   const watched = useMemo(() => new Set(profile.watchlist.map((w) => w.modelId)), [profile.watchlist]);
   const favs = useMemo(
-    () => (profile.onlyFavorites ? favoriteMatcher(profile.providers) : null),
-    [profile.onlyFavorites, profile.providers],
+    () => viewFilter(profile),
+    [profile.mode, profile.onlyFavorites, profile.providers], // eslint-disable-line react-hooks/exhaustive-deps
   );
 
   const rows = useMemo(() => {
     let models = snapshot.models.filter((m) => cat === 'all' || m.cats.includes(cat));
     models = searchModels(models, q).map((m) => {
       const best = cheapest(m, profile.usage, favs);
-      const promo = Math.round(Math.max(0, ...m.offers.map((o) => o.discount ?? 0)) * 100);
-      return { m, best, promo };
+      const offers = favs ? m.offers.filter(favs) : m.offers;
+      const promo = Math.round(Math.max(0, ...offers.map((o) => o.discount ?? 0)) * 100);
+      return { m, best, promo, count: offers.length };
     });
     if (favs) models = models.filter((r) => r.best || r.m.freeId);
     if (!q.trim()) {
       if (sort === 'cheap') models.sort((a, b) => (unitPrice(a.best) ?? Infinity) - (unitPrice(b.best) ?? Infinity));
-      if (sort === 'offers') models.sort((a, b) => b.m.offers.length - a.m.offers.length);
+      if (sort === 'offers') models.sort((a, b) => b.count - a.count);
     }
     return models;
   }, [snapshot, q, cat, sort, profile.usage, favs]);
@@ -53,6 +55,7 @@ export default function Search({ snapshot, onOpen }) {
       <View style={[s.search, { backgroundColor: t.card, borderColor: q ? t.text : t.line }]}>
         <Icon name="search" size={20} color={t.ink2} />
         <TextInput
+          maxFontSizeMultiplier={MAX_FONT_SCALE}
           value={q}
           onChangeText={setQ}
           placeholder="deepseek, claude, flux, veo…"
@@ -80,7 +83,7 @@ export default function Search({ snapshot, onOpen }) {
       initialNumToRender={14}
       ListHeaderComponent={header}
       ListEmptyComponent={<Empty title="Nie ma takiego modelu" body="Spróbuj krótszej nazwy albo innej kategorii." />}
-      renderItem={({ item: { m, best, promo } }) => {
+      renderItem={({ item: { m, best, promo, count } }) => {
         const c = mainCat(m);
         const p = priceParts(best);
         return (
@@ -91,7 +94,7 @@ export default function Search({ snapshot, onOpen }) {
                   {shortName(m.name)}
                   {watched.has(m.id) ? <T kind="strong" style={{ color: t.video }}> ★</T> : null}
                 </T>
-                <CatChip cat={c} label={CAT_LABEL[c]} extra={[m.context ? formatContext(m.context) : null, `${m.offers.length} ofert`].filter(Boolean).join(', ')} />
+                <CatChip cat={c} label={CAT_LABEL[c]} extra={[m.context ? formatContext(m.context) : null, `${count} ofert`].filter(Boolean).join(', ')} />
               </View>
               <View style={{ alignItems: 'flex-end', gap: 4 }}>
                 <T kind="num" style={!best && m.freeId ? { color: t.save } : null}>{best ? p.main : m.freeId ? '0 $' : '–'}</T>

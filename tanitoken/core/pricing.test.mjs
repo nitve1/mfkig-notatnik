@@ -3,7 +3,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
   perMillion, modelKey, offerKey, offerCost, cheapest, sortOffers, priceBeforeDiscount,
-  detectDrops, trackPromos, promoStats, collectDeals, computeAlerts, watchStatus, promoSavings, onePerProvider, favoriteMatcher,
+  detectDrops, trackPromos, promoStats, collectDeals, computeAlerts, watchStatus, promoSavings, onePerProvider, favoriteMatcher, onePerPlatform,
 } from './pricing.js';
 import { openrouterModels, openrouterOffers, vercelEntries, requestyEntries } from './sources.js';
 
@@ -123,4 +123,10 @@ test('favoriteMatcher: dostawca albo platforma', () => {
   assert.equal(match({ ...tok('requesty', 'Requesty (bedrock)', 1, 1) }), false);
   assert.equal(favoriteMatcher(['Requesty'])(tok('requesty', 'Requesty (bedrock)', 1, 1)), true);
   assert.equal(favoriteMatcher([]), null);
+});
+
+test('onePerPlatform: tryb Zwykły', () => {
+  const list = [tok('openrouter', 'Decart', 1, 1), tok('openrouter', 'Novita', 2, 2), tok('direct', 'Groq', 0.5, 0.5), tok('vercel', 'Vercel AI Gateway', 3, 3)];
+  assert.deepEqual(onePerPlatform(list).map((o) => o.provider), ['Decart', 'Vercel AI Gateway']);
+  assert.deepEqual(onePerPlatform(list, 'openrouter:openrouter/Novita').map((o) => o.provider), ['Decart', 'Novita', 'Vercel AI Gateway']);
 });

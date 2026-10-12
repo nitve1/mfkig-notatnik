@@ -1,5 +1,5 @@
 import { StyleSheet, View } from 'react-native';
-import { CATEGORIES, formatUsd, promoAgeDays } from '../../core/pricing.js';
+import { CATEGORIES, formatUsd, platformOf, promoAgeDays } from '../../core/pricing.js';
 import { Card, CatChip, IconButton, PctBadge, Row, T } from './ui';
 import { mainCat, space, useTheme } from './theme';
 
@@ -25,7 +25,7 @@ export function daysLabel(p) {
 }
 
 // Karta promocji: pasek w kolorze kategorii, nazwa, cena, kategoria i dostawca, zniżka.
-export function DealCard({ deal, onPress, watched }) {
+export function DealCard({ deal, onPress, watched, pro = true }) {
   const t = useTheme();
   const m = deal.model;
   const cat = mainCat(m);
@@ -38,7 +38,7 @@ export function DealCard({ deal, onPress, watched }) {
             {shortName(m.name)}
             {watched ? <T kind="strong" style={{ color: t.video }}> ★</T> : null}
           </T>
-          <CatChip cat={cat} label={CAT_LABEL[cat]} extra={deal.type === 'free' ? m.author : deal.offer.provider} />
+          <CatChip cat={cat} label={CAT_LABEL[cat]} extra={deal.type === 'free' ? m.author : pro || platformOf(deal.offer) === deal.offer.provider ? deal.offer.provider : `${platformOf(deal.offer)}, przez ${deal.offer.provider}`} />
         </View>
         <View style={{ alignItems: 'flex-end', gap: 4 }}>
           {deal.type === 'free' ? (

@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { StyleSheet, TextInput, View } from 'react-native';
 import { PLATFORMS, platformOf } from '../../../core/pricing.js';
-import { Pill, T } from '../ui';
+import { Pill, T, MAX_FONT_SCALE } from '../ui';
 import Icon from '../icons';
 import { font, radius, space, useTheme } from '../theme';
 
@@ -12,7 +12,7 @@ const PLATFORM_NOTE = {
 };
 
 // Ulubieni: platformy (konto obejmuje wszystkie ich oferty) i pojedynczy dostawcy.
-export default function ProviderPicker({ snapshot, selected, onToggle, limit = 16 }) {
+export default function ProviderPicker({ snapshot, selected, onToggle, pro = true, limit = 16 }) {
   const t = useTheme();
   const [q, setQ] = useState('');
   const { platforms, providers } = useMemo(() => {
@@ -57,10 +57,15 @@ export default function ProviderPicker({ snapshot, selected, onToggle, limit = 1
         })}
       </View>
 
+      {!pro ? (
+        <T kind="small" color="ink2">Tryb Pro dodaje ~200 dostawców, u których można kupować bezpośrednio.</T>
+      ) : null}
+      {pro ? <>
       <T kind="small" color="ink2" style={{ marginTop: space[2] }}>Dostawcy, u których kupujesz bezpośrednio</T>
       <View style={[s.search, { borderColor: t.line, backgroundColor: t.bg }]}>
         <Icon name="search" size={18} color={t.ink2} />
         <TextInput
+          maxFontSizeMultiplier={MAX_FONT_SCALE}
           value={q}
           onChangeText={setQ}
           placeholder={`Szukaj wśród ${providers.length} dostawców`}
@@ -77,6 +82,7 @@ export default function ProviderPicker({ snapshot, selected, onToggle, limit = 1
         ))}
         {!shown.length ? <T color="ink2">Nie ma takiego dostawcy w zestawieniu.</T> : null}
       </View>
+      </> : null}
       {selected.length ? <T kind="small" color="ink2">Zaznaczone: {selected.join(', ')}</T> : null}
     </View>
   );
@@ -85,6 +91,6 @@ export default function ProviderPicker({ snapshot, selected, onToggle, limit = 1
 const s = StyleSheet.create({
   platform: { flexDirection: 'row', alignItems: 'center', gap: space[3], borderWidth: 1.5, borderRadius: radius.md, padding: 12 },
   search: { flexDirection: 'row', alignItems: 'center', gap: 8, borderWidth: 1.5, borderRadius: radius.sm, paddingHorizontal: 12 },
-  input: { flex: 1, paddingVertical: 10, fontSize: 15, fontFamily: font.textMedium },
+  input: { flex: 1, paddingVertical: 10, fontSize: 16, fontFamily: font.textMedium },
   wrap: { flexDirection: 'row', flexWrap: 'wrap', gap: space[2] },
 });

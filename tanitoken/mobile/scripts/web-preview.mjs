@@ -34,11 +34,20 @@ const page = `<title>TaniToken</title>
   :root { --bg: #f7f7fb; color-scheme: light; }
   @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg: #100e1b; color-scheme: dark; } }
   :root[data-theme="dark"] { --bg: #100e1b; color-scheme: dark; }
-  html, body { height: 100%; background: var(--bg); }
-  body { overflow: hidden; }
-  #root { display: flex; height: 100%; flex: 1; }
+  /* Strona stoi w miejscu jak apka: bez przesuwania na boki, sprężynowania i zoomu. */
+  html, body { height: 100%; width: 100%; background: var(--bg); overflow: hidden; overscroll-behavior: none; }
+  body { position: fixed; inset: 0; touch-action: pan-x pan-y; /* bez pinch i double-tap zoom */ -webkit-text-size-adjust: 100%; }
+  #root { display: flex; height: 100%; width: 100%; flex: 1; overflow: hidden; }
 </style>
 <div id="root"></div>
+<script>
+  (function () {
+    var meta = document.querySelector('meta[name="viewport"]');
+    if (!meta) { meta = document.createElement('meta'); meta.name = 'viewport'; document.head.appendChild(meta); }
+    meta.content = 'width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover';
+    ['gesturestart', 'gesturechange'].forEach(function (e) { document.addEventListener(e, function (ev) { ev.preventDefault(); }, { passive: false }); });
+  })();
+</script>
 <script>${safe}</script>
 `;
 mkdirSync(OUT, { recursive: true });

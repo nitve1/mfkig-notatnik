@@ -1,5 +1,5 @@
 import { Alert, Linking, Platform, ScrollView, StyleSheet, TextInput, View } from 'react-native';
-import { Button, Pill, Row, Section, Segmented, T, ToggleRow } from '../ui';
+import { Button, Pill, Row, Section, Segmented, T, ToggleRow, MAX_FONT_SCALE } from '../ui';
 import { Header } from '../parts';
 import { font, radius, space, useTheme } from '../theme';
 import { exportProfile, importProfile, useProfile } from '../profile';
@@ -13,6 +13,14 @@ const CATS = [
   { key: 'image', label: 'Obraz', icon: 'image' },
   { key: 'video', label: 'Wideo', icon: 'video' },
 ];
+export const MODE_OPTIONS = [
+  { value: 'simple', label: 'Zwykły' },
+  { value: 'pro', label: 'Pro' },
+];
+export const MODE_NOTE = {
+  simple: 'Ceny z platform: OpenRouter, Vercel AI Gateway i Requesty. Jedno konto, prosty wybór.',
+  pro: 'Wszystko: platformy i ~200 dostawców bezpośrednich, każdy wariant osobno.',
+};
 export const THEME_OPTIONS = [
   { value: 'system', label: 'Systemowy', icon: 'phone' },
   { value: 'light', label: 'Jasny', icon: 'sun' },
@@ -76,10 +84,18 @@ export default function Profile({ snapshot }) {
         </View>
       </Section>
 
+      <Section title="Tryb">
+        <View style={{ paddingVertical: space[3], gap: space[2] }}>
+          <Segmented options={MODE_OPTIONS} value={profile.mode ?? 'simple'} onChange={(mode) => update({ mode })} />
+          <T kind="small" color="ink2">{MODE_NOTE[profile.mode ?? 'simple']}</T>
+        </View>
+      </Section>
+
       <Section title="O Tobie">
         <View style={{ paddingVertical: space[3], gap: space[2] }}>
           <T kind="small" color="ink2">Imię lub pseudonim</T>
           <TextInput
+          maxFontSizeMultiplier={MAX_FONT_SCALE}
             value={profile.name}
             onChangeText={(name) => update({ name })}
             placeholder="Opcjonalnie"
@@ -97,7 +113,7 @@ export default function Profile({ snapshot }) {
 
       <Section title="Gdzie masz konto">
         <View style={{ paddingTop: space[3] }}>
-          <ProviderPicker snapshot={snapshot} selected={profile.providers} onToggle={toggleProvider} />
+          <ProviderPicker snapshot={snapshot} selected={profile.providers} onToggle={toggleProvider} pro={profile.mode === 'pro'} />
         </View>
         <ToggleRow
           last
