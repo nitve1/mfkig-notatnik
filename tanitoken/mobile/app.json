@@ -53,7 +53,8 @@
           "icon": "./assets/notification-icon.png",
           "color": "#3d63ff"
         }
-      ]
+      ],
+      "expo-localization"
     ],
     "extra": {
       "snapshotUrls": [

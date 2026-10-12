@@ -1,31 +1,28 @@
 import { useMemo, useState } from 'react';
 import { FlatList, Pressable, RefreshControl, StyleSheet, View } from 'react-native';
-import { collectDeals } from '../../../core/pricing.js';
+import { collectDeals, formatUsd } from '../../../core/pricing.js';
+import { t as tr } from '../../../core/i18n.js';
 import { isPro, viewFilter } from '../filters';
 import { Button, Empty, Segmented, T } from '../ui';
 import Icon from '../icons';
-import { BellButton, CAT_LABEL, DealCard, Header, PriceStatus, styles } from '../parts';
+import { BellButton, catLabel, DealCard, Header, PriceStatus, styles } from '../parts';
 import { radius, space, useTheme } from '../theme';
 import { useProfile } from '../profile';
 
-const TYPES = [
-  { value: 'discount', label: 'Zniżki' },
-  { value: 'drop', label: 'Obniżki' },
-  { value: 'free', label: 'Darmowe' },
-];
+const TYPES = ['discount', 'drop', 'free'];
 
 function Tile({ cat, count, best, type, on, dim, onPress, wide }) {
   const t = useTheme();
   const bg = cat === 'all' ? t.hero : t[cat];
   const note = count === 0
-    ? type === 'free' ? 'brak darmowych' : 'brak zniżek'
-    : type === 'free' ? 'darmowe modele' : `do −${best}%`;
+    ? tr(type === 'free' ? 'tile.noneFree' : 'tile.none')
+    : type === 'free' ? tr('tile.freeModels') : tr('tile.upTo', { pct: best });
   return (
     <Pressable
       onPress={onPress}
       accessibilityRole="button"
       accessibilityState={{ selected: on }}
-      accessibilityLabel={`${CAT_LABEL[cat]}, ${count}, ${note}`}
+      accessibilityLabel={`${catLabel(cat)}, ${count}, ${note}`}
       style={({ pressed }) => [
         s.tile,
         wide && s.wide,
@@ -35,12 +32,12 @@ function Tile({ cat, count, best, type, on, dim, onPress, wide }) {
       {wide ? (
         <>
           <View style={{ flex: 1 }}>
-            <T kind="small" style={s.tileTxt}>Wszystkie promocje</T>
+            <T kind="small" style={s.tileTxt}>{tr('tile.all')}</T>
             <T kind="big" style={s.tileTxt}>{count}</T>
           </View>
           <View style={{ alignItems: 'flex-end' }}>
-            <T kind="small" style={s.tileTxt}>{type === 'free' ? 'za darmo' : 'największa'}</T>
-            <T kind="big" style={s.tileTxt}>{type === 'free' ? '0 $' : count ? `−${best}%` : '–'}</T>
+            <T kind="small" style={s.tileTxt}>{tr(type === 'free' ? 'deal.free' : 'tile.biggest')}</T>
+            <T kind="big" style={s.tileTxt}>{type === 'free' ? formatUsd(0) : count ? `−${best}%` : '–'}</T>
           </View>
         </>
       ) : (
@@ -50,7 +47,7 @@ function Tile({ cat, count, best, type, on, dim, onPress, wide }) {
             <T kind="big" style={s.tileTxt}>{count}</T>
           </View>
           <View>
-            <T kind="strong" style={s.tileTxt}>{CAT_LABEL[cat]}</T>
+            <T kind="strong" style={s.tileTxt}>{catLabel(cat)}</T>
             <T kind="tiny" style={[s.tileTxt, { opacity: 0.9 }]}>{note}</T>
           </View>
         </>
@@ -80,14 +77,14 @@ export default function Deals({ snapshot, refreshing, onRefresh, onOpen, onBell,
     return { count: list.length, best: list.reduce((m, d) => Math.max(m, d.pct), 0) };
   };
   const list = ofType.filter((d) => inCat(d, cat));
-  const typeCounts = Object.fromEntries(TYPES.map((x) => [x.value, visible.filter((d) => d.type === x.value).length]));
+  const typeCounts = Object.fromEntries(TYPES.map((x) => [x, visible.filter((d) => d.type === x).length]));
   const pick = (c) => setCat(cat === c ? 'all' : c);
 
   const header = (
     <View style={{ gap: space[3], marginBottom: space[1] }}>
       <Header
-        kicker={profile.name ? `Cześć ${profile.name}` : null}
-        title="Co dziś tanieje?"
+        kicker={profile.name ? tr('deals.hello', { name: profile.name }) : null}
+        title={tr('deals.title')}
         right={<BellButton onPress={onBell} dot={bellDot} />}
       />
       <PriceStatus snapshot={snapshot} status={priceStatus} onRefresh={onRefresh} />
@@ -97,11 +94,11 @@ export default function Deals({ snapshot, refreshing, onRefresh, onOpen, onBell,
           <Tile key={c} cat={c} type={type} {...stat(c)} on={cat === c} dim={cat !== 'all' && cat !== c} onPress={() => pick(c)} />
         ))}
       </View>
-      <Segmented options={TYPES.map((x) => ({ ...x, count: typeCounts[x.value] }))} value={type} onChange={setType} />
+      <Segmented options={TYPES.map((x) => ({ value: x, label: tr(`type.${x}`), count: typeCounts[x] }))} value={type} onChange={setType} />
       {profile.onlyFavorites && profile.providers.length ? (
-        <T kind="small" color="ink2">Tylko ulubieni: {profile.providers.join(', ')}</T>
+        <T kind="small" color="ink2">{tr('deals.onlyFav', { list: profile.providers.join(', ') })}</T>
       ) : !isPro(profile) ? (
-        <T kind="small" color="ink2">Tryb Zwykły: ceny z OpenRouter, Vercel AI Gateway i Requesty</T>
+        <T kind="small" color="ink2">{tr('deals.simpleNote')}</T>
       ) : null}
     </View>
   );
@@ -119,15 +116,15 @@ export default function Deals({ snapshot, refreshing, onRefresh, onOpen, onBell,
         profile.onlyFavorites && all.some((d) => d.type === type && inCat(d, cat)) ? (
           <Empty
             icon="star"
-            title="Ulubieni nie mają teraz promocji"
-            body="Inni dostawcy mają okazje w tej kategorii."
-            action={<Button kind="line" label="Pokaż wszystkich" onPress={() => update({ onlyFavorites: false })} />}
+            title={tr('deals.favEmpty')}
+            body={tr('deals.favEmptyBody')}
+            action={<Button kind="line" label={tr('deals.showAll')} onPress={() => update({ onlyFavorites: false })} />}
           />
         ) : (
           <Empty
             icon="tag"
-            title={type === 'drop' ? 'Nikt ostatnio nie obniżył cen' : `Brak promocji: ${CAT_LABEL[cat]}`}
-            body={type === 'drop' ? 'Obniżki wykrywamy co 15 minut i pokazujemy przez 7 dni.' : 'Wybierz inną kategorię albo rodzaj promocji.'}
+            title={type === 'drop' ? tr('deals.noDrops') : tr('deals.none', { cat: catLabel(cat) })}
+            body={tr(type === 'drop' ? 'deals.noDropsBody' : 'deals.noneBody')}
           />
         )
       }

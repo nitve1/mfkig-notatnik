@@ -5,6 +5,8 @@
 // (oznaczenie jest wymagane prawem, m.in. przez dyrektywę UCPD i wytyczne UOKiK).
 // Programy sprawdzone w październiku 2026, warunki mogą się zmienić.
 
+import { t } from './i18n.js';
+
 export const AFFILIATES = {
   'Novita': {
     program: '10% od wydatków poleconych przez 180 dni',
@@ -48,25 +50,25 @@ export function affiliateFor(providerName) {
 // Gdzie kierujemy po kliknięciu oferty. sponsored = link partnerski (pokazujemy oznaczenie).
 export function offerLink(model, offer) {
   const aff = offer ? affiliateFor(offer.provider) : null;
-  if (aff) return { url: aff.link, sponsored: true, label: `Przejdź do ${offer.provider}` };
+  if (aff) return { url: aff.link, sponsored: true, label: t('link.goTo', { name: offer.provider }) };
   let url;
   let label;
   switch (offer?.src) {
     case 'vercel':
       url = 'https://vercel.com/ai-gateway/models';
-      label = 'Otwórz Vercel AI Gateway';
+      label = t('link.open', { name: 'Vercel AI Gateway' });
       break;
     case 'requesty':
       url = 'https://www.requesty.ai/';
-      label = 'Otwórz Requesty';
+      label = t('link.open', { name: 'Requesty' });
       break;
     case 'direct':
       url = offer.url;
-      label = `Otwórz ${offer.provider}`;
+      label = t('link.open', { name: offer.provider });
       break;
     default:
       url = model.id.includes('/') && model.offers?.some((o) => o.src === 'openrouter') ? `https://openrouter.ai/${model.id}` : null;
-      label = 'Otwórz w OpenRouter';
+      label = t('link.open', { name: 'OpenRouter' });
   }
   return url ? { url: withTracking(url), sponsored: false, label } : null;
 }

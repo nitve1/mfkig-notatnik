@@ -6,25 +6,22 @@ import { ThemeContext, font, radius, space, useTheme } from '../theme';
 import { importProfile, useProfile } from '../profile';
 import { enableNotifications } from '../alerts';
 import ProviderPicker from './ProviderPicker';
-import { MODE_NOTE, MODE_OPTIONS, THEME_OPTIONS } from './Profile';
+import { LanguagePicker, modeNote, modeOptions, themeOptions } from './Profile';
+import { t as tr } from '../../../core/i18n.js';
 
 const STEPS = 4;
-const CATS = [
-  { key: 'text', label: 'Tekst', note: 'czat, pisanie, analiza' },
-  { key: 'coding', label: 'Kod', note: 'programowanie, agenci' },
-  { key: 'image', label: 'Obraz', note: 'generowanie grafik' },
-  { key: 'video', label: 'Wideo', note: 'generowanie filmów' },
-];
+const CATS = ['text', 'coding', 'image', 'video'].map((key) => ({ key }));
 
 function Body({ snapshot, insets, draft, set, step, setStep, finish }) {
   const t = useTheme();
+  const { profile, update } = useProfile();
 
   const onImport = async () => {
     try {
       const p = await importProfile();
       if (p) finish(p);
     } catch (e) {
-      Alert.alert('Nie udało się wczytać profilu', e.message);
+      Alert.alert(tr('backup.importFailed'), e.message);
     }
   };
 
@@ -32,42 +29,43 @@ function Body({ snapshot, insets, draft, set, step, setStep, finish }) {
     if (!on) return set({ notify: { ...draft.notify, enabled: false } });
     const ok = await enableNotifications();
     set({ notify: { ...draft.notify, enabled: ok } });
-    if (!ok) Alert.alert('Powiadomienia wyłączone', 'Możesz je włączyć później w Profilu.');
+    if (!ok) Alert.alert(tr('onb.notifOffTitle'), tr('onb.notifOffBody'));
   };
 
   let body;
   if (step === 0) {
     body = (
       <>
-        <T kind="display">Co dziś tanieje w AI?</T>
-        <T color="ink2" style={{ marginTop: space[2] }}>
-          Porównujemy ceny modeli u ponad 200 dostawców i ostrzegamy, zanim skończy się promocja, z której korzystasz.
-        </T>
+        <View style={{ marginBottom: space[4] }}>
+          <LanguagePicker value={profile.language} onChange={(language) => update({ language })} />
+        </View>
+        <T kind="display">{tr('onb.title')}</T>
+        <T color="ink2" style={{ marginTop: space[2] }}>{tr('onb.intro')}</T>
         <View style={[s.card, { backgroundColor: t.card, marginTop: space[5] }]}>
-          <T kind="strong">Jak mamy się do Ciebie zwracać?</T>
+          <T kind="strong">{tr('onb.nameQ')}</T>
           <TextInput
           maxFontSizeMultiplier={MAX_FONT_SCALE}
             value={draft.name}
             onChangeText={(name) => set({ name })}
-            placeholder="Imię lub pseudonim, opcjonalnie"
+            placeholder={tr('onb.namePh')}
             placeholderTextColor={t.ink3}
             autoCapitalize="words"
             returnKeyType="next"
             onSubmitEditing={() => setStep(1)}
             style={[s.input, { borderColor: t.line, color: t.ink, backgroundColor: t.bg }]}
           />
-          <T kind="small" color="ink2">Zostaje tylko na tym telefonie. Bez konta i logowania.</T>
+          <T kind="small" color="ink2">{tr('onb.nameNote')}</T>
         </View>
         <Pressable onPress={onImport} accessibilityRole="button" style={{ marginTop: space[4], alignSelf: 'flex-start' }}>
-          <T kind="small" style={{ color: t.text, fontFamily: font.textBold }}>Mam plik profilu z innego telefonu</T>
+          <T kind="small" style={{ color: t.text, fontFamily: font.textBold }}>{tr('onb.haveFile')}</T>
         </Pressable>
       </>
     );
   } else if (step === 1) {
     body = (
       <>
-        <T kind="display">Co Cię interesuje?</T>
-        <T color="ink2" style={{ marginTop: space[2] }}>Te kategorie pokażemy na start. Zawsze możesz przełączyć na wszystkie.</T>
+        <T kind="display">{tr('onb.catsTitle')}</T>
+        <T color="ink2" style={{ marginTop: space[2] }}>{tr('onb.catsBody')}</T>
         <View style={s.grid}>
           {CATS.map((c) => {
             const on = draft.cats.includes(c.key);
@@ -86,8 +84,8 @@ function Body({ snapshot, insets, draft, set, step, setStep, finish }) {
                   </View>
                 </Row>
                 <View>
-                  <T kind="h2" style={{ color: on ? '#fff' : t.ink }}>{c.label}</T>
-                  <T kind="small" style={{ color: on ? '#ffffffd9' : t.ink2 }}>{c.note}</T>
+                  <T kind="h2" style={{ color: on ? '#fff' : t.ink }}>{tr(`cat.${c.key}`)}</T>
+                  <T kind="small" style={{ color: on ? '#ffffffd9' : t.ink2 }}>{tr(`catNote.${c.key}`)}</T>
                 </View>
               </Pressable>
             );
@@ -98,51 +96,51 @@ function Body({ snapshot, insets, draft, set, step, setStep, finish }) {
   } else if (step === 2) {
     body = (
       <>
-        <T kind="display">U kogo masz konto?</T>
-        <T color="ink2" style={{ marginTop: space[2] }}>Wybierz tryb i zaznacz, gdzie płacisz. Wyróżnimy te oferty i pozwolimy filtrować tylko do nich.</T>
+        <T kind="display">{tr('onb.accTitle')}</T>
+        <T color="ink2" style={{ marginTop: space[2] }}>{tr('onb.accBody')}</T>
         <View style={[s.card, { backgroundColor: t.card, marginTop: space[4] }]}>
-          <Segmented options={MODE_OPTIONS} value={draft.mode ?? 'simple'} onChange={(mode) => set({ mode })} />
-          <T kind="small" color="ink2" style={{ marginBottom: space[2] }}>{MODE_NOTE[draft.mode ?? 'simple']}</T>
+          <Segmented options={modeOptions()} value={draft.mode ?? 'simple'} onChange={(mode) => set({ mode })} />
+          <T kind="small" color="ink2" style={{ marginBottom: space[2] }}>{modeNote(draft.mode)}</T>
           <ProviderPicker
             pro={draft.mode === 'pro'}
             snapshot={snapshot}
             selected={draft.providers}
             onToggle={(name) => set({ providers: draft.providers.includes(name) ? draft.providers.filter((x) => x !== name) : [...draft.providers, name] })}
           />
-          <ToggleRow last title="Pokazuj tylko ich oferty" value={draft.onlyFavorites} onChange={(onlyFavorites) => set({ onlyFavorites })} />
+          <ToggleRow last title={tr('profile.onlyFav')} value={draft.onlyFavorites} onChange={(onlyFavorites) => set({ onlyFavorites })} />
         </View>
       </>
     );
   } else {
     body = (
       <>
-        <T kind="display">Ostatnie szczegóły</T>
-        <Section title="Wygląd">
+        <T kind="display">{tr('onb.lastTitle')}</T>
+        <Section title={tr('profile.look')}>
           <View style={{ paddingVertical: space[3] }}>
-            <Segmented options={THEME_OPTIONS} value={draft.theme} onChange={(theme) => set({ theme })} />
+            <Segmented options={themeOptions()} value={draft.theme} onChange={(theme) => set({ theme })} />
           </View>
         </Section>
-        <Section title="Powiadomienia">
+        <Section title={tr('notif.title')}>
           <ToggleRow
             last
-            title="Powiadamiaj o zmianach cen"
-            body="Koniec promocji, z której korzystasz, nowa zniżka na obserwowany model, tańsza oferta."
+            title={tr('onb.notif')}
+            body={tr('onb.notifBody')}
             value={draft.notify.enabled}
             onChange={onNotify}
           />
         </Section>
-        <Section title="Kopia profilu">
+        <Section title={tr('backup.title')}>
           {Platform.OS === 'ios' ? (
             <ToggleRow
               last
-              title="Zachowaj po odinstalowaniu"
-              body="Kopia w pęku kluczy iOS. Wraca po ponownej instalacji."
+              title={tr('backup.keep')}
+              body={tr('backup.keepBody')}
               value={draft.keepAfterUninstall}
               onChange={(keepAfterUninstall) => set({ keepAfterUninstall })}
             />
           ) : (
             <T kind="small" color="ink2" style={{ paddingVertical: space[3] }}>
-              Android robi kopię na Twoim koncie Google i odtworzy profil po ponownej instalacji. Nic nie trafia na nasze serwery, bo ich nie mamy.
+              {tr('backup.androidOnb')}
             </T>
           )}
         </Section>
@@ -161,9 +159,9 @@ function Body({ snapshot, insets, draft, set, step, setStep, finish }) {
         {body}
       </ScrollView>
       <Row style={[s.footer, { paddingBottom: insets.bottom + space[3], backgroundColor: t.bg }]}>
-        {step > 0 ? <Button kind="line" label="Wstecz" onPress={() => setStep(step - 1)} style={{ flex: 0, minWidth: 116 }} /> : null}
+        {step > 0 ? <Button kind="line" label={tr('common.back')} onPress={() => setStep(step - 1)} style={{ flex: 0, minWidth: 116 }} /> : null}
         <Button
-          label={step === STEPS - 1 ? 'Zaczynamy' : step === 2 && !draft.providers.length ? 'Pomiń' : 'Dalej'}
+          label={tr(step === STEPS - 1 ? 'onb.start' : step === 2 && !draft.providers.length ? 'onb.skip' : 'onb.next')}
           onPress={() => (step === STEPS - 1 ? finish() : setStep(step + 1))}
         />
       </Row>

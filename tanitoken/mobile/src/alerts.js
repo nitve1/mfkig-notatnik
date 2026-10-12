@@ -5,6 +5,8 @@ import * as Notifications from 'expo-notifications';
 import * as TaskManager from 'expo-task-manager';
 import * as BackgroundTask from 'expo-background-task';
 import { computeAlerts } from '../../core/pricing.js';
+import { setLanguage, t as tr } from '../../core/i18n.js';
+import { deviceLanguage } from './lang';
 import { compareFilter } from './filters';
 import { refreshPrices } from './data';
 import { readProfile, writeProfile } from './profile';
@@ -40,7 +42,7 @@ export async function checkAndNotify(snapshot, profile) {
     }
     if (sorted.length > MAX_PER_RUN) {
       await Notifications.scheduleNotificationAsync({
-        content: { title: `Jeszcze ${sorted.length - MAX_PER_RUN} zmian cen`, body: 'Otwórz zakładkę Moje, żeby zobaczyć wszystkie.' },
+        content: { title: tr('notif.more', { n: sorted.length - MAX_PER_RUN }), body: tr('notif.moreBody') },
         trigger: Platform.OS === 'android' ? { channelId: 'deals' } : null,
       }).catch(() => {});
     }
@@ -53,6 +55,7 @@ export async function checkAndNotify(snapshot, profile) {
 TaskManager.defineTask(TASK, async () => {
   try {
     const profile = await readProfile();
+    setLanguage(deviceLanguage(profile.language));
     if (!profile.notify.enabled || !profile.watchlist.length) return BackgroundTask.BackgroundTaskResult.Success;
     // Ceny obserwowanych modeli (kilka zapytań), a co 30 min pełne sprawdzenie, jeśli wolno (Wi-Fi).
     const { snapshot } = await refreshPrices(null, {
@@ -78,13 +81,13 @@ export async function enableNotifications() {
 async function enableNotificationsUnsafe() {
   if (Platform.OS === 'android') {
     await Notifications.setNotificationChannelAsync('urgent', {
-      name: 'Koniec promocji',
-      description: 'Promocja na model, którego używasz, kończy się albo skończyła.',
+      name: tr('alert.end'),
+      description: tr('notif.channelUrgent'),
       importance: Notifications.AndroidImportance.HIGH,
     });
     await Notifications.setNotificationChannelAsync('deals', {
-      name: 'Nowe okazje',
-      description: 'Zniżki i tańsze oferty na obserwowane modele.',
+      name: tr('notif.channelDeals'),
+      description: tr('notif.channelDealsBody'),
       importance: Notifications.AndroidImportance.DEFAULT,
     });
   }

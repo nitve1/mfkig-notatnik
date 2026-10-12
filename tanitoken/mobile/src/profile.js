@@ -8,6 +8,7 @@ import * as Sharing from 'expo-sharing';
 import * as DocumentPicker from 'expo-document-picker';
 import { File, Paths } from 'expo-file-system';
 import { DEFAULT_USAGE } from '../../core/pricing.js';
+import { t as tr } from '../../core/i18n.js';
 
 export const PROFILE_KEY = 'tanitoken:profile:v1';
 const KEYCHAIN_KEY = 'tanitoken.profile';
@@ -18,6 +19,7 @@ export const DEFAULT_PROFILE = {
   onboarded: false,
   name: '',
   theme: 'system', // 'system' | 'light' | 'dark'
+  language: 'system', // 'system' albo kod: en, pl, es, fr, it, de
   refresh: { wifiOnly: false }, // pełne sprawdzenie cen (~3 MB) tylko przez Wi-Fi
   mode: 'simple', // 'simple' = tylko platformy, 'pro' = też ~200 dostawców bezpośrednich
   cats: ['all'],
@@ -85,14 +87,14 @@ export async function exportProfile(p) {
   if (file.exists) file.delete();
   file.create();
   file.write(JSON.stringify({ app: 'tanitoken', exportedAt: new Date().toISOString(), profile: core }, null, 2));
-  await Sharing.shareAsync(file.uri, { mimeType: 'application/json', dialogTitle: 'Zapisz profil TaniToken' });
+  await Sharing.shareAsync(file.uri, { mimeType: 'application/json', dialogTitle: tr('backup.saveDialog') });
 }
 
 export async function importProfile() {
   const res = await DocumentPicker.getDocumentAsync({ type: ['application/json', 'text/plain', '*/*'], copyToCacheDirectory: true });
   if (res.canceled || !res.assets?.length) return null;
   const json = JSON.parse(await new File(res.assets[0].uri).text());
-  if (json?.app !== 'tanitoken' || !json.profile) throw new Error('To nie jest plik profilu TaniToken.');
+  if (json?.app !== 'tanitoken' || !json.profile) throw new Error(tr('backup.notProfile'));
   return merge({ ...json.profile, onboarded: true });
 }
 

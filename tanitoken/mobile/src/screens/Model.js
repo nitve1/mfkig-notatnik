@@ -1,19 +1,20 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Linking, Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
 import {
-  SOURCES, UNIT_LABEL, formatContext, formatOfferPrice, formatUsd, isFreeOffer, liveOpenrouterOffers, offerCost,
+  formatContext, formatOfferPrice, formatUsd, isFreeOffer, liveOpenrouterOffers, offerCost,
   favoriteMatcher, offerKey, onePerPlatform, onePerProvider, platformOf, priceBeforeDiscount, sortOffers,
 } from '../../../core/pricing.js';
 import { isPro, modeFilter } from '../filters';
 import { offerLink } from '../../../core/affiliates.js';
 import { Button, Card, CatChip, IconButton, PctBadge, Row, Segmented, Stat, StatusBadge, T, MAX_FONT_SCALE } from '../ui';
 import Icon from '../icons';
-import { CAT_LABEL, authorName, daysLabel, shortName } from '../parts';
+import { catLabel, authorName, daysLabel, shortName } from '../parts';
+import { t as tr } from '../../../core/i18n.js';
 import { font, radius, space, useTheme } from '../theme';
 import { useProfile } from '../profile';
 
 const LIVE_MS = 60 * 1000;
-const SRC_SHORT = { openrouter: 'OpenRouter', vercel: 'Vercel', requesty: 'Requesty', direct: 'bezpośrednio' };
+const srcShort = (src) => ({ openrouter: 'OpenRouter', vercel: 'Vercel', requesty: 'Requesty' }[src] ?? tr('src.direct'));
 
 function UsageInput({ label, value, onChange }) {
   const t = useTheme();
@@ -89,87 +90,87 @@ export default function Model({ model: base, snapshot, onBack }) {
   return (
     <ScrollView contentContainerStyle={{ padding: space[4], paddingBottom: space[7], gap: space[3] }} keyboardShouldPersistTaps="handled">
       <Row style={{ justifyContent: 'space-between' }}>
-        <View style={{ marginLeft: -10 }}><IconButton name="back" label="Wróć" onPress={onBack} /></View>
-        <IconButton name="star" label={item ? 'Przestań obserwować' : 'Obserwuj'} active={!!item} onPress={() => toggleWatch(model.id)} />
+        <View style={{ marginLeft: -10 }}><IconButton name="back" label={tr('common.back')} onPress={onBack} /></View>
+        <IconButton name="star" label={tr(item ? 'model.unwatch' : 'model.watch')} active={!!item} onPress={() => toggleWatch(model.id)} />
       </Row>
 
       <View style={{ gap: 4 }}>
         <Row style={{ gap: space[3] }}>
-          {cats.map((c) => <CatChip key={c} cat={c} label={CAT_LABEL[c]} />)}
+          {cats.map((c) => <CatChip key={c} cat={c} label={catLabel(c)} />)}
         </Row>
         <T kind="display">{shortName(model.name)}</T>
         <T kind="small" color="ink2">
-          {[authorName(model), model.context ? `${formatContext(model.context)} kontekstu` : null, `${modeOnly ? model.offers.filter(modeOnly).length : model.offers.length} ofert`].filter(Boolean).join(', ')}
+          {[authorName(model), model.context ? tr('model.context', { ctx: formatContext(model.context) }) : null, tr('common.offers', { n: modeOnly ? model.offers.filter(modeOnly).length : model.offers.length })].filter(Boolean).join(', ')}
         </T>
-        {model.freeId ? <StatusBadge tone="save" icon="check" label={`Darmowy wariant: ${model.freeId}`} /> : null}
-        {model.expires ? <StatusBadge tone="deal" icon="warn" label={`Wycofanie ${model.expires}`} /> : null}
+        {model.freeId ? <StatusBadge tone="save" icon="check" label={tr('model.freeVariant', { id: model.freeId })} /> : null}
+        {model.expires ? <StatusBadge tone="deal" icon="warn" label={tr('model.expires', { date: model.expires })} /> : null}
       </View>
 
       <Row style={{ alignItems: 'stretch', gap: space[2] }}>
-        <Stat label="Najtaniej miesięcznie" value={best ? formatUsd(offerCost(best, usage)) : '–'} sub={best?.provider} />
+        <Stat label={tr('model.cheapestMonthly')} value={best ? formatUsd(offerCost(best, usage)) : '–'} sub={best?.provider} />
         <Stat
-          label="Oszczędzasz"
+          label={tr('common.youSave')}
           value={best && worst ? formatUsd(offerCost(worst, usage) - offerCost(best, usage)) : '–'}
-          sub="względem najdroższej"
+          sub={tr('model.vsWorst')}
           color={t.save}
         />
       </Row>
 
       <Row style={{ gap: space[2] }}>
         <Button
-          label={item?.mode === 'use' ? 'Używam' : 'Używam…'}
+          label={tr(item?.mode === 'use' ? 'model.using' : 'model.useEllipsis')}
           icon={item?.mode === 'use' ? 'check' : null}
           kind={item?.mode === 'use' ? 'ink' : 'line'}
           onPress={() => setPicking(!picking)}
         />
-        <Button label={item ? 'Obserwujesz' : 'Obserwuj'} icon="star" kind={item ? 'ink' : 'line'} onPress={() => toggleWatch(model.id)} />
+        <Button label={tr(item ? 'model.watching' : 'model.watch')} icon="star" kind={item ? 'ink' : 'line'} onPress={() => toggleWatch(model.id)} />
       </Row>
       {used && !picking ? (
         <Card stripe={t.text} style={{ paddingVertical: 10 }}>
-          <T kind="small">Płacisz u <T kind="small" style={{ fontFamily: font.textBold }}>{pro ? used.provider : platformOf(used) ?? used.provider}</T>, {formatOfferPrice(used)}. Ostrzeżemy Cię, gdy cena się zmieni.</T>
+          <T kind="small">{tr('model.payingAt', { provider: pro ? used.provider : platformOf(used) ?? used.provider, price: formatOfferPrice(used) })}</T>
         </Card>
       ) : null}
       {picking ? (
         <Card stripe={t.video} style={{ backgroundColor: t.dark ? t.card : '#fff4e6' }}>
-          <T kind="strong">Wybierz dostawcę, u którego płacisz</T>
-          <T kind="small" color="ink2">Dotknij oferty poniżej.</T>
+          <T kind="strong">{tr('model.pickTitle')}</T>
+          <T kind="small" color="ink2">{tr('model.pickBody')}</T>
           {item?.mode === 'use' ? (
             <Pressable onPress={() => { setUsing(model.id, null); setPicking(false); }} accessibilityRole="button" style={{ marginTop: 6 }}>
-              <T kind="small" style={{ color: t.text, fontFamily: font.textBold }}>Już nie używam, tylko obserwuję</T>
+              <T kind="small" style={{ color: t.text, fontFamily: font.textBold }}>{tr('model.stopUsing')}</T>
             </Pressable>
           ) : null}
         </Card>
       ) : null}
 
       <Card>
-        <T kind="strong" style={{ marginBottom: space[2] }}>Twoje zużycie miesięcznie</T>
+        <T kind="strong" style={{ marginBottom: space[2] }}>{tr('model.usage')}</T>
         <Row>
           {model.unit === 'token' ? (
             <>
-              <UsageInput label="Wejście, mln tokenów" value={usage.token.in} onChange={(v) => setUsage({ in: v })} />
-              <UsageInput label="Wyjście, mln tokenów" value={usage.token.out} onChange={(v) => setUsage({ out: v })} />
+              <UsageInput label={tr('model.inTokens')} value={usage.token.in} onChange={(v) => setUsage({ in: v })} />
+              <UsageInput label={tr('model.outTokens')} value={usage.token.out} onChange={(v) => setUsage({ out: v })} />
             </>
           ) : (
-            <UsageInput label={model.unit === 'image' ? 'Obrazów' : 'Sekund wideo'} value={usage[model.unit].count} onChange={(v) => setUsage({ count: v })} />
+            <UsageInput label={tr(model.unit === 'image' ? 'model.images' : 'model.seconds')} value={usage[model.unit].count} onChange={(v) => setUsage({ count: v })} />
           )}
         </Row>
       </Card>
 
       <View style={{ gap: space[2], marginTop: space[2] }}>
         <Row style={{ justifyContent: 'space-between' }}>
-          <T kind="h2">Oferty</T>
-          <T kind="tiny" color="ink3">{live ? 'OpenRouter na żywo' : 'z ostatniej aktualizacji'}</T>
+          <T kind="h2">{tr('model.offers')}</T>
+          <T kind="tiny" color="ink3">{tr(live ? 'model.live' : 'model.fromSnapshot')}</T>
         </Row>
         <Segmented
           value={scope}
           onChange={setScope}
           options={[
-            { value: 'all', label: 'Wszyscy' },
-            { value: 'fav', label: 'Ulubieni', count: favCount ? model.offers.filter((o) => isFav(o) && (!modeOnly || modeOnly(o))).length : null },
-            { value: 'promo', label: 'Z promocją', count: promos.filter((p) => p.type !== 'free').length },
+            { value: 'all', label: tr('model.scopeAll') },
+            { value: 'fav', label: tr('model.scopeFav'), count: favCount ? model.offers.filter((o) => isFav(o) && (!modeOnly || modeOnly(o))).length : null },
+            { value: 'promo', label: tr('model.scopePromo'), count: promos.filter((p) => p.type !== 'free').length },
           ]}
         />
-        <T kind="tiny" color="ink3">USD {UNIT_LABEL[model.unit]}</T>
+        <T kind="tiny" color="ink3">{tr(`unitLabel.${model.unit}`)}</T>
       </View>
 
       {offers.map((o) => {
@@ -185,7 +186,7 @@ export default function Model({ model: base, snapshot, onBack }) {
             key={k}
             stripe={isUsed ? t.text : isBest ? t.save : t.line}
             onPress={picking && !other ? () => { setUsing(model.id, k); setPicking(false); } : undefined}
-            accessibilityLabel={picking ? `Używam ${pro ? o.provider : platformOf(o)}` : undefined}
+            accessibilityLabel={picking ? tr('model.useA11y', { name: pro ? o.provider : platformOf(o) }) : undefined}
           >
             <Row style={{ alignItems: 'flex-start' }}>
               <View style={{ flex: 1, gap: 2 }}>
@@ -207,11 +208,11 @@ export default function Model({ model: base, snapshot, onBack }) {
             </Row>
             <Row style={{ marginTop: 8, justifyContent: 'space-between' }}>
               <T kind="tiny" color="ink3" style={{ flex: 1 }} numberOfLines={1}>
-                {[pro ? SRC_SHORT[o.src] ?? SOURCES[o.src]?.name : o.provider !== platformOf(o) ? `przez ${o.provider}` : null, o.quant, o.uptime != null ? `dostępność ${o.uptime}%` : null, promo ? `promocja ${daysLabel(promo)}` : null, other ? 'inna jednostka' : null, isUsed ? 'używasz' : null].filter(Boolean).join(' · ')}
+                {[pro ? srcShort(o.src) : o.provider !== platformOf(o) ? tr('offer.viaShort', { provider: o.provider }) : null, o.quant, o.uptime != null ? tr('offer.uptime', { pct: o.uptime }) : null, promo ? tr('offer.promoSince', { since: daysLabel(promo) }) : null, other ? tr('offer.otherUnit') : null, isUsed ? tr('offer.youUse') : null].filter(Boolean).join(' · ')}
               </T>
               {!picking && link ? (
                 <Pressable onPress={() => Linking.openURL(link.url)} accessibilityRole="link" hitSlop={10} style={s.link}>
-                  <T kind="tiny" style={{ color: t.text }}>{link.sponsored ? 'Partner' : 'Otwórz'}</T>
+                  <T kind="tiny" style={{ color: t.text }}>{tr(link.sponsored ? 'offer.partner' : 'offer.open')}</T>
                   <Icon name="external" size={13} color={t.text} />
                 </Pressable>
               ) : null}
@@ -220,10 +221,10 @@ export default function Model({ model: base, snapshot, onBack }) {
         );
       })}
       {!offers.length ? (
-        <T color="ink2">{scope === 'fav' ? 'Żaden z ulubionych dostawców nie sprzedaje tego modelu.' : 'Brak ofert z promocją.'}</T>
+        <T color="ink2">{tr(scope === 'fav' ? 'model.noFav' : 'model.noPromo')}</T>
       ) : null}
       <T kind="tiny" color="ink3">
-        Cenniki „bezpośrednio” pochodzą z katalogu models.dev i mogą być nieaktualne. Linki „Partner” są partnerskie, kolejność zależy tylko od ceny.
+        {tr('model.footnote')}
       </T>
     </ScrollView>
   );

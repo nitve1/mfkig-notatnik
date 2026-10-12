@@ -18,12 +18,46 @@ Jedno miejsce z historią zmian, decyzjami i otwartymi zadaniami. Aktualizowane 
 
 | Priorytet | Zadanie | Status |
 | --- | --- | --- |
-| 1 | Języki: EN (domyślny), PL, ES, FR, IT, DE. Wykrywanie języka telefonu, przełącznik w Profilu obok motywu, teksty alertów w `core` też tłumaczone | następne |
+| 1 | Finalny build APK na Androida (Gradle: plugin `com.ncorti.ktfmt.gradle` nie rozwiązywał się przez proxy) | w toku |
 | 2 | Historia cen w snapshocie (np. 30 punktów na ofertę) pod wykresy w karcie modelu | pomysł |
 | 3 | Landing w stylu „Kolorowe kategorie” + wersje językowe | na końcu |
 | 4 | Linki partnerskie: zgłoszenie do Novita / GMI Cloud, wklejenie linków w `core/affiliates.js` | po stronie użytkownika |
 | 5 | Po merge'u: ręczne uruchomienie workflow „TaniToken snapshot” (tworzy gałąź `tanitoken-data`) | po merge'u |
 | 6 | Test na prawdziwym telefonie (build EAS), szczególnie zadania w tle i powiadomienia | przed publikacją |
+
+## 2026-10-12 – sesja 4: apka „od A do Z” (sprawdzanie cen na telefonie, 6 języków)
+
+Prośba użytkownika: najpierw dokończyć całą apkę tak, żeby każda funkcja działała, a dopiero na końcu
+zbudować APK. Build APK przerwany do czasu ukończenia apki.
+
+Sprawdzanie cen bez serwera (wcześniej ceny zależały od GitHub Actions, które ruszą dopiero po merge'u):
+- `core/snapshot.js`: `buildSnapshot`, `refreshModels`, `finalize`, `snapshotSummary`. Ten sam kod
+  w `scripts/build-snapshot.mjs` (GitHub Actions) i w apce.
+- Apka (`mobile/src/data.js`): przy otwarciu i co 30 min pełne sprawdzenie (OpenRouter + endpointy,
+  Vercel, Requesty; ok. 6 s, ok. 430 zapytań, ok. 3 MB), między nimi co 5 min tylko obserwowane modele.
+  Cenniki bezpośrednie (models.dev, 5 MB) i dłuższa historia promocji z zestawienia na GitHub co 6 h.
+  Na start zestawienie wbudowane w apkę (`data/snapshot.json` przez Metro). Historia promocji
+  (start, koniec, typowa długość) liczona też na telefonie.
+- Zapis zestawienia w pliku (`mobile/src/store.js`, expo-file-system), bo AsyncStorage na Androidzie
+  ma limit ok. 2 MB na wpis. Metadane odświeżania w AsyncStorage.
+- Zadanie w tle (`alerts.js`): odświeża obserwowane modele (a co 30 min wszystko, jeśli wolno) i wysyła alerty.
+- Ustawienie „Pełne sprawdzenie tylko przez Wi-Fi” (expo-network), status „Sprawdzam ceny… 45%” /
+  „Ceny sprawdzone X temu” / „Czekam na Wi-Fi” / „Brak połączenia” na ekranie Promocji i w Profilu.
+- Typowa długość promocji używana dopiero przy min. 3 zakończonych promocjach u dostawcy i średniej > 1 dnia
+  (wcześniej jedna krótka promocja dawała „zwykle ok. 5 h”).
+
+Języki:
+- `core/i18n.js` + `core/locales/{en,pl,es,fr,it,de}.js` (253 klucze, komplet we wszystkich językach,
+  zgodne zmienne). Odmiana liczebników (PL: one/few/many, FR: 0–1 = one). Ceny: EN „$5.10”, reszta „5,10 $”.
+- Język: ustawienie „Język telefonu” (expo-localization) albo wybrany, przełącznik w Profilu i na
+  pierwszym ekranie onboardingu. Teksty alertów i powiadomień w core też tłumaczone (zadanie w tle ustawia
+  język z profilu). Domyślny EN, gdy język telefonu nie jest obsługiwany.
+- Alerty zapisane w Moje zostają w języku, w którym powstały (świadome uproszczenie).
+- Sprawdzone: cała ścieżka po angielsku bez ani jednego polskiego tekstu, przełączanie DE / FR / ES / IT / PL
+  bez wychodzenia poza ekran.
+
+Inne: `expo-system-ui` (motyw na Androidzie), aktualizacja paczek Expo (doctor 21/21), testy 12/12,
+`scripts/build-android-apk.sh`, lokalny podgląd web na `localhost` też sprawdza ceny na żywo.
 
 ## 2026-10-12 – sesja 3e: sztywny układ i tryb Zwykły / Pro
 

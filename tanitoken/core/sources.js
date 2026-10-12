@@ -5,6 +5,8 @@
 //   unit 'second' -> price w USD za sekundę wideo (variants: rozdzielczości)
 // Wszystkie API poniżej są publiczne i nie wymagają klucza.
 
+import { t } from './i18n.js';
+
 export const OPENROUTER_API = 'https://openrouter.ai/api/v1';
 export const VERCEL_API = 'https://ai-gateway.vercel.sh/v1/models';
 export const REQUESTY_API = 'https://router.requesty.ai/v1/models';
@@ -14,7 +16,7 @@ export const SOURCES = {
   openrouter: { name: 'OpenRouter', kind: 'gateway', live: true },
   vercel: { name: 'Vercel AI Gateway', kind: 'gateway', live: true },
   requesty: { name: 'Requesty', kind: 'gateway', live: true },
-  direct: { name: 'Bezpośrednio u providera', kind: 'direct', live: false },
+  direct: { get name() { return t('src.directLong'); }, kind: 'direct', live: false },
 };
 
 const M = 1e6;
@@ -49,13 +51,11 @@ export function baseId(id) {
 
 // ---------- kategorie ----------
 
-export const CATEGORIES = [
-  { key: 'all', label: 'Wszystko' },
-  { key: 'text', label: 'Tekst' },
-  { key: 'coding', label: 'Kod' },
-  { key: 'image', label: 'Obraz' },
-  { key: 'video', label: 'Wideo' },
-];
+// Etykiety w bieżącym języku (core/i18n.js).
+export const CATEGORIES = ['all', 'text', 'coding', 'image', 'video'].map((key) => ({
+  key,
+  get label() { return t(`cat.${key}`); },
+}));
 
 const CODING_RE = /(coder|codestral|devstral|codex|code-|-code\b|swe-|starcoder|codegemma|codellama|deepcoder|kimi-dev)/i;
 

@@ -20,14 +20,16 @@ import { useSnapshot } from './src/data';
 import { ProfileProvider, useProfile } from './src/profile';
 import { checkAndNotify } from './src/alerts';
 import { ThemeContext, space, useTheme } from './src/theme';
+import { setLanguage, t as tr } from '../core/i18n.js';
+import { deviceLanguage } from './src/lang';
 
 SplashScreen.preventAutoHideAsync().catch(() => {});
 
 const TABS = [
-  { key: 'deals', label: 'Promocje', icon: 'tag' },
-  { key: 'search', label: 'Szukaj', icon: 'search' },
-  { key: 'mine', label: 'Moje', icon: 'star' },
-  { key: 'profile', label: 'Profil', icon: 'user' },
+  { key: 'deals', icon: 'tag' },
+  { key: 'search', icon: 'search' },
+  { key: 'mine', icon: 'star' },
+  { key: 'profile', icon: 'user' },
 ];
 
 function TabBar({ tab, onChange, bottom, badge }) {
@@ -38,12 +40,12 @@ function TabBar({ tab, onChange, bottom, badge }) {
         const on = x.key === tab;
         const color = on ? t.ink : t.ink3;
         return (
-          <Pressable key={x.key} onPress={() => onChange(x.key)} style={s.tab} accessibilityRole="tab" accessibilityState={{ selected: on }} accessibilityLabel={x.label}>
+          <Pressable key={x.key} onPress={() => onChange(x.key)} style={s.tab} accessibilityRole="tab" accessibilityState={{ selected: on }} accessibilityLabel={tr(`nav.${x.key}`)}>
             <View style={[s.tabIcon, on && { backgroundColor: t.seg }]}>
               <Icon name={x.icon} size={22} color={color} width={on ? 2.3 : 2} />
               {x.key === 'mine' && badge ? <View style={[s.badge, { backgroundColor: t.deal, borderColor: t.card }]} /> : null}
             </View>
-            <T kind="tiny" style={{ color }}>{x.label}</T>
+            <T kind="tiny" style={{ color }}>{tr(`nav.${x.key}`)}</T>
           </Pressable>
         );
       })}
@@ -121,9 +123,9 @@ function Main() {
   } else if (!snapshot) {
     body = (
       <View style={[s.center, { padding: space[5], gap: space[3] }]}>
-        <T kind="h2" style={{ textAlign: 'center' }}>Nie udało się pobrać cen</T>
-        <T color="ink2" style={{ textAlign: 'center' }}>Sprawdź połączenie z internetem i spróbuj ponownie.</T>
-        <Button label="Spróbuj ponownie" onPress={refresh} style={{ flex: 0 }} />
+        <T kind="h2" style={{ textAlign: 'center' }}>{tr('app.loadFailed')}</T>
+        <T color="ink2" style={{ textAlign: 'center' }}>{tr('app.loadFailedBody')}</T>
+        <Button label={tr('app.retry')} onPress={refresh} style={{ flex: 0 }} />
       </View>
     );
   } else if (!profile.onboarded) {
@@ -153,6 +155,8 @@ function Main() {
 
 function Themed() {
   const { profile } = useProfile();
+  // Język ustawiamy przed renderem całego drzewa; zmiana w Profilu przerysowuje wszystko.
+  setLanguage(deviceLanguage(profile?.language));
   return (
     <ThemeContext.Provider value={profile?.theme ?? 'system'}>
       <Main />

@@ -1,4 +1,5 @@
 import { Alert, Linking, Platform, ScrollView, StyleSheet, TextInput, View } from 'react-native';
+import { LANGUAGES, t as tr } from '../../../core/i18n.js';
 import { Button, Pill, Row, Section, Segmented, T, ToggleRow, MAX_FONT_SCALE } from '../ui';
 import { Header, PriceStatus } from '../parts';
 import { font, radius, space, useTheme } from '../theme';
@@ -7,25 +8,30 @@ import { disableBackground, enableNotifications } from '../alerts';
 import ProviderPicker from './ProviderPicker';
 
 const PRIVACY_URL = 'https://nitve1.github.io/mfkig-notatnik/tanitoken/landing/prywatnosc.html';
-const CATS = [
-  { key: 'text', label: 'Tekst', icon: 'text' },
-  { key: 'coding', label: 'Kod', icon: 'coding' },
-  { key: 'image', label: 'Obraz', icon: 'image' },
-  { key: 'video', label: 'Wideo', icon: 'video' },
+const CATS = ['text', 'coding', 'image', 'video'];
+
+export const modeOptions = () => [
+  { value: 'simple', label: tr('mode.simple') },
+  { value: 'pro', label: tr('mode.pro') },
 ];
-export const MODE_OPTIONS = [
-  { value: 'simple', label: 'Zwykły' },
-  { value: 'pro', label: 'Pro' },
+export const modeNote = (mode) => tr(mode === 'pro' ? 'mode.proNote' : 'mode.simpleNote');
+export const themeOptions = () => [
+  { value: 'system', label: tr('theme.system'), icon: 'phone' },
+  { value: 'light', label: tr('theme.light'), icon: 'sun' },
+  { value: 'dark', label: tr('theme.dark'), icon: 'moon' },
 ];
-export const MODE_NOTE = {
-  simple: 'Ceny z platform: OpenRouter, Vercel AI Gateway i Requesty. Jedno konto, prosty wybór.',
-  pro: 'Wszystko: platformy i ~200 dostawców bezpośrednich, każdy wariant osobno.',
-};
-export const THEME_OPTIONS = [
-  { value: 'system', label: 'Systemowy', icon: 'phone' },
-  { value: 'light', label: 'Jasny', icon: 'sun' },
-  { value: 'dark', label: 'Ciemny', icon: 'moon' },
-];
+
+// Wybór języka: systemowy + 6 języków.
+export function LanguagePicker({ value, onChange }) {
+  return (
+    <View style={s.wrap}>
+      <Pill label={tr('lang.system')} on={!value || value === 'system'} onPress={() => onChange('system')} />
+      {LANGUAGES.map((l) => (
+        <Pill key={l.code} label={l.name} on={value === l.code} onPress={() => onChange(l.code)} />
+      ))}
+    </View>
+  );
+}
 
 export default function Profile({ snapshot, priceStatus, onRefresh }) {
   const t = useTheme();
@@ -42,9 +48,9 @@ export default function Profile({ snapshot, priceStatus, onRefresh }) {
     const ok = await enableNotifications();
     setNotify({ enabled: ok });
     if (!ok) {
-      Alert.alert('Brak zgody na powiadomienia', 'Włącz je dla TaniToken w ustawieniach telefonu.', [
-        { text: 'Anuluj', style: 'cancel' },
-        { text: 'Otwórz ustawienia', onPress: () => Linking.openSettings() },
+      Alert.alert(tr('notif.deniedTitle'), tr('notif.deniedBody'), [
+        { text: tr('common.cancel'), style: 'cancel' },
+        { text: tr('notif.openSettings'), onPress: () => Linking.openSettings() },
       ]);
     }
   };
@@ -60,122 +66,124 @@ export default function Profile({ snapshot, priceStatus, onRefresh }) {
       const p = await importProfile();
       if (p) {
         replace({ ...p, sent: profile.sent, alerts: profile.alerts });
-        Alert.alert('Profil wczytany', `Obserwowane modele: ${p.watchlist.length}.`);
+        Alert.alert(tr('backup.importedTitle'), tr('backup.importedBody', { n: p.watchlist.length }));
       }
     } catch (e) {
-      Alert.alert('Nie udało się wczytać profilu', e.message);
+      Alert.alert(tr('backup.importFailed'), e.message);
     }
   };
 
   const onReset = () =>
-    Alert.alert('Usunąć profil?', 'Znikną obserwowane modele, ulubieni dostawcy i ustawienia. Tego nie da się cofnąć.', [
-      { text: 'Anuluj', style: 'cancel' },
-      { text: 'Usuń profil', style: 'destructive', onPress: () => { disableBackground(); reset(); } },
+    Alert.alert(tr('about.resetTitle'), tr('about.resetBody'), [
+      { text: tr('common.cancel'), style: 'cancel' },
+      { text: tr('about.reset'), style: 'destructive', onPress: () => { disableBackground(); reset(); } },
     ]);
 
   return (
     <ScrollView contentContainerStyle={{ padding: space[4], paddingBottom: space[7] }} keyboardShouldPersistTaps="handled">
-      <Header kicker="Zapisany tylko na tym telefonie" title="Profil" />
+      <Header kicker={tr('profile.kicker')} title={tr('nav.profile')} />
 
-      <Section title="Wygląd">
-        <View style={{ paddingVertical: space[3], gap: space[2] }}>
-          <Segmented options={THEME_OPTIONS} value={profile.theme ?? 'system'} onChange={(theme) => update({ theme })} />
-          <T kind="small" color="ink2">Systemowy przełącza się razem z trybem nocnym telefonu.</T>
+      <Section title={tr('profile.language')}>
+        <View style={{ paddingVertical: space[3] }}>
+          <LanguagePicker value={profile.language} onChange={(language) => update({ language })} />
         </View>
       </Section>
 
-      <Section title="Sprawdzanie cen">
+      <Section title={tr('profile.look')}>
+        <View style={{ paddingVertical: space[3], gap: space[2] }}>
+          <Segmented options={themeOptions()} value={profile.theme ?? 'system'} onChange={(theme) => update({ theme })} />
+          <T kind="small" color="ink2">{tr('theme.note')}</T>
+        </View>
+      </Section>
+
+      <Section title={tr('refresh.title')}>
         <View style={{ paddingVertical: space[3] }}>
           <PriceStatus snapshot={snapshot} status={priceStatus} onRefresh={onRefresh} />
         </View>
         <ToggleRow
-          title="Pełne sprawdzenie tylko przez Wi-Fi"
-          body="Gdy apka jest otwarta, co 30 minut sprawdzamy wszystkie ceny (ok. 3 MB). Obserwowane modele sprawdzamy zawsze, to kilka kB."
+          title={tr('refresh.wifiOnly')}
+          body={tr('refresh.wifiOnlyBody')}
           value={profile.refresh?.wifiOnly ?? false}
           onChange={(wifiOnly) => update({ refresh: { ...profile.refresh, wifiOnly } })}
           last
         />
       </Section>
 
-      <Section title="Tryb">
+      <Section title={tr('profile.mode')}>
         <View style={{ paddingVertical: space[3], gap: space[2] }}>
-          <Segmented options={MODE_OPTIONS} value={profile.mode ?? 'simple'} onChange={(mode) => update({ mode })} />
-          <T kind="small" color="ink2">{MODE_NOTE[profile.mode ?? 'simple']}</T>
+          <Segmented options={modeOptions()} value={profile.mode ?? 'simple'} onChange={(mode) => update({ mode })} />
+          <T kind="small" color="ink2">{modeNote(profile.mode)}</T>
         </View>
       </Section>
 
-      <Section title="O Tobie">
+      <Section title={tr('profile.about')}>
         <View style={{ paddingVertical: space[3], gap: space[2] }}>
-          <T kind="small" color="ink2">Imię lub pseudonim</T>
+          <T kind="small" color="ink2">{tr('profile.name')}</T>
           <TextInput
-          maxFontSizeMultiplier={MAX_FONT_SCALE}
+            maxFontSizeMultiplier={MAX_FONT_SCALE}
             value={profile.name}
             onChangeText={(name) => update({ name })}
-            placeholder="Opcjonalnie"
+            placeholder={tr('common.optional')}
             placeholderTextColor={t.ink3}
             style={[s.input, { borderColor: t.line, color: t.ink, backgroundColor: t.bg }]}
           />
-          <T kind="small" color="ink2" style={{ marginTop: space[2] }}>Kategorie na start</T>
+          <T kind="small" color="ink2" style={{ marginTop: space[2] }}>{tr('profile.startCats')}</T>
           <View style={s.wrap}>
             {CATS.map((c) => (
-              <Pill key={c.key} label={c.label} icon={c.icon} color={t[c.key]} on={profile.cats.includes(c.key)} onPress={() => toggleCat(c.key)} />
+              <Pill key={c} label={tr(`cat.${c}`)} icon={c} color={t[c]} on={profile.cats.includes(c)} onPress={() => toggleCat(c)} />
             ))}
           </View>
         </View>
       </Section>
 
-      <Section title="Gdzie masz konto">
+      <Section title={tr('profile.accounts')}>
         <View style={{ paddingTop: space[3] }}>
           <ProviderPicker snapshot={snapshot} selected={profile.providers} onToggle={toggleProvider} pro={profile.mode === 'pro'} />
         </View>
         <ToggleRow
           last
-          title="Pokazuj tylko ich oferty"
-          body={profile.providers.length ? 'Alerty „taniej” też porównują tylko z nimi.' : 'Najpierw zaznacz platformę albo dostawcę powyżej.'}
+          title={tr('profile.onlyFav')}
+          body={tr(profile.providers.length ? 'profile.onlyFavBody' : 'profile.onlyFavEmpty')}
           value={profile.onlyFavorites && profile.providers.length > 0}
           onChange={(onlyFavorites) => update({ onlyFavorites })}
         />
       </Section>
 
-      <Section title="Powiadomienia">
-        <ToggleRow last={!n.enabled} title="Powiadomienia" body="Sprawdzamy ceny w tle mniej więcej co 30 minut i przy każdym otwarciu apki." value={n.enabled} onChange={onMaster} />
+      <Section title={tr('notif.title')}>
+        <ToggleRow last={!n.enabled} title={tr('notif.title')} body={tr('notif.masterBody')} value={n.enabled} onChange={onMaster} />
         {n.enabled ? (
           <>
-            <ToggleRow title="Koniec promocji" body="Zniżka na model, którego używasz albo obserwujesz, zniknęła." value={n.promoEnd} onChange={(v) => setNotify({ promoEnd: v })} />
-            <ToggleRow title="Promocja się kończy" body="Trwa prawie tyle, ile zwykle u tego dostawcy." value={n.aging} onChange={(v) => setNotify({ aging: v })} />
-            <ToggleRow title="Nowe promocje" body="Zniżka lub darmowy wariant obserwowanego modelu." value={n.promoStart} onChange={(v) => setNotify({ promoStart: v })} />
-            <ToggleRow title="Taniej gdzie indziej" body="Ktoś jest tańszy o co najmniej 20% niż Twój dostawca." value={n.cheaper} onChange={(v) => setNotify({ cheaper: v })} />
-            <ToggleRow last title="Wycofanie modelu" body="Model zniknie z oferty w ciągu 14 dni." value={n.expires} onChange={(v) => setNotify({ expires: v })} />
+            <ToggleRow title={tr('alert.end')} body={tr('notif.endBody')} value={n.promoEnd} onChange={(v) => setNotify({ promoEnd: v })} />
+            <ToggleRow title={tr('alert.aging')} body={tr('notif.agingBody')} value={n.aging} onChange={(v) => setNotify({ aging: v })} />
+            <ToggleRow title={tr('alert.start')} body={tr('notif.startBody')} value={n.promoStart} onChange={(v) => setNotify({ promoStart: v })} />
+            <ToggleRow title={tr('alert.cheaper')} body={tr('notif.cheaperBody')} value={n.cheaper} onChange={(v) => setNotify({ cheaper: v })} />
+            <ToggleRow last title={tr('alert.expires')} body={tr('notif.expiresBody')} value={n.expires} onChange={(v) => setNotify({ expires: v })} />
           </>
         ) : null}
       </Section>
 
-      <Section title="Kopia profilu">
+      <Section title={tr('backup.title')}>
         {Platform.OS === 'ios' ? (
           <ToggleRow
-            title="Zachowaj po odinstalowaniu"
-            body="Kopia w pęku kluczy iOS na tym telefonie. Wraca po ponownej instalacji."
+            title={tr('backup.keep')}
+            body={tr('backup.keepBody')}
             value={profile.keepAfterUninstall}
             onChange={(keepAfterUninstall) => update({ keepAfterUninstall })}
           />
         ) : (
-          <T kind="small" color="ink2" style={{ paddingVertical: space[3] }}>
-            Android zapisuje dane apki w kopii zapasowej Twojego konta Google i odtwarza je po ponownej instalacji.
-          </T>
+          <T kind="small" color="ink2" style={{ paddingVertical: space[3] }}>{tr('backup.android')}</T>
         )}
         <Row style={{ paddingVertical: space[3], gap: space[2] }}>
-          <Button kind="line" label="Eksportuj" onPress={() => exportProfile(profile).catch((e) => Alert.alert('Eksport nie powiódł się', e.message))} />
-          <Button kind="line" label="Wczytaj" onPress={onImport} />
+          <Button kind="line" label={tr('backup.export')} onPress={() => exportProfile(profile).catch((e) => Alert.alert(tr('backup.exportFailed'), e.message))} />
+          <Button kind="line" label={tr('backup.import')} onPress={onImport} />
         </Row>
       </Section>
 
-      <Section title="O aplikacji">
-        <T kind="small" color="ink2" style={{ paddingTop: space[3] }}>
-          Ceny z OpenRouter, Vercel AI Gateway, Requesty i katalogu models.dev, odświeżane co 15 minut. Linki „Partner” są partnerskie, a kolejność ofert zależy wyłącznie od ceny.
-        </T>
+      <Section title={tr('about.title')}>
+        <T kind="small" color="ink2" style={{ paddingTop: space[3] }}>{tr('about.body')}</T>
         <Row style={{ paddingVertical: space[3], gap: space[2] }}>
-          <Button kind="line" label="Prywatność" onPress={() => Linking.openURL(PRIVACY_URL)} />
-          <Button kind="line" label="Usuń profil" onPress={onReset} />
+          <Button kind="line" label={tr('about.privacy')} onPress={() => Linking.openURL(PRIVACY_URL)} />
+          <Button kind="line" label={tr('about.reset')} onPress={onReset} />
         </Row>
       </Section>
     </ScrollView>

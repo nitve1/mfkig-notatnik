@@ -130,3 +130,14 @@ test('onePerPlatform: tryb Zwykły', () => {
   assert.deepEqual(onePerPlatform(list).map((o) => o.provider), ['Decart', 'Vercel AI Gateway']);
   assert.deepEqual(onePerPlatform(list, 'openrouter:openrouter/Novita').map((o) => o.provider), ['Decart', 'Novita', 'Vercel AI Gateway']);
 });
+
+test('typowa długość promocji tylko z wiarygodnej próbki', () => {
+  const o = tok('openrouter', 'P', 0.5, 1, { discount: 0.5 });
+  const model = { id: 'a/x', name: 'X', unit: 'token', offers: [o] };
+  const promo = { modelId: 'a/x', key: offerKey(o), provider: 'P', type: 'discount', pct: 50, since: new Date().toISOString(), sinceKnown: true };
+  const item = { modelId: 'a/x', mode: 'use', offerKey: offerKey(o) };
+  const snap = (stats) => ({ models: [model], promos: { x: promo }, ended: [], promoStats: stats });
+  assert.equal(watchStatus(snap({ P: { n: 1, avgDays: 0.2 } }), item).typicalDays, null);
+  assert.equal(watchStatus(snap({ P: { n: 2, avgDays: 6 } }), item).typicalDays, null);
+  assert.equal(watchStatus(snap({ P: { n: 4, avgDays: 6 } }), item).typicalDays, 6);
+});

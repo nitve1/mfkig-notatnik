@@ -2,24 +2,21 @@ import { useMemo, useState } from 'react';
 import { FlatList, StyleSheet, TextInput, View } from 'react-native';
 import { cheapest, formatContext, formatUsd, searchModels, unitPrice } from '../../../core/pricing.js';
 import { viewFilter } from '../filters';
+import { t as tr } from '../../../core/i18n.js';
 import { Card, CatChip, Empty, PctBadge, Row, Segmented, T, MAX_FONT_SCALE } from '../ui';
 import Icon from '../icons';
-import { CAT_LABEL, Header, priceParts, shortName, styles } from '../parts';
+import { catLabel, Header, priceParts, shortName, styles } from '../parts';
 import { font, mainCat, radius, space, useTheme } from '../theme';
 import { useProfile } from '../profile';
 
 const CATS = [
-  { value: 'all', label: 'Wszystko' },
-  { value: 'text', icon: 'text', label: 'Tekst' },
-  { value: 'coding', icon: 'coding', label: 'Kod' },
-  { value: 'image', icon: 'image', label: 'Obraz' },
-  { value: 'video', icon: 'video', label: 'Wideo' },
+  { value: 'all' },
+  { value: 'text', icon: 'text' },
+  { value: 'coding', icon: 'coding' },
+  { value: 'image', icon: 'image' },
+  { value: 'video', icon: 'video' },
 ];
-const SORTS = [
-  { value: 'new', label: 'Najnowsze' },
-  { value: 'cheap', label: 'Najtańsze' },
-  { value: 'offers', label: 'Najwięcej ofert' },
-];
+const SORTS = ['new', 'cheap', 'offers'];
 
 export default function Search({ snapshot, onOpen }) {
   const t = useTheme();
@@ -51,7 +48,7 @@ export default function Search({ snapshot, onOpen }) {
 
   const header = (
     <View style={{ gap: space[3], marginBottom: space[1] }}>
-      <Header kicker={`${snapshot.models.length} modeli, ${rows.length} pasuje`} title="Szukaj" />
+      <Header kicker={tr('search.kicker', { n: snapshot.models.length, match: rows.length })} title={tr('search.title')} />
       <View style={[s.search, { backgroundColor: t.card, borderColor: q ? t.text : t.line }]}>
         <Icon name="search" size={20} color={t.ink2} />
         <TextInput
@@ -64,12 +61,12 @@ export default function Search({ snapshot, onOpen }) {
           autoCapitalize="none"
           clearButtonMode="while-editing"
           returnKeyType="search"
-          accessibilityLabel="Szukaj modelu"
+          accessibilityLabel={tr('search.a11y')}
           style={[s.input, { color: t.ink }]}
         />
       </View>
-      <Segmented options={CATS.map((c) => ({ value: c.value, icon: c.icon, label: c.icon ? '' : c.label, a11y: c.label }))} value={cat} onChange={setCat} />
-      {!q.trim() ? <Segmented options={SORTS} value={sort} onChange={setSort} /> : null}
+      <Segmented options={CATS.map((c) => ({ value: c.value, icon: c.icon, label: c.icon ? '' : catLabel(c.value), a11y: catLabel(c.value) }))} value={cat} onChange={setCat} />
+      {!q.trim() ? <Segmented options={SORTS.map((x) => ({ value: x, label: tr(`sort.${x}`) }))} value={sort} onChange={setSort} /> : null}
     </View>
   );
 
@@ -82,7 +79,7 @@ export default function Search({ snapshot, onOpen }) {
       contentContainerStyle={styles.list}
       initialNumToRender={14}
       ListHeaderComponent={header}
-      ListEmptyComponent={<Empty title="Nie ma takiego modelu" body="Spróbuj krótszej nazwy albo innej kategorii." />}
+      ListEmptyComponent={<Empty title={tr('search.empty')} body={tr('search.emptyBody')} />}
       renderItem={({ item: { m, best, promo, count } }) => {
         const c = mainCat(m);
         const p = priceParts(best);
@@ -94,14 +91,14 @@ export default function Search({ snapshot, onOpen }) {
                   {shortName(m.name)}
                   {watched.has(m.id) ? <T kind="strong" style={{ color: t.video }}> ★</T> : null}
                 </T>
-                <CatChip cat={c} label={CAT_LABEL[c]} extra={[m.context ? formatContext(m.context) : null, `${count} ofert`].filter(Boolean).join(', ')} />
+                <CatChip cat={c} label={catLabel(c)} extra={[m.context ? formatContext(m.context) : null, tr('common.offers', { n: count })].filter(Boolean).join(', ')} />
               </View>
               <View style={{ alignItems: 'flex-end', gap: 4 }}>
-                <T kind="num" style={!best && m.freeId ? { color: t.save } : null}>{best ? p.main : m.freeId ? '0 $' : '–'}</T>
+                <T kind="num" style={!best && m.freeId ? { color: t.save } : null}>{best ? p.main : m.freeId ? formatUsd(0) : '–'}</T>
                 {promo > 0 ? <PctBadge pct={promo} /> : <T kind="tiny" color="ink3">{best ? p.unit : ''}</T>}
               </View>
             </Row>
-            {best ? <T kind="tiny" color="ink3" style={{ marginTop: 6 }}>najtaniej u {best.provider}{best.unit === 'token' ? `, wyjście ${formatUsd(best.out)}` : ''}</T> : null}
+            {best ? <T kind="tiny" color="ink3" style={{ marginTop: 6 }}>{best.unit === 'token' ? tr('search.cheapestOut', { provider: best.provider, out: formatUsd(best.out) }) : tr('search.cheapest', { provider: best.provider })}</T> : null}
           </Card>
         );
       }}

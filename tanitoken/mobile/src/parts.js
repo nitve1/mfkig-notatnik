@@ -1,9 +1,10 @@
 import { Pressable, StyleSheet, View } from 'react-native';
-import { CATEGORIES, formatUsd, platformOf, promoAgeDays, timeAgo } from '../../core/pricing.js';
+import { formatUsd, platformOf, promoAgeDays, timeAgo } from '../../core/pricing.js';
+import { t as tr } from '../../core/i18n.js';
 import { Card, CatChip, IconButton, PctBadge, Progress, Row, T } from './ui';
 import { mainCat, space, useTheme } from './theme';
 
-export const CAT_LABEL = Object.fromEntries(CATEGORIES.map((c) => [c.key, c.label]));
+export const catLabel = (c) => tr(`cat.${c}`);
 export const CAT_ICON = { all: 'all', text: 'text', coding: 'coding', image: 'image', video: 'video' };
 
 export const shortName = (name) => name.replace(/^[^:]+:\s*/, '');
@@ -13,15 +14,15 @@ export const authorName = (m) => (m.name.includes(':') ? m.name.split(':')[0].tr
 // Cena "do pokazania" i jednostka.
 export function priceParts(o) {
   if (!o) return { main: '–', unit: '' };
-  if (o.unit === 'token') return { main: formatUsd(o.in), unit: '/ 1M wej.' };
-  return { main: formatUsd(o.price), unit: o.unit === 'image' ? '/ obraz' : '/ s' };
+  if (o.unit === 'token') return { main: formatUsd(o.in), unit: tr('unit.perMIn') };
+  return { main: formatUsd(o.price), unit: tr(o.unit === 'image' ? 'unit.perImage' : 'unit.perSecond') };
 }
 
 export function daysLabel(p) {
   const d = promoAgeDays(p);
-  if (!p.sinceKnown && d < 1) return 'od startu pomiarów';
-  if (d < 1) return `od ${Math.max(1, Math.round(d * 24))} h`;
-  return `od ${Math.round(d)} d`;
+  if (!p.sinceKnown && d < 1) return tr('promo.sinceStart');
+  if (d < 1) return tr('promo.sinceHours', { n: Math.max(1, Math.round(d * 24)) });
+  return tr('promo.sinceDays', { n: Math.round(d) });
 }
 
 // Karta promocji: pasek w kolorze kategorii, nazwa, cena, kategoria i dostawca, zniżka.
@@ -31,30 +32,30 @@ export function DealCard({ deal, onPress, watched, pro = true }) {
   const cat = mainCat(m);
   const p = priceParts(deal.offer);
   return (
-    <Card stripe={t[cat]} onPress={onPress} accessibilityLabel={`${m.name}, ${deal.type === 'free' ? 'darmowy' : `minus ${deal.pct} procent`}`}>
+    <Card stripe={t[cat]} onPress={onPress} accessibilityLabel={`${m.name}, ${deal.type === 'free' ? tr('deal.free') : `−${deal.pct}%`}`}>
       <Row style={{ alignItems: 'flex-start' }}>
         <View style={{ flex: 1, gap: 4 }}>
           <T kind="strong" numberOfLines={2}>
             {shortName(m.name)}
             {watched ? <T kind="strong" style={{ color: t.video }}> ★</T> : null}
           </T>
-          <CatChip cat={cat} label={CAT_LABEL[cat]} extra={deal.type === 'free' ? m.author : pro || platformOf(deal.offer) === deal.offer.provider ? deal.offer.provider : `${platformOf(deal.offer)}, przez ${deal.offer.provider}`} />
+          <CatChip cat={cat} label={catLabel(cat)} extra={deal.type === 'free' ? m.author : pro || platformOf(deal.offer) === deal.offer.provider ? deal.offer.provider : tr('offer.via', { platform: platformOf(deal.offer), provider: deal.offer.provider })} />
         </View>
         <View style={{ alignItems: 'flex-end', gap: 4 }}>
           {deal.type === 'free' ? (
-            <T kind="num" style={{ color: t.save }}>0 $</T>
+            <T kind="num" style={{ color: t.save }}>{formatUsd(0)}</T>
           ) : (
             <T kind="num">{p.main}</T>
           )}
           {deal.type === 'free' ? (
-            <T kind="tiny" color="save">za darmo</T>
+            <T kind="tiny" color="save">{tr('deal.free')}</T>
           ) : (
             <PctBadge pct={deal.pct} />
           )}
         </View>
       </Row>
       <T kind="tiny" color="ink3" style={{ marginTop: 6 }}>
-        {deal.type === 'free' ? `wariant ${m.freeId}` : `${p.unit.replace('/ ', 'za ')}, ${deal.type === 'drop' ? 'obniżka' : 'zniżka'} ${daysLabel(deal)}`}
+        {deal.type === 'free' ? tr('deal.variant', { id: m.freeId }) : tr(deal.type === 'drop' ? 'deal.dropLine' : 'deal.discountLine', { unit: p.unit, since: daysLabel(deal) })}
       </T>
     </Card>
   );
@@ -73,7 +74,7 @@ export function Header({ kicker, title, right }) {
 }
 
 export function BellButton({ onPress, dot }) {
-  return <IconButton name="bell" label="Alerty" onPress={onPress} dot={dot} />;
+  return <IconButton name="bell" label={tr('nav.alerts')} onPress={onPress} dot={dot} />;
 }
 
 // Stan cen: trwa sprawdzanie / kiedy ostatnio / czemu nie sprawdzamy. Dotknięcie = sprawdź teraz.
@@ -84,23 +85,23 @@ export function PriceStatus({ snapshot, status, onRefresh }) {
   let text;
   let color = t.save;
   if (refreshing) {
-    text = progress != null ? `Sprawdzam ceny… ${Math.round(progress * 100)}%` : 'Sprawdzam ceny…';
+    text = progress != null ? tr('status.checkingPct', { pct: Math.round(progress * 100) }) : tr('status.checking');
     color = t.text;
   } else if (error === 'wifi-only') {
-    text = `Czekam na Wi-Fi, ceny sprawdzone ${age}`;
+    text = tr('status.waitWifi', { age });
     color = t.video;
   } else if (error) {
-    text = `Brak połączenia, ceny sprawdzone ${age}`;
+    text = tr('status.offline', { age });
     color = t.deal;
   } else {
-    text = `Ceny sprawdzone ${age}`;
+    text = tr('status.checked', { age });
   }
   return (
-    <Pressable onPress={onRefresh} disabled={refreshing} accessibilityRole="button" accessibilityHint="Sprawdza ceny teraz" style={{ gap: 6 }}>
+    <Pressable onPress={onRefresh} disabled={refreshing} accessibilityRole="button" accessibilityHint={tr('status.hint')} style={{ gap: 6 }}>
       <Row style={{ gap: 8 }}>
         <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: color }} />
         <T kind="small" color="ink2" style={{ flex: 1 }}>{text}</T>
-        {!refreshing ? <T kind="small" style={{ color: t.text }}>Odśwież</T> : null}
+        {!refreshing ? <T kind="small" style={{ color: t.text }}>{tr('status.refresh')}</T> : null}
       </Row>
       {refreshing && progress != null ? <Progress value={progress} color={t.text} /> : null}
     </Pressable>

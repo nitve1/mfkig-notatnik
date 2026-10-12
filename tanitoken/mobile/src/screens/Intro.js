@@ -2,6 +2,7 @@
 import { useEffect, useRef } from 'react';
 import { AccessibilityInfo, Animated, Easing, StyleSheet, View } from 'react-native';
 import { T } from '../ui';
+import { t as tr } from '../../../core/i18n.js';
 import Icon from '../icons';
 import { useTheme } from '../theme';
 
@@ -51,7 +52,7 @@ export default function Intro({ onDone }) {
       </View>
       <Animated.View style={{ opacity: word, transform: [{ translateY: word.interpolate({ inputRange: [0, 1], outputRange: [10, 0] }) }], alignItems: 'center' }}>
         <T kind="display" style={{ fontSize: 40, lineHeight: 44, marginTop: 28 }}>TaniToken</T>
-        <T color="ink2">Ceny API modeli AI na bieżąco</T>
+        <T color="ink2">{tr('intro.tagline')}</T>
       </Animated.View>
     </Animated.View>
   );

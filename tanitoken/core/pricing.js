@@ -11,13 +11,17 @@ export const DEFAULT_USAGE = {
   second: { count: 300 }, // sekund wideo
 };
 
+// Opis jednostki ceny w bieżącym języku (np. "USD za 1M tokenów (wejście / wyjście)").
 export const UNIT_LABEL = {
-  token: 'za 1M tokenów (wejście / wyjście)',
-  image: 'za obraz',
-  second: 'za sekundę wideo',
+  get token() { return t('unitLabel.token'); },
+  get image() { return t('unitLabel.image'); },
+  get second() { return t('unitLabel.second'); },
 };
 
+import { formatNumber, money, t } from './i18n.js';
+
 const DAY = 86400 * 1000;
+export const MIN_PROMO_SAMPLES = 3;
 
 export function offerKey(o) {
   return `${o.src}:${o.tag ?? o.provider}`;
@@ -203,7 +207,9 @@ export function watchStatus(snapshot, item, usage = DEFAULT_USAGE, filter = null
   const bestCost = best ? offerCost(best, usage) : null;
   const overpayPct = usedCost && bestCost != null && usedCost > 0 ? Math.round((1 - bestCost / usedCost) * 100) : 0;
   const stats = snapshot.promoStats ?? {};
-  const typical = usedPromo ? stats[usedPromo.provider]?.avgDays ?? null : null;
+  // Typowa długość tylko z sensownej próbki: min. 3 zakończone promocje i średnio ponad dobę.
+  const st = usedPromo ? stats[usedPromo.provider] : null;
+  const typical = st && st.n >= MIN_PROMO_SAMPLES && st.avgDays >= 1 ? st.avgDays : null;
   return { model, best, used, usedPromo, promos, ended, usedCost, bestCost, overpayPct, typicalDays: typical };
 }
 
@@ -277,8 +283,8 @@ export function computeAlerts(snapshot, watchlist, usage = DEFAULT_USAGE, { now 
         id: `start|${p.modelId}|${p.key}|${p.since}`,
         kind: 'promo-start',
         modelId: s.model.id,
-        title: p.type === 'free' ? `${name}: darmowy wariant` : `${name}: −${p.pct}% u ${p.provider}`,
-        body: p.type === 'free' ? `Model jest dostępny za darmo (${s.model.freeId}).` : `Promocja ${promoAgeText(p, now)}.`,
+        title: p.type === 'free' ? t('alertText.freeTitle', { name }) : t('alertText.startTitle', { name, pct: p.pct, provider: p.provider }),
+        body: p.type === 'free' ? t('alertText.freeBody', { id: s.model.freeId }) : t('alertText.startBody', { age: promoAgeText(p, now) }),
       });
     }
     for (const e of s.ended) {
@@ -288,10 +294,10 @@ export function computeAlerts(snapshot, watchlist, usage = DEFAULT_USAGE, { now 
         kind: 'promo-end',
         modelId: s.model.id,
         urgent: item.mode === 'use',
-        title: e.type === 'free' ? `${name}: koniec darmowego wariantu` : `${name}: koniec promocji u ${e.provider}`,
+        title: e.type === 'free' ? t('alertText.freeEndTitle', { name }) : t('alertText.endTitle', { name, provider: e.provider }),
         body: s.best
-          ? `Teraz najtaniej: ${s.best.provider}, ${formatOfferPrice(s.best)}.`
-          : 'Sprawdź aktualne ceny.',
+          ? t('alertText.endBody', { provider: s.best.provider, price: formatOfferPrice(s.best) })
+          : t('alertText.endBodyNone'),
       });
     }
     if (s.usedPromo && s.typicalDays && promoAgeDays(s.usedPromo, now) >= s.typicalDays * 0.8) {
@@ -300,8 +306,8 @@ export function computeAlerts(snapshot, watchlist, usage = DEFAULT_USAGE, { now 
         kind: 'promo-aging',
         modelId: s.model.id,
         urgent: true,
-        title: `${name}: promocja może się kończyć`,
-        body: `Trwa ${formatDays(promoAgeDays(s.usedPromo, now))}, u ${s.usedPromo.provider} zwykle ok. ${formatDays(s.typicalDays)}.`,
+        title: t('alertText.agingTitle', { name }),
+        body: t('alertText.agingBody', { age: formatDays(promoAgeDays(s.usedPromo, now)), provider: s.usedPromo.provider, typical: formatDays(s.typicalDays) }),
       });
     }
     if (item.mode === 'use' && s.used && s.overpayPct >= 20 && s.best) {
@@ -309,8 +315,8 @@ export function computeAlerts(snapshot, watchlist, usage = DEFAULT_USAGE, { now 
         id: `cheaper|${s.model.id}|${offerKey(s.best)}|${Math.round(unitPrice(s.best) * 1e4)}`,
         kind: 'cheaper',
         modelId: s.model.id,
-        title: `${name}: taniej o ${s.overpayPct}%`,
-        body: `${s.best.provider} oferuje ${formatOfferPrice(s.best)}.`,
+        title: t('alertText.cheaperTitle', { name, pct: s.overpayPct }),
+        body: t('alertText.cheaperBody', { provider: s.best.provider, price: formatOfferPrice(s.best) }),
       });
     }
     if (s.model.expires) {
@@ -321,8 +327,8 @@ export function computeAlerts(snapshot, watchlist, usage = DEFAULT_USAGE, { now 
           kind: 'expires',
           modelId: s.model.id,
           urgent: item.mode === 'use',
-          title: `${name}: model zostanie wyłączony`,
-          body: `Data wycofania: ${s.model.expires}.`,
+          title: t('alertText.expiresTitle', { name }),
+          body: t('alertText.expiresBody', { date: s.model.expires }),
         });
       }
     }
@@ -352,25 +358,26 @@ export function searchModels(models, query) {
 // Opis wieku promocji. Dla promocji zastanych przy pierwszym pomiarze nie znamy startu.
 export function promoAgeText(p, now = Date.now()) {
   const age = formatDays(promoAgeDays(p, now));
-  if (p.sinceKnown) return `trwa ${age}`;
-  return promoAgeDays(p, now) < 1 / 24 ? 'aktywna od pierwszego pomiaru' : `trwa co najmniej ${age}`;
+  if (p.sinceKnown) return t('age.lasts', { age });
+  return promoAgeDays(p, now) < 1 / 24 ? t('age.fromFirst') : t('age.atLeast', { age });
 }
 
 // ---------- formatowanie ----------
 
+// Ceny w USD, zapis zależny od języka (EN "$5.10", inne "5,10 $").
 export function formatUsd(v) {
   if (v == null) return '–';
-  if (v === 0) return '0 $';
-  if (v < 0.01) return `${+v.toFixed(4)} $`;
-  if (v < 1) return `${+v.toFixed(3)} $`;
-  if (v < 100) return `${v.toFixed(2)} $`;
-  return `${Math.round(v).toLocaleString('pl-PL')} $`;
+  if (v === 0) return money('0');
+  if (v < 0.01) return money(formatNumber(+v.toFixed(4)));
+  if (v < 1) return money(formatNumber(+v.toFixed(3)));
+  if (v < 100) return money(formatNumber(v, 2));
+  return money(formatNumber(Math.round(v)));
 }
 
 export function formatOfferPrice(o) {
   if (!o) return '–';
   if (o.unit === 'token') return `${formatUsd(o.in)} / ${formatUsd(o.out)}`;
-  return `${formatUsd(o.price)} ${o.unit === 'image' ? 'za obraz' : 'za s'}`;
+  return `${formatUsd(o.price)} ${t(o.unit === 'image' ? 'unit.perImage' : 'unit.perSecond')}`;
 }
 
 export function formatContext(n) {
@@ -380,16 +387,15 @@ export function formatContext(n) {
 }
 
 export function formatDays(d) {
-  if (d < 1 / 24) return 'mniej niż godzinę';
-  if (d < 1) return `${Math.round(d * 24)} h`;
-  const n = Math.round(d);
-  return n === 1 ? '1 dzień' : `${n} dni`;
+  if (d < 1 / 24) return t('days.lessThanHour');
+  if (d < 1) return t('days.hours', { n: Math.round(d * 24) });
+  return t('days.days', { n: Math.round(d) });
 }
 
 export function timeAgo(iso, now = Date.now()) {
   const s = Math.max(0, Math.round((now - new Date(iso).getTime()) / 1000));
-  if (s < 60) return `${s} s temu`;
-  if (s < 3600) return `${Math.round(s / 60)} min temu`;
-  if (s < 86400) return `${Math.round(s / 3600)} h temu`;
-  return `${Math.round(s / 86400)} d temu`;
+  if (s < 60) return t('ago.s', { n: s });
+  if (s < 3600) return t('ago.min', { n: Math.round(s / 60) });
+  if (s < 86400) return t('ago.h', { n: Math.round(s / 3600) });
+  return t('ago.d', { n: Math.round(s / 86400) });
 }
