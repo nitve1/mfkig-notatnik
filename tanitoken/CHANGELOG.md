@@ -18,14 +18,14 @@ Jedno miejsce z historią zmian, decyzjami i otwartymi zadaniami. Aktualizowane 
 
 | Priorytet | Zadanie | Status |
 | --- | --- | --- |
-| 1 | Test APK 1.1.0 na Motoroli Razr 60 (szkło, Najtaniej, fal.ai, powrót z modelu, ekran startowy) | u użytkownika |
+| 1 | Test APK 0.1.1 na Motoroli Razr 60 (szkło, Najtaniej, fal.ai, powrót z modelu, ekran startowy) | u użytkownika |
 | 2 | Historia cen w snapshocie (np. 30 punktów na ofertę) pod wykresy w karcie modelu | pomysł |
 | 3 | Landing w stylu „Kolorowe kategorie” + wersje językowe | na końcu |
 | 4 | Linki partnerskie: zgłoszenie do Novita / GMI Cloud, wklejenie linków w `core/affiliates.js` | po stronie użytkownika |
 | 5 | Po merge'u: ręczne uruchomienie workflow „TaniToken snapshot” (tworzy gałąź `tanitoken-data`) | po merge'u |
 | 6 | Klucz release (keystore) do Google Play; obecny APK jest podpisany kluczem debug | przed publikacją |
 
-## 2026-10-13 – sesja 5: poprawki po teście na Motoroli Razr 60, więcej platform, szkło (APK 1.1.0)
+## 2026-10-13 – sesja 5: poprawki po teście na Motoroli Razr 60, więcej platform, szkło (APK 0.1.1)
 
 Uwagi użytkownika po pierwszym teście APK i co z nimi zrobione:
 
@@ -50,13 +50,15 @@ Uwagi użytkownika po pierwszym teście APK i co z nimi zrobione:
     `BlurTargetView` + `dimezisBlurViewSdk31Plus`), półprzezroczysty odcień, połysk SVG i 1 px jasnej
     krawędzi u góry. Prawdziwe ugięcie natywnie wymagałoby własnego shadera (AGSL/Metal).
   - `BottomSpaceContext` daje listom miejsce na dole, żeby ostatni element nie chował się pod paskiem.
-- Wersja 1.1.0 (versionCode 2), ten sam klucz debug, więc instaluje się na 1.0.0 bez utraty danych.
-- APK 1.1.0 miał 30,07 MiB (limit wysyłki 30). Włączony R8 (`expo-build-properties`: minify + shrinkResources)
+- Wersja 0.1.1 (versionCode 3), ten sam klucz debug, więc instaluje się na poprzednią bez utraty danych.
+  Numeracja (decyzja użytkownika): 0.x do testów, 1.0.0 dopiero przy wejściu do Google Play. Pierwszy
+  APK nazywał się 1.0.0, a w praktyce był 0.1.0; versionCode tylko rośnie (1, 2, 3...).
+- APK miał 30,07 MiB (limit wysyłki 30). Włączony R8 (`expo-build-properties`: minify + shrinkResources)
   z regułami keep dla modułów Expo, React Native, Hermes, BlurView, SVG, AsyncStorage: 25 MB. Brak KVM w
   środowisku, więc bez emulatora; pierwszy test R8 na telefonie użytkownika.
 - Testy: 15/15 (nowe: parser fal, łączenie po nazwie, platformy).
 
-## 2026-10-12 – sesja 4b: APK 1.0.0
+## 2026-10-12 – sesja 4b: pierwszy APK (wtedy 1.0.0, od sesji 5 liczony jako 0.1.0)
 
 - Zbudowany lokalnie (bez EAS) `TaniToken-1.0.0-arm64.apk` (30 MB, `pl.tanitoken.app`, versionCode 1,
   podpisany kluczem debug, bundle Hermes ze snapshotem cen z dnia buildu). Wysłany użytkownikowi.
@@ -257,4 +259,5 @@ Inne:
   minimum obowiązków RODO. Analityka, konta albo push z serwera to zmienią.
 - Dostawcy nie podają dat końca promocji: ostrzeżenia opierają się na historii długości zniżek.
 - Linki partnerskie zawsze oznaczone, kolejność ofert tylko według ceny.
+- Wersje: 0.x.y w trakcie testów, 1.0.0 dopiero gdy użytkownik uzna, że czas na Google Play.
 - Kolejność prac (ustalona z użytkownikiem): makiety apki → przebudowa apki → języki → landing.
