@@ -212,7 +212,7 @@ function screenVideo(v) {
     <div class="hdr"><div><div class="kick">Najtaniej teraz</div><div class="h1">Wideo</div></div><div class="iconbtn glass">${ic('bell', 22)}</div></div>
     <div class="glass seg"><div>Zniżki</div><div>Obniżki</div><div>Darmowe</div><div class="on">Najtaniej</div></div>
     ${videos.slice(0, 3).map((x) => `<div class="glass card" ${tint(v, 'video', 0.2)}><div class="stripe" style="background:${COLORS.video}"></div><div class="r"><div><div class="nm">${esc(x.name)}</div><div class="chip"><b style="color:${COLORS.video}">Wideo</b> ${esc(x.via)}</div></div><div style="text-align:right"><div class="num">${esc(x.price)}</div><div class="sub" style="margin:2px 0 0">za sekundę</div></div></div></div>`).join('')}
-    ${sponsor(v, { logo: 'fal', color: '#5b3df5', name: 'fal.ai', text: 'Veo, Kling, Seedance w jednym API', cta: 'Wypróbuj' })}
+    ${sponsor(v, { logo: 'W', color: '#5b3df5', name: 'WaveSpeedAI', text: 'Kling, Seedance, Wan przez jedno API', cta: 'Wypróbuj' })}
     ${videos.slice(3, 7).map((x) => `<div class="glass card" ${tint(v, 'video', 0.2)}><div class="stripe" style="background:${COLORS.video}"></div><div class="r"><div><div class="nm">${esc(x.name)}</div><div class="chip"><b style="color:${COLORS.video}">Wideo</b> ${esc(x.via)}</div></div><div style="text-align:right"><div class="num">${esc(x.price)}</div><div class="sub" style="margin:2px 0 0">za sekundę</div></div></div></div>`).join('')}
   </div>${nav(v, 0)}</div>`;
 }

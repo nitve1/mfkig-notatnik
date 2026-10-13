@@ -36,7 +36,10 @@ Jedno miejsce z historią zmian, decyzjami i otwartymi zadaniami. Aktualizowane 
   często z „Typical uses include…”. Plan: opis z Vercel, w drugiej kolejności OpenRouter (do ostatniego
   pełnego zdania), dla fal `shortDescription`; zastosowania jako przetłumaczone etykiety z możliwości modelu
   (narzędzia, rozumowanie, obraz na wejściu, długi kontekst, kategorie).
-- Afiliacja: raport w `docs/afiliacje-2026-10.md` (w toku).
+- Afiliacja: raport w `docs/afiliacje-2026-10.md`. Najlepsze na start: Novita (10%/180 dni), CometAPI (20%),
+  WaveSpeedAI (obraz/wideo, 10%), ElevenLabs (22%/12 mies.), RunPod, Vast.ai, Higgsfield, AI/ML API.
+  OpenRouter, Vercel, Requesty, fal, Replicate, Together, DeepInfra nie mają programu. Karta sponsorowana
+  co 8–12 pozycji, oznaczona, nigdy nie zmienia kolejności cen (UCPD, UOKiK, zasady Google Play).
 - Czeka na decyzję użytkownika: wybór wariantu A/B/C, potem wdrożenie w apce.
 
 ## 2026-10-13 – sesja 5: poprawki po teście na Motoroli Razr 60, więcej platform, szkło (APK 0.1.1)
