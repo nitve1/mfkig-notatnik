@@ -1,4 +1,4 @@
-// Tłumaczenia TaniToken: EN (domyślny), PL, ES, FR, IT, DE.
+// Tłumaczenia LightTokenz: EN (domyślny), PL, ES, FR, IT, DE.
 // Jeden moduł dla apki i tekstów w core (alerty, formaty). Klucze w locales/<język>.js.
 import en from './locales/en.js';
 import pl from './locales/pl.js';

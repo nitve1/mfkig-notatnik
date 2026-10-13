@@ -1,4 +1,4 @@
-# TaniToken
+# LightTokenz (dawniej TaniToken)
 
 Gdzie dziś najtaniej korzystać z API danego modelu AI. Ceny z wielu źródeł, promocje i ostrzeżenia, zanim
 promocja się skończy. Osobny projekt w tym repo, niezależny od notatnika MFKiG.

@@ -12,23 +12,66 @@ export const AFFILIATES = {
     program: '10% od wydatków poleconych przez 180 dni',
     apply: 'https://novita.ai/affiliate',
     link: null,
+    sponsor: { cats: ['text', 'coding', 'image', 'video'], color: '#23b26d', logo: 'N', name: 'Novita AI', tagline: 'ad.novita' },
+  },
+  'CometAPI': {
+    program: '20% od każdego doładowania poleconego (Tolt)',
+    apply: 'https://www.cometapi.com/',
+    link: null,
+    sponsor: { cats: ['text', 'coding'], color: '#3d63ff', logo: 'C', name: 'CometAPI', tagline: 'ad.comet' },
+  },
+  'WaveSpeedAI': {
+    program: '10% od płatności w pierwszych 30 dniach (Tolt)',
+    apply: 'https://wavespeed.ai/',
+    link: null,
+    sponsor: { cats: ['image', 'video'], color: '#7b4dff', logo: 'W', name: 'WaveSpeedAI', tagline: 'ad.wavespeed' },
+  },
+  'AI/ML API': {
+    program: '30% cyklicznie (Rewardful), warunki do potwierdzenia',
+    apply: 'https://aimlapi.com/',
+    link: null,
+    sponsor: { cats: ['text', 'coding', 'image', 'video'], color: '#ff8a00', logo: 'AI', name: 'AI/ML API', tagline: 'ad.aiml' },
   },
   'GMICloud': {
-    program: 'Ambasador GMI Cloud: 20% prowizji',
+    program: 'Ambasador GMI Cloud: 20% prowizji (na zaproszenie)',
     apply: 'https://www.gmicloud.ai/en/company/ambassador-program',
     link: null,
   },
   'fal': {
-    program: 'Program fal (warunki niepotwierdzone, cookie 60 dni)',
-    apply: 'https://openaffiliate.dev/programs/fal',
+    program: 'Brak publicznego programu (sprawdzone 2026-10)',
+    apply: null,
     link: null,
   },
 };
 
-// Nazwy providerów różnią się między źródłami ("GMICloud", "GMI Cloud").
-const ALIASES = { 'GMI Cloud': 'GMICloud', 'Novita AI': 'Novita', 'fal.ai': 'fal' };
+// Karty "Sponsorowane" w listach: tylko partnerzy z wklejonym linkiem, pasujący do kategorii.
+// Zasady (docs/afiliacje-2026-10.md): oznaczone, najwyżej co SPONSOR_EVERY pozycji, nigdy na pierwszym
+// miejscu i nigdy nie zmieniają kolejności cen.
+export const SPONSOR_EVERY = 10;
 
-const UTM = { utm_source: 'tanitoken', utm_medium: 'referral', utm_campaign: 'porownywarka' };
+export function sponsorsFor(cat = 'all') {
+  return Object.values(AFFILIATES)
+    .filter((a) => a.link && a.sponsor && (cat === 'all' || a.sponsor.cats.includes(cat)))
+    .map((a) => ({ ...a.sponsor, url: withTracking(a.link) }));
+}
+
+// Wstawia karty sponsorów do listy co SPONSOR_EVERY pozycji (po pozycji 10, 20...).
+export function withSponsors(items, cat = 'all') {
+  const ads = sponsorsFor(cat);
+  if (!ads.length || items.length < SPONSOR_EVERY) return items;
+  const out = [];
+  let n = 0;
+  items.forEach((it, i) => {
+    out.push(it);
+    if ((i + 1) % SPONSOR_EVERY === 0 && i + 1 < items.length) out.push({ type: 'sponsor', sponsor: ads[n++ % ads.length], key: `ad-${i}` });
+  });
+  return out;
+}
+
+// Nazwy providerów różnią się między źródłami ("GMICloud", "GMI Cloud").
+const ALIASES = { 'GMI Cloud': 'GMICloud', 'Novita AI': 'Novita', 'fal.ai': 'fal', 'AIMLAPI': 'AI/ML API', 'WaveSpeed': 'WaveSpeedAI' };
+
+const UTM = { utm_source: 'lighttokenz', utm_medium: 'referral', utm_campaign: 'lighttokenz' };
 
 export function withTracking(url) {
   if (!url) return null;

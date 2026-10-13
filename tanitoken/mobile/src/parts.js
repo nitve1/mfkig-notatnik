@@ -1,8 +1,9 @@
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Linking, Pressable, StyleSheet, View } from 'react-native';
 import { formatUsd, platformOf, promoAgeDays, timeAgo } from '../../core/pricing.js';
 import { t as tr } from '../../core/i18n.js';
 import { Card, CatChip, IconButton, PctBadge, Progress, Row, T } from './ui';
-import { mainCat, space, useTheme } from './theme';
+import { mainCat, radius, space, useTheme } from './theme';
+import { GlassFx, glassFrame } from './glass';
 
 export const catLabel = (c) => tr(`cat.${c}`);
 export const CAT_ICON = { all: 'all', text: 'text', coding: 'coding', image: 'image', video: 'video' };
@@ -67,6 +68,32 @@ export function DealCard({ deal, onPress, watched, pro = true }) {
   );
 }
 
+// Karta partnera między ofertami: wyraźnie oznaczona, osobny wygląd (nie udaje wiersza cennika).
+export function SponsorCard({ sponsor }) {
+  const t = useTheme();
+  return (
+    <Pressable
+      onPress={() => Linking.openURL(sponsor.url)}
+      accessibilityRole="link"
+      accessibilityLabel={`${tr('ad.label')}: ${sponsor.name}`}
+      style={({ pressed }) => [glassFrame(t, radius.lg), { backgroundColor: t.card, padding: 14, flexDirection: 'row', alignItems: 'center', gap: 12, opacity: pressed ? 0.85 : 1 }]}
+    >
+      <GlassFx radius={radius.lg} />
+      <View style={{ width: 44, height: 44, borderRadius: radius.sm, backgroundColor: sponsor.color, alignItems: 'center', justifyContent: 'center' }}>
+        <T kind="h2" style={{ color: '#fff' }}>{sponsor.logo}</T>
+      </View>
+      <View style={{ flex: 1, minWidth: 0 }}>
+        <T kind="tiny" color="ink3" style={{ letterSpacing: 0.5, textTransform: 'uppercase' }}>{tr('ad.label')}</T>
+        <T kind="strong">{sponsor.name}</T>
+        <T kind="small" color="ink2" numberOfLines={2}>{tr(sponsor.tagline)}</T>
+      </View>
+      <View style={{ paddingHorizontal: 12, paddingVertical: 8, borderRadius: radius.xs, backgroundColor: t.glassActive, borderTopWidth: 1, borderTopColor: t.glassEdge }}>
+        <T kind="small" style={{ fontFamily: 'Figtree_700Bold' }}>{tr('ad.cta')}</T>
+      </View>
+    </Pressable>
+  );
+}
+
 export function Header({ kicker, title, right }) {
   return (
     <Row style={{ alignItems: 'flex-end', marginBottom: space[3] }}>
@@ -103,7 +130,8 @@ export function PriceStatus({ snapshot, status, onRefresh }) {
     text = tr('status.checked', { age });
   }
   return (
-    <Pressable onPress={onRefresh} disabled={refreshing} accessibilityRole="button" accessibilityHint={tr('status.hint')} style={{ gap: 6 }}>
+    <Pressable onPress={onRefresh} disabled={refreshing} accessibilityRole="button" accessibilityHint={tr('status.hint')} style={[{ gap: 6, paddingVertical: 10, paddingHorizontal: 14, backgroundColor: t.card }, glassFrame(t, radius.md)]}>
+      <GlassFx radius={radius.md} />
       <Row style={{ gap: 8 }}>
         <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: color }} />
         <T kind="small" color="ink2" style={{ flex: 1 }}>{text}</T>

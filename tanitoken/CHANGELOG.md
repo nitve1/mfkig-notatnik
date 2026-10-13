@@ -1,4 +1,4 @@
-# TaniToken – changelog i stan projektu
+# LightTokenz (dawniej TaniToken) – changelog i stan projektu
 
 Jedno miejsce z historią zmian, decyzjami i otwartymi zadaniami. Aktualizowane przy każdej zmianie,
 żeby nowa sesja mogła kontynuować bez kontekstu rozmowy. Najnowsze wpisy na górze.
@@ -18,12 +18,39 @@ Jedno miejsce z historią zmian, decyzjami i otwartymi zadaniami. Aktualizowane 
 
 | Priorytet | Zadanie | Status |
 | --- | --- | --- |
-| 1 | Test APK 0.1.1 na Motoroli Razr 60 (szkło, Najtaniej, fal.ai, powrót z modelu, ekran startowy) | u użytkownika |
+| 1 | Test APK 0.2.0 na Motoroli Razr 60 (nowa nazwa i pakiet: odinstalować TaniToken) | u użytkownika |
 | 2 | Historia cen w snapshocie (np. 30 punktów na ofertę) pod wykresy w karcie modelu | pomysł |
 | 3 | Landing w stylu „Kolorowe kategorie” + wersje językowe | na końcu |
-| 4 | Linki partnerskie: zgłoszenie do Novita / GMI Cloud, wklejenie linków w `core/affiliates.js` | po stronie użytkownika |
+| 4 | Linki partnerskie: zapis do Novita, CometAPI, WaveSpeedAI, AI/ML API, wklejenie `link` w `core/affiliates.js` (karty pojawią się same) | po stronie użytkownika |
+| 4b | Domena lighttokenz.com/.app, landing pod nową nazwą | po stronie użytkownika / na końcu |
 | 5 | Po merge'u: ręczne uruchomienie workflow „TaniToken snapshot” (tworzy gałąź `tanitoken-data`) | po merge'u |
 | 6 | Klucz release (keystore) do Google Play; obecny APK jest podpisany kluczem debug | przed publikacją |
+
+## 2026-10-13 – sesja 7: LightTokenz 0.2.0 (nocne szkło, kompaktowe menu, opisy modeli)
+
+Decyzje użytkownika: menu „kompaktowe rozwijane”, wariant „Nocne szkło” bez jasnego motywu, nowa nazwa
+**LightTokenz** (gra słów, lighttokens.com zajęta; lighttokenz.com/.app/.io bez DNS, do sprawdzenia u rejestratora).
+
+- Nazwa: `app.json` name LightTokenz, slug `lighttokenz`, pakiet Android i iOS **`com.lighttokenz.app`**
+  (zmiana pakietu = nowa aplikacja, starą TaniToken trzeba odinstalować; lepiej teraz niż po Google Play).
+  Teksty w 6 językach, plik kopii profilu `lighttokenz-profile-*.json` (stare pliki `tanitoken` nadal się wczytują).
+  Folder w repo zostaje `tanitoken/` (ścieżki workflow i adresy snapshotu), klucze pamięci też bez zmian.
+- Motyw: jeden, „Nocne szkło” (`src/theme.js`); przełącznik motywu usunięty z Profilu i kreatora.
+- Szkło wszędzie (`src/glass.js`): `Backdrop` (świecące plamy kategorii w SVG, rysowane raz), `GlassFx`
+  (połysk + 1 px jasnej krawędzi) na kartach, sekcjach, kaflach, przełącznikach, przyciskach, statusie cen;
+  prawdziwe rozmycie (`Glass`, expo-blur) tylko na pasku nad przewijaną treścią, bo rozmycie na każdej karcie
+  listy byłoby za ciężkie, a karty leżą na nieruchomym, już rozmytym tle.
+- Rogi bliżej kwadratu: `radius` xs 9, sm 10, md 12, lg 14, xl 16; pigułki i odznaki też prostokątne.
+- Menu: pływające, kompaktowe; nieaktywne zakładki to ikony, aktywna rozwija się w prostokąt z ikoną i nazwą.
+- Karta modelu: sekcja „O modelu” (opis twórcy, rozwijany), „Do czego się nada” (etykiety z kategorii i
+  możliwości: narzędzia, rozumowanie, obraz na wejściu, JSON, długi kontekst) i przykład polecenia.
+  Snapshot: `desc` (Vercel pełny > OpenRouter obcięty do zdania > fal `shortDescription`) i `caps`;
+  680/689 modeli ma opis. Snapshot 1,74 MB.
+- Partnerzy: `AFFILIATES` z Novita, CometAPI, WaveSpeedAI, AI/ML API (`core/affiliates.js`), karta
+  „Sponsorowane · link partnerski” co 10 pozycji w Promocjach (`withSponsors`), tylko gdy partner ma `link`.
+  Teraz wszystkie `link: null`, więc kart nie widać, dopóki użytkownik nie wklei swoich linków.
+- Ekran startowy: 2 s dłużej (z sesji 6), napis LightTokenz.
+- Wersja 0.2.0 (versionCode 4). Testy 16/16, expo-doctor 21/21, APK 26 MB (arm64, R8).
 
 ## 2026-10-13 – sesja 6: makiety szkła, opisy modeli, dłuższy ekran startowy
 

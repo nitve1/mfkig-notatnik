@@ -1,6 +1,6 @@
 {
-  "name": "tanitoken",
-  "version": "0.1.1",
+  "name": "lighttokenz",
+  "version": "0.2.0",
   "private": true,
   "main": "index.js",
   "scripts": {

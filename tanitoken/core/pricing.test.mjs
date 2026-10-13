@@ -165,3 +165,19 @@ test('platformy: bramki z models.dev, fal, bez zwykłych dostawców', () => {
   assert.equal(platformOf(tok('direct', 'Kilo Gateway', 1, 1)), 'Kilo Gateway');
   assert.equal(platformOf(tok('direct', 'Groq', 1, 1)), null);
 });
+
+test('karty partnerów: tylko z linkiem, co 10 pozycji, nigdy na początku', async () => {
+  const { AFFILIATES, withSponsors } = await import('./affiliates.js');
+  const items = Array.from({ length: 25 }, (_, i) => ({ i }));
+  assert.equal(withSponsors(items).length, 25); // brak linków = brak kart
+  AFFILIATES.Novita.link = 'https://example.com/ref';
+  try {
+    const out = withSponsors(items, 'video');
+    assert.equal(out.length, 27);
+    assert.equal(out[10].type, 'sponsor');
+    assert.notEqual(out[0].type, 'sponsor');
+    assert.equal(withSponsors(items.slice(0, 5)).length, 5);
+  } finally {
+    AFFILIATES.Novita.link = null;
+  }
+});

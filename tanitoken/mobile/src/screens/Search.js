@@ -50,7 +50,7 @@ export default function Search({ snapshot, onOpen }) {
   const header = (
     <View style={{ gap: space[3], marginBottom: space[1] }}>
       <Header kicker={tr('search.kicker', { n: snapshot.models.length, match: rows.length })} title={tr('search.title')} />
-      <View style={[s.search, { backgroundColor: t.card, borderColor: q ? t.text : t.line }]}>
+      <View style={[s.search, { backgroundColor: t.card, borderColor: q ? t.text : t.glassLine }]}>
         <Icon name="search" size={20} color={t.ink2} />
         <TextInput
           maxFontSizeMultiplier={MAX_FONT_SCALE}

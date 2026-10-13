@@ -6,7 +6,8 @@ import { ThemeContext, font, radius, space, useTheme } from '../theme';
 import { importProfile, useProfile } from '../profile';
 import { enableNotifications } from '../alerts';
 import ProviderPicker from './ProviderPicker';
-import { LanguagePicker, modeNote, modeOptions, themeOptions } from './Profile';
+import { LanguagePicker, modeNote, modeOptions } from './Profile';
+import { GlassFx, glassFrame } from '../glass';
 import { t as tr } from '../../../core/i18n.js';
 
 const STEPS = 4;
@@ -41,7 +42,8 @@ function Body({ snapshot, insets, draft, set, step, setStep, finish }) {
         </View>
         <T kind="display">{tr('onb.title')}</T>
         <T color="ink2" style={{ marginTop: space[2] }}>{tr('onb.intro')}</T>
-        <View style={[s.card, { backgroundColor: t.card, marginTop: space[5] }]}>
+        <View style={[s.card, glassFrame(t, 14), { backgroundColor: t.card, marginTop: space[5] }]}>
+          <GlassFx />
           <T kind="strong">{tr('onb.nameQ')}</T>
           <TextInput
           maxFontSizeMultiplier={MAX_FONT_SCALE}
@@ -52,7 +54,7 @@ function Body({ snapshot, insets, draft, set, step, setStep, finish }) {
             autoCapitalize="words"
             returnKeyType="next"
             onSubmitEditing={() => setStep(1)}
-            style={[s.input, { borderColor: t.line, color: t.ink, backgroundColor: t.bg }]}
+            style={[s.input, { borderColor: t.glassLine, color: t.ink, backgroundColor: 'rgba(0,0,0,0.25)' }]}
           />
           <T kind="small" color="ink2">{tr('onb.nameNote')}</T>
         </View>
@@ -98,7 +100,8 @@ function Body({ snapshot, insets, draft, set, step, setStep, finish }) {
       <>
         <T kind="display">{tr('onb.accTitle')}</T>
         <T color="ink2" style={{ marginTop: space[2] }}>{tr('onb.accBody')}</T>
-        <View style={[s.card, { backgroundColor: t.card, marginTop: space[4] }]}>
+        <View style={[s.card, glassFrame(t, 14), { backgroundColor: t.card, marginTop: space[4] }]}>
+          <GlassFx />
           <Segmented options={modeOptions()} value={draft.mode ?? 'simple'} onChange={(mode) => set({ mode })} />
           <T kind="small" color="ink2" style={{ marginBottom: space[2] }}>{modeNote(draft.mode)}</T>
           <ProviderPicker
@@ -115,11 +118,6 @@ function Body({ snapshot, insets, draft, set, step, setStep, finish }) {
     body = (
       <>
         <T kind="display">{tr('onb.lastTitle')}</T>
-        <Section title={tr('profile.look')}>
-          <View style={{ paddingVertical: space[3] }}>
-            <Segmented options={themeOptions()} value={draft.theme} onChange={(theme) => set({ theme })} />
-          </View>
-        </Section>
         <Section title={tr('notif.title')}>
           <ToggleRow
             last
@@ -149,7 +147,7 @@ function Body({ snapshot, insets, draft, set, step, setStep, finish }) {
   }
 
   return (
-    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={{ flex: 1, backgroundColor: t.bg }}>
+    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={{ flex: 1 }}>
       <ScrollView contentContainerStyle={[s.page, { paddingTop: insets.top + space[4] }]} keyboardShouldPersistTaps="handled">
         <Row style={{ gap: 6, marginBottom: space[5] }}>
           {Array.from({ length: STEPS }, (_, i) => (
@@ -158,7 +156,7 @@ function Body({ snapshot, insets, draft, set, step, setStep, finish }) {
         </Row>
         {body}
       </ScrollView>
-      <Row style={[s.footer, { paddingBottom: insets.bottom + space[3], backgroundColor: t.bg }]}>
+      <Row style={[s.footer, { paddingBottom: insets.bottom + space[3], backgroundColor: 'rgba(12,10,23,0.88)', borderTopWidth: 1, borderTopColor: t.glassLine }]}>
         {step > 0 ? <Button kind="line" label={tr('common.back')} onPress={() => setStep(step - 1)} style={{ flex: 0, minWidth: 116 }} /> : null}
         <Button
           label={tr(step === STEPS - 1 ? 'onb.start' : step === 2 && !draft.providers.length ? 'onb.skip' : 'onb.next')}
@@ -187,11 +185,11 @@ export default function Onboarding({ snapshot, insets }) {
 
 const s = StyleSheet.create({
   page: { padding: space[4], paddingBottom: space[7] },
-  card: { borderRadius: radius.lg, padding: space[4], gap: space[2] },
+  card: { padding: space[4], gap: space[2] },
   input: { borderWidth: 1.5, borderRadius: radius.sm, paddingHorizontal: 14, paddingVertical: 12, fontSize: 17, fontFamily: font.textMedium },
   grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10, marginTop: space[5] },
   tile: { width: '48.4%', minHeight: 130, borderRadius: radius.lg, padding: 14, justifyContent: 'space-between', borderWidth: 2 },
-  check: { width: 22, height: 22, borderRadius: 11, borderWidth: 2, alignItems: 'center', justifyContent: 'center' },
+  check: { width: 22, height: 22, borderRadius: 7, borderWidth: 2, alignItems: 'center', justifyContent: 'center' },
   step: { flex: 1, height: 5, borderRadius: 3 },
   footer: { paddingHorizontal: space[4], paddingTop: space[3], gap: space[2] },
 });

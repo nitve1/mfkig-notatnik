@@ -1,65 +1,40 @@
-// Kierunek "Kolorowe kategorie": każda kategoria ma swój kolor, reszta spokojna.
-// Motyw: systemowy, jasny albo ciemny (ustawienie w Profilu).
+// Kierunek "Kolorowe kategorie" w wersji "Nocne szkło": każda kategoria ma swój kolor, który świeci
+// spod przydymionych, półprzezroczystych paneli. Jeden motyw, ciemny (decyzja z 2026-10-13).
 import { createContext, useContext } from 'react';
-import { useColorScheme } from 'react-native';
 
-const light = {
-  dark: false,
-  bg: '#f7f7fb',
-  card: '#ffffff',
-  ink: '#1a1530',
-  ink2: '#6b6880',
-  ink3: '#9a97ad',
-  line: '#ebeaf2',
-  seg: '#ecebf3',
-  hero: '#1a1530', // kafel "Wszystkie promocje"
-  heroInk: '#ffffff',
-  onInk: '#ffffff', // tekst na przyciskach w kolorze ink
-  text: '#3d63ff',
-  coding: '#8b3dff',
-  image: '#ff4f8b',
-  video: '#ff8a00',
-  deal: '#e8333a',
-  dealSoft: '#fde7e8',
-  save: '#0f9b6c',
-  saveSoft: '#e2f5ee',
-  infoSoft: '#e9edff',
-  glassTint: 'rgba(255,255,255,0.66)',
-  glassEdge: 'rgba(255,255,255,0.95)',
-  glassLine: 'rgba(26,21,48,0.10)',
-  glassSheen: 0.55,
-  glassActive: 'rgba(26,21,48,0.08)',
-};
-
-const dark = {
+const night = {
   dark: true,
-  bg: '#100e1b',
-  card: '#1b1829',
+  bg: '#0c0a17',
+  card: 'rgba(30,26,52,0.55)', // szkło paneli: tło prześwituje
+  cardSolid: '#1a1730', // tam, gdzie pod spodem nie ma tła (np. stopka kreatora)
   ink: '#f3f1fb',
-  ink2: '#aaa6c0',
-  ink3: '#77738f',
-  line: '#2b2741',
-  seg: '#24203a',
-  hero: '#2c2750',
+  ink2: '#b4b0cc',
+  ink3: '#7e7a98',
+  line: 'rgba(255,255,255,0.10)',
+  seg: 'rgba(255,255,255,0.06)',
+  hero: 'rgba(255,255,255,0.10)', // kafel "Wszystkie promocje"
   heroInk: '#ffffff',
-  onInk: '#100e1b',
+  onInk: '#100e1b', // tekst na jasnych przyciskach
   text: '#6d8cff',
   coding: '#a875ff',
   image: '#ff6fa3',
   video: '#ffa23a',
   deal: '#ff5c63',
-  dealSoft: '#3a1c25',
+  dealSoft: 'rgba(255,92,99,0.16)',
   save: '#33cf95',
-  saveSoft: '#13302a',
-  infoSoft: '#232a4d',
-  glassTint: 'rgba(27,24,41,0.62)',
-  glassEdge: 'rgba(255,255,255,0.22)',
-  glassLine: 'rgba(255,255,255,0.08)',
-  glassSheen: 0.12,
-  glassActive: 'rgba(255,255,255,0.12)',
+  saveSoft: 'rgba(51,207,149,0.14)',
+  infoSoft: 'rgba(109,140,255,0.16)',
+  glassTint: 'rgba(30,26,52,0.38)', // pasek zakładek: ok. 15% bardziej przezroczysty niż wcześniej
+  glassEdge: 'rgba(255,255,255,0.32)', // 1 px jasnej krawędzi u góry: światło na grubej tafli
+  glassLine: 'rgba(255,255,255,0.10)',
+  glassSheen: 'rgba(255,255,255,0.045)', // połysk górnej połowy panelu
+  glassActive: 'rgba(255,255,255,0.16)',
 };
 
-export const THEMES = { light, dark };
+export const THEMES = { night };
+
+// Kolory kategorii na kaflach: lekko przezroczyste, żeby świecące tło przebijało przez szkło.
+export const tileColor = (c) => `${c}d9`;
 
 export const font = {
   display: 'BricolageGrotesque_800ExtraBold',
@@ -71,7 +46,8 @@ export const font = {
 };
 
 export const space = { 1: 4, 2: 8, 3: 12, 4: 16, 5: 24, 6: 32, 7: 48 };
-export const radius = { sm: 10, md: 14, lg: 18, xl: 22 };
+// Rogi bliżej kwadratu niż pigułki (uwaga użytkownika z 2026-10-13).
+export const radius = { xs: 9, sm: 10, md: 12, lg: 14, xl: 16 };
 
 // Kolor kategorii modelu (pierwsza "najmocniejsza" kategoria).
 export function mainCat(model) {
@@ -81,20 +57,17 @@ export function mainCat(model) {
   return 'text';
 }
 
-export const ThemeContext = createContext('system');
+// Zostawione dla zgodności: dawniej przełącznik motywu, teraz zawsze nocny.
+export const ThemeContext = createContext('night');
 
 // Ile miejsca zostawić na dole list, żeby ostatni element nie chował się pod pływającym paskiem.
 export const BottomSpaceContext = createContext(space[7]);
 export const useBottomSpace = () => useContext(BottomSpaceContext);
 
-// mode: 'system' | 'light' | 'dark'
-export function useResolvedTheme(mode) {
-  const system = useColorScheme();
-  const name = mode === 'light' || mode === 'dark' ? mode : system === 'dark' ? 'dark' : 'light';
-  return THEMES[name];
+export function useResolvedTheme() {
+  return night;
 }
 
 export function useTheme() {
-  const mode = useContext(ThemeContext);
-  return useResolvedTheme(mode);
+  return night;
 }

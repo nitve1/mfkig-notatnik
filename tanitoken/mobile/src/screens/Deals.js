@@ -5,8 +5,10 @@ import { t as tr } from '../../../core/i18n.js';
 import { isPro, viewFilter } from '../filters';
 import { Button, Empty, Segmented, T } from '../ui';
 import Icon from '../icons';
-import { BellButton, catLabel, DealCard, Header, PriceStatus, priceParts, styles } from '../parts';
-import { radius, space, useBottomSpace, useTheme } from '../theme';
+import { BellButton, catLabel, DealCard, Header, PriceStatus, priceParts, SponsorCard, styles } from '../parts';
+import { withSponsors } from '../../../core/affiliates.js';
+import { radius, space, tileColor, useBottomSpace, useTheme } from '../theme';
+import { GlassFx } from '../glass';
 import { useProfile } from '../profile';
 
 const TYPES = ['discount', 'drop', 'free', 'cheapest'];
@@ -35,7 +37,8 @@ function cheapestDeals(snapshot, filter) {
 
 function Tile({ cat, count, best, type, on, dim, onPress, wide }) {
   const t = useTheme();
-  const bg = cat === 'all' ? t.hero : t[cat];
+  const bg = cat === 'all' ? t.hero : tileColor(t[cat]);
+  const solid = cat === 'all' ? t.ink : t[cat];
   const note = type === 'cheapest'
     ? (count ? tr('tile.from', { price: best }) : tr('tile.noModels'))
     : count === 0
@@ -50,9 +53,10 @@ function Tile({ cat, count, best, type, on, dim, onPress, wide }) {
       style={({ pressed }) => [
         s.tile,
         wide && s.wide,
-        { backgroundColor: bg, opacity: dim ? 0.45 : pressed ? 0.85 : 1, borderColor: on ? t.ink : 'transparent' },
+        { backgroundColor: bg, opacity: dim ? 0.45 : pressed ? 0.85 : 1, borderColor: on ? 'rgba(255,255,255,0.85)' : t.glassLine },
       ]}
     >
+      <GlassFx radius={radius.lg} />
       {wide ? (
         <>
           <View style={{ flex: 1 }}>
@@ -76,7 +80,7 @@ function Tile({ cat, count, best, type, on, dim, onPress, wide }) {
           </View>
         </>
       )}
-      {on && !wide ? <View style={[s.check, { backgroundColor: '#fff' }]}><Icon name="check" size={13} color={bg} width={3} /></View> : null}
+      {on && !wide ? <View style={[s.check, { backgroundColor: '#fff' }]}><Icon name="check" size={13} color={solid} width={3} /></View> : null}
     </Pressable>
   );
 }
@@ -137,9 +141,9 @@ export default function Deals({ snapshot, refreshing, onRefresh, onOpen, onBell,
 
   return (
     <FlatList
-      data={list}
-      keyExtractor={(d) => `${d.modelId}|${d.key}|${d.type}`}
-      renderItem={({ item }) => <DealCard deal={item} pro={isPro(profile)} watched={watched.has(item.modelId)} onPress={() => onOpen(item.modelId)} />}
+      data={withSponsors(list, cat)}
+      keyExtractor={(d) => (d.type === 'sponsor' ? d.key : `${d.modelId}|${d.key}|${d.type}`)}
+      renderItem={({ item }) => item.type === 'sponsor' ? <SponsorCard sponsor={item.sponsor} /> : <DealCard deal={item} pro={isPro(profile)} watched={watched.has(item.modelId)} onPress={() => onOpen(item.modelId)} />}
       contentContainerStyle={[styles.list, { paddingBottom: bottomSpace }]}
       initialNumToRender={10}
       refreshControl={<RefreshControl refreshing={false} onRefresh={onRefresh} tintColor={t.ink2} colors={[t.text]} />}
@@ -173,9 +177,9 @@ export default function Deals({ snapshot, refreshing, onRefresh, onOpen, onBell,
 
 const s = StyleSheet.create({
   grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
-  tile: { width: '48.8%', minHeight: 84, borderRadius: radius.lg, padding: 12, justifyContent: 'space-between', borderWidth: 2 },
+  tile: { width: '48.8%', minHeight: 84, borderRadius: radius.lg, padding: 12, justifyContent: 'space-between', borderWidth: 1.5, overflow: 'hidden' },
   wide: { width: '100%', minHeight: 0, flexDirection: 'row', alignItems: 'center' },
   tileTxt: { color: '#fff' },
-  check: { position: 'absolute', right: 8, bottom: 8, width: 20, height: 20, borderRadius: 10, alignItems: 'center', justifyContent: 'center' },
+  check: { position: 'absolute', right: 8, bottom: 8, width: 20, height: 20, borderRadius: 6, alignItems: 'center', justifyContent: 'center' },
 });
 

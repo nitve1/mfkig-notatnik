@@ -1,4 +1,4 @@
-// Wspólna logika cen TaniToken: skrypt snapshotu, landing page i apka mobilna.
+// Wspólna logika cen LightTokenz: skrypt snapshotu, landing page i apka mobilna.
 // Czysty ESM bez zależności (Node, przeglądarka, React Native).
 export {
   OPENROUTER_API, SOURCES, CATEGORIES, modelKey, baseId, perMillion, liveSnapshot, liveOpenrouterOffers,

@@ -83,10 +83,10 @@ function trimSent(sent) {
 
 export async function exportProfile(p) {
   const { sent: _s, alerts: _a, ...core } = p;
-  const file = new File(Paths.cache, `tanitoken-profil-${new Date().toISOString().slice(0, 10)}.json`);
+  const file = new File(Paths.cache, `lighttokenz-profile-${new Date().toISOString().slice(0, 10)}.json`);
   if (file.exists) file.delete();
   file.create();
-  file.write(JSON.stringify({ app: 'tanitoken', exportedAt: new Date().toISOString(), profile: core }, null, 2));
+  file.write(JSON.stringify({ app: 'lighttokenz', exportedAt: new Date().toISOString(), profile: core }, null, 2));
   await Sharing.shareAsync(file.uri, { mimeType: 'application/json', dialogTitle: tr('backup.saveDialog') });
 }
 
@@ -94,7 +94,7 @@ export async function importProfile() {
   const res = await DocumentPicker.getDocumentAsync({ type: ['application/json', 'text/plain', '*/*'], copyToCacheDirectory: true });
   if (res.canceled || !res.assets?.length) return null;
   const json = JSON.parse(await new File(res.assets[0].uri).text());
-  if (json?.app !== 'tanitoken' || !json.profile) throw new Error(tr('backup.notProfile'));
+  if (!['lighttokenz', 'tanitoken'].includes(json?.app) || !json.profile) throw new Error(tr('backup.notProfile'));
   return merge({ ...json.profile, onboarded: true });
 }
 

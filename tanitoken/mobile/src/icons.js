@@ -23,6 +23,7 @@ const P = {
   phone: (p) => (<><Rect x={6.5} y={2.5} width={11} height={19} rx={2.5} {...p} /><Path d="M11 18.5h2" {...p} /></>),
   close: (p) => <Path d="M6 6l12 12M18 6 6 18" {...p} />,
   plus: (p) => <Path d="M12 5v14M5 12h14" {...p} />,
+  spark: (p) => <Path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M6 18l2.5-2.5M15.5 8.5 18 6" {...p} />,
 };
 
 export default function Icon({ name, size = 22, color = '#000', width = 2, fill = 'none' }) {
@@ -36,7 +37,7 @@ export default function Icon({ name, size = 22, color = '#000', width = 2, fill 
   );
 }
 
-// Znak TaniToken: 4 kwadraty w kolorach kategorii.
+// Znak LightTokenz: 4 kwadraty w kolorach kategorii.
 export function Logo({ size = 32, colors }) {
   const c = colors ?? ['#3d63ff', '#8b3dff', '#ff4f8b', '#ff8a00'];
   return (

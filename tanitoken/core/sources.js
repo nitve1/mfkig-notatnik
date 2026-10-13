@@ -69,6 +69,19 @@ export function mediaKey(name) {
     .replace(/[^a-z0-9]/g, '');
 }
 
+// Opis modelu: OpenRouter ucina opisy w /models ("..."), więc obcinamy do ostatniego pełnego zdania.
+export function cleanDesc(text, max = 700) {
+  let d = String(text ?? '').replace(/\s+/g, ' ').trim();
+  if (!d) return null;
+  const cut = /(\.\.\.|…)$/.test(d) || d.length > max;
+  if (cut) {
+    d = d.replace(/(\.\.\.|…)$/, '').slice(0, max);
+    const end = Math.max(d.lastIndexOf('. '), d.lastIndexOf('! '), d.lastIndexOf('? '));
+    d = end > 40 ? d.slice(0, end + 1) : `${d.trim()}…`;
+  }
+  return d;
+}
+
 // ---------- kategorie ----------
 
 // Etykiety w bieżącym języku (core/i18n.js).
@@ -113,10 +126,18 @@ export function openrouterModels(apiData, codingIds = new Set()) {
       if (p.in != null && p.out != null && !(p.in === 0 && p.out === 0 && !cats.includes('text'))) listPrice = p;
       if (cats.includes('image') && !cats.includes('text') && !(img > 0)) listPrice = null;
     }
+    const params = m.supported_parameters ?? [];
     return {
       id,
       key: modelKey(id),
       name: (m.name ?? id).replace(/\s*\(free\)\s*$/i, ''),
+      desc: cleanDesc(m.description),
+      caps: {
+        tools: params.includes('tools') || undefined,
+        reasoning: params.includes('reasoning') || params.includes('include_reasoning') || undefined,
+        vision: (m.architecture?.input_modalities ?? []).includes('image') || undefined,
+        json: params.includes('structured_outputs') || params.includes('response_format') || undefined,
+      },
       author: id.split('/')[0],
       created: m.created ?? null,
       context: m.context_length || null,
@@ -203,6 +224,7 @@ export function vercelEntries(apiData) {
       id: m.id,
       key: modelKey(m.id),
       name: m.name ?? m.id,
+      desc: cleanDesc(m.description),
       author: m.owned_by ?? m.id.split('/')[0],
       created: m.released ?? m.created ?? null,
       context: m.context_window || null,
@@ -298,6 +320,7 @@ export function falEntries(items) {
       id: `fal/${it.id}`,
       key,
       name: it.modelLab ? `${it.modelLab}: ${name}` : name,
+      desc: cleanDesc(it.shortDescription),
       author: (it.modelLab ?? it.id.split('/')[0]).toLowerCase(),
       created: it.publishedAt ? Math.floor(Date.parse(it.publishedAt) / 1000) : null,
       cats: [kind],

@@ -96,6 +96,8 @@ export async function buildSnapshot({
       models.push(m);
       byKey.set(e.key, m);
     }
+    // Vercel ma pełne opisy twórców (OpenRouter je ucina), więc jego opis wygrywa.
+    if (e.desc && (!m.desc || e.desc.length > m.desc.length)) m.desc = e.desc;
     m.offers.push(e.offer);
   }
 
@@ -109,12 +111,13 @@ export async function buildSnapshot({
     if (!m && e.id?.startsWith('fal/')) {
       m = {
         id: e.id, key: e.key, name: e.name, author: e.author, created: e.created, context: null,
-        cats: e.cats, unit: e.offer.unit, freeId: null, expires: null, listPrice: null, offers: [],
+        cats: e.cats, unit: e.offer.unit, freeId: null, expires: null, listPrice: null, offers: [], desc: e.desc ?? null,
       };
       models.push(m);
       media.set(e.key, m);
       if (!byKey.has(e.key)) byKey.set(e.key, m);
     }
+    if (m && !m.desc && e.desc) m.desc = e.desc;
     if (m && !m.offers.some((o) => o.tag === e.offer.tag)) m.offers.push(e.offer);
   }
 
@@ -147,6 +150,11 @@ export async function buildSnapshot({
     if (!m.offers.some((o) => o.unit === m.unit) && !m.freeId) continue;
     sortModelOffers(m);
     delete m.listPrice;
+    if (m.caps) {
+      for (const k of Object.keys(m.caps)) if (!m.caps[k]) delete m.caps[k];
+      if (!Object.keys(m.caps).length) delete m.caps;
+    }
+    if (!m.desc) delete m.desc;
     catalog.push(m);
   }
   catalog.sort((a, b) => (b.created ?? 0) - (a.created ?? 0));

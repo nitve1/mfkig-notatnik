@@ -15,12 +15,6 @@ export const modeOptions = () => [
   { value: 'pro', label: tr('mode.pro') },
 ];
 export const modeNote = (mode) => tr(mode === 'pro' ? 'mode.proNote' : 'mode.simpleNote');
-export const themeOptions = () => [
-  { value: 'system', label: tr('theme.system'), icon: 'phone' },
-  { value: 'light', label: tr('theme.light'), icon: 'sun' },
-  { value: 'dark', label: tr('theme.dark'), icon: 'moon' },
-];
-
 // Wybór języka: systemowy + 6 języków.
 export function LanguagePicker({ value, onChange }) {
   return (
@@ -90,13 +84,6 @@ export default function Profile({ snapshot, priceStatus, onRefresh }) {
         </View>
       </Section>
 
-      <Section title={tr('profile.look')}>
-        <View style={{ paddingVertical: space[3], gap: space[2] }}>
-          <Segmented options={themeOptions()} value={profile.theme ?? 'system'} onChange={(theme) => update({ theme })} />
-          <T kind="small" color="ink2">{tr('theme.note')}</T>
-        </View>
-      </Section>
-
       <Section title={tr('refresh.title')}>
         <View style={{ paddingVertical: space[3] }}>
           <PriceStatus snapshot={snapshot} status={priceStatus} onRefresh={onRefresh} />
@@ -126,7 +113,7 @@ export default function Profile({ snapshot, priceStatus, onRefresh }) {
             onChangeText={(name) => update({ name })}
             placeholder={tr('common.optional')}
             placeholderTextColor={t.ink3}
-            style={[s.input, { borderColor: t.line, color: t.ink, backgroundColor: t.bg }]}
+            style={[s.input, { borderColor: t.glassLine, color: t.ink, backgroundColor: 'rgba(0,0,0,0.25)' }]}
           />
           <T kind="small" color="ink2" style={{ marginTop: space[2] }}>{tr('profile.startCats')}</T>
           <View style={s.wrap}>

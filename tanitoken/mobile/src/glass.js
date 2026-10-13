@@ -1,20 +1,23 @@
-// Szkło: panel, który ugina i rozmywa to, co pod nim, z jasną krawędzią od światła.
+// Szkło "Nocne szkło".
 //
-// Web (Chromium): prawdziwe załamanie. Filtr SVG z szumem (feTurbulence) przesuwa każdy piksel tła
-// (feDisplacementMap), a backdrop-filter łączy to z rozmyciem. Safari nie obsługuje url() w
-// backdrop-filter, więc tam zostaje samo rozmycie.
-// Android/iOS: React Native nie daje dostępu do pikseli pod widokiem, więc natywnie jest rozmycie
-// tła (expo-blur; Android 12+ przez RenderEffect, wymaga BlurTargetView), półprzezroczysty odcień,
-// połysk u góry i 1 px jasnej krawędzi, które dają wrażenie grubości.
+// Backdrop: nieruchome tło apki, ciemne ze świecącymi plamami kolorów kategorii (SVG, rysowane raz).
+// GlassFx: wykończenie panelu (połysk górnej połowy i 1 px jasnej krawędzi), tanie, bez rozmycia.
+//   Panele leżą na nieruchomym, już rozmytym tle, więc półprzezroczysty odcień + połysk wygląda jak
+//   matowe szkło, a nie kosztuje rozmycia na każdej karcie listy.
+// Glass: prawdziwe szkło dla elementów nad przewijaną treścią (pasek zakładek).
+//   Web (Chromium): filtr SVG feTurbulence + feDisplacementMap w backdrop-filter razem z blur, czyli
+//   tło się ugina. Safari nie obsługuje url() w backdrop-filter, więc tam samo rozmycie.
+//   Android/iOS: expo-blur (Android 12+ przez BlurTargetView i RenderEffect). React Native nie daje
+//   pikseli spod widoku, więc natywnie bez ugięcia.
 import { forwardRef, useEffect, useRef } from 'react';
 import { Platform, StyleSheet, View } from 'react-native';
 import { BlurTargetView, BlurView } from 'expo-blur';
-import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
+import Svg, { Circle, Defs, RadialGradient, Stop } from 'react-native-svg';
 import { useTheme } from './theme';
 
 export { BlurTargetView };
 
-const FILTER_ID = 'tt-glass';
+const FILTER_ID = 'lt-glass';
 
 function ensureWebFilter() {
   if (typeof document === 'undefined' || document.getElementById(FILTER_ID)) return;
@@ -32,23 +35,55 @@ function ensureWebFilter() {
 const canRefract = () =>
   typeof navigator !== 'undefined' && /Chrome|Chromium|Edg\//.test(navigator.userAgent) && !/Firefox/.test(navigator.userAgent);
 
-// Połysk: jasny u góry, zanika do połowy wysokości (światło padające z góry na grubą taflę).
-function Sheen({ radius, opacity }) {
+// Świecące plamy kategorii: tekst u góry z lewej, kod z prawej, obraz niżej, wideo na dole i w rogu.
+const BLOBS = [
+  ['text', '8%', '20%', '48%', 0.55],
+  ['coding', '98%', '40%', '42%', 0.5],
+  ['image', '10%', '70%', '44%', 0.45],
+  ['video', '96%', '92%', '40%', 0.5],
+  ['video', '80%', '-4%', '30%', 0.32],
+];
+
+export function Backdrop() {
+  const t = useTheme();
   return (
-    <Svg style={StyleSheet.absoluteFill} pointerEvents="none">
-      <Defs>
-        <LinearGradient id="sheen" x1="0" y1="0" x2="0" y2="1">
-          <Stop offset="0" stopColor="#ffffff" stopOpacity={opacity} />
-          <Stop offset="0.45" stopColor="#ffffff" stopOpacity={0} />
-          <Stop offset="1" stopColor="#ffffff" stopOpacity={opacity * 0.25} />
-        </LinearGradient>
-      </Defs>
-      <Rect x="0" y="0" width="100%" height="100%" rx={radius} ry={radius} fill="url(#sheen)" />
-    </Svg>
+    <View style={[StyleSheet.absoluteFill, { backgroundColor: t.bg }]} pointerEvents="none">
+      <Svg width="100%" height="100%">
+        <Defs>
+          {BLOBS.map(([c, , , , o], i) => (
+            <RadialGradient key={i} id={`blob${i}`} cx="50%" cy="50%" r="50%">
+              <Stop offset="0" stopColor={t[c]} stopOpacity={o} />
+              <Stop offset="0.55" stopColor={t[c]} stopOpacity={o * 0.35} />
+              <Stop offset="1" stopColor={t[c]} stopOpacity={0} />
+            </RadialGradient>
+          ))}
+        </Defs>
+        {BLOBS.map(([, cx, cy, r], i) => <Circle key={i} cx={cx} cy={cy} r={r} fill={`url(#blob${i})`} />)}
+      </Svg>
+    </View>
   );
 }
 
-export const Glass = forwardRef(function Glass({ style, radius = 24, blurTarget, intensity = 45, children, ...rest }, outerRef) {
+// Wykończenie szklanego panelu: wstaw jako pierwsze dziecko widoku z borderRadius i overflow hidden.
+export function GlassFx({ radius = 14, edge = true }) {
+  const t = useTheme();
+  return (
+    <>
+      <View pointerEvents="none" style={[s.sheen, { borderTopLeftRadius: radius, borderTopRightRadius: radius, backgroundColor: t.glassSheen }]} />
+      {edge ? <View pointerEvents="none" style={[s.edge, { left: radius * 0.6, right: radius * 0.6, backgroundColor: t.glassEdge }]} /> : null}
+    </>
+  );
+}
+
+// Wspólny styl ramki szklanego panelu.
+export const glassFrame = (t, radius = 14) => ({
+  borderRadius: radius,
+  overflow: 'hidden',
+  borderWidth: StyleSheet.hairlineWidth,
+  borderColor: t.glassLine,
+});
+
+export const Glass = forwardRef(function Glass({ style, radius = 16, blurTarget, intensity = 40, children, ...rest }, outerRef) {
   const t = useTheme();
   const webRef = useRef(null);
 
@@ -56,16 +91,13 @@ export const Glass = forwardRef(function Glass({ style, radius = 24, blurTarget,
     if (Platform.OS !== 'web' || !webRef.current) return;
     ensureWebFilter();
     const el = webRef.current;
-    const base = `blur(18px) saturate(1.8) brightness(${t.dark ? 0.9 : 1.06})`;
-    const value = canRefract() ? `url(#${FILTER_ID}) ${base}` : base;
-    el.style.backdropFilter = value;
+    const base = 'blur(18px) saturate(1.8) brightness(0.9)';
+    el.style.backdropFilter = canRefract() ? `blur(18px) url(#${FILTER_ID}) saturate(1.8) brightness(0.9)` : base;
     el.style.webkitBackdropFilter = base;
-    el.style.boxShadow = t.dark
-      ? 'inset 0 1px 0 rgba(255,255,255,.22), inset 0 -1px 0 rgba(0,0,0,.35), 0 10px 30px rgba(0,0,0,.45)'
-      : 'inset 0 1px 0 rgba(255,255,255,.95), inset 0 -1px 0 rgba(26,21,48,.06), 0 10px 30px rgba(26,21,48,.14)';
-  }, [t.dark]);
+    el.style.boxShadow = 'inset 0 1px 0 rgba(255,255,255,.28), inset 0 -1px 0 rgba(0,0,0,.35), 0 10px 30px rgba(0,0,0,.45)';
+  }, []);
 
-  const frame = [style, { borderRadius: radius, overflow: 'hidden', borderWidth: StyleSheet.hairlineWidth, borderColor: t.glassLine }];
+  const frame = [style, glassFrame(t, radius)];
 
   if (Platform.OS === 'web') {
     return (
@@ -74,7 +106,7 @@ export const Glass = forwardRef(function Glass({ style, radius = 24, blurTarget,
         style={[frame, { backgroundColor: t.glassTint }]}
         {...rest}
       >
-        <Sheen radius={radius} opacity={t.glassSheen * 0.6} />
+        <GlassFx radius={radius} edge={false} />
         {children}
       </View>
     );
@@ -86,18 +118,17 @@ export const Glass = forwardRef(function Glass({ style, radius = 24, blurTarget,
         blurTarget={blurTarget}
         blurMethod="dimezisBlurViewSdk31Plus"
         intensity={intensity}
-        tint={t.dark ? 'dark' : 'light'}
+        tint="dark"
         style={StyleSheet.absoluteFill}
       />
       <View style={[StyleSheet.absoluteFill, { backgroundColor: t.glassTint }]} pointerEvents="none" />
-      <Sheen radius={radius} opacity={t.glassSheen} />
-      {/* 1 px jasnej krawędzi od światła: to ona robi z prostokąta taflę z grubością. */}
-      <View pointerEvents="none" style={[s.edge, { left: radius * 0.6, right: radius * 0.6, backgroundColor: t.glassEdge }]} />
+      <GlassFx radius={radius} />
       {children}
     </View>
   );
 });
 
 const s = StyleSheet.create({
+  sheen: { position: 'absolute', left: 0, right: 0, top: 0, height: '46%' },
   edge: { position: 'absolute', top: 0, height: 1 },
 });

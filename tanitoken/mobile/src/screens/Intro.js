@@ -1,4 +1,4 @@
-// Ekran powitalny: cztery kafle kategorii wskakują po kolei i składają się w znak TaniToken.
+// Ekran powitalny: cztery kafle kategorii wskakują po kolei i składają się w znak LightTokenz.
 import { useEffect, useRef } from 'react';
 import { AccessibilityInfo, Animated, Easing, StyleSheet, View } from 'react-native';
 import { T } from '../ui';
@@ -39,7 +39,7 @@ export default function Intro({ onDone }) {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps -- animacja startuje raz
 
   return (
-    <Animated.View style={[s.wrap, { backgroundColor: t.bg, opacity: fade }]} accessible accessibilityLabel="TaniToken">
+    <Animated.View style={[s.wrap, { backgroundColor: t.bg, opacity: fade }]} accessible accessibilityLabel="LightTokenz">
       <View style={s.grid}>
         {TILES.map((c, i) => (
           <Animated.View
@@ -51,7 +51,7 @@ export default function Intro({ onDone }) {
         ))}
       </View>
       <Animated.View style={{ opacity: word, transform: [{ translateY: word.interpolate({ inputRange: [0, 1], outputRange: [10, 0] }) }], alignItems: 'center' }}>
-        <T kind="display" style={{ fontSize: 40, lineHeight: 44, marginTop: 28 }}>TaniToken</T>
+        <T kind="display" style={{ fontSize: 40, lineHeight: 44, marginTop: 28 }}>LightTokenz</T>
         <T color="ink2">{tr('intro.tagline')}</T>
       </Animated.View>
     </Animated.View>

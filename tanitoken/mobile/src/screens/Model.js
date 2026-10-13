@@ -32,8 +32,72 @@ function UsageInput({ label, value, onChange }) {
         }}
         keyboardType="decimal-pad"
         accessibilityLabel={label}
-        style={[s.input, { borderColor: t.line, color: t.ink, backgroundColor: t.bg }]}
+        style={[s.input, { borderColor: t.glassLine, color: t.ink, backgroundColor: 'rgba(0,0,0,0.25)' }]}
       />
+    </View>
+  );
+}
+
+// Do czego się nada: przetłumaczone etykiety z kategorii i możliwości modelu (dane z OpenRouter).
+function modelUses(model) {
+  const c = model.caps ?? {};
+  const uses = [];
+  if (model.cats.includes('video')) uses.push(['video', 'use.videoGen']);
+  if (model.cats.includes('image')) uses.push(['image', 'use.imageGen']);
+  if (model.cats.includes('coding')) uses.push(['coding', 'use.coding']);
+  if (c.tools) uses.push(['spark', 'use.agents']);
+  if (c.reasoning) uses.push(['check', 'use.reasoning']);
+  if (model.context >= 200000) uses.push(['text', 'use.longDocs', { ctx: formatContext(model.context) }]);
+  if (c.vision) uses.push(['image', 'use.vision']);
+  if (c.json) uses.push(['all', 'use.json']);
+  if (model.cats.includes('text') && !model.cats.includes('coding')) uses.unshift(['text', 'use.chat']);
+  return uses.slice(0, 6);
+}
+
+function exampleKey(model) {
+  if (model.cats.includes('video')) return 'example.video';
+  if (model.cats.includes('image') && !model.cats.includes('text')) return 'example.image';
+  if (model.cats.includes('coding')) return 'example.coding';
+  if (model.caps?.tools) return 'example.agents';
+  return 'example.text';
+}
+
+function About({ model }) {
+  const t = useTheme();
+  const [open, setOpen] = useState(false);
+  const uses = modelUses(model);
+  if (!model.desc && !uses.length) return null;
+  return (
+    <View style={{ gap: space[2] }}>
+      {model.desc ? (
+        <Card>
+          <T numberOfLines={open ? undefined : 4}>{model.desc}</T>
+          <Row style={{ marginTop: space[2], justifyContent: 'space-between' }}>
+            <T kind="tiny" color="ink3" style={{ flex: 1 }}>{tr('model.descNote')}</T>
+            {model.desc.length > 180 ? (
+              <Pressable onPress={() => setOpen(!open)} hitSlop={10} accessibilityRole="button">
+                <T kind="tiny" style={{ color: t.text }}>{tr(open ? 'model.less' : 'model.more')}</T>
+              </Pressable>
+            ) : null}
+          </Row>
+        </Card>
+      ) : null}
+      {uses.length ? (
+        <>
+          <T kind="h2" style={{ marginTop: space[2] }}>{tr('model.uses')}</T>
+          <View style={s.uses}>
+            {uses.map(([icon, key, vars]) => (
+              <View key={key} style={[s.use, { backgroundColor: t.card, borderColor: t.glassLine }]}>
+                <Icon name={icon} size={15} color={t.ink2} />
+                <T kind="small" style={{ fontFamily: font.textSemi }}>{tr(key, vars)}</T>
+              </View>
+            ))}
+          </View>
+          <Card>
+            <T kind="small" color="ink2"><T kind="small" style={{ fontFamily: font.textBold }}>{tr('model.example')}: </T>{tr(exampleKey(model))}</T>
+          </Card>
+        </>
+      ) : null}
     </View>
   );
 }
@@ -107,6 +171,8 @@ export default function Model({ model: base, snapshot, onBack }) {
         {model.expires ? <StatusBadge tone="deal" icon="warn" label={tr('model.expires', { date: model.expires })} /> : null}
       </View>
 
+      <About model={model} />
+
       <Row style={{ alignItems: 'stretch', gap: space[2] }}>
         <Stat label={tr('model.cheapestMonthly')} value={best ? formatUsd(offerCost(best, usage)) : '–'} sub={best?.provider} />
         <Stat
@@ -132,7 +198,7 @@ export default function Model({ model: base, snapshot, onBack }) {
         </Card>
       ) : null}
       {picking ? (
-        <Card stripe={t.video} style={{ backgroundColor: t.dark ? t.card : '#fff4e6' }}>
+        <Card stripe={t.video}>
           <T kind="strong">{tr('model.pickTitle')}</T>
           <T kind="small" color="ink2">{tr('model.pickBody')}</T>
           {item?.mode === 'use' ? (
@@ -232,6 +298,8 @@ export default function Model({ model: base, snapshot, onBack }) {
 }
 
 const s = StyleSheet.create({
+  uses: { flexDirection: 'row', flexWrap: 'wrap', gap: space[2] },
+  use: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 11, paddingVertical: 8, borderRadius: radius.sm, borderWidth: 1 },
   input: { borderWidth: 1.5, borderRadius: radius.sm, paddingHorizontal: 12, paddingVertical: 9, fontSize: 17, fontFamily: font.textBold },
   link: { flexDirection: 'row', alignItems: 'center', gap: 4, marginLeft: 8 },
 });

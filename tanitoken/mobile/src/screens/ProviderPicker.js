@@ -45,7 +45,7 @@ export default function ProviderPicker({ snapshot, selected, onToggle, pro = tru
         {platforms.map((p) => {
           const on = selected.includes(p.name);
           return (
-            <View key={p.name} style={[s.platform, { borderColor: on ? t.text : t.line, backgroundColor: on ? t.infoSoft : t.bg }]}>
+            <View key={p.name} style={[s.platform, { borderColor: on ? t.text : t.line, backgroundColor: on ? t.infoSoft : 'rgba(0,0,0,0.18)' }]}>
               <View style={{ flex: 1 }}>
                 <T kind="strong">{p.name}</T>
                 <T kind="tiny" color="ink2">{tr(PLATFORM_NOTE[p.name])}, {tr('common.offers', { n: p.offers })}</T>
@@ -72,7 +72,7 @@ export default function ProviderPicker({ snapshot, selected, onToggle, pro = tru
       ) : null}
       {pro ? <>
       <T kind="small" color="ink2" style={{ marginTop: space[2] }}>{tr('picker.direct')}</T>
-      <View style={[s.search, { borderColor: t.line, backgroundColor: t.bg }]}>
+      <View style={[s.search, { borderColor: t.glassLine, backgroundColor: 'rgba(0,0,0,0.25)' }]}>
         <Icon name="search" size={18} color={t.ink2} />
         <TextInput
           maxFontSizeMultiplier={MAX_FONT_SCALE}
@@ -99,7 +99,7 @@ export default function ProviderPicker({ snapshot, selected, onToggle, pro = tru
 }
 
 const s = StyleSheet.create({
-  platform: { flexDirection: 'row', alignItems: 'center', gap: space[3], borderWidth: 1.5, borderRadius: radius.md, padding: 12 },
+  platform: { flexDirection: 'row', alignItems: 'center', gap: space[3], borderWidth: 1, borderRadius: radius.md, padding: 12 },
   search: { flexDirection: 'row', alignItems: 'center', gap: 8, borderWidth: 1.5, borderRadius: radius.sm, paddingHorizontal: 12 },
   input: { flex: 1, paddingVertical: 10, fontSize: 16, fontFamily: font.textMedium },
   wrap: { flexDirection: 'row', flexWrap: 'wrap', gap: space[2] },

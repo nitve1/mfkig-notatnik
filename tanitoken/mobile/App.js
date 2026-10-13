@@ -19,8 +19,8 @@ import Icon from './src/icons';
 import { useSnapshot } from './src/data';
 import { ProfileProvider, useProfile } from './src/profile';
 import { checkAndNotify } from './src/alerts';
-import { BottomSpaceContext, ThemeContext, space, useTheme } from './src/theme';
-import { BlurTargetView, Glass } from './src/glass';
+import { BottomSpaceContext, ThemeContext, font, radius, space, useTheme } from './src/theme';
+import { Backdrop, BlurTargetView, Glass } from './src/glass';
 import { setLanguage, t as tr } from '../core/i18n.js';
 import { deviceLanguage } from './src/lang';
 
@@ -33,8 +33,9 @@ const TABS = [
   { key: 'profile', icon: 'user' },
 ];
 
-// Pływający pasek zakładek ze szkła: lista przewija się pod nim i prześwituje.
-const TABBAR_H = 62;
+// Pływający, kompaktowy pasek zakładek ze szkła: nieaktywne to same ikony, aktywna rozwija się
+// w prostokąt z ikoną i nazwą. Lista przewija się pod nim i prześwituje.
+const TABBAR_H = 60;
 
 function TabBar({ tab, onChange, badge }) {
   const t = useTheme();
@@ -44,12 +45,19 @@ function TabBar({ tab, onChange, badge }) {
         const on = x.key === tab;
         const color = on ? t.ink : t.ink2;
         return (
-          <Pressable key={x.key} onPress={() => onChange(x.key)} style={s.tab} accessibilityRole="tab" accessibilityState={{ selected: on }} accessibilityLabel={tr(`nav.${x.key}`)}>
-            <View style={[s.tabIcon, on && { backgroundColor: t.glassActive }]}>
+          <Pressable
+            key={x.key}
+            onPress={() => onChange(x.key)}
+            style={[s.tab, on ? [s.tabOn, { backgroundColor: t.glassActive, borderTopColor: t.glassEdge }] : s.tabOff]}
+            accessibilityRole="tab"
+            accessibilityState={{ selected: on }}
+            accessibilityLabel={tr(`nav.${x.key}`)}
+          >
+            <View>
               <Icon name={x.icon} size={22} color={color} width={on ? 2.3 : 2} />
-              {x.key === 'mine' && badge ? <View style={[s.badge, { backgroundColor: t.deal, borderColor: t.card }]} /> : null}
+              {x.key === 'mine' && badge ? <View style={[s.badge, { backgroundColor: t.deal, borderColor: t.cardSolid }]} /> : null}
             </View>
-            <T kind="tiny" style={{ color }}>{tr(`nav.${x.key}`)}</T>
+            {on ? <T kind="strong" numberOfLines={1} style={{ color, fontFamily: font.textBold, flexShrink: 1 }}>{tr(`nav.${x.key}`)}</T> : null}
           </Pressable>
         );
       })}
@@ -157,7 +165,7 @@ function Main() {
   if (intro && profile) {
     return (
       <View style={[s.full, { backgroundColor: t.bg }]}>
-        <StatusBar style={t.dark ? 'light' : 'dark'} />
+        <StatusBar style="light" />
         <Intro onDone={endIntro} />
       </View>
     );
@@ -167,14 +175,17 @@ function Main() {
   const tabGap = insets.bottom + 10;
   return (
     <View style={[s.root, { backgroundColor: t.bg, paddingTop: onboarding ? 0 : insets.top }]}>
-      <StatusBar style={t.dark ? 'light' : 'dark'} />
+      <StatusBar style="light" />
       {/* Stała kolumna: na telefonie pełna szerokość, na tablecie i w przeglądarce max 600 px pośrodku. */}
       <View style={s.column}>
         <BottomSpaceContext.Provider value={showTabs ? TABBAR_H + tabGap + space[5] : space[7]}>
-          <BlurTargetView ref={blurTarget} style={{ flex: 1, backgroundColor: t.bg }}>{body}</BlurTargetView>
+          <BlurTargetView ref={blurTarget} style={{ flex: 1, backgroundColor: t.bg }}>
+            <Backdrop />
+            {body}
+          </BlurTargetView>
         </BottomSpaceContext.Provider>
         {showTabs ? (
-          <Glass blurTarget={blurTarget} radius={TABBAR_H / 2} style={[s.floating, { bottom: tabGap }]}>
+          <Glass blurTarget={blurTarget} radius={radius.xl} style={[s.floating, { bottom: tabGap }]}>
             <TabBar tab={tab} onChange={changeTab} badge={newAlerts && tab !== 'mine'} />
           </Glass>
         ) : null}
@@ -214,9 +225,10 @@ const s = StyleSheet.create({
   full: { flex: 1 },
   column: { flex: 1, width: '100%', maxWidth: 600 },
   center: { flex: 1, alignItems: 'center', justifyContent: 'center' },
-  floating: { position: 'absolute', left: space[3], right: space[3], height: TABBAR_H },
-  tabbar: { flex: 1, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 4 },
-  tab: { flex: 1, alignItems: 'center', gap: 2 },
-  tabIcon: { width: 56, height: 30, borderRadius: 15, alignItems: 'center', justifyContent: 'center' },
-  badge: { position: 'absolute', right: 12, top: 2, width: 10, height: 10, borderRadius: 5, borderWidth: 2 },
+  floating: { position: 'absolute', left: space[4], right: space[4], height: TABBAR_H },
+  tabbar: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: 4, paddingHorizontal: 8 },
+  tab: { height: 44, borderRadius: 11, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8 },
+  tabOn: { flex: 1, paddingHorizontal: 12, borderTopWidth: 1 },
+  tabOff: { width: 56 },
+  badge: { position: 'absolute', right: -4, top: -3, width: 10, height: 10, borderRadius: 5, borderWidth: 2 },
 });

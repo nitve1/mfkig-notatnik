@@ -1,16 +1,16 @@
 {
   "expo": {
-    "name": "TaniToken",
-    "slug": "tanitoken",
-    "version": "0.1.1",
+    "name": "LightTokenz",
+    "slug": "lighttokenz",
+    "version": "0.2.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "automatic",
-    "backgroundColor": "#f7f7fb",
+    "userInterfaceStyle": "dark",
+    "backgroundColor": "#0c0a17",
     "ios": {
-      "bundleIdentifier": "pl.tanitoken.app",
+      "bundleIdentifier": "com.lighttokenz.app",
       "supportsTablet": true,
-      "buildNumber": "3",
+      "buildNumber": "4",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false,
         "UIBackgroundModes": [
@@ -20,11 +20,11 @@
       }
     },
     "android": {
-      "package": "pl.tanitoken.app",
-      "versionCode": 3,
+      "package": "com.lighttokenz.app",
+      "versionCode": 4,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#1a1530"
+        "backgroundColor": "#0c0a17"
       },
       "allowBackup": true
     },
@@ -36,10 +36,10 @@
           "image": "./assets/splash.png",
           "imageWidth": 120,
           "resizeMode": "contain",
-          "backgroundColor": "#f7f7fb",
+          "backgroundColor": "#0c0a17",
           "dark": {
             "image": "./assets/splash.png",
-            "backgroundColor": "#100e1b"
+            "backgroundColor": "#0c0a17"
           }
         }
       ],
