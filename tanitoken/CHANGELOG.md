@@ -40,7 +40,10 @@ Jedno miejsce z historią zmian, decyzjami i otwartymi zadaniami. Aktualizowane 
   WaveSpeedAI (obraz/wideo, 10%), ElevenLabs (22%/12 mies.), RunPod, Vast.ai, Higgsfield, AI/ML API.
   OpenRouter, Vercel, Requesty, fal, Replicate, Together, DeepInfra nie mają programu. Karta sponsorowana
   co 8–12 pozycji, oznaczona, nigdy nie zmienia kolejności cen (UCPD, UOKiK, zasady Google Play).
-- Czeka na decyzję użytkownika: wybór wariantu A/B/C, potem wdrożenie w apce.
+- Rogi zmniejszone (uwaga użytkownika: bliżej kwadratu niż pigułki): karty 14 px, pasek 16, przyciski 9–12.
+- `mockups/g4-nawigacja`: 4 pomysły na pasek (dok na dole, kompaktowy rozwijany, zakładki + osobny
+  przycisk szukania, lekki dok z kreską).
+- Czeka na decyzję użytkownika: wariant A/B/C i nawigacja 1–4, potem wdrożenie w apce.
 
 ## 2026-10-13 – sesja 5: poprawki po teście na Motoroli Razr 60, więcej platform, szkło (APK 0.1.1)
 

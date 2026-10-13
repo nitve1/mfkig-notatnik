@@ -98,7 +98,7 @@ h1.v{font:800 30px Bric;color:#1a1530;margin-bottom:4px} p.v{color:#4d4a63;margi
 .content{position:absolute;inset:0;padding:54px 16px 120px;display:flex;flex-direction:column;gap:10px}
 .content>*{flex:none}
 .content{bottom:96px;overflow:hidden;padding-bottom:16px;-webkit-mask-image:linear-gradient(#000 calc(100% - 70px),transparent);mask-image:linear-gradient(#000 calc(100% - 70px),transparent)}
-.glass{position:relative;border-radius:22px;background:${v.tint};
+.glass{position:relative;border-radius:14px;background:${v.tint};
   backdrop-filter:blur(16px) url(#lens) saturate(1.8);-webkit-backdrop-filter:blur(16px) saturate(1.8);
   box-shadow:inset 0 1px 0 ${v.edge},inset 0 0 0 1px ${v.line},inset 0 -1px 0 rgba(0,0,0,.06),0 10px 28px ${v.shadow}}
 .glass::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
@@ -106,8 +106,8 @@ h1.v{font:800 30px Bric;color:#1a1530;margin-bottom:4px} p.v{color:#4d4a63;margi
 .glass.strong{background:${v.tintStrong}}
 .hdr{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:2px}
 .kick{font-size:13px;color:${v.ink2}} .h1{font:800 30px/1.05 Bric;letter-spacing:-.5px}
-.iconbtn{width:44px;height:44px;border-radius:16px;display:grid;place-items:center;color:${v.ink}}
-.status{display:flex;align-items:center;gap:8px;padding:10px 14px;font-size:13px;color:${v.ink2};border-radius:16px}
+.iconbtn{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;color:${v.ink}}
+.status{display:flex;align-items:center;gap:8px;padding:10px 14px;font-size:13px;color:${v.ink2};border-radius:12px}
 .status b{margin-left:auto;color:${COLORS.text};font-weight:600}
 .dot{width:8px;height:8px;border-radius:4px;background:${COLORS.save}}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
@@ -115,8 +115,8 @@ h1.v{font:800 30px Bric;color:#1a1530;margin-bottom:4px} p.v{color:#4d4a63;margi
 .tile .t{display:flex;justify-content:space-between;align-items:center}
 .tile .n{font:800 26px Bric} .tile .l{font:700 15px Fig} .tile .s{font-size:11.5px;opacity:.9}
 .wide{grid-column:1/-1;flex-direction:row;align-items:center;min-height:0;padding:12px 14px;background:${v.hero};color:${v.heroInk}}
-.seg{display:flex;padding:4px;border-radius:16px;gap:2px}
-.seg div{flex:1;text-align:center;font:600 13px Fig;padding:8px 0;border-radius:12px;color:${v.ink2}}
+.seg{display:flex;padding:4px;border-radius:12px;gap:2px}
+.seg div{flex:1;text-align:center;font:600 13px Fig;padding:8px 0;border-radius:9px;color:${v.ink2}}
 .seg .on{background:${v.active};color:${v.ink};box-shadow:inset 0 1px 0 ${v.edge},0 2px 8px ${v.shadow}}
 .seg i{font-style:normal;color:${v.ink3};font-weight:600}
 .card{padding:13px 14px 12px 18px;overflow:hidden}
@@ -128,18 +128,18 @@ h1.v{font:800 30px Bric;color:#1a1530;margin-bottom:4px} p.v{color:#4d4a63;margi
 .pct{display:inline-block;background:${COLORS.deal};color:#fff;font:700 12px Fig;padding:2px 7px;border-radius:8px;margin-top:4px;box-shadow:inset 0 1px 0 rgba(255,255,255,.4)}
 .sub{font-size:11.5px;color:${v.ink3};margin-top:6px}
 .sponsor{padding:14px;display:flex;gap:12px;align-items:center}
-.sponsor .logo{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;font:800 18px Bric;color:#fff;flex:none;box-shadow:inset 0 1px 0 rgba(255,255,255,.5)}
+.sponsor .logo{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;font:800 18px Bric;color:#fff;flex:none;box-shadow:inset 0 1px 0 rgba(255,255,255,.5);border-radius:10px}
 .ad{font:700 10.5px Fig;letter-spacing:.6px;text-transform:uppercase;color:${v.ink3}}
-.cta{margin-left:auto;font:700 13px Fig;padding:9px 12px;border-radius:12px;background:${v.active};white-space:nowrap;box-shadow:inset 0 1px 0 ${v.edge}}
-.nav{position:absolute;left:12px;right:12px;bottom:22px;height:66px;border-radius:22px;display:flex;align-items:center;padding:0 6px;
+.cta{margin-left:auto;font:700 13px Fig;padding:9px 12px;border-radius:9px;background:${v.active};white-space:nowrap;box-shadow:inset 0 1px 0 ${v.edge}}
+.nav{position:absolute;left:12px;right:12px;bottom:22px;height:66px;border-radius:16px;display:flex;align-items:center;padding:0 6px;
   background:${v.tint.replace(/,\.(\d+)\)$/, (m, a) => `,${(Number(`0.${a}`) * 0.85).toFixed(2)})`)}}
-.nav .tb{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;font:600 11.5px Fig;color:${v.ink2};padding:7px 0 6px;border-radius:16px;margin:0 2px}
+.nav .tb{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;font:600 11.5px Fig;color:${v.ink2};padding:7px 0 6px;border-radius:11px;margin:0 2px}
 .nav .tb.on{background:${v.active};color:${v.ink};box-shadow:inset 0 1px 0 ${v.edge},inset 0 0 0 1px ${v.line},0 4px 14px ${v.shadow}}
 .sec{font:800 18px Bric;margin:6px 2px 0}
 .desc{padding:14px;font-size:14px;line-height:1.45;color:${v.ink}}
 .src{font-size:11.5px;color:${v.ink3};margin-top:8px}
 .uses{display:flex;flex-wrap:wrap;gap:6px;padding:12px}
-.use{display:flex;align-items:center;gap:6px;font:600 13px Fig;padding:8px 11px;border-radius:14px;background:${v.active};box-shadow:inset 0 1px 0 ${v.edge}}
+.use{display:flex;align-items:center;gap:6px;font:600 13px Fig;padding:8px 11px;border-radius:10px;background:${v.active};box-shadow:inset 0 1px 0 ${v.edge}}
 .ex{padding:12px 14px;font-size:13.5px;line-height:1.4;color:${v.ink2}}
 .ex b{color:${v.ink};font-weight:600}
 .facts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
@@ -222,6 +222,36 @@ const LENS = `<svg width="0" height="0" style="position:absolute"><filter id="le
   <feGaussianBlur in="noise" stdDeviation="2" result="soft"/>
   <feDisplacementMap in="SourceGraphic" in2="soft" scale="38" xChannelSelector="R" yChannelSelector="G"/></filter></svg>`;
 
+// ---------- pomysły na nawigację (wariant A) ----------
+const NAV_CSS = `
+.navD{position:absolute;left:0;right:0;bottom:0;height:88px;border-radius:14px 14px 0 0;display:flex;padding:8px 8px 22px}
+.navD .tb{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;font:600 11.5px Fig;padding:6px 0;border-radius:10px;margin:0 3px}
+.navD .tb.on{background:var(--act);box-shadow:inset 0 1px 0 var(--edge),0 3px 10px var(--sh)}
+.navC{position:absolute;left:16px;right:16px;bottom:24px;height:60px;border-radius:16px;display:flex;align-items:center;gap:4px;padding:0 8px}
+.navC .tb{display:flex;align-items:center;justify-content:center;gap:8px;height:44px;min-width:52px;border-radius:11px;font:700 14px Fig}
+.navC .tb.on{flex:1;background:var(--act);box-shadow:inset 0 1px 0 var(--edge),0 3px 10px var(--sh)}
+.navC .tb:not(.on){flex:0 0 56px}
+.navS{position:absolute;left:16px;right:88px;bottom:24px;height:62px;border-radius:16px;display:flex;align-items:center;padding:0 6px}
+.navS .tb{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;font:600 11.5px Fig;padding:6px 0;border-radius:11px;margin:0 2px}
+.navS .tb.on{background:var(--act);box-shadow:inset 0 1px 0 var(--edge),0 3px 10px var(--sh)}
+.fab{position:absolute;right:16px;bottom:24px;width:62px;height:62px;border-radius:16px;display:grid;place-items:center}
+.navL{position:absolute;left:0;right:0;bottom:0;height:84px;display:flex;padding:0 8px 20px;border-radius:0}
+.navL .tb{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font:600 11.5px Fig;position:relative}
+.navL .tb.on{color:${COLORS.text}}
+.navL .tb.on::before{content:"";position:absolute;top:0;width:36px;height:3px;border-radius:0 0 3px 3px;background:${COLORS.text};box-shadow:0 2px 10px ${COLORS.text}}
+`;
+const TABS = [['tag', 'Promocje'], ['search', 'Szukaj'], ['star', 'Moje'], ['user', 'Profil']];
+const NAVS = [
+  ['1. Dok na dole', 'Pełna szerokość, przyklejony do krawędzi, rogi tylko u góry. Aktywna zakładka: prostokąt 10 px wokół ikony i podpisu. Najbardziej klasyczny, nic nie zasłania listy z boków.',
+    (v) => `<div class="navD glass">${TABS.map(([i, l], k) => `<div class="tb ${k === 0 ? 'on' : ''}">${ic(i, 22)}<span>${l}</span></div>`).join('')}</div>`],
+  ['2. Kompaktowy, rozwijany', 'Pływa, ale jest niższy. Nieaktywne to same ikony, aktywna rozwija się w poziomy prostokąt z ikoną i nazwą. Mniej tekstu, więcej miejsca.',
+    (v) => `<div class="navC glass">${TABS.map(([i, l], k) => `<div class="tb ${k === 0 ? 'on' : ''}">${ic(i, 22)}${k === 0 ? `<span>${l}</span>` : ''}</div>`).join('')}</div>`],
+  ['3. Zakładki + przycisk szukania', 'Trzy zakładki w pasku, wyszukiwanie jako osobny kwadratowy przycisk obok (jak w iOS 26). Szukanie modelu jest najczęstszą akcją, więc dostaje własne miejsce pod kciukiem.',
+    (v) => `<div class="navS glass">${[TABS[0], TABS[2], TABS[3]].map(([i, l], k) => `<div class="tb ${k === 0 ? 'on' : ''}">${ic(i, 22)}<span>${l}</span></div>`).join('')}</div><div class="fab glass">${ic('search', 24)}</div>`],
+  ['4. Lekki dok z kreską', 'Dok bez żadnego tła pod aktywną zakładką: tylko kolor ikony i świecąca kreska u góry. Najmniej „pudełek”, szkło widać na całej szerokości.',
+    (v) => `<div class="navL glass">${TABS.map(([i, l], k) => `<div class="tb ${k === 0 ? 'on' : ''}">${ic(i, 22)}<span>${l}</span></div>`).join('')}</div>`],
+];
+
 const outputs = [];
 for (const V of VARIANTS) {
   const html = `<!doctype html><meta charset="utf-8"><title>TaniToken – ${V.name}</title><style>${css(V.vars)}</style>${LENS}
@@ -233,13 +263,30 @@ for (const V of VARIANTS) {
   writeFileSync(file, html);
   outputs.push(file);
 }
+{
+  const V = VARIANTS[0];
+  const v = V.vars;
+  const phones = NAVS.map(([title, note, make]) => {
+    const html = screenDeals(v).replace(/<div class="nav glass">[\s\S]*?<\/div><\/div>$/, `${make(v)}</div>`);
+    return `<div style="width:390px">${html}<div class="cap" style="font:800 16px Bric;color:#1a1530;margin-top:12px">${title}</div><div class="cap" style="font-weight:400">${note}</div></div>`;
+  }).join('');
+  const html = `<!doctype html><meta charset="utf-8"><title>TaniToken – nawigacja</title><style>${css(v)}${NAV_CSS}
+  .phone{--act:${v.active};--edge:${v.edge};--sh:${v.shadow}}
+  .navD .tb,.navS .tb,.navL .tb,.navC .tb{color:${v.ink2}} .navD .tb.on,.navS .tb.on,.navC .tb.on{color:${v.ink}}
+  </style>${LENS}<h1 class="v">Nawigacja: 4 pomysły</h1><p class="v">Wszystkie w wariancie A (Szron), rogi 14–16 px jak karty, aktywna zakładka obejmuje ikonę i podpis.</p><div class="row">${phones}</div>`;
+  const file = join(DIR, 'g4-nawigacja.html');
+  writeFileSync(file, html);
+  outputs.push(file);
+}
 console.log(outputs.join('\n'));
 
 if (process.argv.includes('--png')) {
   const { chromium } = await import(process.env.PLAYWRIGHT_MODULE ?? 'playwright');
   const b = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium', args: ['--allow-file-access-from-files'] });
   const p = await b.newPage({ viewport: { width: 1290, height: 1010 }, deviceScaleFactor: 2 });
+  await p.setViewportSize({ width: 1290, height: 1010 });
   for (const f of outputs) {
+    await p.setViewportSize({ width: f.includes('nawigacja') ? 1720 : 1290, height: 1010 });
     await p.goto(pathToFileURL(f).href);
     await p.waitForTimeout(600);
     await p.screenshot({ path: f.replace(/\.html$/, '.png'), fullPage: true });
