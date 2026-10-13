@@ -214,11 +214,20 @@ export function watchStatus(snapshot, item, usage = DEFAULT_USAGE, filter = null
 }
 
 // Platformy, na których zakłada się konto i kupuje dostęp do wielu modeli naraz.
-export const PLATFORMS = ['OpenRouter', 'Vercel AI Gateway', 'Requesty'];
-const SRC_PLATFORM = { openrouter: 'OpenRouter', vercel: 'Vercel AI Gateway', requesty: 'Requesty' };
+// Platformy = jedno konto i jeden klucz API do modeli wielu firm.
+// Pierwsze cztery sprawdzamy na żywo, pozostałe bramki mają cenniki z models.dev (zestawienie z GitHub).
+const SRC_PLATFORM = { openrouter: 'OpenRouter', vercel: 'Vercel AI Gateway', requesty: 'Requesty', fal: 'fal.ai' };
+export const GATEWAYS = [
+  'Kilo Gateway', 'NanoGPT', 'LLM Gateway', 'Eden AI', 'AIHubMix', 'ZenMux', '302.AI', 'Helicone',
+  'Cloudflare AI Gateway', 'FastRouter', 'Poe', 'Hugging Face',
+];
+export const PLATFORMS = [...Object.values(SRC_PLATFORM), ...GATEWAYS];
+const GATEWAY_SET = new Set(GATEWAYS);
 
 export function platformOf(o) {
-  return SRC_PLATFORM[o?.src] ?? null;
+  if (!o) return null;
+  if (o.src === 'direct') return GATEWAY_SET.has(o.provider) ? o.provider : null;
+  return SRC_PLATFORM[o.src] ?? null;
 }
 
 // Filtr ofert "u ulubionych": pasuje dostawca (np. Novita) albo platforma, przez którą idzie oferta (np. OpenRouter).

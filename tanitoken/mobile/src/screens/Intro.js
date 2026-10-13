@@ -59,7 +59,7 @@ export default function Intro({ onDone }) {
 }
 
 const s = StyleSheet.create({
-  wrap: { ...StyleSheet.absoluteFillObject, alignItems: 'center', justifyContent: 'center', zIndex: 10 },
+  wrap: { flex: 1, alignItems: 'center', justifyContent: 'center' },
   grid: { width: 172, flexDirection: 'row', flexWrap: 'wrap', gap: 12 },
   tile: { width: 80, height: 80, borderRadius: 24, alignItems: 'center', justifyContent: 'center' },
 });

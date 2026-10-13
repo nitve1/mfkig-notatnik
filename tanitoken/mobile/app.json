@@ -2,7 +2,7 @@
   "expo": {
     "name": "TaniToken",
     "slug": "tanitoken",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
@@ -10,7 +10,7 @@
     "ios": {
       "bundleIdentifier": "pl.tanitoken.app",
       "supportsTablet": true,
-      "buildNumber": "1",
+      "buildNumber": "2",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false,
         "UIBackgroundModes": [
@@ -21,7 +21,7 @@
     },
     "android": {
       "package": "pl.tanitoken.app",
-      "versionCode": 1,
+      "versionCode": 2,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#1a1530"
@@ -54,7 +54,17 @@
           "color": "#3d63ff"
         }
       ],
-      "expo-localization"
+      "expo-localization",
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "enableMinifyInReleaseBuilds": true,
+            "enableShrinkResourcesInReleaseBuilds": true,
+            "extraProguardRules": "# Moduły Expo i biblioteki natywne używają refleksji i nazw klas z JS: zostają w całości.\n-keep class expo.modules.** { *; }\n-keep class eightbitlab.com.blurview.** { *; }\n-keep class com.reactnativecommunity.asyncstorage.** { *; }\n-keep class com.th3rdwave.safeareacontext.** { *; }\n-keep class com.horcrux.svg.** { *; }\n-keep class com.facebook.react.** { *; }\n-keep class com.facebook.hermes.** { *; }\n-keep class com.facebook.jni.** { *; }"
+          }
+        }
+      ]
     ],
     "extra": {
       "snapshotUrls": [

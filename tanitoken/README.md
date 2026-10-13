@@ -26,10 +26,16 @@ Wszystkie publiczne, bez klucza i bez opłat:
 | OpenRouter `/models?category=programming` | które modele są do kodu | co 15 min |
 | Vercel AI Gateway `/v1/models` | ceny tekstu, obrazów (za obraz) i wideo (za sekundę) | co 15 min |
 | Requesty `/v1/models` | ceny z Bedrock, Vertex, Azure i innych przez Requesty | co 15 min |
-| models.dev `api.json` | cenniki bezpośrednie ~180 providerów (społeczność, mogą być nieaktualne) | co 15 min |
+| fal.ai `/api/models?categories=text-to-image,text-to-video,image-to-video` | ceny obrazów i wideo (z opisu cennika, `parseFalPrice`) | co 15 min |
+| models.dev `api.json` | cenniki bezpośrednie ~180 providerów i bramek API (społeczność, mogą być nieaktualne) | co 15 min |
 
-Ten sam model łączymy między źródłami po znormalizowanej nazwie (`modelKey`). Aktualnie: ~540 modeli,
-~6800 ofert, ~240 dostawców. Snapshot ma ~1,4 MB, po kompresji ~130 KB.
+Ten sam model łączymy między źródłami po znormalizowanej nazwie (`modelKey`, dla obrazów i wideo `mediaKey`).
+Aktualnie: ~690 modeli (100 wideo, 100 obrazów), ~7200 ofert, ~240 dostawców. Snapshot ma ~1,6 MB.
+
+Platformy (tryb Zwykły) to 16 miejsc z jednym kontem do modeli wielu firm: OpenRouter, Vercel AI Gateway,
+Requesty, fal.ai (sprawdzane na żywo) oraz bramki z models.dev (`GATEWAYS` w `core/pricing.js`): Kilo Gateway,
+NanoGPT, LLM Gateway, Eden AI, AIHubMix, ZenMux, 302.AI, Helicone, Cloudflare AI Gateway, FastRouter, Poe,
+Hugging Face. Replicate, Together, WaveSpeed i Kie.ai wymagają klucza API do cennika, więc ich nie ma.
 
 OpenRouter nie podaje cen wideo (zwraca 0), więc te modele wyceniamy z Vercel. Nigdy nie oznaczamy ich jako darmowe.
 

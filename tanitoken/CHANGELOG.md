@@ -18,12 +18,43 @@ Jedno miejsce z historią zmian, decyzjami i otwartymi zadaniami. Aktualizowane 
 
 | Priorytet | Zadanie | Status |
 | --- | --- | --- |
-| 1 | Test APK 1.0.0 na Motoroli użytkownika (zadania w tle, powiadomienia, sprawdzanie cen) | u użytkownika |
+| 1 | Test APK 1.1.0 na Motoroli Razr 60 (szkło, Najtaniej, fal.ai, powrót z modelu, ekran startowy) | u użytkownika |
 | 2 | Historia cen w snapshocie (np. 30 punktów na ofertę) pod wykresy w karcie modelu | pomysł |
 | 3 | Landing w stylu „Kolorowe kategorie” + wersje językowe | na końcu |
 | 4 | Linki partnerskie: zgłoszenie do Novita / GMI Cloud, wklejenie linków w `core/affiliates.js` | po stronie użytkownika |
 | 5 | Po merge'u: ręczne uruchomienie workflow „TaniToken snapshot” (tworzy gałąź `tanitoken-data`) | po merge'u |
 | 6 | Klucz release (keystore) do Google Play; obecny APK jest podpisany kluczem debug | przed publikacją |
+
+## 2026-10-13 – sesja 5: poprawki po teście na Motoroli Razr 60, więcej platform, szkło (APK 1.1.0)
+
+Uwagi użytkownika po pierwszym teście APK i co z nimi zrobione:
+
+- Animacja startowa była pod paskiem zakładek. Teraz `Intro` to osobny, pierwszy pełny ekran (App.js zwraca
+  sam ekran powitalny, bez kolumny i paska), a nie nakładka.
+- Powrót z karty modelu wracał do „Zniżek”. Teraz lista zostaje zamontowana pod kartą modelu
+  (`display: none`), więc wraca się do tej samej listy: typ, kategoria i przewinięcie zostają.
+- „Nie ma modeli wideo i obrazów”. Modele były, ale bez promocji, a ekran pokazywał tylko promocje. Zmiany:
+  - nowy rodzaj listy **Najtaniej** (`type.cheapest`): każdy model z kategorii z najtańszą ofertą, w obrazach
+    najpierw cena za obraz, w wideo za sekundę; kafle pokazują „od 0,005 $/s”;
+  - pusta kategoria promocji ma przycisk „Pokaż najtańsze”;
+  - nowe źródło **fal.ai** (`falEntries`, `parseFalPrice`, `mediaKey` w `core/sources.js`): ok. 130 ofert
+    obrazów i wideo; ceny z opisu cennika (za obraz, za sekundę; opisy w tokenach pomijane). Wideo: 32 → 100
+    modeli, obrazy: 71 → 104. API fal nie ma CORS, więc na webie zostają oferty z ostatniego zestawienia.
+- „Czy są tylko 3 platformy?”. Teraz 16: OpenRouter, Vercel AI Gateway, Requesty, fal.ai (na żywo) i 12 bramek
+  z models.dev (`GATEWAYS` w `core/pricing.js`). W wyborze kont bramki są jako pigułki z liczbą ofert.
+  Replicate, Together, WaveSpeed, Kie.ai wymagają klucza do cennika.
+- Efekt szkła (`mobile/src/glass.js`), pływający pasek zakładek, pod którym przewija się lista:
+  - web (Chromium): filtr SVG `feTurbulence` + `feDisplacementMap` w `backdrop-filter` razem z `blur`,
+    czyli tło się ugina, a nie tylko rozmywa; Safari bez url() w backdrop-filter, więc tam samo rozmycie;
+  - Android/iOS: React Native nie daje pikseli spod widoku, więc natywnie: `expo-blur` (Android 12+ przez
+    `BlurTargetView` + `dimezisBlurViewSdk31Plus`), półprzezroczysty odcień, połysk SVG i 1 px jasnej
+    krawędzi u góry. Prawdziwe ugięcie natywnie wymagałoby własnego shadera (AGSL/Metal).
+  - `BottomSpaceContext` daje listom miejsce na dole, żeby ostatni element nie chował się pod paskiem.
+- Wersja 1.1.0 (versionCode 2), ten sam klucz debug, więc instaluje się na 1.0.0 bez utraty danych.
+- APK 1.1.0 miał 30,07 MiB (limit wysyłki 30). Włączony R8 (`expo-build-properties`: minify + shrinkResources)
+  z regułami keep dla modułów Expo, React Native, Hermes, BlurView, SVG, AsyncStorage: 25 MB. Brak KVM w
+  środowisku, więc bez emulatora; pierwszy test R8 na telefonie użytkownika.
+- Testy: 15/15 (nowe: parser fal, łączenie po nazwie, platformy).
 
 ## 2026-10-12 – sesja 4b: APK 1.0.0
 

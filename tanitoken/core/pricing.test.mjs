@@ -5,7 +5,8 @@ import {
   perMillion, modelKey, offerKey, offerCost, cheapest, sortOffers, priceBeforeDiscount,
   detectDrops, trackPromos, promoStats, collectDeals, computeAlerts, watchStatus, promoSavings, onePerProvider, favoriteMatcher, onePerPlatform,
 } from './pricing.js';
-import { openrouterModels, openrouterOffers, vercelEntries, requestyEntries } from './sources.js';
+import { openrouterModels, openrouterOffers, vercelEntries, requestyEntries, parseFalPrice, falEntries, mediaKey } from './sources.js';
+import { platformOf } from './pricing.js';
 
 const tok = (src, provider, inP, outP, extra = {}) => ({ src, provider, tag: `${src}/${provider}`, unit: 'token', in: inP, out: outP, discount: 0, ...extra });
 
@@ -140,4 +141,27 @@ test('typowa długość promocji tylko z wiarygodnej próbki', () => {
   assert.equal(watchStatus(snap({ P: { n: 1, avgDays: 0.2 } }), item).typicalDays, null);
   assert.equal(watchStatus(snap({ P: { n: 2, avgDays: 6 } }), item).typicalDays, null);
   assert.equal(watchStatus(snap({ P: { n: 4, avgDays: 6 } }), item).typicalDays, 6);
+});
+
+test('fal: cena z opisu (obraz, sekunda wideo, tokeny pomijane)', () => {
+  assert.deepEqual(parseFalPrice('Your request will cost **$0.15** per image. For **$1.00**, you can run this model **7** times.', 'image'), { unit: 'image', price: 0.15 });
+  assert.deepEqual(parseFalPrice('For every second of video you generate you will be charged **$0.10** without audio or **$0.15** with audio for 720p.', 'video'), { unit: 'second', price: 0.1 });
+  assert.deepEqual(parseFalPrice('For **5s** video your request will cost **$0.35**. For every aditional second you will be charged **$0.07.**', 'video'), { unit: 'second', price: 0.07 });
+  assert.equal(parseFalPrice('Text tokens (per 1M): **$5.00** input, **$10.00** output.', 'image'), null);
+  assert.equal(parseFalPrice('', 'image'), null);
+});
+
+test('fal: łączenie z modelami z innych źródeł po nazwie', () => {
+  assert.equal(mediaKey('Veo 3.1 Fast Generate'), mediaKey('Veo 3.1 Fast'));
+  assert.equal(mediaKey('Kling v2.6 Text-to-Video'), mediaKey('Kling Video v2.6'));
+  const [e] = falEntries([{ id: 'fal-ai/veo3.1/fast', title: 'Veo 3.1 Fast', category: 'text-to-video', modelLab: 'Google', pricingInfoOverride: 'charged **$0.10** per second' }]);
+  assert.equal(e.offer.src, 'fal');
+  assert.equal(e.offer.unit, 'second');
+  assert.equal(e.key, mediaKey('Veo 3.1 Fast Generate'));
+});
+
+test('platformy: bramki z models.dev, fal, bez zwykłych dostawców', () => {
+  assert.equal(platformOf(tok('fal', 'fal.ai', 1, 1)), 'fal.ai');
+  assert.equal(platformOf(tok('direct', 'Kilo Gateway', 1, 1)), 'Kilo Gateway');
+  assert.equal(platformOf(tok('direct', 'Groq', 1, 1)), null);
 });

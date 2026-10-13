@@ -10,11 +10,11 @@ import { Button, Card, CatChip, IconButton, PctBadge, Row, Segmented, Stat, Stat
 import Icon from '../icons';
 import { catLabel, authorName, daysLabel, shortName } from '../parts';
 import { t as tr } from '../../../core/i18n.js';
-import { font, radius, space, useTheme } from '../theme';
+import { font, radius, space, useBottomSpace, useTheme } from '../theme';
 import { useProfile } from '../profile';
 
 const LIVE_MS = 60 * 1000;
-const srcShort = (src) => ({ openrouter: 'OpenRouter', vercel: 'Vercel', requesty: 'Requesty' }[src] ?? tr('src.direct'));
+const srcShort = (o) => ({ openrouter: 'OpenRouter', vercel: 'Vercel', requesty: 'Requesty', fal: 'fal.ai' }[o.src] ?? (platformOf(o) ? tr('platform.gateway') : tr('src.direct')));
 
 function UsageInput({ label, value, onChange }) {
   const t = useTheme();
@@ -40,6 +40,7 @@ function UsageInput({ label, value, onChange }) {
 
 export default function Model({ model: base, snapshot, onBack }) {
   const t = useTheme();
+  const bottomSpace = useBottomSpace();
   const { profile, update, watchItem, toggleWatch, setUsing } = useProfile();
   const [model, setModel] = useState(base);
   const [live, setLive] = useState(false);
@@ -88,7 +89,7 @@ export default function Model({ model: base, snapshot, onBack }) {
   const setUsage = (patch) => update({ usage: { ...usage, [model.unit]: { ...usage[model.unit], ...patch } } });
 
   return (
-    <ScrollView contentContainerStyle={{ padding: space[4], paddingBottom: space[7], gap: space[3] }} keyboardShouldPersistTaps="handled">
+    <ScrollView contentContainerStyle={{ padding: space[4], paddingBottom: bottomSpace, gap: space[3] }} keyboardShouldPersistTaps="handled">
       <Row style={{ justifyContent: 'space-between' }}>
         <View style={{ marginLeft: -10 }}><IconButton name="back" label={tr('common.back')} onPress={onBack} /></View>
         <IconButton name="star" label={tr(item ? 'model.unwatch' : 'model.watch')} active={!!item} onPress={() => toggleWatch(model.id)} />
@@ -208,7 +209,7 @@ export default function Model({ model: base, snapshot, onBack }) {
             </Row>
             <Row style={{ marginTop: 8, justifyContent: 'space-between' }}>
               <T kind="tiny" color="ink3" style={{ flex: 1 }} numberOfLines={1}>
-                {[pro ? srcShort(o.src) : o.provider !== platformOf(o) ? tr('offer.viaShort', { provider: o.provider }) : null, o.quant, o.uptime != null ? tr('offer.uptime', { pct: o.uptime }) : null, promo ? tr('offer.promoSince', { since: daysLabel(promo) }) : null, other ? tr('offer.otherUnit') : null, isUsed ? tr('offer.youUse') : null].filter(Boolean).join(' · ')}
+                {[pro ? srcShort(o) : o.provider !== platformOf(o) ? tr('offer.viaShort', { provider: o.provider }) : null, o.quant, o.uptime != null ? tr('offer.uptime', { pct: o.uptime }) : null, promo ? tr('offer.promoSince', { since: daysLabel(promo) }) : null, other ? tr('offer.otherUnit') : null, isUsed ? tr('offer.youUse') : null].filter(Boolean).join(' · ')}
               </T>
               {!picking && link ? (
                 <Pressable onPress={() => Linking.openURL(link.url)} accessibilityRole="link" hitSlop={10} style={s.link}>

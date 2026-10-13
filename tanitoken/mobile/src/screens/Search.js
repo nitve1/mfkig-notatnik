@@ -6,7 +6,7 @@ import { t as tr } from '../../../core/i18n.js';
 import { Card, CatChip, Empty, PctBadge, Row, Segmented, T, MAX_FONT_SCALE } from '../ui';
 import Icon from '../icons';
 import { catLabel, Header, priceParts, shortName, styles } from '../parts';
-import { font, mainCat, radius, space, useTheme } from '../theme';
+import { font, mainCat, radius, space, useBottomSpace, useTheme } from '../theme';
 import { useProfile } from '../profile';
 
 const CATS = [
@@ -20,6 +20,7 @@ const SORTS = ['new', 'cheap', 'offers'];
 
 export default function Search({ snapshot, onOpen }) {
   const t = useTheme();
+  const bottomSpace = useBottomSpace();
   const { profile } = useProfile();
   const [q, setQ] = useState('');
   const [cat, setCat] = useState(profile.cats.length === 1 && profile.cats[0] !== 'all' ? profile.cats[0] : 'all');
@@ -76,7 +77,7 @@ export default function Search({ snapshot, onOpen }) {
       keyExtractor={(r) => r.m.id}
       keyboardShouldPersistTaps="handled"
       keyboardDismissMode="on-drag"
-      contentContainerStyle={styles.list}
+      contentContainerStyle={[styles.list, { paddingBottom: bottomSpace }]}
       initialNumToRender={14}
       ListHeaderComponent={header}
       ListEmptyComponent={<Empty title={tr('search.empty')} body={tr('search.emptyBody')} />}

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { ActivityIndicator, BackHandler, Pressable, StyleSheet, View } from 'react-native';
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
@@ -19,7 +19,8 @@ import Icon from './src/icons';
 import { useSnapshot } from './src/data';
 import { ProfileProvider, useProfile } from './src/profile';
 import { checkAndNotify } from './src/alerts';
-import { ThemeContext, space, useTheme } from './src/theme';
+import { BottomSpaceContext, ThemeContext, space, useTheme } from './src/theme';
+import { BlurTargetView, Glass } from './src/glass';
 import { setLanguage, t as tr } from '../core/i18n.js';
 import { deviceLanguage } from './src/lang';
 
@@ -32,16 +33,19 @@ const TABS = [
   { key: 'profile', icon: 'user' },
 ];
 
-function TabBar({ tab, onChange, bottom, badge }) {
+// Pływający pasek zakładek ze szkła: lista przewija się pod nim i prześwituje.
+const TABBAR_H = 62;
+
+function TabBar({ tab, onChange, badge }) {
   const t = useTheme();
   return (
-    <View style={[s.tabbar, { backgroundColor: t.card, borderTopColor: t.line, paddingBottom: bottom + 6 }]} accessibilityRole="tablist">
+    <View style={s.tabbar} accessibilityRole="tablist">
       {TABS.map((x) => {
         const on = x.key === tab;
-        const color = on ? t.ink : t.ink3;
+        const color = on ? t.ink : t.ink2;
         return (
           <Pressable key={x.key} onPress={() => onChange(x.key)} style={s.tab} accessibilityRole="tab" accessibilityState={{ selected: on }} accessibilityLabel={tr(`nav.${x.key}`)}>
-            <View style={[s.tabIcon, on && { backgroundColor: t.seg }]}>
+            <View style={[s.tabIcon, on && { backgroundColor: t.glassActive }]}>
               <Icon name={x.icon} size={22} color={color} width={on ? 2.3 : 2} />
               {x.key === 'mine' && badge ? <View style={[s.badge, { backgroundColor: t.deal, borderColor: t.card }]} /> : null}
             </View>
@@ -64,6 +68,7 @@ function Main() {
   const [tab, setTab] = useState('deals');
   const [openId, setOpenId] = useState(null);
   const [seenAlerts, setSeenAlerts] = useState(null);
+  const blurTarget = useRef(null);
   const ready = profile && snapshot;
   const endIntro = useCallback(() => setIntro(false), []);
 
@@ -133,22 +138,47 @@ function Main() {
   } else {
     const model = openId ? snapshot.models.find((m) => m.id === openId) : null;
     const common = { snapshot, refreshing, onRefresh: refresh, onOpen: setOpenId, priceStatus };
-    if (model) body = <Model key={model.id} model={model} snapshot={snapshot} onBack={() => setOpenId(null)} />;
-    else if (tab === 'deals') body = <Deals {...common} onBell={() => changeTab('mine')} bellDot={newAlerts} />;
-    else if (tab === 'search') body = <Search {...common} />;
-    else if (tab === 'mine') body = <Mine {...common} onGoSearch={() => changeTab('search')} onGoProfile={() => changeTab('profile')} />;
-    else body = <Profile snapshot={snapshot} priceStatus={priceStatus} onRefresh={refresh} />;
+    let screen;
+    if (tab === 'deals') screen = <Deals {...common} onBell={() => changeTab('mine')} bellDot={newAlerts} />;
+    else if (tab === 'search') screen = <Search {...common} />;
+    else if (tab === 'mine') screen = <Mine {...common} onGoSearch={() => changeTab('search')} onGoProfile={() => changeTab('profile')} />;
+    else screen = <Profile snapshot={snapshot} priceStatus={priceStatus} onRefresh={refresh} />;
+    // Karta modelu leży nad listą, a lista zostaje zamontowana: powrót wraca do tego samego
+    // widoku (typ, kategoria, przewinięcie), a nie do domyślnych "Promocji".
+    body = (
+      <>
+        <View style={{ flex: 1, display: model ? 'none' : 'flex' }}>{screen}</View>
+        {model ? <Model key={model.id} model={model} snapshot={snapshot} onBack={() => setOpenId(null)} /> : null}
+      </>
+    );
   }
 
+  // Ekran powitalny to pierwszy pełny ekran po otwarciu, bez paska zakładek pod spodem.
+  if (intro && profile) {
+    return (
+      <View style={[s.full, { backgroundColor: t.bg }]}>
+        <StatusBar style={t.dark ? 'light' : 'dark'} />
+        <Intro onDone={endIntro} />
+      </View>
+    );
+  }
+
+  const showTabs = !!(ready && profile.onboarded);
+  const tabGap = insets.bottom + 10;
   return (
     <View style={[s.root, { backgroundColor: t.bg, paddingTop: onboarding ? 0 : insets.top }]}>
       <StatusBar style={t.dark ? 'light' : 'dark'} />
       {/* Stała kolumna: na telefonie pełna szerokość, na tablecie i w przeglądarce max 600 px pośrodku. */}
       <View style={s.column}>
-        <View style={{ flex: 1 }}>{body}</View>
-        {ready && profile.onboarded ? <TabBar tab={tab} onChange={changeTab} bottom={insets.bottom} badge={newAlerts && tab !== 'mine'} /> : null}
+        <BottomSpaceContext.Provider value={showTabs ? TABBAR_H + tabGap + space[5] : space[7]}>
+          <BlurTargetView ref={blurTarget} style={{ flex: 1, backgroundColor: t.bg }}>{body}</BlurTargetView>
+        </BottomSpaceContext.Provider>
+        {showTabs ? (
+          <Glass blurTarget={blurTarget} radius={TABBAR_H / 2} style={[s.floating, { bottom: tabGap }]}>
+            <TabBar tab={tab} onChange={changeTab} badge={newAlerts && tab !== 'mine'} />
+          </Glass>
+        ) : null}
       </View>
-      {intro && profile ? <Intro onDone={endIntro} /> : null}
     </View>
   );
 }
@@ -181,9 +211,11 @@ export default function App() {
 
 const s = StyleSheet.create({
   root: { flex: 1, alignItems: 'center', overflow: 'hidden' },
+  full: { flex: 1 },
   column: { flex: 1, width: '100%', maxWidth: 600 },
   center: { flex: 1, alignItems: 'center', justifyContent: 'center' },
-  tabbar: { flexDirection: 'row', borderTopWidth: StyleSheet.hairlineWidth, paddingTop: 6 },
+  floating: { position: 'absolute', left: space[3], right: space[3], height: TABBAR_H },
+  tabbar: { flex: 1, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 4 },
   tab: { flex: 1, alignItems: 'center', gap: 2 },
   tabIcon: { width: 56, height: 30, borderRadius: 15, alignItems: 'center', justifyContent: 'center' },
   badge: { position: 'absolute', right: 12, top: 2, width: 10, height: 10, borderRadius: 5, borderWidth: 2 },

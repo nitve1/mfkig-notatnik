@@ -1,8 +1,8 @@
 // Silnik zestawienia cen: ten sam kod w skrypcie (GitHub Actions) i w apce na telefonie.
 // getJson(url) -> Promise<json> dostarcza wywołujący (Node: fetch z ponowieniami, apka: fetch).
 import {
-  OPENROUTER_API, VERCEL_API, REQUESTY_API, MODELS_DEV_API,
-  openrouterModels, openrouterOffers, vercelEntries, requestyEntries, modelsDevEntries, baseId,
+  OPENROUTER_API, VERCEL_API, REQUESTY_API, MODELS_DEV_API, FAL_API, FAL_CATEGORIES, FAL_PAGE_SIZE,
+  openrouterModels, openrouterOffers, vercelEntries, requestyEntries, modelsDevEntries, falEntries, mediaKey, baseId,
 } from './sources.js';
 import { detectDrops, trackPromos, promoStats, offerKey, offerCost } from './pricing.js';
 
@@ -30,18 +30,33 @@ async function pool(items, concurrency, fn) {
   }));
 }
 
+// Katalog fal.ai: kilka stron na kategorię (obrazy, wideo).
+async function fetchFal(getJson) {
+  const items = [];
+  await Promise.all(FAL_CATEGORIES.map(async (cat) => {
+    const url = (page) => `${FAL_API}?page=${page}&size=${FAL_PAGE_SIZE}&categories=${cat}`;
+    const first = await getJson(url(1));
+    items.push(...(first.items ?? []));
+    const pages = Math.min(first.pages ?? 1, 15);
+    for (let page = 2; page <= pages; page++) items.push(...((await getJson(url(page))).items ?? []));
+  }));
+  if (!items.length) throw new Error('fal: pusty katalog');
+  return items;
+}
+
 // Pełne zestawienie. includeDirect=false: cenniki bezpośrednie (models.dev, 5 MB) bierzemy z `base`.
 export async function buildSnapshot({
   getJson, prev = null, base = null, includeDirect = true, concurrency = 12,
   now = new Date().toISOString(), onProgress = null, minOpenrouterSuccess = 0.8,
 }) {
   const status = {};
-  const [orAll, orCoding, vercel, requesty, modelsDev] = await Promise.all([
+  const [orAll, orCoding, vercel, requesty, modelsDev, fal] = await Promise.all([
     settle('openrouter', status, () => getJson(`${OPENROUTER_API}/models?output_modalities=all`)),
     settle('openrouter-coding', status, () => getJson(`${OPENROUTER_API}/models?category=programming`)),
     settle('vercel', status, () => getJson(VERCEL_API)),
     settle('requesty', status, () => getJson(REQUESTY_API)),
     includeDirect ? settle('direct', status, () => getJson(MODELS_DEV_API)) : Promise.resolve(null),
+    settle('fal', status, () => fetchFal(getJson)),
   ]);
   if (!orAll) throw new Error(`OpenRouter: ${status.openrouter?.error ?? 'brak danych'}`);
 
@@ -84,6 +99,25 @@ export async function buildSnapshot({
     m.offers.push(e.offer);
   }
 
+  // 2b. fal.ai: obrazy i wideo, łączone po nazwie (mediaKey), bo identyfikatory są inne niż w OpenRouter.
+  const falList = fal ? falEntries(fal) : keptOffers(prev, 'fal');
+  const media = new Map();
+  for (const m of models) if (m.cats.includes('image') || m.cats.includes('video')) media.set(mediaKey(m.name), m);
+  for (const e of falList) {
+    // Świeże wpisy mają klucz po nazwie (mediaKey); zachowane z poprzedniego zestawienia mają klucz modelu.
+    let m = e.fresh ? media.get(e.key) : byKey.get(e.key) ?? media.get(e.key);
+    if (!m && e.id?.startsWith('fal/')) {
+      m = {
+        id: e.id, key: e.key, name: e.name, author: e.author, created: e.created, context: null,
+        cats: e.cats, unit: e.offer.unit, freeId: null, expires: null, listPrice: null, offers: [],
+      };
+      models.push(m);
+      media.set(e.key, m);
+      if (!byKey.has(e.key)) byKey.set(e.key, m);
+    }
+    if (m && !m.offers.some((o) => o.tag === e.offer.tag)) m.offers.push(e.offer);
+  }
+
   // 3. Requesty i cenniki bezpośrednie tylko dla modeli z katalogu.
   const attach = (offersByKey) => {
     for (const { key, offer } of offersByKey) {
@@ -117,6 +151,15 @@ export async function buildSnapshot({
   }
   catalog.sort((a, b) => (b.created ?? 0) - (a.created ?? 0));
   return finalize(prev, catalog, now, status);
+}
+
+// Gdy źródło chwilowo nie odpowiada, zostają jego oferty z poprzedniego zestawienia (po kluczu modelu).
+function keptOffers(prev, src) {
+  const out = [];
+  for (const m of prev?.models ?? []) {
+    for (const o of m.offers) if (o.src === src) out.push({ id: m.id, key: m.key, name: m.name, author: m.author, created: m.created, cats: m.cats, offer: o });
+  }
+  return out;
 }
 
 function sortModelOffers(m) {

@@ -24,6 +24,11 @@ const light = {
   save: '#0f9b6c',
   saveSoft: '#e2f5ee',
   infoSoft: '#e9edff',
+  glassTint: 'rgba(255,255,255,0.66)',
+  glassEdge: 'rgba(255,255,255,0.95)',
+  glassLine: 'rgba(26,21,48,0.10)',
+  glassSheen: 0.55,
+  glassActive: 'rgba(26,21,48,0.08)',
 };
 
 const dark = {
@@ -47,6 +52,11 @@ const dark = {
   save: '#33cf95',
   saveSoft: '#13302a',
   infoSoft: '#232a4d',
+  glassTint: 'rgba(27,24,41,0.62)',
+  glassEdge: 'rgba(255,255,255,0.22)',
+  glassLine: 'rgba(255,255,255,0.08)',
+  glassSheen: 0.12,
+  glassActive: 'rgba(255,255,255,0.12)',
 };
 
 export const THEMES = { light, dark };
@@ -72,6 +82,10 @@ export function mainCat(model) {
 }
 
 export const ThemeContext = createContext('system');
+
+// Ile miejsca zostawić na dole list, żeby ostatni element nie chował się pod pływającym paskiem.
+export const BottomSpaceContext = createContext(space[7]);
+export const useBottomSpace = () => useContext(BottomSpaceContext);
 
 // mode: 'system' | 'light' | 'dark'
 export function useResolvedTheme(mode) {

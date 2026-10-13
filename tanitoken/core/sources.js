@@ -11,11 +11,16 @@ export const OPENROUTER_API = 'https://openrouter.ai/api/v1';
 export const VERCEL_API = 'https://ai-gateway.vercel.sh/v1/models';
 export const REQUESTY_API = 'https://router.requesty.ai/v1/models';
 export const MODELS_DEV_API = 'https://models.dev/api.json';
+export const FAL_API = 'https://fal.ai/api/models';
+// Kategorie fal.ai, które porównujemy (generowanie obrazów i wideo). 40 modeli na stronę.
+export const FAL_CATEGORIES = ['text-to-image', 'text-to-video', 'image-to-video'];
+export const FAL_PAGE_SIZE = 40;
 
 export const SOURCES = {
   openrouter: { name: 'OpenRouter', kind: 'gateway', live: true },
   vercel: { name: 'Vercel AI Gateway', kind: 'gateway', live: true },
   requesty: { name: 'Requesty', kind: 'gateway', live: true },
+  fal: { name: 'fal.ai', kind: 'gateway', live: true },
   direct: { get name() { return t('src.directLong'); }, kind: 'direct', live: false },
 };
 
@@ -47,6 +52,21 @@ export function modelKey(id) {
 
 export function baseId(id) {
   return String(id).split(':')[0];
+}
+
+// Klucz dla modeli obrazów i wideo po nazwie, bo każde źródło nazywa je inaczej:
+// "Veo 3.1 Fast Generate" (Vercel) i "Veo 3.1 Fast" (fal) -> "veo31fast".
+export function mediaKey(name) {
+  return String(name ?? '')
+    .toLowerCase()
+    .replace(/^[^:]+:\s*/, '')
+    .replace(/\[(.*?)\]/g, ' $1 ')
+    .replace(/\b(text|image|reference|audio)[- ]to[- ](video|image)\b/g, ' ')
+    .replace(/\b(t2v|i2v|r2v|t2i|api|generate|preview|model|video)\b/g, ' ')
+    .replace(/\b0\d\d\b/g, ' ')
+    .replace(/\bv(?=\d)/g, '')
+    .replace(/(\d)\.0\b/g, '$1')
+    .replace(/[^a-z0-9]/g, '');
 }
 
 // ---------- kategorie ----------
@@ -227,6 +247,75 @@ export function requestyEntries(apiData) {
     };
     const cur = best.get(tag);
     if (!cur || inP * 3 + outP < cur.offer.in * 3 + cur.offer.out) best.set(tag, entry);
+  }
+  return [...best.values()];
+}
+
+// ---------- fal.ai (obrazy i wideo) ----------
+
+// fal podaje cenę opisem, np. "Your request will cost **$0.15** per image" albo
+// "For every second of video you generate you will be charged **$0.10** ... for 720p".
+// Bierzemy cenę za obraz albo za sekundę (720p, jeśli opis ją wymienia); opisy w tokenach pomijamy.
+export function parseFalPrice(text, kind) {
+  const plain = String(text ?? '').replace(/\*\*/g, '').replace(/\s+/g, ' ');
+  if (!plain || /per 1M|tokens? \(|per 1,?000 tokens/i.test(plain.slice(0, 160))) return null;
+  const hits = [];
+  const re = /\$\s*(\d+(?:\.\d+)?)/g;
+  let m;
+  while ((m = re.exec(plain))) {
+    const price = Number(m[1]);
+    const before = plain.slice(Math.max(0, m.index - 60), m.index);
+    const rest = plain.slice(m.index + m[0].length);
+    const end = rest.search(/\$|\. |;|$/);
+    const after = rest.slice(0, end < 0 ? 80 : Math.min(end, 120));
+    hits.push({ price, before, after, around: `${before} ${after}` });
+  }
+  const valid = hits.filter((h) => h.price > 0 && !/token|1,?000|per 1M|additional|extra|each additional/i.test(h.after));
+  if (kind === 'video') {
+    const perSec = valid.filter((h) => /second|\/s\b|\/sec/i.test(h.after) || /\b(every|per|each)\b[^$]{0,25}\bsecond/i.test(h.before));
+    // Pierwsza stawka w opisie to zwykle podstawowa (najniższa rozdzielczość, bez dźwięku): cena "od".
+    return perSec[0] ? { unit: 'second', price: perSec[0].price } : null;
+  }
+  const img = valid.filter((h) => !/second/i.test(h.after));
+  const pick = img.find((h) => /image|megapixel|\bMP\b|1K/i.test(h.around)) ?? img[0];
+  return pick ? { unit: 'image', price: pick.price } : null;
+}
+
+const FAL_STRIP = /\s*(text[- ]to[- ](image|video)|image[- ]to[- ]video|api)\b/gi;
+
+export function falEntries(items) {
+  const best = new Map();
+  for (const it of items ?? []) {
+    if (it.removed || it.deprecated || it.hidePricing || !it.pricingInfoOverride) continue;
+    const kind = String(it.category).endsWith('video') ? 'video' : 'image';
+    const p = parseFalPrice(it.pricingInfoOverride, kind);
+    if (!p) continue;
+    const name = it.title.replace(FAL_STRIP, '').replace(/\s{2,}/g, ' ').trim();
+    const key = mediaKey(name);
+    if (!/[a-z]{3}/.test(key)) continue; // sama wersja ("V2.6") bez nazwy modelu
+    const entry = {
+      fresh: true,
+      id: `fal/${it.id}`,
+      key,
+      name: it.modelLab ? `${it.modelLab}: ${name}` : name,
+      author: (it.modelLab ?? it.id.split('/')[0]).toLowerCase(),
+      created: it.publishedAt ? Math.floor(Date.parse(it.publishedAt) / 1000) : null,
+      cats: [kind],
+      offer: {
+        src: 'fal',
+        provider: 'fal.ai',
+        tag: `fal/${it.id}`,
+        unit: p.unit,
+        price: p.price,
+        discount: 0,
+        context: null,
+        url: `https://fal.ai/models/${it.id}`,
+        promoNote: /promotional|limited[- ]time|launch pric/i.test(it.pricingInfoOverride) || undefined,
+      },
+    };
+    // Ten sam model bywa w kilku wariantach (tekst->wideo, obraz->wideo): zostaje najtańszy.
+    const cur = best.get(key);
+    if (!cur || p.price < cur.offer.price) best.set(key, entry);
   }
   return [...best.values()];
 }

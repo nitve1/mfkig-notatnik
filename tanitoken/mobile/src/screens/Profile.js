@@ -2,7 +2,7 @@ import { Alert, Linking, Platform, ScrollView, StyleSheet, TextInput, View } fro
 import { LANGUAGES, t as tr } from '../../../core/i18n.js';
 import { Button, Pill, Row, Section, Segmented, T, ToggleRow, MAX_FONT_SCALE } from '../ui';
 import { Header, PriceStatus } from '../parts';
-import { font, radius, space, useTheme } from '../theme';
+import { font, radius, space, useBottomSpace, useTheme } from '../theme';
 import { exportProfile, importProfile, useProfile } from '../profile';
 import { disableBackground, enableNotifications } from '../alerts';
 import ProviderPicker from './ProviderPicker';
@@ -35,6 +35,7 @@ export function LanguagePicker({ value, onChange }) {
 
 export default function Profile({ snapshot, priceStatus, onRefresh }) {
   const t = useTheme();
+  const bottomSpace = useBottomSpace();
   const { profile, update, toggleProvider, replace, reset } = useProfile();
   const n = profile.notify;
   const setNotify = (patch) => update({ notify: { ...n, ...patch } });
@@ -80,7 +81,7 @@ export default function Profile({ snapshot, priceStatus, onRefresh }) {
     ]);
 
   return (
-    <ScrollView contentContainerStyle={{ padding: space[4], paddingBottom: space[7] }} keyboardShouldPersistTaps="handled">
+    <ScrollView contentContainerStyle={{ padding: space[4], paddingBottom: bottomSpace }} keyboardShouldPersistTaps="handled">
       <Header kicker={tr('profile.kicker')} title={tr('nav.profile')} />
 
       <Section title={tr('profile.language')}>

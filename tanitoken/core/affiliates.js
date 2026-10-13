@@ -62,6 +62,7 @@ export function offerLink(model, offer) {
       url = 'https://www.requesty.ai/';
       label = t('link.open', { name: 'Requesty' });
       break;
+    case 'fal':
     case 'direct':
       url = offer.url;
       label = t('link.open', { name: offer.provider });

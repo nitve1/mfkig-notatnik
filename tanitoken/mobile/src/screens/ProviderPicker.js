@@ -1,31 +1,33 @@
 import { useMemo, useState } from 'react';
 import { StyleSheet, TextInput, View } from 'react-native';
-import { PLATFORMS, platformOf } from '../../../core/pricing.js';
+import { GATEWAYS, PLATFORMS, platformOf } from '../../../core/pricing.js';
 import { t as tr } from '../../../core/i18n.js';
 import { Pill, T, MAX_FONT_SCALE } from '../ui';
 import Icon from '../icons';
 import { font, radius, space, useTheme } from '../theme';
 
-const PLATFORM_NOTE = { OpenRouter: 'platform.openrouter', 'Vercel AI Gateway': 'platform.vercel', Requesty: 'platform.requesty' };
+const PLATFORM_NOTE = { OpenRouter: 'platform.openrouter', 'Vercel AI Gateway': 'platform.vercel', Requesty: 'platform.requesty', 'fal.ai': 'platform.fal' };
 
 // Ulubieni: platformy (konto obejmuje wszystkie ich oferty) i pojedynczy dostawcy.
 export default function ProviderPicker({ snapshot, selected, onToggle, pro = true, limit = 16 }) {
   const t = useTheme();
   const [q, setQ] = useState('');
-  const { platforms, providers } = useMemo(() => {
+  const { platforms, gateways, providers } = useMemo(() => {
     const perPlatform = Object.fromEntries(PLATFORMS.map((p) => [p, 0]));
     const count = new Map();
     for (const m of snapshot?.models ?? []) {
       for (const o of m.offers) {
         const platform = platformOf(o);
         if (platform) perPlatform[platform]++;
-        // Oferty Vercel i Requesty mają w nazwie platformę, nie osobnego dostawcę.
-        if (o.src === 'vercel' || o.src === 'requesty') continue;
+        // Oferty platform (Vercel, Requesty, fal, bramki) nie są osobnymi dostawcami.
+        if (o.src !== 'openrouter' && platform) continue;
         count.set(o.provider, (count.get(o.provider) ?? 0) + 1);
       }
     }
     return {
-      platforms: PLATFORMS.map((name) => ({ name, offers: perPlatform[name] })),
+      platforms: PLATFORMS.filter((name) => !GATEWAYS.includes(name)).map((name) => ({ name, offers: perPlatform[name] })),
+      gateways: GATEWAYS.filter((name) => perPlatform[name] > 0).sort((a, b) => perPlatform[b] - perPlatform[a])
+        .map((name) => ({ name, offers: perPlatform[name] })),
       providers: [...count.entries()].sort((a, b) => b[1] - a[1]).map(([name]) => name),
     };
   }, [snapshot]);
@@ -53,6 +55,17 @@ export default function ProviderPicker({ snapshot, selected, onToggle, pro = tru
           );
         })}
       </View>
+
+      {gateways.length ? (
+        <>
+          <T kind="small" color="ink2" style={{ marginTop: space[1] }}>{tr('picker.gateways')}</T>
+          <View style={s.wrap}>
+            {gateways.map((g) => (
+              <Pill key={g.name} label={`${g.name} · ${g.offers}`} on={selected.includes(g.name)} color={t.text} onPress={() => onToggle(g.name)} />
+            ))}
+          </View>
+        </>
+      ) : null}
 
       {!pro ? (
         <T kind="small" color="ink2">{tr('picker.proHint')}</T>

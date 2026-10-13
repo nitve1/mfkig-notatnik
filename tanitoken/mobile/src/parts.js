@@ -14,8 +14,12 @@ export const authorName = (m) => (m.name.includes(':') ? m.name.split(':')[0].tr
 // Cena "do pokazania" i jednostka.
 export function priceParts(o) {
   if (!o) return { main: '–', unit: '' };
-  if (o.unit === 'token') return { main: formatUsd(o.in), unit: tr('unit.perMIn') };
-  return { main: formatUsd(o.price), unit: tr(o.unit === 'image' ? 'unit.perImage' : 'unit.perSecond') };
+  if (o.unit === 'token') return { main: formatUsd(o.in), unit: tr('unit.perMIn'), unitShort: '' };
+  return {
+    main: formatUsd(o.price),
+    unit: tr(o.unit === 'image' ? 'unit.perImage' : 'unit.perSecond'),
+    unitShort: o.unit === 'second' ? '/s' : '',
+  };
 }
 
 export function daysLabel(p) {
@@ -32,7 +36,7 @@ export function DealCard({ deal, onPress, watched, pro = true }) {
   const cat = mainCat(m);
   const p = priceParts(deal.offer);
   return (
-    <Card stripe={t[cat]} onPress={onPress} accessibilityLabel={`${m.name}, ${deal.type === 'free' ? tr('deal.free') : `−${deal.pct}%`}`}>
+    <Card stripe={t[cat]} onPress={onPress} accessibilityLabel={`${m.name}, ${deal.type === 'free' ? tr('deal.free') : deal.type === 'cheapest' ? `${p.main} ${p.unit}` : `−${deal.pct}%`}`}>
       <Row style={{ alignItems: 'flex-start' }}>
         <View style={{ flex: 1, gap: 4 }}>
           <T kind="strong" numberOfLines={2}>
@@ -49,13 +53,15 @@ export function DealCard({ deal, onPress, watched, pro = true }) {
           )}
           {deal.type === 'free' ? (
             <T kind="tiny" color="save">{tr('deal.free')}</T>
+          ) : deal.type === 'cheapest' ? (
+            <T kind="tiny" color="ink2">{tr('deal.offers', { n: deal.count })}</T>
           ) : (
             <PctBadge pct={deal.pct} />
           )}
         </View>
       </Row>
       <T kind="tiny" color="ink3" style={{ marginTop: 6 }}>
-        {deal.type === 'free' ? tr('deal.variant', { id: m.freeId }) : tr(deal.type === 'drop' ? 'deal.dropLine' : 'deal.discountLine', { unit: p.unit, since: daysLabel(deal) })}
+        {deal.type === 'free' ? tr('deal.variant', { id: m.freeId }) : deal.type === 'cheapest' ? tr('deal.cheapestLine', { unit: p.unit }) : tr(deal.type === 'drop' ? 'deal.dropLine' : 'deal.discountLine', { unit: p.unit, since: daysLabel(deal) })}
       </T>
     </Card>
   );
@@ -109,5 +115,5 @@ export function PriceStatus({ snapshot, status, onRefresh }) {
 }
 
 export const styles = StyleSheet.create({
-  list: { padding: space[4], paddingBottom: space[7], gap: space[2] },
+  list: { padding: space[4], gap: space[2] },
 });

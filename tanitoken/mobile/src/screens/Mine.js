@@ -4,7 +4,7 @@ import { formatDays, formatOfferPrice, formatUsd, promoAgeDays, promoSavings, ti
 import { Button, Card, CatChip, Empty, PctBadge, Progress, Row, Stat, StatusBadge, T } from '../ui';
 import Icon from '../icons';
 import { catLabel, Header, priceParts, shortName } from '../parts';
-import { mainCat, space, useTheme } from '../theme';
+import { mainCat, space, useBottomSpace, useTheme } from '../theme';
 import { useProfile } from '../profile';
 import { compareFilter, modeFilter } from '../filters';
 import { t as tr } from '../../../core/i18n.js';
@@ -39,6 +39,7 @@ function usingState(st) {
 
 export default function Mine({ snapshot, onOpen, onGoSearch, onGoProfile }) {
   const t = useTheme();
+  const bottomSpace = useBottomSpace();
   const { profile } = useProfile();
   const filter = compareFilter(profile);
   const rows = useMemo(
@@ -74,7 +75,7 @@ export default function Mine({ snapshot, onOpen, onGoSearch, onGoProfile }) {
   }
 
   return (
-    <ScrollView contentContainerStyle={{ padding: space[4], paddingBottom: space[7], gap: space[2] }}>
+    <ScrollView contentContainerStyle={{ padding: space[4], paddingBottom: bottomSpace, gap: space[2] }}>
       <Header kicker={tr('mine.kicker', { using: using.length, watching: watching.length })} title={tr('nav.mine')} />
 
       <Row style={{ alignItems: 'stretch', gap: space[2] }}>
