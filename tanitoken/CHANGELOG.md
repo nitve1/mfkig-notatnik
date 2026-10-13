@@ -25,6 +25,20 @@ Jedno miejsce z historią zmian, decyzjami i otwartymi zadaniami. Aktualizowane 
 | 5 | Po merge'u: ręczne uruchomienie workflow „TaniToken snapshot” (tworzy gałąź `tanitoken-data`) | po merge'u |
 | 6 | Klucz release (keystore) do Google Play; obecny APK jest podpisany kluczem debug | przed publikacją |
 
+## 2026-10-13 – sesja 6: makiety szkła, opisy modeli, dłuższy ekran startowy
+
+- Ekran startowy: animacja trwa 2 s dłużej (`Animated.delay(2450)`), żeby dało się przeczytać hasło.
+- Makiety „szkło wszędzie” (`mockups/glass.mjs`, PNG `mockups/g1-szron`, `g2-noc`, `g3-witraz`), 3 ekrany na
+  wariant: Promocje z reklamą partnerską w liście, karta modelu z opisem i zastosowaniami, Najtaniej wideo.
+  Uwagi użytkownika w makietach: pasek ~15% bardziej przezroczysty, rogi 22 px jak reszta kart,
+  aktywna zakładka to zaokrąglony kształt obejmujący ikonę i podpis (zamiast kwadratu za ikoną).
+- Opisy modeli: OpenRouter `/models` ucina opisy (568 z 659 kończy się „...”), Vercel `/v1/models` ma pełne,
+  często z „Typical uses include…”. Plan: opis z Vercel, w drugiej kolejności OpenRouter (do ostatniego
+  pełnego zdania), dla fal `shortDescription`; zastosowania jako przetłumaczone etykiety z możliwości modelu
+  (narzędzia, rozumowanie, obraz na wejściu, długi kontekst, kategorie).
+- Afiliacja: raport w `docs/afiliacje-2026-10.md` (w toku).
+- Czeka na decyzję użytkownika: wybór wariantu A/B/C, potem wdrożenie w apce.
+
 ## 2026-10-13 – sesja 5: poprawki po teście na Motoroli Razr 60, więcej platform, szkło (APK 0.1.1)
 
 Uwagi użytkownika po pierwszym teście APK i co z nimi zrobione:

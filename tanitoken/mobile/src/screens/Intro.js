@@ -29,7 +29,7 @@ export default function Intro({ onDone }) {
       Animated.sequence([
         Animated.stagger(110, anims.map((a) => Animated.spring(a, { toValue: 1, friction: 6, tension: 120, useNativeDriver: true }))),
         Animated.timing(word, { toValue: 1, duration: 260, easing: Easing.out(Easing.cubic), useNativeDriver: true }),
-        Animated.delay(450),
+        Animated.delay(2450), // czas na przeczytanie nazwy i hasła
         Animated.timing(fade, { toValue: 0, duration: 220, useNativeDriver: true }),
       ]).start(({ finished }) => finished && !cancelled && done.current());
     });
