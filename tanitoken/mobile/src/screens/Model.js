@@ -23,7 +23,7 @@ function UsageInput({ label, value, onChange }) {
   const [text, setText] = useState(String(value));
   return (
     <View style={{ flex: 1 }}>
-      <T kind="tiny" color="ink2" style={{ marginBottom: 4 }}>{label}</T>
+      <T kind="tiny" color="ink2" style={{ marginBottom: space[2] }}>{label}</T>
       <TextInput
           maxFontSizeMultiplier={MAX_FONT_SCALE}
         value={text}
@@ -80,11 +80,11 @@ function About({ model: base }) {
   if (!model.desc && !uses.length) return null;
   return (
     <View style={{ gap: space[2] }}>
-      <T kind="h2" style={{ marginTop: space[3] }}>{tr('model.about')}</T>
+      <T kind="h2" style={{ marginTop: space[5] }}>{tr('model.about')}</T>
       {model.desc ? (
         <Card level="flat">
           <T numberOfLines={open ? undefined : 4}>{model.desc}</T>
-          <Row style={{ marginTop: space[2], justifyContent: 'space-between' }}>
+          <Row style={{ marginTop: space[3], justifyContent: 'space-between' }}>
             <T kind="tiny" color="ink3" style={{ flex: 1 }}>{tr('model.descNote')}</T>
             {model.desc.length > 180 ? (
               <Pressable onPress={() => setOpen(!open)} hitSlop={10} accessibilityRole="button">
@@ -96,7 +96,7 @@ function About({ model: base }) {
       ) : null}
       {uses.length ? (
         <>
-          <T kind="strong" style={{ marginTop: space[2] }}>{tr('model.uses')}</T>
+          <T kind="strong" style={{ marginTop: space[4] }}>{tr('model.uses')}</T>
           <View style={s.uses}>
             {uses.map(([icon, key, vars]) => (
               <View key={key} style={s.use}>
@@ -258,7 +258,7 @@ export default function Model({ model: base, snapshot, onBack }) {
             { value: 'promo', label: tr('model.scopePromo'), count: promos.filter((p) => p.type !== 'free').length },
           ]}
         />
-        <T kind="tiny" color="ink3" style={{ marginTop: space[2] }}>{tr(`unitLabel.${model.unit}`)} · {tr('model.monthlyAtUsage')}</T>
+        <T kind="tiny" color="ink3" style={{ marginTop: space[3], marginBottom: space[1] }}>{tr(`unitLabel.${model.unit}`)} · {tr('model.monthlyAtUsage')}</T>
         {offers.map((o, i) => {
           const k = offerKey(o);
           const promo = promos.find((p) => p.key === k);
@@ -321,7 +321,7 @@ export default function Model({ model: base, snapshot, onBack }) {
       </Card>
 
       <Card level="flat">
-        <T kind="strong" style={{ marginBottom: space[2] }}>{tr('model.usage')}</T>
+        <T kind="strong" style={{ marginBottom: space[3] }}>{tr('model.usage')}</T>
         <Row>
           {model.unit === 'token' ? (
             <>
@@ -338,7 +338,7 @@ export default function Model({ model: base, snapshot, onBack }) {
 
       <About model={model} />
 
-      <T kind="tiny" color="ink3">
+      <T kind="tiny" color="ink3" style={{ marginTop: space[3] }}>
         {tr('model.footnote')}
       </T>
     </ScrollView>
@@ -346,7 +346,7 @@ export default function Model({ model: base, snapshot, onBack }) {
 }
 
 const s = StyleSheet.create({
-  uses: { flexDirection: 'row', flexWrap: 'wrap', gap: space[2] },
+  uses: { flexDirection: 'row', flexWrap: 'wrap', columnGap: space[4], rowGap: space[1] },
   use: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingRight: 10, paddingVertical: 4 },
   head: { marginHorizontal: -space[4], marginTop: -space[4], paddingHorizontal: space[4], paddingTop: space[4], paddingBottom: space[2] },
   offer: { paddingVertical: space[3] },

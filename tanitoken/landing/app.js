@@ -1,45 +1,56 @@
 import {
-  CATEGORIES, DEFAULT_USAGE, UNIT_LABEL, SOURCES, collectDeals, searchModels, cheapest, sortOffers, offerCost, offerKey,
-  unitPrice, priceBeforeDiscount, liveSnapshot, liveOpenrouterOffers, formatUsd, formatOfferPrice, formatContext,
-  formatDays, promoAgeDays, promoAgeText, timeAgo, isFreeOffer,
+  CATEGORIES, DEFAULT_USAGE, UNIT_LABEL, collectDeals, searchModels, cheapest, sortOffers, offerCost, offerKey,
+  priceBeforeDiscount, liveSnapshot, liveOpenrouterOffers, formatUsd, formatOfferPrice, formatContext,
+  promoAgeText, timeAgo, isFreeOffer, platformOf,
 } from '../core/pricing.js';
+import { setLanguage, t } from '../core/i18n.js';
 import { offerLink } from '../core/affiliates.js';
+import { dayOf, priceSeries } from '../core/history.js';
 
-// Świeży snapshot z gałęzi danych (Actions co 15 min), potem kopia w repo, na końcu OpenRouter na żywo.
-const SNAPSHOT_URLS = [
-  'https://raw.githubusercontent.com/nitve1/mfkig-notatnik/tanitoken-data/snapshot.json',
-  '../data/snapshot.json',
+setLanguage('pl');
+
+// Zestawienie z gałęzi danych (GitHub Actions co 15 min), potem kopia w repo, na końcu OpenRouter na żywo.
+const DATA = [
+  'https://raw.githubusercontent.com/nitve1/mfkig-notatnik/tanitoken-data/',
+  '../data/',
 ];
 const REFRESH_MS = 5 * 60 * 1000;
-const PAGE = 15;
-const CAT_LABEL = Object.fromEntries(CATEGORIES.map((c) => [c.key, c.label]));
+const PAGE = 12;
+const TILE_CATS = ['text', 'coding', 'image', 'video'];
+const CAT_COLOR = { text: '#8aa2ff', coding: '#a875ff', image: '#ff6fa3', video: '#ffa23a' };
 
 const $ = (sel) => document.querySelector(sel);
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 const plural = (n, one, few, many) => {
   if (n === 1) return one;
   const d = n % 10;
-  const t = n % 100;
-  return d >= 2 && d <= 4 && (t < 12 || t > 14) ? few : many;
+  const h = n % 100;
+  return d >= 2 && d <= 4 && (h < 12 || h > 14) ? few : many;
 };
+const mainCat = (m) => (m.cats.includes('video') ? 'video' : m.cats.includes('image') ? 'image' : m.cats.includes('coding') ? 'coding' : 'text');
+const where = (o) => platformOf(o) ?? o.provider;
+// Gdzie kupisz i przez kogo, np. "OpenRouter, przez Baidu".
+const whereVia = (o) => (where(o) !== o.provider ? `${where(o)}, przez ${o.provider}` : where(o));
+// Nazwa bez prefiksu twórcy ("DeepSeek: DeepSeek V4" -> "DeepSeek V4").
+const shortName = (name) => name.replace(/^[^:]{1,40}:\s*/, '');
 
-const state = { snapshot: null, deals: [], cat: 'all', type: 'discount', shown: PAGE, usage: structuredClone(DEFAULT_USAGE), sources: new Set(Object.keys(SOURCES)) };
+const state = { snapshot: null, history: null, deals: [], cat: null, type: 'discount', shown: PAGE, usage: structuredClone(DEFAULT_USAGE) };
 
-async function fetchSnapshot() {
-  for (const url of SNAPSHOT_URLS) {
+async function getJson(file, check) {
+  for (const base of DATA) {
     try {
-      const r = await fetch(`${url}?t=${Math.floor(Date.now() / 60000)}`);
+      const r = await fetch(`${base}${file}?t=${Math.floor(Date.now() / 60000)}`);
       if (!r.ok) continue;
-      const s = await r.json();
-      if (s.v === 2) return s;
+      const json = await r.json();
+      if (check(json)) return json;
     } catch { /* następne źródło */ }
   }
-  return liveSnapshot();
+  return null;
 }
 
 async function load() {
   try {
-    state.snapshot = await fetchSnapshot();
+    state.snapshot = (await getJson('snapshot.json', (s) => s.v === 2)) ?? (await liveSnapshot());
   } catch {
     if (!state.snapshot) {
       $('#status').classList.add('error');
@@ -49,11 +60,13 @@ async function load() {
   }
   state.deals = collectDeals(state.snapshot);
   renderStatus();
-  renderHero();
-  renderCats();
+  renderTiles();
   renderDeals();
   renderPopular();
-  renderNotifs();
+  renderHero();
+  // Historia cen jest większa, więc dociągamy ją po wyświetleniu reszty.
+  state.history ??= await getJson('history.json', (h) => h.v === 1);
+  renderHero();
   const fromHash = new URLSearchParams(location.hash.slice(1)).get('model');
   if (fromHash && !$('#model').dataset.model) openModel(fromHash, false);
 }
@@ -66,89 +79,109 @@ function renderStatus() {
   document.querySelectorAll('[data-stat="providers"]').forEach((el) => { el.textContent = `${providers}`; });
   $('#status').classList.remove('error');
   $('#status').lastChild.textContent = s.partial
-    ? `Pokazuję ceny bazowe z OpenRouter (pełne zestawienie chwilowo niedostępne).`
-    : `Ceny sprzed ${timeAgo(s.generatedAt).replace(' temu', '')}. Teraz ${discounts} ${plural(discounts, 'promocja', 'promocje', 'promocji')} i ${free} ${plural(free, 'darmowy model', 'darmowe modele', 'darmowych modeli')}.`;
+    ? 'Pokazuję ceny podstawowe z OpenRouter, pełne zestawienie chwilowo nie odpowiada.'
+    : `Ceny sprawdzone ${timeAgo(s.updatedAt ?? s.generatedAt)}. Teraz ${discounts} ${plural(discounts, 'promocja', 'promocje', 'promocji')} i ${free} ${plural(free, 'darmowy model', 'darmowe modele', 'darmowych modeli')}.`;
 }
 
 function priceParts(o) {
-  if (o.unit === 'token') return { main: formatUsd(o.in).replace(' $', ''), unit: '$ / 1M wejścia', extra: `wyjście ${formatUsd(o.out)}` };
-  return { main: formatUsd(o.price).replace(' $', ''), unit: o.unit === 'image' ? '$ za obraz' : '$ za sekundę', extra: '' };
+  if (o.unit === 'token') return { main: formatUsd(o.in), unit: 'za 1M tokenów wejścia', short: '/ 1M wej.', extra: `wyjście ${formatUsd(o.out)}` };
+  return { main: formatUsd(o.price), unit: o.unit === 'image' ? 'za obraz' : 'za sekundę wideo', short: o.unit === 'image' ? 'za obraz' : 'za s', extra: '' };
+}
+
+// Mała linia ceny z 30 dni (najtaniej w ogóle), gdy jest historia z serwera.
+function sparkline(model) {
+  if (!state.history) return '';
+  const pts = priceSeries(state.history, model, { days: 30, today: dayOf(Date.now()), usage: state.usage });
+  const vals = pts.map((p) => p.best).filter((v) => v != null);
+  if (vals.length < 2) return '';
+  const max = Math.max(...vals) * 1.1;
+  const min = Math.min(...vals) * 0.9;
+  const x = (i) => (i / pts.length) * 300;
+  const y = (v) => 50 - ((v - min) / (max - min || 1)) * 44;
+  let d = '';
+  let prev = null;
+  pts.forEach((p, i) => {
+    if (p.best == null) { prev = null; return; }
+    d += prev == null ? `M${x(i)},${y(p.best)}` : `V${y(p.best)}`;
+    d += `H${x(i + 1)}`;
+    prev = p.best;
+  });
+  return `<svg viewBox="0 0 300 56" preserveAspectRatio="none" role="img" aria-label="Najniższa cena z 30 dni"><path d="${d}" fill="none" stroke="#6a86f5" stroke-width="2" vector-effect="non-scaling-stroke"/></svg>`;
 }
 
 function renderHero() {
   const top = state.deals.find((d) => d.type === 'discount' && d.model.cats.includes('text')) ?? state.deals.find((d) => d.offer);
-  const el = $('#hero-tag');
+  const el = $('#hero-card');
   if (!top) {
-    el.innerHTML = '<span class="tag-hole" aria-hidden="true"></span><span class="tag-skeleton">Brak aktywnych zniżek w tej chwili.</span>';
+    el.innerHTML = '<p class="skeleton">Teraz nikt nie daje zniżki. Zajrzyj za kilkanaście minut.</p>';
     return;
   }
   const before = top.type === 'drop' ? { ...top.offer, ...top.from } : priceBeforeDiscount(top.offer);
   const p = priceParts(top.offer);
-  el.innerHTML = `<span class="tag-hole" aria-hidden="true"></span>
-    <div>
-      <p class="tag-model">${esc(top.model.name)}</p>
-      <p class="tag-provider">u ${esc(top.offer.provider)}, ${esc(SOURCES[top.offer.src]?.name ?? '')}</p>
-    </div>
-    <p class="tag-price">${esc(p.main)}<small>${esc(p.unit)}</small></p>
-    <div class="tag-row">
-      <span class="tag-old">${before ? `było ${esc(formatOfferPrice(before))}` : esc(p.extra)}</span>
-      <span class="tag-pct">−${top.pct}%</span>
-    </div>`;
-  el.classList.remove('reveal');
-  void el.offsetWidth;
-  el.classList.add('reveal');
-  el.style.cursor = 'pointer';
+  const cat = mainCat(top.model);
+  el.innerHTML = `
+    <p class="cat" style="color:${CAT_COLOR[cat]}">${esc(t(`cat.${cat}`))}</p>
+    <p class="name">${esc(shortName(top.model.name))}</p>
+    <p class="prov">${esc(whereVia(top.offer))}</p>
+    <p class="price"><b>${esc(p.main)}</b><small>${esc(p.unit)}</small></p>
+    <div class="row"><span>${before ? `<span class="old">${esc(formatOfferPrice(before))}</span>` : esc(p.extra)}</span><span class="pct">−${top.pct}%</span></div>
+    ${sparkline(top.model)}`;
   el.onclick = () => openModel(top.model.id, true);
-  $('#hero-caption').textContent = `Największa zniżka na model tekstowy. Promocja ${promoAgeText(top)}.`;
+  $('#hero-caption').textContent = `Największa zniżka na model tekstowy, promocja ${promoAgeText(top)}.`;
 }
 
-function catCount(cat) {
-  return state.deals.filter((d) => d.type === state.type && (cat === 'all' || d.model.cats.includes(cat))).length;
+function renderTiles() {
+  const discounts = state.deals.filter((d) => d.type === 'discount');
+  $('#tiles').innerHTML = TILE_CATS.map((c) => {
+    const list = discounts.filter((d) => d.model.cats.includes(c));
+    const best = list[0];
+    return `<button class="tile" data-cat="${c}" aria-pressed="${state.cat === c}">
+      <b>${list.length}</b><span>${esc(t(`cat.${c}`))}</span><small>${best ? `do −${best.pct}%` : 'brak zniżek'}</small></button>`;
+  }).join('');
 }
-
-function renderCats() {
-  $('[data-group="cat"]').innerHTML = CATEGORIES.map(
-    (c) => `<button aria-pressed="${state.cat === c.key}" data-value="${c.key}">${c.label}<span class="count">${catCount(c.key)}</span></button>`,
-  ).join('');
-}
+$('#tiles').addEventListener('click', (e) => {
+  const b = e.target.closest('[data-cat]');
+  if (!b) return;
+  state.cat = state.cat === b.dataset.cat ? null : b.dataset.cat;
+  state.shown = PAGE;
+  renderTiles();
+  renderDeals();
+  $('#promocje').scrollIntoView();
+});
 
 function dealRow(d) {
   const m = d.model;
-  const cats = m.cats.filter((c) => c !== 'text' || m.cats.length === 1).map((c) => CAT_LABEL[c]).join(', ');
-  let tag;
-  let meta;
+  const cat = mainCat(m);
+  const dot = `<span class="dot" style="background:${CAT_COLOR[cat]}" aria-hidden="true"></span>`;
   if (d.type === 'free') {
-    tag = `<span class="mini-tag free"><span class="p">0 $</span><span class="u">wariant :free</span></span>`;
-    meta = `${esc(m.author)}, ${esc(cats)}. Darmowy wariant ${promoAgeText(d).replace('aktywna', 'dostępny')}.`;
-  } else {
-    const p = priceParts(d.offer);
-    tag = `<span class="mini-tag"><span class="pct">−${d.pct}%</span><span class="p">${esc(p.main)}</span><span class="u">${esc(p.unit)}</span></span>`;
-    meta = `${esc(d.offer.provider)} w ${esc(SOURCES[d.offer.src]?.name)}, <span class="cat">${esc(cats)}</span>. ${d.type === 'drop' ? 'Obniżka' : 'Zniżka'} ${promoAgeText(d)}.`;
+    return `<li class="deal"><button data-model="${esc(m.id)}"><span><p class="deal-name">${esc(shortName(m.name))}</p>
+      <p class="deal-meta">${dot}${esc(t(`cat.${cat}`))}, darmowy wariant ${esc(promoAgeText(d).replace('aktywna', 'dostępny'))}</p></span>
+      <span class="deal-price"><b>0 $</b><small>z limitami</small></span></button></li>`;
   }
-  return `<li class="deal"><button data-model="${esc(m.id)}">
-    <span><p class="deal-name">${esc(m.name)}</p><p class="deal-meta">${meta}</p></span>${tag}</button></li>`;
+  const p = priceParts(d.offer);
+  return `<li class="deal"><button data-model="${esc(m.id)}"><span><p class="deal-name">${esc(shortName(m.name))}</p>
+    <p class="deal-meta">${dot}${esc(whereVia(d.offer))}, ${d.type === 'drop' ? 'obniżka' : 'zniżka'} ${esc(promoAgeText(d))}</p></span>
+    <span class="deal-price"><span class="top"><span class="pct">−${d.pct}%</span><b>${esc(p.main)}</b></span><small>${esc(p.short)}</small></span></button></li>`;
 }
 
 function renderDeals() {
-  const list = state.deals.filter((d) => d.type === state.type && (state.cat === 'all' || d.model.cats.includes(state.cat)));
-  const typeName = { discount: 'zniżek', drop: 'obniżek cen', free: 'darmowych modeli' }[state.type];
-  $('#promo-summary').textContent = list.length ? `${list.length} ${typeName}, od największej` : '';
+  const list = state.deals.filter((d) => d.type === state.type && (!state.cat || d.model.cats.includes(state.cat)));
+  const typeName = { discount: plural(list.length, 'zniżka', 'zniżki', 'zniżek'), drop: plural(list.length, 'obniżka', 'obniżki', 'obniżek'), free: plural(list.length, 'darmowy model', 'darmowe modele', 'darmowych modeli') }[state.type];
+  $('#promo-summary').textContent = list.length ? `${list.length} ${typeName}${state.cat ? `, ${t(`cat.${state.cat}`).toLowerCase()}` : ''}, od największej` : '';
   $('#deals').innerHTML = list.length
     ? list.slice(0, state.shown).map(dealRow).join('')
     : `<li class="empty">${state.type === 'drop'
-      ? 'Nikt nie obniżył cen w ostatnich 7 dniach. Obniżki wykrywamy przy każdej aktualizacji, zajrzyj później.'
-      : 'Brak pozycji w tej kategorii. Wybierz inną kategorię albo rodzaj promocji.'}</li>`;
+      ? 'Przez ostatnie 7 dni nikt nie obniżył cen. Sprawdzamy to co 15 minut.'
+      : 'W tej kategorii nic teraz nie ma. Wybierz inną kategorię albo rodzaj promocji.'}</li>`;
   $('#more-deals').hidden = list.length <= state.shown;
 }
 
 document.querySelector('.toolbar').addEventListener('click', (e) => {
   const b = e.target.closest('button[data-value]');
   if (!b) return;
-  const group = b.parentElement.dataset.group;
-  state[group] = b.dataset.value;
+  state.type = b.dataset.value;
   state.shown = PAGE;
   b.parentElement.querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
-  if (group === 'type') renderCats();
   renderDeals();
 });
 $('#more-deals').addEventListener('click', () => { state.shown += PAGE; renderDeals(); });
@@ -168,9 +201,9 @@ function renderResults() {
   box.innerHTML = found.length
     ? found.map((m, i) => {
       const c = cheapest(m);
-      return `<li role="option" id="opt-${i}" aria-selected="${i === 0}" data-model="${esc(m.id)}"><span>${esc(m.name)}</span><small>${c ? `od ${esc(formatOfferPrice(c))}` : m.freeId ? 'darmowy' : ''}</small></li>`;
+      return `<li role="option" id="opt-${i}" aria-selected="${i === 0}" data-model="${esc(m.id)}"><span>${esc(m.name)}</span><small>${c ? `od ${esc(formatOfferPrice(c))}` : m.freeId ? 'za darmo' : ''}</small></li>`;
     }).join('')
-    : '<li aria-disabled="true">Nie znaleźliśmy takiego modelu. Spróbuj krótszej nazwy.</li>';
+    : '<li aria-disabled="true">Nie ma takiego modelu. Spróbuj krótszej nazwy.</li>';
   $('#q').setAttribute('aria-expanded', 'true');
 }
 function moveActive(delta) {
@@ -210,7 +243,7 @@ $('#popular').addEventListener('click', (e) => {
   if (b) openModel(b.dataset.model, false);
 });
 
-// ---------- karta modelu ----------
+// ---------- karta modelu (jak w apce: nagłówek w kolorze kategorii, cena na górze) ----------
 async function openModel(id, scroll) {
   const m = state.snapshot.models.find((x) => x.id === id);
   if (!m) return;
@@ -228,7 +261,7 @@ async function openModel(id, scroll) {
     m.offers = [...live, ...m.offers.filter((o) => o.src !== 'openrouter')];
     box.dataset.live = '1';
     renderModel(m);
-  } catch { /* zostają ceny ze snapshotu */ }
+  } catch { /* zostają ceny z zestawienia */ }
 }
 
 function usageInputs(unit) {
@@ -240,16 +273,17 @@ function usageInputs(unit) {
   return `<label>${label}<input type="number" min="0" step="10" data-u="count" value="${state.usage[unit].count}" inputmode="numeric"></label>`;
 }
 
+const TINT = { text: '74,99,216', coding: '122,63,224', image: '194,24,91', video: '168,83,10' };
+
 function renderModel(m) {
   const box = $('#model');
-  const filter = (o) => state.sources.has(o.src);
-  const offers = sortOffers(m, state.usage, filter);
-  const main = offers.filter((o) => o.unit === m.unit);
-  const paid = main.filter((o) => !isFreeOffer(o));
+  const offers = sortOffers(m, state.usage);
+  const paid = offers.filter((o) => o.unit === m.unit && !isFreeOffer(o));
   const best = paid[0];
   const worst = paid[paid.length - 1];
   const cost = (o) => offerCost(o, state.usage);
   const promos = Object.values(state.snapshot.promos ?? {}).filter((p) => p.modelId === m.id);
+  const cat = mainCat(m);
 
   const rows = offers.map((o) => {
     const before = priceBeforeDiscount(o);
@@ -258,41 +292,39 @@ function renderModel(m) {
     const other = o.unit !== m.unit;
     const price = o.unit === 'token'
       ? `${before ? `<span class="old">${formatUsd(before.in)}</span>` : ''}${formatUsd(o.in)}</td><td>${before ? `<span class="old">${formatUsd(before.out)}</span>` : ''}${formatUsd(o.out)}`
-      : `${before ? `<span class="old">${formatUsd(before.price)}</span>` : ''}${formatUsd(o.price)} ${o.unit === 'image' ? 'za obraz' : 'za s'}</td><td>${o.variants?.length > 1 ? esc(o.variants.map((v) => `${v.label}: ${formatUsd(v.price)}`).join(', ')) : ''}`;
-    return `<tr class="${o === best ? 'best' : ''} ${other ? 'other-unit' : ''}">
-      <td class="prov">${esc(o.provider)}${promo ? `<span class="pct">−${promo.pct}%</span>` : ''}<span class="src">${esc(SOURCES[o.src]?.name)}${o.quant ? `, ${esc(o.quant)}` : ''}${promo ? `, promocja ${promoAgeText(promo)}` : ''}</span></td>
+      : `${before ? `<span class="old">${formatUsd(before.price)}</span>` : ''}${formatUsd(o.price)}</td><td>${o.variants?.length > 1 ? esc(o.variants.map((v) => `${v.label}: ${formatUsd(v.price)}`).join(', ')) : ''}`;
+    const via = where(o) !== o.provider ? `przez ${esc(o.provider)}` : '';
+    return `<tr class="${o === best ? 'best' : ''}">
+      <td class="prov">${esc(where(o))}${promo && promo.type !== 'free' ? `<span class="pct">−${promo.pct}%</span>` : ''}<span class="src">${[via, o.quant ? esc(o.quant) : '', promo ? `promocja ${esc(promoAgeText(promo))}` : ''].filter(Boolean).join(', ')}</span></td>
       <td>${price}</td>
       <td class="cost">${other ? '<span class="src">inna jednostka</span>' : formatUsd(cost(o))}</td>
       <td>${formatContext(o.context)}</td>
-      <td>${o.uptime != null ? `${o.uptime}%` : '–'}</td>
-      <td>${link ? `<a class="go" href="${esc(link.url)}" target="_blank" rel="noopener${link.sponsored ? ' sponsored' : ''}">${esc(link.label)}</a>${link.sponsored ? '<span class="sponsored">link partnerski</span>' : ''}` : ''}</td></tr>`;
+      <td>${link ? `<a class="go" href="${esc(link.url)}" target="_blank" rel="noopener${link.sponsored ? ' sponsored' : ''}">${link.sponsored ? 'Partner' : 'Otwórz'}</a>${link.sponsored ? '<span class="sponsored">link partnerski</span>' : ''}` : ''}</td></tr>`;
   }).join('');
 
-  const verdict = best
-    ? `Najtaniej: <strong>${esc(best.provider)}</strong>, ${formatUsd(cost(best))} miesięcznie.${worst && cost(worst) > cost(best) ? ` <span class="save">Oszczędzasz ${formatUsd(cost(worst) - cost(best))} względem najdroższej oferty.</span>` : ''}`
-    : m.freeId ? `Model dostępny za darmo jako <code>${esc(m.freeId)}</code>.` : 'Brak płatnych ofert przy wybranych źródłach.';
-  const priceHead = m.unit === 'token' ? '<th scope="col">Wejście /1M</th><th scope="col">Wyjście /1M</th>' : '<th scope="col">Cena</th><th scope="col">Warianty</th>';
-  const cats = m.cats.map((c) => `<span class="chip">${CAT_LABEL[c]}</span>`).join('');
+  const priceHead = m.unit === 'token' ? '<th scope="col">Wejście / 1M</th><th scope="col">Wyjście / 1M</th>' : '<th scope="col">Cena</th><th scope="col">Warianty</th>';
+  const saving = best && worst ? cost(worst) - cost(best) : 0;
 
   box.innerHTML = `
-    <div class="model-head">
+    <div class="model-head" style="background:linear-gradient(180deg, rgba(${TINT[cat]},0.6), rgba(${TINT[cat]},0))">
       <div>
+        <p class="cat" style="color:${CAT_COLOR[cat]};font-weight:600;font-size:13px">${esc(t(`cat.${cat}`))}</p>
         <h3>${esc(m.name)}</h3>
-        <p class="model-id">${esc(m.id)}${m.context ? `, kontekst ${formatContext(m.context)}` : ''}${m.freeId ? `, darmowy wariant ${esc(m.freeId)}` : ''}</p>
-        <div class="model-cats">${cats}</div>
+        <p class="model-id">${esc(m.author ?? '')}${m.context ? `, ${formatContext(m.context)} kontekstu` : ''}${m.freeId ? `, darmowy wariant ${esc(m.freeId)}` : ''}</p>
       </div>
       <button class="btn btn-line" id="close-model">Zamknij</button>
     </div>
-    <div class="calc">${usageInputs(m.unit)}<p class="verdict" aria-live="polite">${verdict}</p></div>
-    <div class="src-filter" role="group" aria-label="Źródła">
-      ${Object.entries(SOURCES).map(([k, s]) => `<label><input type="checkbox" data-src="${k}" ${state.sources.has(k) ? 'checked' : ''}> ${esc(s.name)}</label>`).join('')}
+    <div class="model-price">
+      <div><span class="lab">Najtaniej miesięcznie</span><b>${best ? formatUsd(cost(best)) : m.freeId ? '0 $' : '–'}</b><span class="lab">${best ? esc(where(best)) : ''}</span></div>
+      ${saving > 0 ? `<div class="save"><span class="lab">Oszczędzasz</span><b>${formatUsd(saving)}</b><span class="lab">względem najdroższej</span></div>` : ''}
     </div>
+    <div class="calc">${usageInputs(m.unit)}</div>
     <div class="table-wrap"><table>
-      <caption>Ceny w USD ${esc(UNIT_LABEL[m.unit])}. Koszt dla wpisanego zużycia.</caption>
-      <thead><tr><th scope="col">Dostawca</th>${priceHead}<th scope="col">Koszt miesięcznie</th><th scope="col">Kontekst</th><th scope="col">Dostępność 24 h</th><th scope="col"><span class="sr-only">Link</span></th></tr></thead>
-      <tbody>${rows || '<tr><td colspan="7">Żadne z zaznaczonych źródeł nie sprzedaje tego modelu.</td></tr>'}</tbody>
+      <caption>Ceny w ${esc(UNIT_LABEL[m.unit])}. Koszt miesięczny przy wpisanym zużyciu.</caption>
+      <thead><tr><th scope="col">Gdzie kupisz</th>${priceHead}<th scope="col">Miesięcznie</th><th scope="col">Kontekst</th><th scope="col"><span class="sr-only">Link</span></th></tr></thead>
+      <tbody>${rows || '<tr><td colspan="6">Nikt teraz nie sprzedaje tego modelu.</td></tr>'}</tbody>
     </table></div>
-    <p class="live-note">${box.dataset.live ? 'Oferty OpenRouter pobrane przed chwilą.' : 'Ceny z ostatniej aktualizacji. Oferty OpenRouter odświeżam na żywo…'} Cenniki bezpośrednie pochodzą z katalogu models.dev i mogą być nieaktualne.</p>`;
+    <p class="live-note">${box.dataset.live ? 'Oferty z OpenRouter pobrane przed chwilą.' : 'Ceny z ostatniego sprawdzenia. Oferty z OpenRouter odświeżam na bieżąco…'} Linki Partner są partnerskie, kolejność zależy tylko od ceny.</p>`;
 
   box.querySelectorAll('[data-u]').forEach((input) => input.addEventListener('change', () => {
     const v = Math.max(0, Number(input.value) || 0);
@@ -300,28 +332,11 @@ function renderModel(m) {
     else state.usage[m.unit].count = v;
     renderModel(m);
   }));
-  box.querySelectorAll('[data-src]').forEach((cb) => cb.addEventListener('change', () => {
-    if (cb.checked) state.sources.add(cb.dataset.src);
-    else state.sources.delete(cb.dataset.src);
-    renderModel(m);
-  }));
   $('#close-model').addEventListener('click', () => {
     box.hidden = true;
     box.dataset.model = '';
     history.replaceState(null, '', location.pathname);
   });
-}
-
-// ---------- przykładowe powiadomienia z prawdziwych danych ----------
-function renderNotifs() {
-  const icon = '<span class="notif-icon" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M3 9.5 9.5 3H29v26H9.5L3 22.5z" fill="none" stroke="#172036" stroke-width="2.4"/><circle cx="10" cy="16" r="2.4" fill="#172036"/></svg></span>';
-  const discounts = state.deals.filter((d) => d.type === 'discount');
-  const a = discounts[0];
-  const b = discounts.find((d) => d.model.id !== a?.model.id && d.model.cats.includes('text'));
-  if (!a || !b) return;
-  const alt = sortOffers(b.model).find((o) => o.unit === b.model.unit && offerKey(o) !== offerKey(b.offer) && !isFreeOffer(o));
-  $('#notif-1').innerHTML = `${icon}<span class="notif-app">TaniToken, teraz</span><span class="notif-title">${esc(a.model.name)}: −${a.pct}% u ${esc(a.offer.provider)}</span><span class="notif-body">Obserwujesz ten model. Nowa cena ${esc(formatOfferPrice(a.offer))}.</span>`;
-  $('#notif-2').innerHTML = `${icon}<span class="notif-app">TaniToken, 2 h temu</span><span class="notif-title">${esc(b.model.name)}: promocja może się kończyć</span><span class="notif-body">Zniżka u ${esc(b.offer.provider)} ${promoAgeText(b)}.${alt ? ` Bez niej najtaniej: ${esc(alt.provider)}, ${esc(formatOfferPrice(alt))}.` : ''}</span>`;
 }
 
 load();

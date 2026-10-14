@@ -20,11 +20,24 @@ Jedno miejsce z historią zmian, decyzjami i otwartymi zadaniami. Aktualizowane 
 | --- | --- | --- |
 | 1 | Test APK 0.2.0 na Motoroli Razr 60 (nowa nazwa i pakiet: odinstalować TaniToken) | u użytkownika |
 | 2 | Profile zużycia (makieta `mockups/usage.png`, warianty 1–3) | czeka na wybór |
-| 3 | Landing w stylu „Kolorowe kategorie” + wersje językowe | na końcu |
+| 3 | Landing: wersje językowe, hosting i domena | po decyzji o hostingu |
 | 4 | Linki partnerskie: zapis do Novita, CometAPI, WaveSpeedAI, AI/ML API, wklejenie `link` w `core/affiliates.js` (karty pojawią się same) | po stronie użytkownika |
 | 4b | Domena lighttokenz.com/.app, landing pod nową nazwą | po stronie użytkownika / na końcu |
 | 5 | Po merge'u: ręczne uruchomienie workflow „TaniToken snapshot” (tworzy gałąź `tanitoken-data`) | po merge'u |
 | 6 | Klucz release (keystore) do Google Play; obecny APK jest podpisany kluczem debug | przed publikacją |
+
+## 2026-10-14 – sesja 15: teksty bez AI slop, odstępy, APK 0.3.0, nowy landing
+
+- Teksty (6 języków) przepuszczone przez zasady skilla humanizer: bez cudzysłowów w przykładach i podpowiedziach,
+  bez zdań-sloganów (np. „Jedno konto, prosty wybór”), poprawione „nie mamy serwerów” (mamy, ale profil na nie
+  nie trafia), EN bez skrótów typu „you're”.
+- Karta modelu: większe odstępy (podpisy pól, sekcje, wykres, „O modelu”), płaskie karty z delikatną ramką, żeby nie
+  zlewały się z tłem; jedna etykieta ceny na wykresie, gdy obie linie kończą się tak samo.
+- Wersja 0.3.0 (versionCode 5). APK `mobile/dist-android/LightTokenz-0.3.0-arm64.apk`, 25 MiB, klucz debug.
+- Landing od nowa w stylu apki (`landing/`): nocne tło kategorii, szkło, Archivo, karta największej zniżki ze
+  świecącą krawędzią, kafle kategorii jako filtr, lista promocji, porównanie z kartą modelu jak w apce (nagłówek w
+  kolorze kategorii, cena na górze), zrzuty z apki, FAQ bez „models.dev”. Podgląd: artefakt
+  https://claude.ai/artifact/5ggujRWdSjoWMo1oGLuizd (dane z dołączonego zestawienia).
 
 ## 2026-10-14 – sesja 14: czytelność karty modelu (wariant B)
 

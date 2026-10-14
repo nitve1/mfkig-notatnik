@@ -20,6 +20,6 @@ sed -i.bak "s/^reactNativeArchitectures=.*/reactNativeArchitectures=$ARCHS/" and
 
 VERSION=$(node -p "require('./app.json').expo.version")
 mkdir -p dist-android
-cp android/app/build/outputs/apk/release/app-release.apk "dist-android/TaniToken-$VERSION.apk"
-echo "OK dist-android/TaniToken-$VERSION.apk"
-echo "Instalacja na podłączonym telefonie: adb install -r dist-android/TaniToken-$VERSION.apk"
+cp android/app/build/outputs/apk/release/app-release.apk "dist-android/LightTokenz-$VERSION-arm64.apk"
+echo "OK dist-android/LightTokenz-$VERSION-arm64.apk"
+echo "Instalacja na podłączonym telefonie: adb install -r dist-android/LightTokenz-$VERSION-arm64.apk"

@@ -76,7 +76,7 @@ export default function PriceChart({ model, usage = DEFAULT_USAGE, used = null, 
     return (
       <Card level={level}>
         <T kind="strong">{tr('history.title')}</T>
-        <T kind="small" color="ink2" style={{ marginTop: 4 }}>{tr('history.collecting')}</T>
+        <T kind="small" color="ink2" style={{ marginTop: 6 }}>{tr('history.collecting')}</T>
       </Card>
     );
   }
@@ -115,7 +115,8 @@ export default function PriceChart({ model, usage = DEFAULT_USAGE, used = null, 
     const yl = y(v);
     return above || yl + 2 + LH > bottom ? yl - LH - 2 : yl + 2;
   };
-  let yMine = hasMine && last.mine != null ? place(last.mine, hiMine) : null;
+  const sameEnd = hasMine && last.mine != null && last.best != null && Math.abs(last.mine - last.best) < 1e-9;
+  let yMine = hasMine && last.mine != null && !sameEnd ? place(last.mine, hiMine) : null;
   let yBest = last.best != null ? place(last.best, !hiMine && hasMine) : null;
   if (yMine != null && yBest != null && Math.abs(yMine - yBest) < LH) {
     // Za blisko: rozsuwamy, wyższa cena wyżej.
@@ -126,20 +127,20 @@ export default function PriceChart({ model, usage = DEFAULT_USAGE, used = null, 
   return (
     <Card level={level}>
       <T kind="strong">{tr('history.title')}</T>
-      <T kind="tiny" color="ink3" style={{ marginTop: 2, marginBottom: 8 }}>{unitTxt}</T>
+      <T kind="tiny" color="ink3" style={{ marginTop: 4, marginBottom: 12 }}>{unitTxt}</T>
       <Segmented
         value={days}
         onChange={(v) => { setDays(v); setPick(null); }}
         options={[7, 30, 90].map((n) => ({ value: n, label: tr('history.days', { n }) }))}
       />
       {hasMine ? (
-        <Row style={{ gap: 14, marginTop: 10, flexWrap: 'wrap' }}>
+        <Row style={{ gap: 16, marginTop: 14, flexWrap: 'wrap' }}>
           <Row style={{ gap: 6 }}><View style={[s.key, { backgroundColor: t.chartBest }]} /><T kind="tiny" color="ink2">{tr('history.best')}</T></Row>
           <Row style={{ gap: 6 }}><View style={[s.key, { backgroundColor: t.chartMine }]} /><T kind="tiny" color="ink2">{tr('history.mine', { name: mineLabel })}</T></Row>
         </Row>
       ) : null}
       <View
-        style={{ height: H, marginTop: 8 }}
+        style={{ height: H, marginTop: 12 }}
         onLayout={(e) => setW(e.nativeEvent.layout.width)}
         onStartShouldSetResponder={() => true}
         onResponderGrant={onTouch}
@@ -170,8 +171,8 @@ export default function PriceChart({ model, usage = DEFAULT_USAGE, used = null, 
           <>
             <T kind="tiny" color="ink3" style={[s.date, { left: PL }]}>{dayLabel(points[0].day)}</T>
             <T kind="tiny" color="ink3" style={[s.date, { right: PR }]}>{tr('history.today')}</T>
-            {yMine != null ? <T kind="tiny" style={[s.end, { top: yMine, right: PR }]}>{formatUsd(last.mine)}</T> : null}
-            {yBest != null ? <T kind="tiny" style={[s.end, { top: yBest, right: PR }]}>{formatUsd(last.best)}</T> : null}
+            {yMine != null ? <T kind="tiny" style={[s.end, { top: yMine, right: PR + 6 }]}>{formatUsd(last.mine)}</T> : null}
+            {yBest != null ? <T kind="tiny" style={[s.end, { top: yBest, right: PR + 6 }]}>{formatUsd(last.best)}</T> : null}
           </>
         ) : null}
         {p && w ? (
@@ -183,13 +184,13 @@ export default function PriceChart({ model, usage = DEFAULT_USAGE, used = null, 
         ) : null}
       </View>
       {diff != null ? (
-        <T kind="small" color="ink2" style={{ marginTop: 6 }}>
+        <T kind="small" color="ink2" style={{ marginTop: 12 }}>
           {diff > 0.0000001
             ? tr('history.overpay', { diff: formatUsd(diff), unit: tr(`history.unitShort.${model.unit}`), month: formatUsd(diff * per) })
             : tr('history.bestAlready')}
         </T>
       ) : !mine ? (
-        <T kind="tiny" color="ink3" style={{ marginTop: 6 }}>{tr('history.pickHint')}</T>
+        <T kind="tiny" color="ink3" style={{ marginTop: 12 }}>{tr('history.pickHint')}</T>
       ) : null}
     </Card>
   );

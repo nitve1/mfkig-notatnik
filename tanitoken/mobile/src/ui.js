@@ -117,7 +117,7 @@ export function Card({ stripe, children, onPress, style, accessibilityLabel, lev
   const surface = level === 'raised'
     ? [glassFrame(t, radius.lg), { backgroundColor: t.cardRaised, borderColor: t.glassLineStrong }]
     : level === 'flat'
-      ? { borderRadius: radius.lg, overflow: 'hidden', backgroundColor: t.card }
+      ? { borderRadius: radius.lg, overflow: 'hidden', backgroundColor: t.card, borderWidth: 1, borderColor: t.line }
       : [glassFrame(t, radius.lg), { backgroundColor: t.card }];
   const base = [s.card, surface, { paddingLeft: stripe ? 18 : 14 }, style];
   if (!onPress) return <View style={base}>{body}</View>;
