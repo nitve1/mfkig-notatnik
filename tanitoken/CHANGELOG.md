@@ -46,6 +46,8 @@ Raport: `docs/testy-2026-10-14.md`. Poprawione:
 - Cele dotyku: cały wiersz przełącza (nie tylko suwak), link „Otwórz” i „Mam plik profilu” 44 px, pola 44 px.
 - Testy: 19/19 (nowe: awaria Vercel/Requesty, częściowe odświeżenie, stałe id alertów), testy przeglądarkowe na 360
   i 412 px bez błędów, kontrole regresji 7/7. Podgląd w artefakcie (wersja 9).
+- Podgląd web: tło (obrazek) nie trafiało do pliku podglądu, bo `web-preview.mjs` wstawiał tylko fonty;
+  teraz wstawia też obrazki jako data URI (wersja 10). W apce tło było cały czas.
 
 ## 2026-10-14 – sesja 11: stonowane tło, czytelność (WCAG AA) i wydajność
 

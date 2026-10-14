@@ -26,6 +26,12 @@ js = js.replace(/"\/assets\/[^"]+?\/([A-Za-z]+_\d+[A-Za-z]+)\.[0-9a-f]+\.ttf"/g,
   const path = join(BUILD, all.slice(2, -1));
   return `"data:font/ttf;base64,${readFileSync(path).toString('base64')}"`;
 });
+// Obrazki apki (tło) też jako data URI, inaczej podgląd w jednym pliku nie ma tła.
+js = js.replace(/"\/assets\/[^"]+?\.(jpg|jpeg|png|webp)"/g, (all, ext) => {
+  const path = join(BUILD, all.slice(2, -1));
+  const mime = ext === 'jpg' ? 'jpeg' : ext;
+  return `"data:image/${mime};base64,${readFileSync(path).toString('base64')}"`;
+});
 const inlined = FONTS.filter((f) => js.includes(`base64`) && js.includes(f)).length;
 
 const safe = js.replace(/<\/script/gi, '<\\/script');
