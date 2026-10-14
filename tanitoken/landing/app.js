@@ -1,13 +1,12 @@
 import {
-  CATEGORIES, DEFAULT_USAGE, UNIT_LABEL, collectDeals, searchModels, cheapest, sortOffers, offerCost, offerKey,
+  DEFAULT_USAGE, UNIT_LABEL, collectDeals, searchModels, cheapest, sortOffers, offerCost, offerKey,
   priceBeforeDiscount, liveSnapshot, liveOpenrouterOffers, formatUsd, formatOfferPrice, formatContext,
   promoAgeText, timeAgo, isFreeOffer, platformOf,
 } from '../core/pricing.js';
-import { setLanguage, t } from '../core/i18n.js';
+import { LANGUAGES, setLanguage, t } from '../core/i18n.js';
 import { offerLink } from '../core/affiliates.js';
 import { dayOf, priceSeries } from '../core/history.js';
-
-setLanguage('pl');
+import { L, setPageLang } from './i18n.js';
 
 // Zestawienie z gałęzi danych (GitHub Actions co 15 min), potem kopia w repo, na końcu OpenRouter na żywo.
 const DATA = [
@@ -18,24 +17,52 @@ const REFRESH_MS = 5 * 60 * 1000;
 const PAGE = 12;
 const TILE_CATS = ['text', 'coding', 'image', 'video'];
 const CAT_COLOR = { text: '#8aa2ff', coding: '#a875ff', image: '#ff6fa3', video: '#ffa23a' };
+const TINT = { text: '74,99,216', coding: '122,63,224', image: '194,24,91', video: '168,83,10' };
+const LANG_KEY = 'lighttokenz:lang';
 
 const $ = (sel) => document.querySelector(sel);
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
-const plural = (n, one, few, many) => {
-  if (n === 1) return one;
-  const d = n % 10;
-  const h = n % 100;
-  return d >= 2 && d <= 4 && (h < 12 || h > 14) ? few : many;
-};
 const mainCat = (m) => (m.cats.includes('video') ? 'video' : m.cats.includes('image') ? 'image' : m.cats.includes('coding') ? 'coding' : 'text');
 const where = (o) => platformOf(o) ?? o.provider;
-// Gdzie kupisz i przez kogo, np. "OpenRouter, przez Baidu".
-const whereVia = (o) => (where(o) !== o.provider ? `${where(o)}, przez ${o.provider}` : where(o));
+// Gdzie kupisz i przez kogo, np. "OpenRouter, via Baidu".
+const whereVia = (o) => (where(o) !== o.provider ? L('via', { where: where(o), provider: o.provider }) : where(o));
 // Nazwa bez prefiksu twórcy ("DeepSeek: DeepSeek V4" -> "DeepSeek V4").
 const shortName = (name) => name.replace(/^[^:]{1,40}:\s*/, '');
 
 const state = { snapshot: null, history: null, deals: [], cat: null, type: 'discount', shown: PAGE, usage: structuredClone(DEFAULT_USAGE) };
 
+// ---------- język: domyślnie angielski, wybór zapamiętany w przeglądarce ----------
+function savedLang() {
+  try { return localStorage.getItem(LANG_KEY); } catch { return null; }
+}
+function applyLang(code) {
+  const lang = setPageLang(code);
+  setLanguage(lang);
+  document.documentElement.lang = lang;
+  document.title = L('meta.title');
+  document.querySelector('meta[name="description"]')?.setAttribute('content', L('meta.description'));
+  document.querySelectorAll('[data-i18n]').forEach((el) => { el.textContent = L(el.dataset.i18n); });
+  document.querySelectorAll('[data-i18n-aria]').forEach((el) => el.setAttribute('aria-label', L(el.dataset.i18nAria)));
+  document.querySelectorAll('[data-i18n-alt]').forEach((el) => el.setAttribute('alt', L(el.dataset.i18nAlt)));
+  document.querySelectorAll('[data-i18n-ph]').forEach((el) => el.setAttribute('placeholder', L(el.dataset.i18nPh)));
+  $('#lang').value = lang;
+  renderLead();
+  if (state.snapshot) renderAll();
+}
+$('#lang').innerHTML = LANGUAGES.map((l) => `<option value="${l.code}">${esc(l.name)}</option>`).join('');
+$('#lang').addEventListener('change', (e) => {
+  try { localStorage.setItem(LANG_KEY, e.target.value); } catch { /* bez zapamiętania */ }
+  applyLang(e.target.value);
+});
+
+function providerCount() {
+  return state.snapshot ? new Set(state.snapshot.models.flatMap((m) => m.offers.map((o) => o.provider))).size : 200;
+}
+function renderLead() {
+  $('#hero-lead').innerHTML = esc(L('hero.lead', { n: '\u0000' })).replace('\u0000', `<span data-stat="providers">${providerCount()}</span>`);
+}
+
+// ---------- dane ----------
 async function getJson(file, check) {
   for (const base of DATA) {
     try {
@@ -54,16 +81,12 @@ async function load() {
   } catch {
     if (!state.snapshot) {
       $('#status').classList.add('error');
-      $('#status').lastChild.textContent = 'Nie udało się pobrać cen. Sprawdź połączenie i odśwież stronę.';
+      $('#status').lastChild.textContent = L('status.error');
     }
     return;
   }
   state.deals = collectDeals(state.snapshot);
-  renderStatus();
-  renderTiles();
-  renderDeals();
-  renderPopular();
-  renderHero();
+  renderAll();
   // Historia cen jest większa, więc dociągamy ją po wyświetleniu reszty.
   state.history ??= await getJson('history.json', (h) => h.v === 1);
   renderHero();
@@ -71,21 +94,31 @@ async function load() {
   if (fromHash && !$('#model').dataset.model) openModel(fromHash, false);
 }
 
+function renderAll() {
+  renderLead();
+  renderStatus();
+  renderTiles();
+  renderDeals();
+  renderPopular();
+  renderHero();
+  const id = $('#model').dataset.model;
+  const m = id && state.snapshot.models.find((x) => x.id === id);
+  if (m) renderModel(m);
+}
+
 function renderStatus() {
   const s = state.snapshot;
   const discounts = state.deals.filter((d) => d.type !== 'free').length;
   const free = state.deals.filter((d) => d.type === 'free').length;
-  const providers = new Set(s.models.flatMap((m) => m.offers.map((o) => o.provider))).size;
-  document.querySelectorAll('[data-stat="providers"]').forEach((el) => { el.textContent = `${providers}`; });
   $('#status').classList.remove('error');
   $('#status').lastChild.textContent = s.partial
-    ? 'Pokazuję ceny podstawowe z OpenRouter, pełne zestawienie chwilowo nie odpowiada.'
-    : `Ceny sprawdzone ${timeAgo(s.updatedAt ?? s.generatedAt)}. Teraz ${discounts} ${plural(discounts, 'promocja', 'promocje', 'promocji')} i ${free} ${plural(free, 'darmowy model', 'darmowe modele', 'darmowych modeli')}.`;
+    ? L('status.partial')
+    : L('status.ok', { age: timeAgo(s.updatedAt ?? s.generatedAt), promos: L('count.promos', { n: discounts }), free: L('count.free', { n: free }) });
 }
 
 function priceParts(o) {
-  if (o.unit === 'token') return { main: formatUsd(o.in), unit: 'za 1M tokenów wejścia', short: '/ 1M wej.', extra: `wyjście ${formatUsd(o.out)}` };
-  return { main: formatUsd(o.price), unit: o.unit === 'image' ? 'za obraz' : 'za sekundę wideo', short: o.unit === 'image' ? 'za obraz' : 'za s', extra: '' };
+  if (o.unit === 'token') return { main: formatUsd(o.in), unit: L('unit.in'), short: L('unit.inShort'), extra: L('unit.out', { price: formatUsd(o.out) }) };
+  return { main: formatUsd(o.price), unit: L(o.unit === 'image' ? 'unit.image' : 'unit.second'), short: L(o.unit === 'image' ? 'unit.image' : 'unit.secondShort'), extra: '' };
 }
 
 // Mała linia ceny z 30 dni (najtaniej w ogóle), gdy jest historia z serwera.
@@ -106,14 +139,14 @@ function sparkline(model) {
     d += `H${x(i + 1)}`;
     prev = p.best;
   });
-  return `<svg viewBox="0 0 300 56" preserveAspectRatio="none" role="img" aria-label="Najniższa cena z 30 dni"><path d="${d}" fill="none" stroke="#6a86f5" stroke-width="2" vector-effect="non-scaling-stroke"/></svg>`;
+  return `<svg viewBox="0 0 300 56" preserveAspectRatio="none" aria-hidden="true"><path d="${d}" fill="none" stroke="#6a86f5" stroke-width="2" vector-effect="non-scaling-stroke"/></svg>`;
 }
 
 function renderHero() {
   const top = state.deals.find((d) => d.type === 'discount' && d.model.cats.includes('text')) ?? state.deals.find((d) => d.offer);
   const el = $('#hero-card');
   if (!top) {
-    el.innerHTML = '<p class="skeleton">Teraz nikt nie daje zniżki. Zajrzyj za kilkanaście minut.</p>';
+    el.innerHTML = `<p class="skeleton">${esc(L('hero.none'))}</p>`;
     return;
   }
   const before = top.type === 'drop' ? { ...top.offer, ...top.from } : priceBeforeDiscount(top.offer);
@@ -127,7 +160,7 @@ function renderHero() {
     <div class="row"><span>${before ? `<span class="old">${esc(formatOfferPrice(before))}</span>` : esc(p.extra)}</span><span class="pct">−${top.pct}%</span></div>
     ${sparkline(top.model)}`;
   el.onclick = () => openModel(top.model.id, true);
-  $('#hero-caption').textContent = `Największa zniżka na model tekstowy, promocja ${promoAgeText(top)}.`;
+  $('#hero-caption').textContent = L('hero.caption', { age: promoAgeText(top) });
 }
 
 function renderTiles() {
@@ -136,7 +169,7 @@ function renderTiles() {
     const list = discounts.filter((d) => d.model.cats.includes(c));
     const best = list[0];
     return `<button class="tile" data-cat="${c}" aria-pressed="${state.cat === c}">
-      <b>${list.length}</b><span>${esc(t(`cat.${c}`))}</span><small>${best ? `do −${best.pct}%` : 'brak zniżek'}</small></button>`;
+      <b>${list.length}</b><span>${esc(t(`cat.${c}`))}</span><small>${best ? esc(L('tile.upTo', { pct: best.pct })) : esc(L('tile.none'))}</small></button>`;
   }).join('');
 }
 $('#tiles').addEventListener('click', (e) => {
@@ -146,7 +179,7 @@ $('#tiles').addEventListener('click', (e) => {
   state.shown = PAGE;
   renderTiles();
   renderDeals();
-  $('#promocje').scrollIntoView();
+  $('#deals-section').scrollIntoView();
 });
 
 function dealRow(d) {
@@ -155,24 +188,22 @@ function dealRow(d) {
   const dot = `<span class="dot" style="background:${CAT_COLOR[cat]}" aria-hidden="true"></span>`;
   if (d.type === 'free') {
     return `<li class="deal"><button data-model="${esc(m.id)}"><span><p class="deal-name">${esc(shortName(m.name))}</p>
-      <p class="deal-meta">${dot}${esc(t(`cat.${cat}`))}, darmowy wariant ${esc(promoAgeText(d).replace('aktywna', 'dostępny'))}</p></span>
-      <span class="deal-price"><b>0 $</b><small>z limitami</small></span></button></li>`;
+      <p class="deal-meta">${dot}${esc(t(`cat.${cat}`))}, ${esc(L('deal.free', { age: promoAgeText(d) }))}</p></span>
+      <span class="deal-price"><b>${esc(formatUsd(0))}</b><small>${esc(L('deal.limits'))}</small></span></button></li>`;
   }
   const p = priceParts(d.offer);
   return `<li class="deal"><button data-model="${esc(m.id)}"><span><p class="deal-name">${esc(shortName(m.name))}</p>
-    <p class="deal-meta">${dot}${esc(whereVia(d.offer))}, ${d.type === 'drop' ? 'obniżka' : 'zniżka'} ${esc(promoAgeText(d))}</p></span>
+    <p class="deal-meta">${dot}${esc(whereVia(d.offer))}, ${esc(L(d.type === 'drop' ? 'deal.drop' : 'deal.discount', { age: promoAgeText(d) }))}</p></span>
     <span class="deal-price"><span class="top"><span class="pct">−${d.pct}%</span><b>${esc(p.main)}</b></span><small>${esc(p.short)}</small></span></button></li>`;
 }
 
 function renderDeals() {
   const list = state.deals.filter((d) => d.type === state.type && (!state.cat || d.model.cats.includes(state.cat)));
-  const typeName = { discount: plural(list.length, 'zniżka', 'zniżki', 'zniżek'), drop: plural(list.length, 'obniżka', 'obniżki', 'obniżek'), free: plural(list.length, 'darmowy model', 'darmowe modele', 'darmowych modeli') }[state.type];
-  $('#promo-summary').textContent = list.length ? `${list.length} ${typeName}${state.cat ? `, ${t(`cat.${state.cat}`).toLowerCase()}` : ''}, od największej` : '';
+  const count = L({ discount: 'count.discount', drop: 'count.drop', free: 'count.free2' }[state.type], { n: list.length });
+  $('#promo-summary').textContent = list.length ? [count, state.cat ? t(`cat.${state.cat}`) : null, L('deals.biggest')].filter(Boolean).join(', ') : '';
   $('#deals').innerHTML = list.length
     ? list.slice(0, state.shown).map(dealRow).join('')
-    : `<li class="empty">${state.type === 'drop'
-      ? 'Przez ostatnie 7 dni nikt nie obniżył cen. Sprawdzamy to co 15 minut.'
-      : 'W tej kategorii nic teraz nie ma. Wybierz inną kategorię albo rodzaj promocji.'}</li>`;
+    : `<li class="empty">${esc(L(state.type === 'drop' ? 'deals.emptyDrop' : 'deals.empty'))}</li>`;
   $('#more-deals').hidden = list.length <= state.shown;
 }
 
@@ -201,9 +232,9 @@ function renderResults() {
   box.innerHTML = found.length
     ? found.map((m, i) => {
       const c = cheapest(m);
-      return `<li role="option" id="opt-${i}" aria-selected="${i === 0}" data-model="${esc(m.id)}"><span>${esc(m.name)}</span><small>${c ? `od ${esc(formatOfferPrice(c))}` : m.freeId ? 'za darmo' : ''}</small></li>`;
+      return `<li role="option" id="opt-${i}" aria-selected="${i === 0}" data-model="${esc(m.id)}"><span>${esc(m.name)}</span><small>${c ? esc(L('cmp.from', { price: formatOfferPrice(c) })) : m.freeId ? esc(L('cmp.free')) : ''}</small></li>`;
     }).join('')
-    : '<li aria-disabled="true">Nie ma takiego modelu. Spróbuj krótszej nazwy.</li>';
+    : `<li aria-disabled="true">${esc(L('cmp.none'))}</li>`;
   $('#q').setAttribute('aria-expanded', 'true');
 }
 function moveActive(delta) {
@@ -236,7 +267,7 @@ document.addEventListener('click', (e) => { if (!e.target.closest('.search')) $(
 
 function renderPopular() {
   const picks = [...state.snapshot.models].sort((a, b) => b.offers.length - a.offers.length).slice(0, 5);
-  $('#popular').innerHTML = `Najwięcej ofert: ${picks.map((m) => `<button data-model="${esc(m.id)}">${esc(m.name.replace(/^[^:]+:\s*/, ''))}</button>`).join('')}`;
+  $('#popular').innerHTML = `${esc(L('cmp.popular'))} ${picks.map((m) => `<button data-model="${esc(m.id)}">${esc(shortName(m.name))}</button>`).join('')}`;
 }
 $('#popular').addEventListener('click', (e) => {
   const b = e.target.closest('button[data-model]');
@@ -253,7 +284,7 @@ async function openModel(id, scroll) {
   box.dataset.model = id;
   box.dataset.live = '';
   renderModel(m);
-  if (scroll) $('#porownaj').scrollIntoView();
+  if (scroll) $('#compare').scrollIntoView();
   if (!m.offers.some((o) => o.src === 'openrouter')) return;
   try {
     const live = await liveOpenrouterOffers(m);
@@ -266,14 +297,11 @@ async function openModel(id, scroll) {
 
 function usageInputs(unit) {
   if (unit === 'token') {
-    return `<label>Wejście, mln tokenów miesięcznie<input type="number" min="0" step="0.5" data-u="in" value="${state.usage.token.in}" inputmode="decimal"></label>
-      <label>Wyjście, mln tokenów miesięcznie<input type="number" min="0" step="0.5" data-u="out" value="${state.usage.token.out}" inputmode="decimal"></label>`;
+    return `<label>${esc(L('model.in'))}<input id="use-in" type="number" min="0" step="0.5" data-u="in" value="${state.usage.token.in}" inputmode="decimal"></label>
+      <label>${esc(L('model.out'))}<input id="use-out" type="number" min="0" step="0.5" data-u="out" value="${state.usage.token.out}" inputmode="decimal"></label>`;
   }
-  const label = unit === 'image' ? 'Obrazów miesięcznie' : 'Sekund wideo miesięcznie';
-  return `<label>${label}<input type="number" min="0" step="10" data-u="count" value="${state.usage[unit].count}" inputmode="numeric"></label>`;
+  return `<label>${esc(L(unit === 'image' ? 'model.images' : 'model.seconds'))}<input id="use-count" type="number" min="0" step="10" data-u="count" value="${state.usage[unit].count}" inputmode="numeric"></label>`;
 }
-
-const TINT = { text: '74,99,216', coding: '122,63,224', image: '194,24,91', video: '168,83,10' };
 
 function renderModel(m) {
   const box = $('#model');
@@ -293,38 +321,41 @@ function renderModel(m) {
     const price = o.unit === 'token'
       ? `${before ? `<span class="old">${formatUsd(before.in)}</span>` : ''}${formatUsd(o.in)}</td><td>${before ? `<span class="old">${formatUsd(before.out)}</span>` : ''}${formatUsd(o.out)}`
       : `${before ? `<span class="old">${formatUsd(before.price)}</span>` : ''}${formatUsd(o.price)}</td><td>${o.variants?.length > 1 ? esc(o.variants.map((v) => `${v.label}: ${formatUsd(v.price)}`).join(', ')) : ''}`;
-    const via = where(o) !== o.provider ? `przez ${esc(o.provider)}` : '';
+    const via = where(o) !== o.provider ? L('model.via', { provider: o.provider }) : '';
     return `<tr class="${o === best ? 'best' : ''}">
-      <td class="prov">${esc(where(o))}${promo && promo.type !== 'free' ? `<span class="pct">−${promo.pct}%</span>` : ''}<span class="src">${[via, o.quant ? esc(o.quant) : '', promo ? `promocja ${esc(promoAgeText(promo))}` : ''].filter(Boolean).join(', ')}</span></td>
+      <td class="prov">${esc(where(o))}${promo && promo.type !== 'free' ? `<span class="pct">−${promo.pct}%</span>` : ''}<span class="src">${[via, o.quant, promo ? L('model.promo', { age: promoAgeText(promo) }) : ''].filter(Boolean).map(esc).join(', ')}</span></td>
       <td>${price}</td>
-      <td class="cost">${other ? '<span class="src">inna jednostka</span>' : formatUsd(cost(o))}</td>
+      <td class="cost">${other ? `<span class="src">${esc(L('model.otherUnit'))}</span>` : formatUsd(cost(o))}</td>
       <td>${formatContext(o.context)}</td>
-      <td>${link ? `<a class="go" href="${esc(link.url)}" target="_blank" rel="noopener${link.sponsored ? ' sponsored' : ''}">${link.sponsored ? 'Partner' : 'Otwórz'}</a>${link.sponsored ? '<span class="sponsored">link partnerski</span>' : ''}` : ''}</td></tr>`;
+      <td>${link ? `<a class="go" href="${esc(link.url)}" target="_blank" rel="noopener${link.sponsored ? ' sponsored' : ''}">${esc(L(link.sponsored ? 'model.partner' : 'model.open'))}</a>${link.sponsored ? `<span class="sponsored">${esc(L('model.partnerLink'))}</span>` : ''}` : ''}</td></tr>`;
   }).join('');
 
-  const priceHead = m.unit === 'token' ? '<th scope="col">Wejście / 1M</th><th scope="col">Wyjście / 1M</th>' : '<th scope="col">Cena</th><th scope="col">Warianty</th>';
+  const priceHead = m.unit === 'token'
+    ? `<th scope="col">${esc(L('model.colIn'))}</th><th scope="col">${esc(L('model.colOut'))}</th>`
+    : `<th scope="col">${esc(L('model.colPrice'))}</th><th scope="col">${esc(L('model.colVariants'))}</th>`;
   const saving = best && worst ? cost(worst) - cost(best) : 0;
+  const meta = [m.author, m.context ? L('model.context', { ctx: formatContext(m.context) }) : null, m.freeId ? L('model.freeVariant', { id: m.freeId }) : null].filter(Boolean).join(', ');
 
   box.innerHTML = `
     <div class="model-head" style="background:linear-gradient(180deg, rgba(${TINT[cat]},0.6), rgba(${TINT[cat]},0))">
       <div>
-        <p class="cat" style="color:${CAT_COLOR[cat]};font-weight:600;font-size:13px">${esc(t(`cat.${cat}`))}</p>
-        <h3>${esc(m.name)}</h3>
-        <p class="model-id">${esc(m.author ?? '')}${m.context ? `, ${formatContext(m.context)} kontekstu` : ''}${m.freeId ? `, darmowy wariant ${esc(m.freeId)}` : ''}</p>
+        <p class="cat" style="color:${CAT_COLOR[cat]}">${esc(t(`cat.${cat}`))}</p>
+        <h3>${esc(shortName(m.name))}</h3>
+        <p class="model-id">${esc(meta)}</p>
       </div>
-      <button class="btn btn-line" id="close-model">Zamknij</button>
+      <button class="btn btn-line" id="close-model">${esc(L('model.close'))}</button>
     </div>
     <div class="model-price">
-      <div><span class="lab">Najtaniej miesięcznie</span><b>${best ? formatUsd(cost(best)) : m.freeId ? '0 $' : '–'}</b><span class="lab">${best ? esc(where(best)) : ''}</span></div>
-      ${saving > 0 ? `<div class="save"><span class="lab">Oszczędzasz</span><b>${formatUsd(saving)}</b><span class="lab">względem najdroższej</span></div>` : ''}
+      <div><span class="lab">${esc(L('model.cheapest'))}</span><b>${best ? formatUsd(cost(best)) : m.freeId ? formatUsd(0) : '–'}</b><span class="lab">${best ? esc(where(best)) : ''}</span></div>
+      ${saving > 0 ? `<div class="save"><span class="lab">${esc(L('model.save'))}</span><b>${formatUsd(saving)}</b><span class="lab">${esc(L('model.vsWorst'))}</span></div>` : ''}
     </div>
     <div class="calc">${usageInputs(m.unit)}</div>
     <div class="table-wrap"><table>
-      <caption>Ceny w ${esc(UNIT_LABEL[m.unit])}. Koszt miesięczny przy wpisanym zużyciu.</caption>
-      <thead><tr><th scope="col">Gdzie kupisz</th>${priceHead}<th scope="col">Miesięcznie</th><th scope="col">Kontekst</th><th scope="col"><span class="sr-only">Link</span></th></tr></thead>
-      <tbody>${rows || '<tr><td colspan="6">Nikt teraz nie sprzedaje tego modelu.</td></tr>'}</tbody>
+      <caption>${esc(L('model.caption', { unit: UNIT_LABEL[m.unit] }))}</caption>
+      <thead><tr><th scope="col">${esc(L('model.where'))}</th>${priceHead}<th scope="col">${esc(L('model.colMonthly'))}</th><th scope="col">${esc(L('model.colContext'))}</th><th scope="col"><span class="sr-only">${esc(L('model.colLink'))}</span></th></tr></thead>
+      <tbody>${rows || `<tr><td colspan="6">${esc(L('model.none'))}</td></tr>`}</tbody>
     </table></div>
-    <p class="live-note">${box.dataset.live ? 'Oferty z OpenRouter pobrane przed chwilą.' : 'Ceny z ostatniego sprawdzenia. Oferty z OpenRouter odświeżam na bieżąco…'} Linki Partner są partnerskie, kolejność zależy tylko od ceny.</p>`;
+    <p class="live-note">${esc(L(box.dataset.live ? 'model.liveDone' : 'model.liveLoading'))} ${esc(L('model.note'))}</p>`;
 
   box.querySelectorAll('[data-u]').forEach((input) => input.addEventListener('change', () => {
     const v = Math.max(0, Number(input.value) || 0);
@@ -339,6 +370,7 @@ function renderModel(m) {
   });
 }
 
+applyLang(savedLang() ?? 'en');
 load();
 setInterval(load, REFRESH_MS);
 setInterval(() => state.snapshot && renderStatus(), 30 * 1000);

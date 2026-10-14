@@ -57,6 +57,7 @@ export function Segmented({ options, value, onChange, style }) {
   const t = useTheme();
   const [w, setW] = useState(0);
   const index = Math.max(0, options.findIndex((o) => o.value === value));
+  const stacked = options.length >= 4 && options.some((o) => o.count != null);
   const segW = w ? (w - SEG_PAD * 2) / options.length : 0;
   const x = useRef(new Animated.Value(0)).current;
   const ready = useRef(false);
@@ -91,7 +92,13 @@ export function Segmented({ options, value, onChange, style }) {
             style={s.segItem}
           >
             {o.icon ? <Icon name={o.icon} size={15} color={on ? t.ink : t.ink2} /> : null}
-            {o.label ? <T kind="small" numberOfLines={1} style={{ color: on ? t.ink : t.ink2, fontFamily: font.textBold }}>
+            {o.label && stacked ? (
+              // Cztery i więcej opcji: liczba pod etykietą, żeby dłuższe słowa (np. po niemiecku) się mieściły.
+              <View style={{ alignItems: 'center' }}>
+                <T kind="small" numberOfLines={1} style={{ color: on ? t.ink : t.ink2, fontFamily: font.textBold }}>{o.label}</T>
+                {o.count != null ? <T kind="tiny" style={{ color: t.ink3, lineHeight: 14 }}>{o.count}</T> : null}
+              </View>
+            ) : o.label ? <T kind="small" numberOfLines={1} style={{ color: on ? t.ink : t.ink2, fontFamily: font.textBold }}>
               {o.label}
               {o.count != null ? <T kind="small" style={{ color: t.ink3, fontFamily: font.textSemi }}>{` ${o.count}`}</T> : null}
             </T> : null}

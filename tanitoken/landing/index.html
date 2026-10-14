@@ -1,13 +1,13 @@
 <!doctype html>
-<html lang="pl">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>LightTokenz: ceny API modeli AI na bieżąco</title>
-  <meta name="description" content="Porównujemy ceny API modeli AI u ponad 200 dostawców co 15 minut. Promocje, darmowe modele, historia cen i ostrzeżenie, zanim skończy się zniżka.">
+  <title>LightTokenz: live AI API prices</title>
+  <meta name="description" content="We compare AI model API prices across 200+ providers every 15 minutes. Deals, free models, price history and a heads-up before a discount ends.">
   <meta name="theme-color" content="#0b0a12">
-  <meta property="og:title" content="LightTokenz: gdzie dziś najtaniej zapłacisz za tokeny">
-  <meta property="og:description" content="Ceny API modeli AI na bieżąco: tekst, kod, obraz i wideo.">
+  <meta property="og:title" content="LightTokenz: where tokens are cheapest today">
+  <meta property="og:description" content="Live AI API prices for text, code, image and video models.">
   <link rel="icon" href="icon.png" type="image/png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,108 +15,127 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <a class="skip" href="#promocje">Przejdź do promocji</a>
+  <a class="skip" href="#deals-section" data-i18n="skip">Skip to deals</a>
   <header class="top">
-    <a class="brand" href="./" aria-label="LightTokenz, strona główna">
+    <a class="brand" href="./" aria-label="LightTokenz">
       <img src="icon.png" alt="" width="32" height="32">
       LightTokenz
     </a>
-    <nav aria-label="Główna">
-      <a href="#promocje">Promocje</a>
-      <a href="#porownaj">Porównaj</a>
-      <a href="#aplikacja" class="nav-app">Aplikacja</a>
+    <nav aria-label="Main">
+      <a href="#deals-section" data-i18n="nav.deals">Deals</a>
+      <a href="#compare" data-i18n="nav.compare">Compare</a>
+      <a href="#app" class="nav-app" data-i18n="nav.app">App</a>
+      <label class="lang">
+        <span class="sr-only" data-i18n="lang.label">Language</span>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg>
+        <select id="lang"></select>
+      </label>
     </nav>
   </header>
 
   <main>
     <section class="hero" aria-labelledby="hero-title">
       <div class="hero-copy">
-        <h1 id="hero-title">Płać mniej za tokeny.</h1>
-        <p class="lead">Co 15 minut sprawdzamy ceny modeli AI u <span data-stat="providers">ponad 200</span> dostawców. Widzisz, gdzie dziś jest najtaniej, a apka ostrzeże Cię, zanim skończy się promocja, z której korzystasz.</p>
-        <p class="status" id="status" aria-live="polite"><span class="pulse" aria-hidden="true"></span><span>Pobieram aktualne ceny…</span></p>
+        <h1 id="hero-title" data-i18n="hero.title">Pay less for tokens.</h1>
+        <p class="lead" id="hero-lead"></p>
+        <p class="status" id="status" aria-live="polite"><span class="pulse" aria-hidden="true"></span><span data-i18n="status.loading">Loading current prices…</span></p>
         <div class="hero-actions">
-          <a href="#promocje" class="btn btn-ink">Zobacz promocje</a>
-          <a href="#porownaj" class="btn btn-line">Porównaj model</a>
+          <a href="#deals-section" class="btn btn-ink" data-i18n="hero.deals">See deals</a>
+          <a href="#compare" class="btn btn-line" data-i18n="hero.compare">Compare a model</a>
         </div>
       </div>
       <figure class="hero-card-wrap">
         <div class="glow">
           <div class="hero-card" id="hero-card" aria-live="polite">
-            <p class="skeleton">Szukam największej zniżki…</p>
+            <p class="skeleton" data-i18n="hero.searching">Looking for the biggest discount…</p>
           </div>
         </div>
-        <figcaption id="hero-caption">Największa zniżka w tej chwili</figcaption>
+        <figcaption id="hero-caption" data-i18n="hero.captionShort">Biggest discount right now</figcaption>
       </figure>
     </section>
 
-    <section class="tiles" aria-label="Kategorie" id="tiles"></section>
+    <section class="tiles" id="tiles" data-i18n-aria="tiles.label" aria-label="Categories"></section>
 
-    <section id="promocje" class="block" aria-labelledby="promo-title">
+    <section id="deals-section" class="block" aria-labelledby="promo-title">
       <div class="block-head">
-        <h2 id="promo-title">Promocje</h2>
+        <h2 id="promo-title" data-i18n="deals.title">Deals</h2>
         <p class="muted" id="promo-summary"></p>
       </div>
       <div class="toolbar">
-        <div class="segmented" role="group" aria-label="Rodzaj promocji" data-group="type">
-          <button aria-pressed="true" data-value="discount">Zniżki</button>
-          <button aria-pressed="false" data-value="drop">Obniżki</button>
-          <button aria-pressed="false" data-value="free">Darmowe</button>
+        <div class="segmented" role="group" data-i18n-aria="deals.typeLabel" aria-label="Deal type" data-group="type">
+          <button aria-pressed="true" data-value="discount" data-i18n="type.discount">Discounts</button>
+          <button aria-pressed="false" data-value="drop" data-i18n="type.drop">Price cuts</button>
+          <button aria-pressed="false" data-value="free" data-i18n="type.free">Free</button>
         </div>
       </div>
       <ol class="deals panel" id="deals" aria-live="polite"></ol>
-      <button id="more-deals" class="btn btn-line more" hidden>Pokaż kolejne</button>
+      <button id="more-deals" class="btn btn-line more" hidden data-i18n="deals.more">Show more</button>
     </section>
 
-    <section id="porownaj" class="block" aria-labelledby="cmp-title">
+    <section id="compare" class="block" aria-labelledby="cmp-title">
       <div class="block-head">
-        <h2 id="cmp-title">Porównaj dostawców</h2>
-        <p class="muted">Wpisz nazwę modelu. Oferty ułożymy od najtańszej przy Twoim zużyciu.</p>
+        <h2 id="cmp-title" data-i18n="cmp.title">Compare providers</h2>
+        <p class="muted" data-i18n="cmp.sub">Type a model name. We sort the offers from cheapest at your usage.</p>
       </div>
       <div class="search">
-        <label class="sr-only" for="q">Szukaj modelu</label>
-        <input id="q" type="search" placeholder="np. deepseek, claude, flux, veo" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="results">
+        <label class="sr-only" for="q" data-i18n="cmp.label">Search for a model</label>
+        <input id="q" type="search" placeholder="e.g. deepseek, claude, flux, veo" data-i18n-ph="cmp.placeholder" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="results">
         <ul id="results" class="results" role="listbox"></ul>
       </div>
       <div class="popular" id="popular"></div>
       <article id="model" class="model" hidden></article>
     </section>
 
-    <section id="aplikacja" class="block app" aria-labelledby="app-title">
+    <section id="app" class="block app" aria-labelledby="app-title">
       <div class="app-copy">
-        <h2 id="app-title">Apka pilnuje cen za Ciebie</h2>
-        <p class="lead">Zaznacz modele, których używasz. Gdy promocja się kończy albo ktoś sprzedaje taniej, dostaniesz powiadomienie.</p>
+        <h2 id="app-title" data-i18n="app.title">The app watches prices for you</h2>
+        <p class="lead" data-i18n="app.lead">Mark the models you use. When a deal is about to end or someone sells cheaper, you get a notification.</p>
         <dl class="features">
-          <div><dt>Ostrzeżenie przed końcem promocji</dt>
-          <dd>Dostawcy nie podają dat końca zniżek. Liczymy, ile trwały poprzednie u tego samego dostawcy, i przypominamy, zanim wrócisz do pełnej ceny.</dd></div>
-          <div><dt>Historia ceny</dt>
-          <dd>Wykres z 90 dni pokazuje najniższą cenę modelu obok tej, którą płacisz Ty. Od razu widać, ile przepłacasz miesięcznie.</dd></div>
-          <div><dt>Profil zostaje na telefonie</dt>
-          <dd>Bez konta i logowania. Kopia zapasowa trafia na Twoje konto Google, nie do nas.</dd></div>
+          <div><dt data-i18n="f1.t">Heads-up before a deal ends</dt><dd data-i18n="f1.d"></dd></div>
+          <div><dt data-i18n="f2.t">Price history</dt><dd data-i18n="f2.d"></dd></div>
+          <div><dt data-i18n="f3.t">Your profile stays on your phone</dt><dd data-i18n="f3.d"></dd></div>
         </dl>
         <div class="stores">
-          <span class="store" aria-disabled="true"><small>Wkrótce</small>Google Play</span>
-          <span class="store" aria-disabled="true"><small>Później</small>App Store</span>
+          <div class="store-wrap">
+            <span class="soon" data-i18n="store.soon">Coming soon</span>
+            <span class="store" role="img" aria-label="Google Play (coming soon)" aria-disabled="true">
+              <svg class="store-logo" viewBox="0 0 24 26" aria-hidden="true">
+                <path fill="#00c3ff" d="M1.2.6 13.3 12.9 1.2 25.2c-.3-.3-.4-.8-.4-1.3V1.9c0-.5.1-1 .4-1.3z"/>
+                <path fill="#00e676" d="M1.2.6 13.3 12.9l4-4L3.2.8C2.4.3 1.7.3 1.2.6z"/>
+                <path fill="#ff3d45" d="m1.2 25.2 12.1-12.3 4 4-14.1 8.1c-.8.5-1.5.5-2 .2z"/>
+                <path fill="#ffd400" d="m17.3 8.9-4 4 4 4 4.6-2.6c1.3-.7 1.3-2.1 0-2.8z"/>
+              </svg>
+              <span class="store-text"><small data-i18n="store.gpTop">GET IT ON</small><b>Google Play</b></span>
+            </span>
+          </div>
+          <div class="store-wrap">
+            <span class="soon" data-i18n="store.later">Coming later</span>
+            <span class="store" role="img" aria-label="App Store (coming later)" aria-disabled="true">
+              <svg class="store-logo" viewBox="0 0 24 24" aria-hidden="true"><path fill="#fff" d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+              <span class="store-text"><small data-i18n="store.asTop">Download on the</small><b>App Store</b></span>
+            </span>
+          </div>
         </div>
       </div>
-      <div class="phones" aria-label="Zrzuty ekranu aplikacji">
-        <img src="shot-deals.jpg" alt="Ekran promocji w aplikacji LightTokenz" width="390" height="844" loading="lazy">
-        <img src="shot-model.jpg" alt="Karta modelu z najniższą ceną i listą ofert" width="390" height="844" loading="lazy">
+      <div class="phones" data-i18n-aria="shots.label" aria-label="App screenshots">
+        <div class="phone"><img src="shot-deals.jpg" data-i18n-alt="shots.deals" alt="Deals screen in the LightTokenz app" width="390" height="844" loading="lazy"></div>
+        <div class="phone"><img src="shot-model.jpg" data-i18n-alt="shots.model" alt="Model card with the cheapest price and the list of offers" width="390" height="844" loading="lazy"></div>
       </div>
     </section>
 
     <section class="block faq" aria-labelledby="faq-title">
-      <h2 id="faq-title">Pytania</h2>
-      <details><summary>Skąd macie ceny?</summary><p>Sprawdzamy je sami. Co 15 minut pobieramy cenniki z OpenRouter, Vercel AI Gateway, Requesty, fal.ai i kilkunastu innych bramek API. Gdy otworzysz model, oferty z OpenRouter pobieramy jeszcze raz, na bieżąco.</p></details>
-      <details><summary>Skąd wiecie, że promocja się kończy?</summary><p>Zapisujemy, kiedy każda zniżka się pojawiła i ile trwały poprzednie u tego samego dostawcy. Gdy obecna zbliża się do typowej długości, apka ostrzega. Gdy zniknie, dostajesz powiadomienie z najtańszą alternatywą.</p></details>
-      <details><summary>Jak liczycie koszt miesięczny?</summary><p>Dla modeli tekstowych mnożymy cenę wejścia i wyjścia przez Twoje zużycie w milionach tokenów. Dla obrazów liczymy cenę za obraz, dla wideo za sekundę.</p></details>
-      <details><summary>Czy darmowe modele mają haczyk?</summary><p>Zwykle mają limity zapytań, a część dostawców zapisuje prompty. Zanim użyjesz takiego modelu w produkcji, przeczytaj warunki na jego stronie.</p></details>
-      <details><summary>Jak na tym zarabiacie?</summary><p>Część linków jest partnerska. Jeśli założysz konto u dostawcy z takiego linku, dostajemy prowizję. Takie linki zawsze oznaczamy, a kolejność ofert zależy tylko od ceny.</p></details>
+      <h2 id="faq-title" data-i18n="faq.title">Questions</h2>
+      <details><summary data-i18n="q1"></summary><p data-i18n="a1"></p></details>
+      <details><summary data-i18n="q2"></summary><p data-i18n="a2"></p></details>
+      <details><summary data-i18n="q3"></summary><p data-i18n="a3"></p></details>
+      <details><summary data-i18n="q4"></summary><p data-i18n="a4"></p></details>
+      <details><summary data-i18n="q5"></summary><p data-i18n="a5"></p></details>
     </section>
   </main>
 
   <footer class="foot">
-    <p>LightTokenz nie jest powiązany z OpenRouter, Vercel, Requesty, fal.ai ani z twórcami modeli. Przed zakupem sprawdź cenę u dostawcy.</p>
-    <p><a href="prywatnosc.html">Prywatność</a></p>
+    <p data-i18n="foot.note"></p>
+    <p><a href="prywatnosc.html" data-i18n="foot.privacy">Privacy</a></p>
   </footer>
 
   <script type="module" src="app.js"></script>

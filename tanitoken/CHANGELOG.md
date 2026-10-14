@@ -26,6 +26,17 @@ Jedno miejsce z historią zmian, decyzjami i otwartymi zadaniami. Aktualizowane 
 | 5 | Po merge'u: ręczne uruchomienie workflow „TaniToken snapshot” (tworzy gałąź `tanitoken-data`) | po merge'u |
 | 6 | Klucz release (keystore) do Google Play; obecny APK jest podpisany kluczem debug | przed publikacją |
 
+## 2026-10-14 – sesja 16: landing w 6 językach, przyciski sklepów, smartfony
+
+- Landing domyślnie po angielsku, przełącznik języka w nagłówku (EN, PL, ES, FR, IT, DE), wybór zapamiętany w
+  przeglądarce. Teksty strony w `landing/i18n.js`, ceny, kategorie i czas z `core/i18n.js`.
+- Przyciski Google Play i App Store: czarne odznaki z logo, nad nimi Wkrótce / Później (bez linku, sklepy jeszcze
+  nie działają).
+- Zrzuty apki po angielsku w ramkach smartfonów (CSS, bez obrazków ramek).
+- Apka: w filtrach z 4 opcjami liczba stoi pod etykietą (po angielsku i niemiecku etykiety się ucinały); krótsze
+  etykiety: EN Price cuts, DE Senkungen, IT Economici.
+- Do zrobienia: strona prywatności jest tylko po polsku.
+
 ## 2026-10-14 – sesja 15: teksty bez AI slop, odstępy, APK 0.3.0, nowy landing
 
 - Teksty (6 języków) przepuszczone przez zasady skilla humanizer: bez cudzysłowów w przykładach i podpowiedziach,

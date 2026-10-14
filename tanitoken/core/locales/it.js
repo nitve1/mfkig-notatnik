@@ -273,7 +273,7 @@ export default {
   'onb.next': 'Avanti',
   'onb.skip': 'Salta',
   'onb.start': 'Iniziamo',
-  'type.cheapest': "Più economici",
+  'type.cheapest': "Economici",
   'tile.from': "da {price}",
   'tile.noModels': "nessun modello",
   'tile.allModels': "Tutti i modelli",

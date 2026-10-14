@@ -180,12 +180,6 @@ tr.best td:first-child { box-shadow: inset 3px 0 0 var(--save); }
 .features { margin: 26px 0 0; display: grid; gap: 18px; }
 .features dt { font-weight: 700; font-size: 17px; }
 .features dd { margin: 4px 0 0; color: var(--ink2); }
-.stores { display: flex; gap: 10px; margin-top: 26px; flex-wrap: wrap; }
-.store { display: flex; flex-direction: column; justify-content: center; min-height: 52px; padding: 0 18px; border-radius: var(--r-md); border: 1px solid var(--glass-line); font-weight: 700; color: var(--ink2); }
-.store small { font-weight: 600; font-size: 11.5px; color: var(--ink3); }
-.phones { display: flex; gap: 16px; justify-content: center; }
-.phones img { width: 46%; max-width: 260px; height: auto; border-radius: 26px; border: 1px solid var(--glass-line); box-shadow: 0 24px 60px rgba(0,0,0,0.5); }
-.phones img:nth-child(2) { margin-top: 48px; }
 @media (max-width: 860px) { .app { grid-template-columns: 1fr; } }
 
 /* FAQ */
@@ -204,3 +198,30 @@ tr.best td:first-child { box-shadow: inset 3px 0 0 var(--save); }
 .doc p, .doc li { color: var(--ink2); }
 
 .hero-copy, .app-copy, .model { min-width: 0; }
+
+/* Wybór języka */
+.lang { position: relative; display: flex; align-items: center; margin-left: 4px; }
+.lang svg { position: absolute; left: 10px; width: 17px; height: 17px; fill: none; stroke: var(--ink2); stroke-width: 1.6; pointer-events: none; }
+.lang select { appearance: none; -webkit-appearance: none; min-height: 44px; padding: 0 30px 0 34px; border-radius: var(--r-sm); border: 1px solid var(--glass-line); background: rgba(255,255,255,0.04) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23c9c5dd' stroke-width='1.6'/%3E%3C/svg%3E") right 10px center / 11px no-repeat; color: var(--ink); font: 600 14px Archivo, sans-serif; cursor: pointer; }
+.lang select option { background: #16131f; color: var(--ink); }
+@media (max-width: 560px) { .top nav .nav-app { display: none; } }
+
+/* Przyciski sklepów: czarne odznaki z logo, jak oficjalne (sklepy jeszcze nie działają, więc bez linku) */
+.stores { display: flex; gap: 14px; margin-top: 28px; flex-wrap: wrap; }
+.store-wrap { display: flex; flex-direction: column; gap: 6px; }
+.soon { font-size: 12px; font-weight: 700; color: var(--ink3); letter-spacing: 0.04em; }
+.store { display: inline-flex; align-items: center; gap: 10px; min-width: 176px; height: 56px; padding: 0 18px 0 14px; border-radius: 12px; background: #000; border: 1px solid #a6a6a6; color: #fff; }
+.store-logo { width: 26px; height: 28px; flex: none; }
+.store-text { display: flex; flex-direction: column; line-height: 1.1; }
+.store-text small { font-size: 10.5px; font-weight: 500; letter-spacing: 0.02em; }
+.store-text b { font-size: 21px; font-weight: 600; letter-spacing: -0.01em; }
+
+/* Zrzuty apki w ramkach smartfonów */
+.phones { display: flex; gap: 22px; justify-content: center; align-items: flex-start; }
+.phone { position: relative; width: 46%; max-width: 270px; aspect-ratio: 390 / 844; padding: 9px; border-radius: 44px; background: linear-gradient(145deg, #3a3748, #15131d 45%, #2a2836); box-shadow: 0 0 0 1px rgba(255,255,255,0.14), 0 30px 70px rgba(0,0,0,0.55), inset 0 0 0 2px rgba(0,0,0,0.6); }
+.phone img { width: 100%; height: 100%; object-fit: cover; border-radius: 36px; display: block; }
+.phone::before { content: ''; position: absolute; top: 19px; left: 50%; width: 11px; height: 11px; margin-left: -5.5px; border-radius: 50%; background: #05050a; box-shadow: 0 0 0 2px #1d1b26; z-index: 1; }
+.phone::after { content: ''; position: absolute; right: -3px; top: 22%; width: 3px; height: 13%; border-radius: 0 3px 3px 0; background: #2d2b38; }
+.phone:nth-child(2) { margin-top: 56px; }
+@media (max-width: 420px) { .phone { border-radius: 34px; padding: 7px; } .phone img { border-radius: 28px; } .phone::before { top: 14px; } }
+.model-head .cat { font-weight: 600; font-size: 13px; }

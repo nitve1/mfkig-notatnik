@@ -23,7 +23,7 @@ export default {
   'catNote.video': 'Videogenerierung',
 
   'type.discount': 'Rabatte',
-  'type.drop': 'Preissenkungen',
+  'type.drop': "Senkungen",
   'type.free': 'Kostenlos',
   'sort.new': 'Neueste',
   'sort.cheap': 'Günstigste',
