@@ -41,6 +41,10 @@ Wybór użytkownika z makiety `mockups/history.png`: wariant B (najtaniej gdziek
   ulubieni; para sprawdzona walidatorem palety), legenda, 7 / 30 / 90 dni, dymek po dotknięciu (dzień, najtańszy
   dostawca, Twoja cena), ceny na końcu linii, „Przepłacasz X za 1M tokenów, ok. Y / mies.”. Za mało danych:
   „Zbieramy historię cen…”. Bez wybranego dostawcy: jedna linia i podpowiedź. Tryb Zwykły: tylko platformy.
+- Poprawka po uwadze użytkownika: usunięty dopisek „cenniki z models.dev mogą być nieaktualne” (my jesteśmy
+  źródłem); stopka karty modelu mówi tylko o linkach partnerskich, „O apce”: „Ceny sprawdzamy sami…”.
+- Wykres: każdy dzień ma swój odcinek, więc zmiana ceny dziś też jest widoczna. Podgląd web dostaje
+  PRZYKŁADOWĄ historię 60 dni (`web-preview.mjs`), bo prawdziwa zbiera się od dziś.
 - Tłumaczenia `history.*` w 6 językach. Sprawdzone w podglądzie web 360 i 390 px (sztuczna historia 40 dni):
   bez błędów JS i bez wychodzenia poza ekran.
 

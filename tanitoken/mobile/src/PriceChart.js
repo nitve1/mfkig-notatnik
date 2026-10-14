@@ -34,16 +34,17 @@ const dayLabel = (day) => {
   }
 };
 
-// Linia schodkowa; przerwa tam, gdzie brak danych.
+// Linia schodkowa: każdy dzień ma swój odcinek [x(i), x(i + 1)], więc zmiana ceny dziś też jest widoczna.
+// Przerwa tam, gdzie brak danych.
 function stepPath(points, key, x, y) {
   let d = '';
   let prev = null;
   points.forEach((p, i) => {
     const v = p[key];
     if (v == null) { prev = null; return; }
-    d += prev == null ? `M${x(i)},${y(v)}` : `H${x(i)}V${y(v)}`;
+    d += prev == null ? `M${x(i)},${y(v)}` : `V${y(v)}`;
+    d += `H${x(i + 1)}`;
     prev = v;
-    if (i === points.length - 1 || points[i + 1][key] == null) d += `H${x(i === points.length - 1 ? i : i + 1)}`;
   });
   return d;
 }
@@ -84,7 +85,7 @@ export default function PriceChart({ model, usage = DEFAULT_USAGE, used = null, 
   const top = niceTop(Math.max(...vals));
   const dec = top < 0.1 ? 3 : top < 10 ? 2 : 0;
   const W = w || 300;
-  const x = (i) => PL + (i / (points.length - 1)) * (W - PL - PR);
+  const x = (i) => PL + (i / points.length) * (W - PL - PR);
   const y = (v) => PT + (1 - v / top) * (H - PT - PB);
   const last = points[points.length - 1];
   const hasMine = !!mine && points.some((p) => p.mine != null);
@@ -100,10 +101,11 @@ export default function PriceChart({ model, usage = DEFAULT_USAGE, used = null, 
 
   const onTouch = (e) => {
     const lx = e.nativeEvent.locationX;
-    const i = Math.round(((lx - PL) / (W - PL - PR)) * (points.length - 1));
+    const i = Math.floor(((lx - PL) / (W - PL - PR)) * points.length);
     setPick(Math.max(0, Math.min(points.length - 1, i)));
   };
   const p = pick != null ? points[pick] : null;
+  const px = pick != null ? x(pick + 0.5) : 0; // środek dnia
 
   // Etykiety cen na końcu linii: wyższa cena nad swoją linią, niższa pod (albo nad, gdy brak miejsca przy osi).
   const LH = 18;
@@ -154,9 +156,9 @@ export default function PriceChart({ model, usage = DEFAULT_USAGE, used = null, 
             <Path d={stepPath(points, 'best', x, y)} stroke={t.chartBest} strokeWidth={2} fill="none" />
             {p ? (
               <>
-                <Line x1={x(pick)} x2={x(pick)} y1={PT} y2={H - PB} stroke="rgba(255,255,255,0.35)" strokeDasharray="3 3" />
-                {p.mine != null && hasMine ? <Circle cx={x(pick)} cy={y(p.mine)} r={4.5} fill={t.chartMine} stroke={t.bg} strokeWidth={2} /> : null}
-                {p.best != null ? <Circle cx={x(pick)} cy={y(p.best)} r={4.5} fill={t.chartBest} stroke={t.bg} strokeWidth={2} /> : null}
+                <Line x1={px} x2={px} y1={PT} y2={H - PB} stroke="rgba(255,255,255,0.35)" strokeDasharray="3 3" />
+                {p.mine != null && hasMine ? <Circle cx={px} cy={y(p.mine)} r={4.5} fill={t.chartMine} stroke={t.bg} strokeWidth={2} /> : null}
+                {p.best != null ? <Circle cx={px} cy={y(p.best)} r={4.5} fill={t.chartBest} stroke={t.bg} strokeWidth={2} /> : null}
               </>
             ) : null}
           </Svg>
@@ -173,7 +175,7 @@ export default function PriceChart({ model, usage = DEFAULT_USAGE, used = null, 
           </>
         ) : null}
         {p && w ? (
-          <View pointerEvents="none" style={[s.tip, { backgroundColor: t.cardSolid, borderColor: t.glassLine, left: Math.max(0, Math.min(W - 176, x(pick) + (x(pick) > W / 2 ? -184 : 8))) }]}>
+          <View pointerEvents="none" style={[s.tip, { backgroundColor: t.cardSolid, borderColor: t.glassLine, left: Math.max(0, Math.min(W - 176, px + (px > W / 2 ? -184 : 8))) }]}>
             <T kind="tiny">{dayLabel(p.day)}</T>
             <T kind="tiny" color="ink2">{tr('history.tipBest', { price: formatUsd(p.best), name: name(p.bestKey) })}</T>
             {hasMine ? <T kind="tiny" color="ink2">{p.mine != null ? tr('history.tipMine', { price: formatUsd(p.mine) }) : tr('history.tipNoMine')}</T> : null}

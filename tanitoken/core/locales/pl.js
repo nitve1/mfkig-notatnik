@@ -137,7 +137,7 @@ export default {
   'model.useA11y': 'Używam {name}',
   'model.noFav': 'Żaden z ulubionych dostawców nie sprzedaje tego modelu.',
   'model.noPromo': 'Brak ofert z promocją.',
-  'model.footnote': 'Cenniki „bezpośrednio” pochodzą z katalogu models.dev i mogą być nieaktualne. Linki „Partner” są partnerskie, kolejność zależy tylko od ceny.',
+  'model.footnote': "Linki „Partner” są partnerskie, kolejność ofert zależy wyłącznie od ceny.",
 
   'state.gone': 'Dostawca zniknął',
   'state.inPromo': 'Promocja −{pct}%',
@@ -236,7 +236,7 @@ export default {
   'backup.saveDialog': 'Zapisz profil LightTokenz',
   'backup.notProfile': 'To nie jest plik profilu LightTokenz.',
   'about.title': 'O aplikacji',
-  'about.body': 'Ceny z OpenRouter, Vercel AI Gateway, fal.ai, Requesty i katalogu models.dev, sprawdzane na Twoim telefonie. Linki „Partner” są partnerskie, a kolejność ofert zależy wyłącznie od ceny.',
+  'about.body': "Ceny sprawdzamy sami, na Twoim telefonie i na naszym serwerze. Linki „Partner” są partnerskie, a kolejność ofert zależy wyłącznie od ceny.",
   'about.privacy': 'Prywatność',
   'about.reset': 'Usuń profil',
   'about.resetTitle': 'Usunąć profil?',
