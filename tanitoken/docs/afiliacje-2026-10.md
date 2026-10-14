@@ -203,6 +203,26 @@ Rezerwowe: Runway ($15 za subskrybenta, wymaga profilu twórcy), Lovable (do $10
 | 9 | **RunPod / Vast.ai** | GPU do własnych modeli | kredyty, potem gotówka | natychmiast | OF |
 | 10 | **Jasper / Writesonic / Synthesia / HeyGen** | narzędzia AI do tekstu i wideo (słabszy związek z porównywarką API) | ok. 20–30% cyklicznie (3P, dane rozbieżne) | różne sieci | 3P |
 
+
+**Linki do zgłoszeń (2026-10-14):**
+
+| # | Program | Strona programu | Prowizja | Uwagi |
+|---|---|---|---|---|
+| 1 | CometAPI | https://www.cometapi.com/affiliate/ | 20% od doładowań, cookie 120 dni | Tolt (cometapi.tolt.io) |
+| 2 | Novita AI | https://novita.ai/affiliate | 10% przez 180 dni | portal affiliates.novita.ai |
+| 3 | Monica | https://monica.im/affiliate | 25% cyklicznie przez pierwszy rok | zwrot cofa prowizję |
+| 4 | AI/ML API | https://aimlapi.com/affiliate (wg katalogów, nieoficjalnie potwierdzony) | 30% (3P), cookie 90 dni | Rewardful; jeśli 404, link w stopce lub w panelu po zalogowaniu |
+| 5 | Google Workspace | https://workspace.google.com/intl/en_ph/refer (porównanie programów; wybierz swój kraj) | ok. $9–27 za użytkownika | CJ Affiliate; sprawdzić, czy Polska jest na liście |
+| 6 | WaveSpeedAI | https://wavespeed.ai/static/affiliate | 10% przez 30 dni | Tolt, link od razu |
+| 7 | ElevenLabs | https://elevenlabs.io/affiliates | 22% przez 12 mies. | PartnerStack |
+| 8 | Higgsfield AI | https://higgsfield.ai/affiliate | do 25% przez 12 mies. | zgoda na baner: affiliate@higgsfield.ai |
+| 9a | RunPod | https://www.runpod.io/referral-program | 3–5% w kredytach, 10% gotówką po 25 poleconych | polecony musi użyć logowania Google |
+| 9b | Vast.ai | https://docs.vast.ai/guides/reference/referral-program | 3% dożywotnio, do 75% do wypłaty | zakaz reklam na frazy z marką |
+| 10a | Jasper | https://www.jasper.ai/partners | 25% cyklicznie (wg umowy) | FirstPromoter, selekcja |
+| 10b | Writesonic | https://writesonic.com/affiliate | 20% przez 12 mies., cookie 60 dni | wypłata od $50, zakaz licytowania marki |
+| 10c | Synthesia | https://www.synthesia.io/partners/affiliates | 20–25% przez 12 mies. (3P), cookie 60 dni | Rewardful |
+| 10d | HeyGen | https://www.heygen.com/affiliate | 35% przez 3 mies., cookie 30 dni | PayPal, wypłata od $30 |
+
 **Bez programu (nie planować banerów z prowizją):** Abacus ChatLLM, TypingMind, Poe, Cursor, Perplexity (poza programem studenckim Comet), OpenRouter, Vercel, Requesty, fal.ai.
 
 **Zasady dla banerów z markami Claude, GPT i Gemini:**
