@@ -26,6 +26,15 @@ Jedno miejsce z historią zmian, decyzjami i otwartymi zadaniami. Aktualizowane 
 | 5 | Po merge'u: ręczne uruchomienie workflow „TaniToken snapshot” (tworzy gałąź `tanitoken-data`) | po merge'u |
 | 6 | Klucz release (keystore) do Google Play; obecny APK jest podpisany kluczem debug | przed publikacją |
 
+## 2026-10-14 – sesja 8: propozycje czcionek
+
+- Uwaga użytkownika: Bricolage Grotesque + Figtree wyglądają „typowo AI”. Makiety 5 par krojów na „Nocnym
+  szkle” (`mockups/fonts.mjs`, PNG `mockups/f1-gielda` … `f5-kantor`): Giełda (Big Shoulders Display + Barlow),
+  Redakcja (Young Serif + Instrument Sans), Terminal (Chivo + Chivo Mono), Sygnał (Anybody szeroki +
+  Atkinson Hyperlegible Next), Kantor (Gloock + Familjen Grotesk + Azeret Mono). Wszystkie mają polskie znaki
+  i paczki `@expo-google-fonts`. Czeka na wybór.
+- Podgląd web opublikowany jako artefakt (ten sam adres, wersja 4).
+
 ## 2026-10-13 – sesja 7: LightTokenz 0.2.0 (nocne szkło, kompaktowe menu, opisy modeli)
 
 Decyzje użytkownika: menu „kompaktowe rozwijane”, wariant „Nocne szkło” bez jasnego motywu, nowa nazwa

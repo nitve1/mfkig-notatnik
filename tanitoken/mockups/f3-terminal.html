@@ -1,0 +1,129 @@
+<!doctype html><meta charset="utf-8"><title>LightTokenz – 3. Terminal</title><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Chivo:wght@400;500;600;700;800;900&family=Chivo+Mono:wght@400;500;600;700&display=block" rel="stylesheet"><style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#d9d7e3;font-family:'Chivo',sans-serif;padding:28px;color:#f3f1fb}
+h1.v{font:900 30px 'Chivo';color:#1a1530;margin-bottom:4px} p.v{color:#4d4a63;margin-bottom:18px;font-size:15px}
+.row{display:flex;gap:28px;align-items:flex-start}
+.cap{font:600 13px 'Chivo';color:#4d4a63;margin:10px 4px 0}
+.phone{width:390px;height:844px;border-radius:44px;overflow:hidden;position:relative;background:#0c0a17;box-shadow:0 30px 60px rgba(20,16,40,.25)}
+.scene{position:absolute;inset:0;overflow:hidden}
+.blob{position:absolute;border-radius:50%;filter:blur(38px);opacity:0.75}
+.pattern{position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.05) 1.4px,transparent 1.6px);background-size:16px 16px}
+.content{position:absolute;inset:0;padding:54px 16px 120px;display:flex;flex-direction:column;gap:10px}
+.content>*{flex:none}
+.content{bottom:96px;overflow:hidden;padding-bottom:16px;-webkit-mask-image:linear-gradient(#000 calc(100% - 70px),transparent);mask-image:linear-gradient(#000 calc(100% - 70px),transparent)}
+.glass{position:relative;border-radius:14px;background:rgba(30,26,52,.38);
+  backdrop-filter:blur(16px) url(#lens) saturate(1.8);-webkit-backdrop-filter:blur(16px) saturate(1.8);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.32),inset 0 0 0 1px rgba(255,255,255,.10),inset 0 -1px 0 rgba(0,0,0,.06),0 10px 28px rgba(0,0,0,.5)}
+.glass::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:linear-gradient(180deg,rgba(255,255,255,0.1) 0%,rgba(255,255,255,0) 46%,rgba(255,255,255,0.03) 100%)}
+.glass.strong{background:rgba(30,26,52,.6)}
+.hdr{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:2px}
+.kick{font-size:13px;color:#b4b0cc} .h1{font:900 30px/1.05 'Chivo';letter-spacing:-.5px}
+.iconbtn{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;color:#f3f1fb}
+.status{display:flex;align-items:center;gap:8px;padding:10px 14px;font-size:13px;color:#b4b0cc;border-radius:12px}
+.status b{margin-left:auto;color:#3d63ff;font-weight:600}
+.dot{width:8px;height:8px;border-radius:4px;background:#0f9b6c}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.tile{padding:12px;min-height:84px;display:flex;flex-direction:column;justify-content:space-between;color:#fff}
+.tile .t{display:flex;justify-content:space-between;align-items:center}
+.tile .n{font:900 26px 'Chivo'} .tile .l{font:700 15px 'Chivo'} .tile .s{font-size:11.5px;opacity:.9}
+.wide{grid-column:1/-1;flex-direction:row;align-items:center;min-height:0;padding:12px 14px;background:rgba(255,255,255,.10);color:#fff}
+.seg{display:flex;padding:4px;border-radius:12px;gap:2px}
+.seg div{flex:1;text-align:center;font:600 13px 'Chivo';padding:8px 0;border-radius:9px;color:#b4b0cc}
+.seg .on{background:rgba(255,255,255,.16);color:#f3f1fb;box-shadow:inset 0 1px 0 rgba(255,255,255,.32),0 2px 8px rgba(0,0,0,.5)}
+.seg i{font-style:normal;color:#7e7a98;font-weight:600}
+.card{padding:13px 14px 12px 18px;overflow:hidden}
+.card .stripe{position:absolute;left:0;top:12px;bottom:12px;width:4px;border-radius:0 4px 4px 0}
+.card .r{display:flex;justify-content:space-between;gap:10px}
+.card .nm{font:700 16px 'Chivo'} .card .num{font:900 20px 'Chivo';white-space:nowrap}
+.chip{display:inline-flex;align-items:center;gap:4px;font-size:13px;color:#b4b0cc;margin-top:3px}
+.chip b{font-weight:600}
+.pct{display:inline-block;background:#e8333a;color:#fff;font:700 12px 'Chivo';padding:2px 7px;border-radius:8px;margin-top:4px;box-shadow:inset 0 1px 0 rgba(255,255,255,.4)}
+.sub{font-size:11.5px;color:#7e7a98;margin-top:6px}
+.sponsor{padding:14px;display:flex;gap:12px;align-items:center}
+.sponsor .logo{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;font:900 18px 'Chivo';color:#fff;flex:none;box-shadow:inset 0 1px 0 rgba(255,255,255,.5);border-radius:10px}
+.ad{font:700 10.5px 'Chivo';letter-spacing:.6px;text-transform:uppercase;color:#7e7a98}
+.cta{margin-left:auto;font:700 13px 'Chivo';padding:9px 12px;border-radius:9px;background:rgba(255,255,255,.16);white-space:nowrap;box-shadow:inset 0 1px 0 rgba(255,255,255,.32)}
+.nav{position:absolute;left:12px;right:12px;bottom:22px;height:66px;border-radius:16px;display:flex;align-items:center;padding:0 6px;
+  background:rgba(30,26,52,0.32)}
+.nav .tb{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;font:600 11.5px 'Chivo';color:#b4b0cc;padding:7px 0 6px;border-radius:11px;margin:0 2px}
+.nav .tb.on{background:rgba(255,255,255,.16);color:#f3f1fb;box-shadow:inset 0 1px 0 rgba(255,255,255,.32),inset 0 0 0 1px rgba(255,255,255,.10),0 4px 14px rgba(0,0,0,.5)}
+.sec{font:900 18px 'Chivo';margin:6px 2px 0}
+.desc{padding:14px;font-size:14px;line-height:1.45;color:#f3f1fb}
+.src{font-size:11.5px;color:#7e7a98;margin-top:8px}
+.uses{display:flex;flex-wrap:wrap;gap:6px;padding:12px}
+.use{display:flex;align-items:center;gap:6px;font:600 13px 'Chivo';padding:8px 11px;border-radius:10px;background:rgba(255,255,255,.16);box-shadow:inset 0 1px 0 rgba(255,255,255,.32)}
+.ex{padding:12px 14px;font-size:13.5px;line-height:1.4;color:#b4b0cc}
+.ex b{color:#f3f1fb;font-weight:600}
+.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.fact{padding:10px 12px} .fact .k{font-size:11.5px;color:#7e7a98} .fact .v{font:900 18px 'Chivo'}
+.offer{padding:12px 14px;display:flex;justify-content:space-between;align-items:center}
+.offer .p{font:700 15px 'Chivo'} .offer .s{font-size:12px;color:#7e7a98} .offer .c{font:900 18px 'Chivo';text-align:right}
+
+  .h1,.sec,.tile .l{font-family:'Chivo';font-weight:900;letter-spacing:-.4px}
+  .card .num,.offer .c,.fact .v,.tile .n,.wide .n{font-family:'Chivo Mono';font-weight:600;font-variant-numeric:tabular-nums;}
+  .card .num{font-size:19px} .tile .n{font-size:24.7px} .offer .c,.fact .v{font-size:17.099999999999998px}
+  h1.v{font-family:'Chivo';font-weight:900;}
+  </style><svg width="0" height="0" style="position:absolute"><filter id="lens" x="0%" y="0%" width="100%" height="100%" color-interpolation-filters="sRGB">
+  <feTurbulence type="fractalNoise" baseFrequency="0.011 0.017" numOctaves="2" seed="11" result="noise"/>
+  <feGaussianBlur in="noise" stdDeviation="2" result="soft"/>
+  <feDisplacementMap in="SourceGraphic" in2="soft" scale="38" xChannelSelector="R" yChannelSelector="G"/></filter></svg>
+  <h1 class="v">3. Terminal <span style="font:500 18px 'Chivo';color:#4d4a63">Chivo + Chivo Mono</span></h1><p class="v">Jedna rodzina: grotesk do treści, mono do cen i liczb, więc kolumny cen równo się układają.</p>
+  <div class="row"><div><div class="phone"><div class="scene">
+  <div class="blob" style="width:300px;height:300px;left:-90px;top:120px;background:#3d63ff"></div>
+  <div class="blob" style="width:260px;height:260px;right:-80px;top:300px;background:#8b3dff"></div>
+  <div class="blob" style="width:280px;height:280px;left:-40px;top:560px;background:#ff4f8b"></div>
+  <div class="blob" style="width:240px;height:240px;right:-60px;top:690px;background:#ff8a00"></div>
+  <div class="blob" style="width:200px;height:200px;right:30px;top:-60px;background:#ff8a00;opacity:0.44999999999999996"></div>
+  <div class="pattern"></div></div><div class="content">
+    <div class="hdr"><div><div class="kick">Cześć, Ania</div><div class="h1">Co dziś tanieje?</div></div><div class="iconbtn glass"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg></div></div>
+    <div class="glass status"><span class="dot"></span>Ceny sprawdzone 2 min temu<b>Odśwież</b></div>
+    <div class="grid"><div class="glass tile wide"><div style="flex:1"><div style="font-size:13px;opacity:.85">Wszystkie promocje</div><div class="n">90</div></div><div style="text-align:right"><div style="font-size:13px;opacity:.85">największa</div><div class="n">−80%</div></div></div><div class="glass tile" style="background:linear-gradient(150deg,#3d63ffe6,#3d63ffa6)"><div class="t"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M5 7h14M5 12h14M5 17h9"/></svg><span class="n">90</span></div><div><div class="l">Tekst</div><div class="s">do −80%</div></div></div><div class="glass tile" style="background:linear-gradient(150deg,#8b3dffe6,#8b3dffa6)"><div class="t"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="m9 7-5 5 5 5M15 7l5 5-5 5"/></svg><span class="n">40</span></div><div><div class="l">Kod</div><div class="s">do −71%</div></div></div><div class="glass tile" style="background:linear-gradient(150deg,#ff4f8be6,#ff4f8ba6)"><div class="t"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><rect x="3.5" y="5" width="17" height="14" rx="3"/><circle cx="9" cy="10" r="1.6"/><path d="m4 17 5-4 4 3 3-2 4 3"/></svg><span class="n">0</span></div><div><div class="l">Obraz</div><div class="s">brak zniżek</div></div></div><div class="glass tile" style="background:linear-gradient(150deg,#ff8a00e6,#ff8a00a6)"><div class="t"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><rect x="3.5" y="6" width="12" height="12" rx="3"/><path d="m15.5 10 5-3v10l-5-3"/></svg><span class="n">0</span></div><div><div class="l">Wideo</div><div class="s">brak zniżek</div></div></div></div>
+    <div class="glass seg"><div class="on">Zniżki <i>90</i></div><div>Obniżki</div><div>Darmowe</div><div>Najtaniej</div></div>
+    <div class="glass card" ><div class="stripe" style="background:#3d63ff"></div>
+    <div class="r"><div><div class="nm">Mercury 2.5</div><div class="chip"><b style="color:#3d63ff">Tekst</b> OpenRouter, przez Inception</div></div>
+    <div style="text-align:right"><div class="num">0,04 $</div><span class="pct">−80%</span></div></div>
+    <div class="sub">/ 1M tokenów wejścia · zniżka od startu pomiarów</div></div><div class="glass card" ><div class="stripe" style="background:#3d63ff"></div>
+    <div class="r"><div><div class="nm">Qwen3 235B A22B Instruct 2507</div><div class="chip"><b style="color:#3d63ff">Tekst</b> OpenRouter, przez GMICloud</div></div>
+    <div style="text-align:right"><div class="num">0,087 $</div><span class="pct">−75%</span></div></div>
+    <div class="sub">/ 1M tokenów wejścia · zniżka od startu pomiarów</div></div>
+    <div class="glass sponsor strong"><div class="logo" style="background:#23b26d">N</div>
+    <div style="min-width:0"><div class="ad">Reklama · link partnerski</div><div style="font:700 15px 'Chivo'">Novita AI</div><div style="font-size:12.5px;color:#b4b0cc">Te same modele open source, płacisz za użycie</div></div>
+    <div class="cta">Sprawdź</div></div>
+    <div class="glass card" ><div class="stripe" style="background:#3d63ff"></div>
+    <div class="r"><div><div class="nm">Ling 3.0 Flash VL</div><div class="chip"><b style="color:#3d63ff">Tekst</b> OpenRouter, przez Novita</div></div>
+    <div style="text-align:right"><div class="num">0,021 $</div><span class="pct">−72%</span></div></div>
+    <div class="sub">/ 1M tokenów wejścia · zniżka od startu pomiarów</div></div>
+  </div><div class="nav glass"><div class="tb on"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M3 8.5 8.5 3H21v18H8.5L3 15.5z"/><circle cx="8.5" cy="12" r="1.6"/></svg><span>Promocje</span></div><div class="tb "><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg><span>Szukaj</span></div><div class="tb "><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="m12 3 2.7 5.6 6.1.8-4.5 4.2 1.1 6.1L12 16.8l-5.4 2.9 1.1-6.1-4.5-4.2 6.1-.8z"/></svg><span>Moje</span></div><div class="tb "><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg><span>Profil</span></div></div></div><div class="cap">Promocje: szkło na kaflach, liście i pasku; reklama co kilka ofert</div></div>
+  <div><div class="phone"><div class="scene">
+  <div class="blob" style="width:300px;height:300px;left:-90px;top:120px;background:#3d63ff"></div>
+  <div class="blob" style="width:260px;height:260px;right:-80px;top:300px;background:#8b3dff"></div>
+  <div class="blob" style="width:280px;height:280px;left:-40px;top:560px;background:#ff4f8b"></div>
+  <div class="blob" style="width:240px;height:240px;right:-60px;top:690px;background:#ff8a00"></div>
+  <div class="blob" style="width:200px;height:200px;right:30px;top:-60px;background:#ff8a00;opacity:0.44999999999999996"></div>
+  <div class="pattern"></div></div><div class="content" style="gap:10px">
+    <div class="hdr"><div class="iconbtn glass"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="m15 5-7 7 7 7"/></svg></div><div class="iconbtn glass"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="m12 3 2.7 5.6 6.1.8-4.5 4.2 1.1 6.1L12 16.8l-5.4 2.9 1.1-6.1-4.5-4.2 6.1-.8z"/></svg></div></div>
+    <div><div class="chip" style="margin:0"><b style="color:#3d63ff">Tekst</b> · <b style="color:#8b3dff">Kod</b> · Z.ai</div><div class="h1" style="font-size:32px">GLM 5</div></div>
+    <div class="glass desc strong">GLM 5 is a frontier-class, general-purpose large language model optimized for complex systems engineering and long-horizon agentic tasks.<div class="src">Opis twórcy (EN, przez Vercel AI Gateway / OpenRouter) · Pokaż całość</div></div>
+    <div class="sec">Do czego się nada</div>
+    <div class="glass uses"><div class="use"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="m9 7-5 5 5 5M15 7l5 5-5 5"/></svg>Programowanie całych projektów</div><div class="use"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M6 18l2.5-2.5M15.5 8.5 18 6"/></svg>Agenci i narzędzia</div><div class="use"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M5 7h14M5 12h14M5 17h9"/></svg>Długie dokumenty (205K tokenów)</div><div class="use"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="m5 12 5 5 9-10"/></svg>Rozumowanie krok po kroku</div></div>
+    <div class="glass ex"><b>Przykład:</b> „Przejrzyj repozytorium, znajdź przyczynę błędu w płatnościach i przygotuj poprawkę z testami.”</div>
+    <div class="facts"><div class="glass fact"><div class="k">Kontekst</div><div class="v">205K</div></div><div class="glass fact"><div class="k">Oferty</div><div class="v">52</div></div><div class="glass fact"><div class="k">Najtaniej / mies.</div><div class="v">9,80 $</div></div></div>
+    <div class="sec">Gdzie najtaniej</div>
+    <div class="glass offer"><div><div class="p">NanoGPT </div><div class="s">bezpośrednio · 0,6 $ / 1,90 $ za 1M</div></div><div class="c">9,80 $<div class="s">miesięcznie</div></div></div><div class="glass offer"><div><div class="p">StreamLake <span class="pct" style="margin:0 0 0 4px">−40%</span></div><div class="s">OpenRouter · 0,6 $ / 1,92 $ za 1M</div></div><div class="c">9,84 $<div class="s">miesięcznie</div></div></div>
+  </div><div class="nav glass"><div class="tb "><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M3 8.5 8.5 3H21v18H8.5L3 15.5z"/><circle cx="8.5" cy="12" r="1.6"/></svg><span>Promocje</span></div><div class="tb on"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg><span>Szukaj</span></div><div class="tb "><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="m12 3 2.7 5.6 6.1.8-4.5 4.2 1.1 6.1L12 16.8l-5.4 2.9 1.1-6.1-4.5-4.2 6.1-.8z"/></svg><span>Moje</span></div><div class="tb "><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg><span>Profil</span></div></div></div><div class="cap">Model: opis twórcy, zastosowania, przykład, ceny</div></div>
+  <div><div class="phone"><div class="scene">
+  <div class="blob" style="width:300px;height:300px;left:-90px;top:120px;background:#3d63ff"></div>
+  <div class="blob" style="width:260px;height:260px;right:-80px;top:300px;background:#8b3dff"></div>
+  <div class="blob" style="width:280px;height:280px;left:-40px;top:560px;background:#ff4f8b"></div>
+  <div class="blob" style="width:240px;height:240px;right:-60px;top:690px;background:#ff8a00"></div>
+  <div class="blob" style="width:200px;height:200px;right:30px;top:-60px;background:#ff8a00;opacity:0.44999999999999996"></div>
+  <div class="pattern"></div></div><div class="content">
+    <div class="hdr"><div><div class="kick">Najtaniej teraz</div><div class="h1">Wideo</div></div><div class="iconbtn glass"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg></div></div>
+    <div class="glass seg"><div>Zniżki</div><div>Obniżki</div><div>Darmowe</div><div class="on">Najtaniej</div></div>
+    <div class="glass card" ><div class="stripe" style="background:#ff8a00"></div><div class="r"><div><div class="nm">LongCat Video Distilled</div><div class="chip"><b style="color:#ff8a00">Wideo</b> fal.ai</div></div><div style="text-align:right"><div class="num">0,005 $</div><div class="sub" style="margin:2px 0 0">za sekundę</div></div></div></div><div class="glass card" ><div class="stripe" style="background:#ff8a00"></div><div class="r"><div><div class="nm">HeyGen Video</div><div class="chip"><b style="color:#ff8a00">Wideo</b> Vercel AI Gateway</div></div><div style="text-align:right"><div class="num">0,01 $</div><div class="sub" style="margin:2px 0 0">za sekundę</div></div></div></div><div class="glass card" ><div class="stripe" style="background:#ff8a00"></div><div class="r"><div><div class="nm">Boreal</div><div class="chip"><b style="color:#ff8a00">Wideo</b> fal.ai</div></div><div style="text-align:right"><div class="num">0,01 $</div><div class="sub" style="margin:2px 0 0">za sekundę</div></div></div></div>
+    <div class="glass sponsor strong"><div class="logo" style="background:#5b3df5">W</div>
+    <div style="min-width:0"><div class="ad">Reklama · link partnerski</div><div style="font:700 15px 'Chivo'">WaveSpeedAI</div><div style="font-size:12.5px;color:#b4b0cc">Kling, Seedance, Wan przez jedno API</div></div>
+    <div class="cta">Wypróbuj</div></div>
+    <div class="glass card" ><div class="stripe" style="background:#ff8a00"></div><div class="r"><div><div class="nm">Kling LipSync Audio-to-Video</div><div class="chip"><b style="color:#ff8a00">Wideo</b> fal.ai</div></div><div style="text-align:right"><div class="num">0,014 $</div><div class="sub" style="margin:2px 0 0">za sekundę</div></div></div></div><div class="glass card" ><div class="stripe" style="background:#ff8a00"></div><div class="r"><div><div class="nm">H3 Max Turbo</div><div class="chip"><b style="color:#ff8a00">Wideo</b> fal.ai</div></div><div style="text-align:right"><div class="num">0,015 $</div><div class="sub" style="margin:2px 0 0">za sekundę</div></div></div></div><div class="glass card" ><div class="stripe" style="background:#ff8a00"></div><div class="r"><div><div class="nm">Minimax</div><div class="chip"><b style="color:#ff8a00">Wideo</b> fal.ai</div></div><div style="text-align:right"><div class="num">0,017 $</div><div class="sub" style="margin:2px 0 0">za sekundę</div></div></div></div><div class="glass card" ><div class="stripe" style="background:#ff8a00"></div><div class="r"><div><div class="nm">Grok Imagine Video 1.5 Lite</div><div class="chip"><b style="color:#ff8a00">Wideo</b> fal.ai</div></div><div style="text-align:right"><div class="num">0,02 $</div><div class="sub" style="margin:2px 0 0">za sekundę</div></div></div></div>
+  </div><div class="nav glass"><div class="tb on"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M3 8.5 8.5 3H21v18H8.5L3 15.5z"/><circle cx="8.5" cy="12" r="1.6"/></svg><span>Promocje</span></div><div class="tb "><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg><span>Szukaj</span></div><div class="tb "><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="m12 3 2.7 5.6 6.1.8-4.5 4.2 1.1 6.1L12 16.8l-5.4 2.9 1.1-6.1-4.5-4.2 6.1-.8z"/></svg><span>Moje</span></div><div class="tb "><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg><span>Profil</span></div></div></div><div class="cap">Najtaniej w wideo; aktywna zakładka obejmuje ikonę i podpis</div></div></div>
