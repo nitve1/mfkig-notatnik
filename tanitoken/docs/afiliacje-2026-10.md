@@ -175,3 +175,39 @@ Rezerwowe: Runway ($15 za subskrybenta, wymaga profilu twórcy), Lovable (do $10
 - UCPD i Omnibus: Dyrektywa 2005/29/WE ze zmianami wprowadzonymi dyrektywą (UE) 2019/2161 (EUR-Lex)
 
 **Do sprawdzenia ręcznie (po założeniu kont):** panele AIHubMix, 302.AI, ZenMux i SiliconFlow (zakładki z poleceniami), oficjalna strona afiliacji AI/ML API, stawka Krea w Dub, stawka Kling w Impact, potwierdzenie od Higgsfield, czy natywna karta w aplikacji to „paid advertising”.
+
+---
+
+## 7. Aktualizacja 2026-10-14: Claude, GPT i Gemini oraz lista pod banery
+
+**Wniosek:** Anthropic, OpenAI i Google nie płacą prowizji za polecenie samego Claude, ChatGPT czy Gemini (API ani subskrypcji). Banery z tymi modelami da się jednak zrobić przez **firmy, które je odsprzedają** i mają afiliację (bramki API i aplikacje „wiele modeli w jednym abonamencie”), a dla Gemini dodatkowo przez Google Workspace.
+
+| Marka | Program u producenta | Jak zarabiać na banerze z tą marką | Pewność |
+|---|---|---|---|
+| **Claude (Anthropic)** | BRAK dla wydawców. Claude Partner Network (od 12.03.2026) to program dla firm wdrażających Claude, bez prowizji. AffiliPilot podaje 20% cyklicznie, ale sam przyznaje, że tego nie zweryfikował | CometAPI (20% od doładowań), AI/ML API (30%, 3P), Monica (25% przez rok) | OF (brak programu) |
+| **ChatGPT / OpenAI** | BRAK. Są tylko akcje polecające dla wybranych krajów, nagrodą są wyższe limity, nie pieniądze | CometAPI, AI/ML API, Monica | OF-cz |
+| **Gemini (Google)** | BRAK dla samego Gemini. Jest **Google Workspace Affiliate Program** (CJ Affiliate, 40+ krajów, ok. $9–27 za użytkownika, wypłata po 90 dniach płacenia przez klienta, cookie 30 dni); Gemini jest w planach Workspace. **Google Cloud Affiliate** tylko dla USA i Kanady, więc z Polski odpada | Workspace (baner Gemini w Gmailu i Dokumentach), CometAPI, AI/ML API, Monica | OF / 3P (stawki) |
+
+**Lista pod banery (kolejność zgłoszeń):**
+
+| # | Program | Co pokazuje baner | Prowizja | Dołączenie | Pewność |
+|---|---|---|---|---|---|
+| 1 | **CometAPI** | Claude, GPT, Gemini i 500 innych modeli pod jednym kluczem API | 20% od doładowań, cookie 120 dni | Tolt, akceptacja | OF-cz |
+| 2 | **Novita AI** | tanie modele open source, obraz, wideo, GPU | 10% przez 180 dni | portal, auto | OF-cz |
+| 3 | **Monica** (monica.im) | ChatGPT, Claude i Gemini w jednej aplikacji i rozszerzeniu (dla osób bez API) | 25% cyklicznie przez pierwszy rok; zwrot cofa prowizję | https://monica.im/affiliate | OF |
+| 4 | **AI/ML API** | 300+ modeli przez jedno API, w tym Claude, GPT, Gemini | 30% (3P) | Rewardful (3P), potwierdzić w panelu | 3P |
+| 5 | **Google Workspace** | Gemini w Gmailu, Dokumentach i Meet dla firm | ok. $9–27 za użytkownika (zależy od kraju i planu) | CJ Affiliate, sprawdzić, czy Polska jest na liście | OF / 3P |
+| 6 | **WaveSpeedAI** | obraz i wideo przez API | 10% przez 30 dni | Tolt, link od razu | OF-cz |
+| 7 | **ElevenLabs** | głos i audio przez API | 22% przez 12 mies. | PartnerStack | OF-cz |
+| 8 | **Higgsfield AI** | wideo AI | do 25% przez 12 mies. | Impact; **zakaz reklam płatnych**, baner tylko po zgodzie e-mailem | OF |
+| 9 | **RunPod / Vast.ai** | GPU do własnych modeli | kredyty, potem gotówka | natychmiast | OF |
+| 10 | **Jasper / Writesonic / Synthesia / HeyGen** | narzędzia AI do tekstu i wideo (słabszy związek z porównywarką API) | ok. 20–30% cyklicznie (3P, dane rozbieżne) | różne sieci | 3P |
+
+**Bez programu (nie planować banerów z prowizją):** Abacus ChatLLM, TypingMind, Poe, Cursor, Perplexity (poza programem studenckim Comet), OpenRouter, Vercel, Requesty, fal.ai.
+
+**Zasady dla banerów z markami Claude, GPT i Gemini:**
+- Baner reklamuje **partnera** (np. CometAPI), a nazwy modeli są tylko opisem tego, co sprzedaje. Bez logo Anthropic, OpenAI i Google i bez sugerowania współpracy z nimi. Ich wytyczne marki zabraniają używania logo w reklamach osób trzecich.
+- Każdy baner ma etykietę Sponsorowane albo Link partnerski i nie wpływa na kolejność cen (zob. sekcja 5).
+- Google Workspace przez CJ Affiliate zwykle zabrania licytowania marki w Google Ads, więc w apce i na stronie tylko organicznie.
+
+**Źródła sekcji 7:** https://customgpt.ai/claude-ai-affiliate-program-alternative/, https://www.anthropic.com/news/claude-partner-network, https://affilipilot.io/programs/claude-ai-anthropic, https://www.eesel.ai/blog/chatgpt-affiliate-program, https://customgpt.ai/does-openai-have-an-affiliate-program/, https://workspace.google.com/intl/en_ph/refer, https://gsuite.google.co.in/affiliate-program/, https://uppromote.com/affiliate-directory/google-workspace/, https://cloud.google.com/affiliate-program, https://cloud.google.com/affiliate-program?hl=fr, https://monica.im/affiliate, https://krater.ai/blog/best-ai-aggregator, https://tapfiliate.com/blog/best-ai-affiliate-programs-gp/, https://www.layer3labs.io/guides/best-ai-affiliate-programs
