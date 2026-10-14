@@ -26,6 +26,20 @@ Jedno miejsce z historią zmian, decyzjami i otwartymi zadaniami. Aktualizowane 
 | 5 | Po merge'u: ręczne uruchomienie workflow „TaniToken snapshot” (tworzy gałąź `tanitoken-data`) | po merge'u |
 | 6 | Klucz release (keystore) do Google Play; obecny APK jest podpisany kluczem debug | przed publikacją |
 
+## 2026-10-14 – sesja 10: wybór krok po kroku (tło, szkło, świecąca krawędź)
+
+Uwaga użytkownika: za dużo zmian naraz i bez pytania; panele wyglądały jak dwa nałożone kolory (połysk do
+połowy), tło bez prawdziwych gradientów. Od teraz: makieta opcji, wybór użytkownika, dopiero potem kod.
+
+- Krok 1, tło (`mockups/bg.mjs`, `bg.png`): wybrane **6. Kolory kategorii** (siatka radialnych gradientów
+  niebieski / pomarańcz / róż / fiolet na #0b0a12).
+- Krok 2, szkło (`mockups/panels.mjs`, `panels.png`): wybrane **C. Połysk** (gradient 0.16 → 0.06 → 0.03
+  od góry bez ostrej granicy, blur 16 + saturate, ramka 1 px białe 16%, wewnętrzna poświata, miękki cień).
+- Krok 3, świecąca krawędź (`mockups/glow.mjs`, `glow.png`, w HTML prawdziwa animacja @property): gdzie
+  (1 kafel podsumowania, 2 największa zniżka, 3 karta „Używam”, 4 aktywna zakładka) i kolor (a kategorie,
+  b kolor elementu, c srebro, d róż-pomarańcz). Czeka na wybór.
+- Zmiany z sesji 9 (szkło, glow na kaflu) zostaną dostosowane do wyborów.
+
 ## 2026-10-14 – sesja 9: szkło bez „linii”, świecąca krawędź, animacje, mniej śladów AI
 
 Uwagi użytkownika: pozioma kreska dzieląca panele (połysk do połowy) i biała linia u góry wyglądały tanio;
