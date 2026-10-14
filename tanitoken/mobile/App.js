@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { ActivityIndicator, BackHandler, Pressable, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, BackHandler, LayoutAnimation, Platform, Pressable, StyleSheet, UIManager, View } from 'react-native';
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import * as SplashScreen from 'expo-splash-screen';
@@ -24,6 +24,11 @@ import { setLanguage, t as tr } from '../core/i18n.js';
 import { deviceLanguage } from './src/lang';
 
 SplashScreen.preventAutoHideAsync().catch(() => {});
+UIManager.setLayoutAnimationEnabledExperimental?.(true);
+
+// Płynne przejście zakładki w pasku (rozwinięcie aktywnej, zwinięcie poprzedniej).
+const TAB_ANIM = LayoutAnimation.create(240, LayoutAnimation.Types.easeInEaseOut, LayoutAnimation.Properties.opacity);
+const WEB_TRANSITION = Platform.OS === 'web' ? { transitionProperty: 'flex-grow, width, background-color', transitionDuration: '240ms', transitionTimingFunction: 'ease-in-out' } : null;
 
 const TABS = [
   { key: 'deals', icon: 'tag' },
@@ -46,8 +51,8 @@ function TabBar({ tab, onChange, badge }) {
         return (
           <Pressable
             key={x.key}
-            onPress={() => onChange(x.key)}
-            style={[s.tab, on ? [s.tabOn, { backgroundColor: t.glassActive, borderTopColor: t.glassEdge }] : s.tabOff]}
+            onPress={() => { if (!on) LayoutAnimation.configureNext(TAB_ANIM); onChange(x.key); }}
+            style={[s.tab, WEB_TRANSITION, on ? [s.tabOn, { backgroundColor: t.glassActive }] : s.tabOff]}
             accessibilityRole="tab"
             accessibilityState={{ selected: on }}
             accessibilityLabel={tr(`nav.${x.key}`)}
@@ -224,9 +229,10 @@ const s = StyleSheet.create({
   column: { flex: 1, width: '100%', maxWidth: 600 },
   center: { flex: 1, alignItems: 'center', justifyContent: 'center' },
   floating: { position: 'absolute', left: space[4], right: space[4], height: TABBAR_H },
-  tabbar: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: 4, paddingHorizontal: 8 },
-  tab: { height: 44, borderRadius: 11, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8 },
-  tabOn: { flex: 1, paddingHorizontal: 12, borderTopWidth: 1 },
-  tabOff: { width: 56 },
+  // Pasek: promień 18, odstęp 4, więc zakładka ma 14 jak karty i kafle (łuki równoległe).
+  tabbar: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: 4, padding: 4 },
+  tab: { height: TABBAR_H - 8, borderRadius: radius.lg, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8 },
+  tabOn: { flexGrow: 1, flexShrink: 1, flexBasis: 0, paddingHorizontal: 12 },
+  tabOff: { width: 58, flexGrow: 0, flexShrink: 0 },
   badge: { position: 'absolute', right: -4, top: -3, width: 10, height: 10, borderRadius: 5, borderWidth: 2 },
 });

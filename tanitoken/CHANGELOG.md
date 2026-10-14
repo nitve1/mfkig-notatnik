@@ -26,6 +26,25 @@ Jedno miejsce z historią zmian, decyzjami i otwartymi zadaniami. Aktualizowane 
 | 5 | Po merge'u: ręczne uruchomienie workflow „TaniToken snapshot” (tworzy gałąź `tanitoken-data`) | po merge'u |
 | 6 | Klucz release (keystore) do Google Play; obecny APK jest podpisany kluczem debug | przed publikacją |
 
+## 2026-10-14 – sesja 9: szkło bez „linii”, świecąca krawędź, animacje, mniej śladów AI
+
+Uwagi użytkownika: pozioma kreska dzieląca panele (połysk do połowy) i biała linia u góry wyglądały tanio;
+różne promienie rogów (zwłaszcza aktywna zakładka); brak animacji paska; filtry mają przesuwać się płynniej.
+
+- `GlassFx`: zamiast połysku z ostrą krawędzią i 1 px linii u góry łagodny ukośny odblask (SVG, zanika w
+  głąb). Web (Chromium): każdy panel ma prawdziwe szkło (blur + ugięcie feDisplacementMap pod spodem).
+- Promienie: jedna skala (`radius` xs 8, sm 10, md 12, lg 14, xl 18). Karty, kafle, przyciski, przełączniki 14;
+  pasek 18 z odstępem 4, więc aktywna zakładka ma 14 i łuki są równoległe.
+- Pasek zakładek: płynne rozwinięcie aktywnej (LayoutAnimation na telefonie, przejście CSS na webie).
+- `Segmented`: podświetlenie przesuwa się sprężyście (Animated, natywny driver) i jest 2 px mniejsze z każdej strony.
+- `GlowBorder` (glass.js): obracająca się świecąca krawędź (pas gradientu kręcony za kartą, odpowiednik
+  CSS @property + conic-gradient) na kaflu „Wszystkie promocje/modele”.
+- Mniej śladów „strony z AI”: tło bez gradientu fiolet-niebieski (ciepłe plamy pomarańcz/róż), dopiski
+  przeniesione pod nagłówki (bez „eyebrow” nad nimi), półpauz w tekstach brak, tekstu z gradientem brak.
+- Najtaniej: sortowanie po cenie pokazanej na karcie; modele z darmowym wejściem pokazują cenę wyjścia
+  („/ 1M wyj.”), a nie mylące „0 $”.
+- Podgląd w artefakcie (wersja 6).
+
 ## 2026-10-14 – sesja 8: propozycje czcionek
 
 - Uwaga użytkownika: Bricolage Grotesque + Figtree wyglądają „typowo AI”. Makiety 5 par krojów na „Nocnym

@@ -47,8 +47,9 @@ export const font = {
 };
 
 export const space = { 1: 4, 2: 8, 3: 12, 4: 16, 5: 24, 6: 32, 7: 48 };
-// Rogi bliżej kwadratu niż pigułki (uwaga użytkownika z 2026-10-13).
-export const radius = { xs: 9, sm: 10, md: 12, lg: 14, xl: 16 };
+// Rogi bliżej kwadratu niż pigułki (uwaga użytkownika z 2026-10-13). Element w środku innego ma promień
+// zewnętrzny minus odstęp, żeby łuki szły równolegle (np. pasek 18 i zakładka 14 przy odstępie 4).
+export const radius = { xs: 8, sm: 10, md: 12, lg: 14, xl: 18 };
 
 // Kolor kategorii modelu (pierwsza "najmocniejsza" kategoria).
 export function mainCat(model) {

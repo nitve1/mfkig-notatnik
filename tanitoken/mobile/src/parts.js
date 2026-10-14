@@ -15,6 +15,8 @@ export const authorName = (m) => (m.name.includes(':') ? m.name.split(':')[0].tr
 // Cena "do pokazania" i jednostka.
 export function priceParts(o) {
   if (!o) return { main: '–', unit: '' };
+  // Darmowe wejście i płatne wyjście (np. modele obrazów liczone w tokenach): pokazujemy cenę wyjścia.
+  if (o.unit === 'token' && o.in === 0 && o.out > 0) return { main: formatUsd(o.out), unit: tr('unit.perMOut'), unitShort: '' };
   if (o.unit === 'token') return { main: formatUsd(o.in), unit: tr('unit.perMIn'), unitShort: '' };
   return {
     main: formatUsd(o.price),
@@ -96,10 +98,11 @@ export function SponsorCard({ sponsor }) {
 
 export function Header({ kicker, title, right }) {
   return (
-    <Row style={{ alignItems: 'flex-end', marginBottom: space[3] }}>
+    <Row style={{ alignItems: 'flex-start', marginBottom: space[3] }}>
       <View style={{ flex: 1 }}>
-        {kicker ? <T kind="small" color="ink2">{kicker}</T> : null}
         <T kind="h1">{title}</T>
+        {/* Dopisek pod tytułem, nie nad nim (bez "eyebrow" typowego dla stron z AI). */}
+        {kicker ? <T kind="small" color="ink2" style={{ marginTop: 2 }}>{kicker}</T> : null}
       </View>
       {right}
     </Row>

@@ -8,7 +8,7 @@ import Icon from '../icons';
 import { BellButton, catLabel, DealCard, Header, PriceStatus, priceParts, SponsorCard, styles } from '../parts';
 import { withSponsors } from '../../../core/affiliates.js';
 import { radius, space, tileColor, useBottomSpace, useTheme } from '../theme';
-import { GlassFx } from '../glass';
+import { GlassFx, GlowBorder } from '../glass';
 import { useProfile } from '../profile';
 
 const TYPES = ['discount', 'drop', 'free', 'cheapest'];
@@ -20,7 +20,9 @@ const UNIT_ORDER = {
 };
 const byPrice = (cat) => {
   const order = UNIT_ORDER[cat] ?? UNIT_ORDER.other;
-  return (a, b) => order[a.offer.unit] - order[b.offer.unit] || unitPrice(a.offer) - unitPrice(b.offer);
+  // Tokeny: najpierw po cenie wejścia, bo tę pokazuje karta; przy remisie po cenie łącznej.
+  const shown = (o) => (o.unit !== 'token' ? o.price : o.in > 0 ? o.in : o.out);
+  return (a, b) => order[a.offer.unit] - order[b.offer.unit] || shown(a.offer) - shown(b.offer) || unitPrice(a.offer) - unitPrice(b.offer);
 };
 
 // "Najtaniej": każdy model z kategorii z najtańszą ofertą (także bez promocji, np. obrazy i wideo).
@@ -44,7 +46,7 @@ function Tile({ cat, count, best, type, on, dim, onPress, wide }) {
     : count === 0
       ? tr(type === 'free' ? 'tile.noneFree' : 'tile.none')
       : type === 'free' ? tr('tile.freeModels') : tr('tile.upTo', { pct: best });
-  return (
+  const tile = (
     <Pressable
       onPress={onPress}
       accessibilityRole="button"
@@ -53,7 +55,8 @@ function Tile({ cat, count, best, type, on, dim, onPress, wide }) {
       style={({ pressed }) => [
         s.tile,
         wide && s.wide,
-        { backgroundColor: bg, opacity: dim ? 0.45 : pressed ? 0.85 : 1, borderColor: on ? 'rgba(255,255,255,0.85)' : t.glassLine },
+        { backgroundColor: bg, opacity: dim ? 0.45 : pressed ? 0.85 : 1, borderColor: wide ? 'transparent' : on ? 'rgba(255,255,255,0.85)' : t.glassLine },
+        wide && { borderWidth: 0, borderRadius: radius.lg - 1.5 },
       ]}
     >
       <GlassFx radius={radius.lg} />
@@ -83,6 +86,8 @@ function Tile({ cat, count, best, type, on, dim, onPress, wide }) {
       {on && !wide ? <View style={[s.check, { backgroundColor: '#fff' }]}><Icon name="check" size={13} color={solid} width={3} /></View> : null}
     </Pressable>
   );
+  // Kafel "Wszystkie" dostaje obracającą się, świecącą krawędź.
+  return wide ? <GlowBorder radius={radius.lg} style={{ width: '100%' }}>{tile}</GlowBorder> : tile;
 }
 
 export default function Deals({ snapshot, refreshing, onRefresh, onOpen, onBell, bellDot, priceStatus }) {

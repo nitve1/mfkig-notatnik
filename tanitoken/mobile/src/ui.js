@@ -1,4 +1,5 @@
-import { Pressable, StyleSheet, Switch, Text, View } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+import { Animated, Platform, Pressable, StyleSheet, Switch, Text, View } from 'react-native';
 import Icon from './icons';
 import { font, radius, space, useTheme } from './theme';
 import { GlassFx, glassFrame } from './glass';
@@ -35,24 +36,49 @@ export function Button({ label, onPress, kind = 'ink', icon, disabled, style, ac
       accessibilityHint={accessibilityHint}
       style={({ pressed }) => [
         s.btn,
-        solid ? { backgroundColor: t.ink, borderColor: t.ink } : { ...glassFrame(t, radius.md), backgroundColor: t.card },
+        solid ? { backgroundColor: t.ink, borderColor: t.ink } : { ...glassFrame(t, radius.lg), backgroundColor: t.card },
         { opacity: disabled ? 0.4 : pressed ? 0.8 : 1 },
         style,
       ]}
     >
-      {!solid ? <GlassFx radius={radius.md} /> : null}
+      {!solid ? <GlassFx radius={radius.lg} /> : null}
       {icon ? <Icon name={icon} size={18} color={fg} fill={icon === 'star' && solid ? fg : 'none'} /> : null}
       <T kind="strong" style={{ color: fg }}>{label}</T>
     </Pressable>
   );
 }
 
-// Przełącznik na całą szerokość (równe segmenty).
+// Przełącznik na całą szerokość (równe segmenty). Podświetlenie aktywnego przesuwa się płynnie
+// i jest odrobinę mniejsze niż segment.
+const SEG_PAD = 3;
+const SEG_INSET = 2;
+
 export function Segmented({ options, value, onChange, style }) {
   const t = useTheme();
+  const [w, setW] = useState(0);
+  const index = Math.max(0, options.findIndex((o) => o.value === value));
+  const segW = w ? (w - SEG_PAD * 2) / options.length : 0;
+  const x = useRef(new Animated.Value(0)).current;
+  const ready = useRef(false);
+  useEffect(() => {
+    if (!segW) return;
+    const to = index * segW;
+    if (!ready.current) { x.setValue(to); ready.current = true; return; }
+    Animated.spring(x, { toValue: to, useNativeDriver: Platform.OS !== 'web', speed: 18, bounciness: 4 }).start();
+  }, [index, segW, x]);
   return (
-    <View style={[s.seg, glassFrame(t, radius.md), { backgroundColor: t.card }, style]} accessibilityRole="tablist">
-      <GlassFx radius={radius.md} />
+    <View
+      style={[s.seg, glassFrame(t, radius.lg), { backgroundColor: t.card }, style]}
+      accessibilityRole="tablist"
+      onLayout={(e) => setW(e.nativeEvent.layout.width)}
+    >
+      <GlassFx radius={radius.lg} />
+      {segW ? (
+        <Animated.View
+          pointerEvents="none"
+          style={[s.segPill, { width: segW - SEG_INSET * 2, backgroundColor: t.glassActive, transform: [{ translateX: x }] }]}
+        />
+      ) : null}
       {options.map((o) => {
         const on = o.value === value;
         return (
@@ -62,7 +88,7 @@ export function Segmented({ options, value, onChange, style }) {
             accessibilityRole="tab"
             accessibilityLabel={o.a11y ?? o.label}
             accessibilityState={{ selected: on }}
-            style={[s.segItem, on && { backgroundColor: t.glassActive, borderTopWidth: 1, borderTopColor: t.glassEdge }]}
+            style={s.segItem}
           >
             {o.icon ? <Icon name={o.icon} size={15} color={on ? t.ink : t.ink2} /> : null}
             {o.label ? <T kind="small" numberOfLines={1} style={{ color: on ? t.ink : t.ink2, fontFamily: font.textBold }}>
@@ -167,7 +193,7 @@ export function Pill({ label, on, onPress, color, icon }) {
       accessibilityState={{ checked: on }}
       style={[s.pill, { borderColor: on ? c : t.glassLine, backgroundColor: on ? c : t.card }]}
     >
-      {!on ? <GlassFx radius={radius.sm} /> : null}
+      {!on ? <GlassFx radius={radius.md} /> : null}
       {icon ? <Icon name={icon} size={15} color={on ? '#fff' : c} /> : null}
       <T kind="small" style={{ color: on ? (color ? '#fff' : t.onInk) : t.ink, fontFamily: font.textSemi }}>{label}</T>
     </Pressable>
@@ -213,8 +239,8 @@ export function ToggleRow({ title, body, value, onChange, last }) {
 export function IconButton({ name, onPress, label, dot, active }) {
   const t = useTheme();
   return (
-    <Pressable onPress={onPress} hitSlop={8} accessibilityRole="button" accessibilityLabel={label} style={[s.iconBtn, glassFrame(t, radius.md), { backgroundColor: t.card, overflow: 'visible' }]}>
-      <GlassFx radius={radius.md} />
+    <Pressable onPress={onPress} hitSlop={8} accessibilityRole="button" accessibilityLabel={label} style={[s.iconBtn, glassFrame(t, radius.lg), { backgroundColor: t.card, overflow: 'visible' }]}>
+      <GlassFx radius={radius.lg} />
       <Icon name={name} size={23} color={active ? t.video : t.ink} fill={active ? t.video : 'none'} />
       {dot ? <View style={[s.dot, { backgroundColor: t.deal, borderColor: t.cardSolid }]} /> : null}
     </Pressable>
@@ -235,9 +261,10 @@ export function Empty({ title, body, action, icon = 'search' }) {
 }
 
 const s = StyleSheet.create({
-  btn: { flex: 1, minHeight: 48, paddingHorizontal: space[4], borderRadius: radius.md, borderWidth: 1.5, alignItems: 'center', justifyContent: 'center', flexDirection: 'row', gap: 8 },
-  seg: { flexDirection: 'row', padding: 3 },
-  segItem: { flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 5, paddingVertical: 9, borderRadius: 9 },
+  btn: { flex: 1, minHeight: 48, paddingHorizontal: space[4], borderRadius: radius.lg, borderWidth: 1, alignItems: 'center', justifyContent: 'center', flexDirection: 'row', gap: 8 },
+  seg: { flexDirection: 'row', padding: SEG_PAD },
+  segPill: { position: 'absolute', top: SEG_PAD + SEG_INSET, bottom: SEG_PAD + SEG_INSET, left: SEG_PAD + SEG_INSET, borderRadius: radius.lg - SEG_PAD - SEG_INSET },
+  segItem: { flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 5, paddingVertical: 10 },
   card: { padding: 14 },
   stripe: { position: 'absolute', left: 0, top: 12, bottom: 12, width: 4, borderTopRightRadius: 4, borderBottomRightRadius: 4 },
   badge: { paddingHorizontal: 7, paddingVertical: 2, borderRadius: 6, alignSelf: 'flex-end' },
@@ -245,7 +272,7 @@ const s = StyleSheet.create({
   catChip: { flexDirection: 'row', alignItems: 'center', gap: 5, flexShrink: 1 },
   stat: { flex: 1, padding: 14 },
   progress: { height: 7, borderRadius: 9, overflow: 'hidden' },
-  pill: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 13, paddingVertical: 9, borderRadius: radius.sm, borderWidth: 1, overflow: 'hidden' },
+  pill: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 13, paddingVertical: 9, borderRadius: radius.md, borderWidth: 1, overflow: 'hidden' },
   section: { paddingHorizontal: 14, paddingVertical: 4 },
   iconBtn: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center' },
   dot: { position: 'absolute', right: 7, top: 7, width: 10, height: 10, borderRadius: 5, borderWidth: 2 },

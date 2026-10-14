@@ -30,6 +30,7 @@ export default {
   'sort.offers': 'Plus d’offres',
 
   'unit.perMIn': '/ 1M entrée',
+  'unit.perMOut': '/ 1M sortie',
   'unit.perImage': 'par image',
   'unit.perSecond': 'par seconde',
   'unitLabel.token': 'USD par 1M de tokens (entrée / sortie)',

@@ -9,10 +9,10 @@
 //   tło się ugina. Safari nie obsługuje url() w backdrop-filter, więc tam samo rozmycie.
 //   Android/iOS: expo-blur (Android 12+ przez BlurTargetView i RenderEffect). React Native nie daje
 //   pikseli spod widoku, więc natywnie bez ugięcia.
-import { forwardRef, useEffect, useRef } from 'react';
-import { Platform, StyleSheet, View } from 'react-native';
+import { forwardRef, useEffect, useRef, useState } from 'react';
+import { Animated, Easing, Platform, StyleSheet, View } from 'react-native';
 import { BlurTargetView, BlurView } from 'expo-blur';
-import Svg, { Circle, Defs, RadialGradient, Stop } from 'react-native-svg';
+import Svg, { Circle, Defs, LinearGradient, RadialGradient, Rect, Stop } from 'react-native-svg';
 import { useTheme } from './theme';
 
 export { BlurTargetView };
@@ -35,13 +35,12 @@ function ensureWebFilter() {
 const canRefract = () =>
   typeof navigator !== 'undefined' && /Chrome|Chromium|Edg\//.test(navigator.userAgent) && !/Firefox/.test(navigator.userAgent);
 
-// Świecące plamy kategorii: tekst u góry z lewej, kod z prawej, obraz niżej, wideo na dole i w rogu.
+// Ciepłe plamy w tle (pomarańcz i róż kategorii wideo i obrazu); bez typowego gradientu fiolet-niebieski.
 const BLOBS = [
-  ['text', '8%', '20%', '48%', 0.55],
-  ['coding', '98%', '40%', '42%', 0.5],
-  ['image', '10%', '70%', '44%', 0.45],
-  ['video', '96%', '92%', '40%', 0.5],
-  ['video', '80%', '-4%', '30%', 0.32],
+  ['video', '92%', '6%', '46%', 0.42],
+  ['image', '4%', '78%', '46%', 0.36],
+  ['video', '100%', '62%', '30%', 0.18],
+  ['text', '0%', '30%', '30%', 0.14],
 ];
 
 export function Backdrop() {
@@ -64,13 +63,31 @@ export function Backdrop() {
   );
 }
 
-// Wykończenie szklanego panelu: wstaw jako pierwsze dziecko widoku z borderRadius i overflow hidden.
-export function GlassFx({ radius = 14, edge = true }) {
-  const t = useTheme();
+// Wykończenie szklanego panelu (pierwsze dziecko widoku z borderRadius i overflow hidden).
+// Bez ostrych linii: łagodny, ukośny odblask światła, który zanika w głąb tafli.
+// Web (Chromium): dodatkowo prawdziwe szkło, czyli tło pod panelem rozmyte i ugięte filtrem SVG.
+export function GlassFx({ radius = 14, backdrop = true }) {
+  const ref = useRef(null);
+  useEffect(() => {
+    if (Platform.OS !== 'web' || !ref.current || !backdrop) return;
+    ensureWebFilter();
+    const v = canRefract() ? `blur(12px) url(#${FILTER_ID}) saturate(1.6)` : 'blur(12px) saturate(1.6)';
+    ref.current.style.backdropFilter = v;
+    ref.current.style.webkitBackdropFilter = 'blur(12px) saturate(1.6)';
+  }, []);
   return (
     <>
-      <View pointerEvents="none" style={[s.sheen, { borderTopLeftRadius: radius, borderTopRightRadius: radius, backgroundColor: t.glassSheen }]} />
-      {edge ? <View pointerEvents="none" style={[s.edge, { left: radius * 0.6, right: radius * 0.6, backgroundColor: t.glassEdge }]} /> : null}
+      {Platform.OS === 'web' && backdrop ? <View ref={ref} pointerEvents="none" style={[StyleSheet.absoluteFill, { borderRadius: radius, zIndex: -1 }]} /> : null}
+      <Svg style={StyleSheet.absoluteFill} pointerEvents="none">
+        <Defs>
+          <LinearGradient id="lt-sheen" x1="0" y1="0" x2="0.75" y2="1">
+            <Stop offset="0" stopColor="#ffffff" stopOpacity={0.09} />
+            <Stop offset="0.55" stopColor="#ffffff" stopOpacity={0.015} />
+            <Stop offset="1" stopColor="#ffffff" stopOpacity={0} />
+          </LinearGradient>
+        </Defs>
+        <Rect x="0" y="0" width="100%" height="100%" rx={radius} ry={radius} fill="url(#lt-sheen)" />
+      </Svg>
     </>
   );
 }
@@ -94,7 +111,7 @@ export const Glass = forwardRef(function Glass({ style, radius = 16, blurTarget,
     const base = 'blur(18px) saturate(1.8) brightness(0.9)';
     el.style.backdropFilter = canRefract() ? `blur(18px) url(#${FILTER_ID}) saturate(1.8) brightness(0.9)` : base;
     el.style.webkitBackdropFilter = base;
-    el.style.boxShadow = 'inset 0 1px 0 rgba(255,255,255,.28), inset 0 -1px 0 rgba(0,0,0,.35), 0 10px 30px rgba(0,0,0,.45)';
+    el.style.boxShadow = '0 10px 30px rgba(0,0,0,.45)';
   }, []);
 
   const frame = [style, glassFrame(t, radius)];
@@ -106,7 +123,7 @@ export const Glass = forwardRef(function Glass({ style, radius = 16, blurTarget,
         style={[frame, { backgroundColor: t.glassTint }]}
         {...rest}
       >
-        <GlassFx radius={radius} edge={false} />
+        <GlassFx radius={radius} backdrop={false} />
         {children}
       </View>
     );
@@ -122,13 +139,47 @@ export const Glass = forwardRef(function Glass({ style, radius = 16, blurTarget,
         style={StyleSheet.absoluteFill}
       />
       <View style={[StyleSheet.absoluteFill, { backgroundColor: t.glassTint }]} pointerEvents="none" />
-      <GlassFx radius={radius} />
+      <GlassFx radius={radius} backdrop={false} />
       {children}
     </View>
   );
 });
 
-const s = StyleSheet.create({
-  sheen: { position: 'absolute', left: 0, right: 0, top: 0, height: '46%' },
-  edge: { position: 'absolute', top: 0, height: 1 },
-});
+// Obracająca się, świecąca krawędź (jak "premium glow border"): za kartą kręci się pas gradientu,
+// a karta przykrywa środek, więc widać tylko świecący brzeg. CSS robi to przez @property i
+// conic-gradient; w React Native obracamy kwadrat z gradientem liniowym (natywny driver animacji).
+export function GlowBorder({ radius = 14, width = 1.5, colors = ['#ffa23a', '#ff6fa3'], duration = 4000, style, innerStyle, children }) {
+  const [size, setSize] = useState(null);
+  const spin = useRef(new Animated.Value(0)).current;
+  useEffect(() => {
+    const loop = Animated.loop(Animated.timing(spin, { toValue: 1, duration, easing: Easing.linear, useNativeDriver: Platform.OS !== 'web' }));
+    loop.start();
+    return () => loop.stop();
+  }, [spin, duration]);
+  const side = size ? Math.ceil(Math.hypot(size.w, size.h)) : 0;
+  const rotate = spin.interpolate({ inputRange: [0, 1], outputRange: ['0deg', '360deg'] });
+  return (
+    <View
+      style={[{ borderRadius: radius, overflow: 'hidden', padding: width }, style]}
+      onLayout={(e) => setSize({ w: e.nativeEvent.layout.width, h: e.nativeEvent.layout.height })}
+    >
+      {size ? (
+        <Animated.View pointerEvents="none" style={{ position: 'absolute', width: side, height: side, left: (size.w - side) / 2, top: (size.h - side) / 2, transform: [{ rotate }] }}>
+          <Svg width="100%" height="100%">
+            <Defs>
+              <LinearGradient id="lt-glow" x1="0" y1="0" x2="1" y2="0">
+                <Stop offset="0" stopColor={colors[0]} stopOpacity={0} />
+                <Stop offset="0.35" stopColor={colors[0]} stopOpacity={0.15} />
+                <Stop offset="0.5" stopColor="#ffffff" stopOpacity={0.95} />
+                <Stop offset="0.65" stopColor={colors[1]} stopOpacity={0.15} />
+                <Stop offset="1" stopColor={colors[1]} stopOpacity={0} />
+              </LinearGradient>
+            </Defs>
+            <Rect x="0" y="0" width="100%" height="100%" fill="url(#lt-glow)" />
+          </Svg>
+        </Animated.View>
+      ) : null}
+      <View style={[{ borderRadius: radius - width, overflow: 'hidden', backgroundColor: '#15122a' }, innerStyle]}>{children}</View>
+    </View>
+  );
+}
