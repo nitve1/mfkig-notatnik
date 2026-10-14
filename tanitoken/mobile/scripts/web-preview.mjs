@@ -29,11 +29,11 @@ js = js.replace(/"\/assets\/[^"]+?\/([A-Za-z]+_\d+[A-Za-z]+)\.[0-9a-f]+\.ttf"/g,
 const inlined = FONTS.filter((f) => js.includes(`base64`) && js.includes(f)).length;
 
 const safe = js.replace(/<\/script/gi, '<\\/script');
-const page = `<title>TaniToken</title>
+const page = `<title>LightTokenz</title>
 <style>
-  :root { --bg: #f7f7fb; color-scheme: light; }
-  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg: #100e1b; color-scheme: dark; } }
-  :root[data-theme="dark"] { --bg: #100e1b; color-scheme: dark; }
+  :root { --bg: #0c0a17; color-scheme: dark; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg: #0c0a17; color-scheme: dark; } }
+  :root[data-theme="dark"] { --bg: #0c0a17; color-scheme: dark; }
   /* Strona stoi w miejscu jak apka: bez przesuwania na boki, sprężynowania i zoomu. */
   html, body { height: 100%; width: 100%; background: var(--bg); overflow: hidden; overscroll-behavior: none; }
   body { position: fixed; inset: 0; touch-action: pan-x pan-y; /* bez pinch i double-tap zoom */ -webkit-text-size-adjust: 100%; }
