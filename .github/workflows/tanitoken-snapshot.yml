@@ -1,4 +1,4 @@
-name: TaniToken snapshot
+name: LightTokenz snapshot
 
 # Co 15 min pobiera ceny i publikuje tanitoken/data/snapshot.json oraz history.json (historia cen, 90 dni)
 # na gałęzi "tanitoken-data" (1 commit, nadpisywany), żeby nie zaśmiecać historii main.

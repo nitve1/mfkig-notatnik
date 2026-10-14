@@ -39,6 +39,6 @@ Po zmianie plików apki podbij `VERSION` w `sw.js`, żeby telefony pobrały now�
 
 ---
 
-## TaniToken (osobny projekt)
+## LightTokenz (osobny projekt, dawniej TaniToken)
 
 W katalogu [`tanitoken/`](tanitoken/) jest niezależna apka: porównywarka cen API modeli AI (OpenRouter) z promocjami na żywo. Landing page, apka Android/iOS (Expo) i snapshot cen co 15 min z GitHub Actions. Szczegóły w [`tanitoken/README.md`](tanitoken/README.md).

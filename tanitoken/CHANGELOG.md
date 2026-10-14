@@ -18,12 +18,12 @@ Jedno miejsce z historią zmian, decyzjami i otwartymi zadaniami. Aktualizowane 
 
 | Priorytet | Zadanie | Status |
 | --- | --- | --- |
-| 1 | Test APK 0.2.0 na Motoroli Razr 60 (nowa nazwa i pakiet: odinstalować TaniToken) | u użytkownika |
+| 1 | Test APK 0.3.0 na Motoroli Razr 60 (powiadomienia i odświeżanie w tle) | u użytkownika |
 | 2 | Profile zużycia (makieta `mockups/usage.png`, warianty 1–3) | czeka na wybór |
 | 3 | Landing: wersje językowe, hosting i domena | po decyzji o hostingu |
 | 4 | Linki partnerskie: zapis do Novita, CometAPI, WaveSpeedAI, AI/ML API, wklejenie `link` w `core/affiliates.js` (karty pojawią się same) | po stronie użytkownika |
 | 4b | Domena lighttokenz.com/.app, landing pod nową nazwą | po stronie użytkownika / na końcu |
-| 5 | Po merge'u: ręczne uruchomienie workflow „TaniToken snapshot” (tworzy gałąź `tanitoken-data`) | po merge'u |
+| 5 | Po merge'u: ręczne uruchomienie workflow „LightTokenz snapshot” (tworzy gałąź `tanitoken-data`) | po merge'u |
 | 6 | Klucz release (keystore) do Google Play; obecny APK jest podpisany kluczem debug | przed publikacją |
 
 ## 2026-10-14 – sesja 16: landing w 6 językach, przyciski sklepów, smartfony

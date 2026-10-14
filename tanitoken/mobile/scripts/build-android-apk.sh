@@ -3,7 +3,7 @@
 #   cd tanitoken/mobile && bash scripts/build-android-apk.sh
 # Wymaga: Node 20+, JDK 17+ i Android SDK (ANDROID_HOME). Brakujące platformy, build-tools
 # i NDK Gradle pobierze sam (po zaakceptowaniu licencji: sdkmanager --licenses).
-# Wynik: dist-android/TaniToken-<wersja>.apk, podpisany kluczem debug (do testów, nie do Google Play).
+# Wynik: dist-android/LightTokenz-<wersja>-arm64.apk, podpisany kluczem debug (do testów, nie do Google Play).
 set -euo pipefail
 cd "$(dirname "$0")/.."
 : "${ANDROID_HOME:?Ustaw ANDROID_HOME na katalog Android SDK}"

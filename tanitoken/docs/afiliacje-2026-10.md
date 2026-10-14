@@ -1,4 +1,4 @@
-# Programy afiliacyjne i polecające dla TaniToken (stan na 2026-10-13)
+# Programy afiliacyjne i polecające dla LightTokenz (stan na 2026-10-13)
 
 Cel: lista programów afiliacyjnych, partnerskich i referral u dostawców AI API, bramek (routerów), chmur GPU oraz narzędzi do generowania obrazu i wideo. Linki mają się pojawiać w darmowej aplikacji mobilnej porównującej ceny API, oznaczone jako afiliacyjne, plus sporadyczne natywne karty sponsorowane.
 
@@ -53,7 +53,7 @@ Cel: lista programów afiliacyjnych, partnerskich i referral u dostawców AI API
 
 | Firma | Status | Uwagi i źródło |
 |---|---|---|
-| **OpenRouter** | **BRAK** | FAQ nie wspomina o afiliacji ani referral (https://openrouter.ai/docs/faq). Są tylko kody promocyjne (openrouter.ai/redeem). Warto natomiast wysyłać nagłówki `HTTP-Referer`/`X-Title`, żeby TaniToken pojawił się w rankingu aplikacji OpenRouter (darmowa ekspozycja, nie prowizja) |
+| **OpenRouter** | **BRAK** | FAQ nie wspomina o afiliacji ani referral (https://openrouter.ai/docs/faq). Są tylko kody promocyjne (openrouter.ai/redeem). Warto natomiast wysyłać nagłówki `HTTP-Referer`/`X-Title`, żeby LightTokenz pojawił się w rankingu aplikacji OpenRouter (darmowa ekspozycja, nie prowizja) |
 | **Vercel AI Gateway** | **BRAK** dla wydawców | Partner Program tylko dla agencji i integratorów (https://vercel.com/blog/vercel-partner-program-updates). Wzmianka o „AI Playground affiliates” tylko u stron trzecich, niepotwierdzona |
 | **Requesty** | **BRAK** (nie znaleziono) | – |
 | **fal.ai** | **BRAK** | Tylko granty i kredyty dla startupów z kodami partnerów (akceleratory, VC): https://fal.ai/startups |

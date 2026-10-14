@@ -128,7 +128,7 @@ nadpisywany commit, `main` zostaje czysty). Landing i apka czytają go z `raw.gi
 fallbackiem na kopię w repo i na samo `/models` z OpenRouter.
 
 Workflow z `schedule` działa dopiero na domyślnej gałęzi. Po merge’u odpal go raz ręcznie
-(Actions → TaniToken snapshot → Run workflow), żeby powstała gałąź `tanitoken-data`.
+(Actions → LightTokenz snapshot → Run workflow), żeby powstała gałąź `tanitoken-data`.
 
 ## Testy i skrypty
 
