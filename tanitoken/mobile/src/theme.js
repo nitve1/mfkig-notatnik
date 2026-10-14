@@ -37,12 +37,13 @@ export const THEMES = { night };
 export const tileColor = (c) => `${c}d9`;
 
 export const font = {
-  display: 'BricolageGrotesque_800ExtraBold',
-  displayBold: 'BricolageGrotesque_700Bold',
-  text: 'Figtree_400Regular',
-  textMedium: 'Figtree_500Medium',
-  textSemi: 'Figtree_600SemiBold',
-  textBold: 'Figtree_700Bold',
+  // Archivo (klasyczna szerokość) w całej apce, wybór użytkownika z 2026-10-14.
+  display: 'Archivo_800ExtraBold',
+  displayBold: 'Archivo_700Bold',
+  text: 'Archivo_400Regular',
+  textMedium: 'Archivo_500Medium',
+  textSemi: 'Archivo_600SemiBold',
+  textBold: 'Archivo_700Bold',
 };
 
 export const space = { 1: 4, 2: 8, 3: 12, 4: 16, 5: 24, 6: 32, 7: 48 };

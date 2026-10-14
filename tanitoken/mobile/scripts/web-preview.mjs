@@ -11,7 +11,7 @@ import { fileURLToPath } from 'node:url';
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const BUILD = join(ROOT, 'dist-web', 'build');
 const OUT = join(ROOT, 'dist-web');
-const FONTS = ['BricolageGrotesque_700Bold', 'BricolageGrotesque_800ExtraBold', 'Figtree_400Regular', 'Figtree_500Medium', 'Figtree_600SemiBold', 'Figtree_700Bold'];
+const FONTS = ['Archivo_400Regular', 'Archivo_500Medium', 'Archivo_600SemiBold', 'Archivo_700Bold', 'Archivo_800ExtraBold'];
 
 rmSync(OUT, { recursive: true, force: true });
 execSync(`npx expo export --platform web --output-dir ${BUILD}`, { cwd: ROOT, stdio: 'inherit' });

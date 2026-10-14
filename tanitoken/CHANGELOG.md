@@ -38,7 +38,9 @@ Jedno miejsce z historią zmian, decyzjami i otwartymi zadaniami. Aktualizowane 
   Reddit Mono, Michroma, Parkinsans + Google Sans Code, Sixtyfour (brak „ś”, do odrzucenia).
 - Użytkownik zaproponował Archivo: 4 warianty szerokości (`mockups/fonts3.mjs`, `fonts3.png`). Paczka
   `@expo-google-fonts/archivo` ma tylko szerokość 100%; inne szerokości trzeba wyciąć z fontu zmiennego
-  (fontTools instancer) do `mobile/assets/fonts`, bo React Native nie obsługuje osi wdth. Czeka na wybór.
+  (fontTools instancer) do `mobile/assets/fonts`, bo React Native nie obsługuje osi wdth.
+- Wybór: **Archivo klasyczne** (100% szerokości) w całej apce: `font` w `src/theme.js` (400–800),
+  `@expo-google-fonts/archivo`; Bricolage Grotesque i Figtree usunięte. Podgląd w artefakcie (wersja 5).
 - Podgląd web opublikowany jako artefakt (ten sam adres, wersja 4).
 
 ## 2026-10-13 – sesja 7: LightTokenz 0.2.0 (nocne szkło, kompaktowe menu, opisy modeli)

@@ -2,7 +2,7 @@ import { Linking, Pressable, StyleSheet, View } from 'react-native';
 import { formatUsd, platformOf, promoAgeDays, timeAgo } from '../../core/pricing.js';
 import { t as tr } from '../../core/i18n.js';
 import { Card, CatChip, IconButton, PctBadge, Progress, Row, T } from './ui';
-import { mainCat, radius, space, useTheme } from './theme';
+import { font, mainCat, radius, space, useTheme } from './theme';
 import { GlassFx, glassFrame } from './glass';
 
 export const catLabel = (c) => tr(`cat.${c}`);
@@ -88,7 +88,7 @@ export function SponsorCard({ sponsor }) {
         <T kind="small" color="ink2" numberOfLines={2}>{tr(sponsor.tagline)}</T>
       </View>
       <View style={{ paddingHorizontal: 12, paddingVertical: 8, borderRadius: radius.xs, backgroundColor: t.glassActive, borderTopWidth: 1, borderTopColor: t.glassEdge }}>
-        <T kind="small" style={{ fontFamily: 'Figtree_700Bold' }}>{tr('ad.cta')}</T>
+        <T kind="small" style={{ fontFamily: font.textBold }}>{tr('ad.cta')}</T>
       </View>
     </Pressable>
   );
