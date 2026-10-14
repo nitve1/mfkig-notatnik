@@ -6,10 +6,12 @@ import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildSnapshot, snapshotSummary } from '../core/snapshot.js';
+import { recordPrices } from '../core/history.js';
 
 const DATA_DIR = join(dirname(fileURLToPath(import.meta.url)), '..', 'data');
 const OUT = join(DATA_DIR, 'snapshot.json');
 const DESC = join(DATA_DIR, 'descriptions.json'); // opisy modeli osobno: apka wczytuje je dopiero w karcie modelu
+const HIST = join(DATA_DIR, 'history.json'); // historia cen, 90 dni (core/history.js)
 
 async function getJson(url, tries = 3) {
   for (let i = 1; ; i++) {
@@ -56,10 +58,14 @@ for (const id of Object.keys(descs)) if (!keep.has(id)) delete descs[id];
 await writeFile(DESC, JSON.stringify(descs));
 const body = JSON.stringify(snapshot);
 await writeFile(OUT, body);
+let hist = null;
+try { hist = JSON.parse(await readFile(HIST, 'utf8')); } catch { /* pierwszy raz */ }
+const histBody = JSON.stringify(recordPrices(hist, snapshot));
+await writeFile(HIST, histBody);
 
 const sum = snapshotSummary(snapshot);
 const ended = snapshot.ended.filter((e) => e.endedAt === snapshot.generatedAt).length;
 console.log(
   `OK ${sum.models} modeli, ${sum.offers} ofert ${JSON.stringify(sum.bySrc)}, kategorie ${JSON.stringify(sum.cats)}, ` +
-    `${sum.promos} promocji, ${ended} zakończonych, ${(body.length / 1024).toFixed(0)} KB, ${Date.now() - started} ms`,
+    `${sum.promos} promocji, ${ended} zakończonych, ${(body.length / 1024).toFixed(0)} KB, historia ${(histBody.length / 1024).toFixed(0)} KB, ${Date.now() - started} ms`,
 );

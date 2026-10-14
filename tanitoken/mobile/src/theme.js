@@ -27,6 +27,10 @@ const night = {
   glassTint: 'rgba(11,10,18,0.62)', // pasek: mocniej przyciemniony, bo pod nim przewija się tekst
   glassLine: 'rgba(255,255,255,0.16)',
   glassActive: 'rgba(255,255,255,0.16)',
+  // Wykresy: para sprawdzona walidatorem palety (tryb ciemny, daltonizm, kontrast 3:1).
+  chartBest: '#6a86f5',
+  chartMine: '#d27818',
+  chartGrid: 'rgba(255,255,255,0.08)',
 };
 
 export const THEMES = { night };

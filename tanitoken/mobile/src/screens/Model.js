@@ -12,6 +12,7 @@ import { catLabel, authorName, daysLabel, shortName } from '../parts';
 import { t as tr } from '../../../core/i18n.js';
 import { font, radius, space, useBottomSpace, useTheme } from '../theme';
 import { useProfile } from '../profile';
+import PriceChart from '../PriceChart';
 
 const LIVE_MS = 60 * 1000;
 const srcShort = (o) => ({ openrouter: 'OpenRouter', vercel: 'Vercel', requesty: 'Requesty', fal: 'fal.ai' }[o.src] ?? (platformOf(o) ? tr('platform.gateway') : tr('src.direct')));
@@ -220,6 +221,8 @@ export default function Model({ model: base, snapshot, onBack }) {
           ) : null}
         </Card>
       ) : null}
+
+      <PriceChart model={model} usage={usage} used={used} isFav={isFav} favCount={favCount} allow={modeOnly} pro={pro} />
 
       <Card>
         <T kind="strong" style={{ marginBottom: space[2] }}>{tr('model.usage')}</T>

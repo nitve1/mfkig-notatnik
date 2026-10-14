@@ -59,3 +59,32 @@ export async function writeMeta(patch) {
   await AsyncStorage.setItem(META_KEY, JSON.stringify(next)).catch(() => {});
   return next;
 }
+
+// Historia cen (core/history.js): osobny plik, wczytywany dopiero w karcie modelu.
+const HIST_FILE = 'lighttokenz-history-v1.json';
+const HIST_WEB_KEY = 'lighttokenz:history:v1';
+
+export async function readHistory() {
+  try {
+    if (Platform.OS === 'web') {
+      const raw = await AsyncStorage.getItem(HIST_WEB_KEY);
+      return raw ? JSON.parse(raw) : null;
+    }
+    const f = new File(Paths.document, HIST_FILE);
+    return f.exists ? JSON.parse(await f.text()) : null;
+  } catch {
+    return null;
+  }
+}
+
+export async function writeHistory(history) {
+  try {
+    const json = JSON.stringify(history);
+    if (Platform.OS === 'web') return await AsyncStorage.setItem(HIST_WEB_KEY, json);
+    const f = new File(Paths.document, HIST_FILE);
+    if (!f.exists) f.create();
+    f.write(json);
+  } catch {
+    // brak miejsca: historia poczeka do następnego zapisu
+  }
+}

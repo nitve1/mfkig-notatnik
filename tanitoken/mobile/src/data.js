@@ -9,6 +9,7 @@ import Constants from 'expo-constants';
 import * as Network from 'expo-network';
 import { buildSnapshot, refreshModels } from '../../core/snapshot.js';
 import { readMeta, readSnapshot, writeMeta, writeSnapshot } from './store';
+import { mergeRemoteHistory, recordSnapshot } from './history';
 
 const DEFAULT_URLS = [
   'https://raw.githubusercontent.com/nitve1/mfkig-notatnik/tanitoken-data/snapshot.json',
@@ -44,6 +45,19 @@ function stripDesc(s) {
 // Porównanie świeżości po ostatnim PEŁNYM sprawdzeniu (częściowe odświeżenie nie udaje pełnego).
 const newer = (a, b) => !b || (a && Date.parse(a.generatedAt) > Date.parse(b.generatedAt));
 const stamp = (s) => Date.parse(s?.updatedAt ?? s?.generatedAt) || 0;
+
+// Historia cen z serwera leży obok zestawienia (history.json).
+export async function fetchRemoteHistory() {
+  for (const url of SNAPSHOT_URLS) {
+    try {
+      const h = await getJson(`${url.replace(/snapshot\.json$/, 'history.json')}?t=${Math.floor(Date.now() / 60000)}`);
+      if (h?.v === 1) return h;
+    } catch {
+      // następne źródło
+    }
+  }
+  return null;
+}
 
 export async function fetchRemoteSnapshot() {
   for (const url of SNAPSHOT_URLS) {
@@ -101,6 +115,7 @@ export async function refreshPrices(current, { force = false, wifiOnly = true, o
     const remote = await fetchRemoteSnapshot();
     if (remote) {
       await writeMeta({ remoteAt: now });
+      await mergeRemoteHistory(await fetchRemoteHistory());
       if (newer(remote, snap)) {
         snap = remote;
         changed = true;
@@ -128,7 +143,10 @@ export async function refreshPrices(current, { force = false, wifiOnly = true, o
     else if (!canFull) error = 'wifi-only';
   }
 
-  if (changed) await writeSnapshot(snap);
+  if (changed) {
+    await writeSnapshot(snap);
+    await recordSnapshot(snap);
+  }
   return { snapshot: snap, changed, error, live: canFull };
 }
 

@@ -7,7 +7,7 @@ Jedno miejsce z historią zmian, decyzjami i otwartymi zadaniami. Aktualizowane 
 
 1. Przeczytaj ten plik i `tanitoken/README.md`.
 2. Gałąź robocza: `claude/hopeful-gauss-8su545` (repo `nitve1/mfkig-notatnik`).
-3. Testy: `node --test tanitoken/core/pricing.test.mjs`. Snapshot: `node tanitoken/scripts/build-snapshot.mjs`.
+3. Testy: `node --test tanitoken/core/pricing.test.mjs tanitoken/core/history.test.mjs`. Snapshot: `node tanitoken/scripts/build-snapshot.mjs`.
 4. Apka: `cd tanitoken/mobile && npm install && npx expo-doctor && npx expo export --platform android`.
 5. Podgląd UI bez telefonu: kopia `mobile/` do scratchpada, `npx expo install react-dom react-native-web`,
    `npx expo export --platform web`, serwer statyczny + Playwright (`/opt/pw-browsers/chromium`).
@@ -19,12 +19,30 @@ Jedno miejsce z historią zmian, decyzjami i otwartymi zadaniami. Aktualizowane 
 | Priorytet | Zadanie | Status |
 | --- | --- | --- |
 | 1 | Test APK 0.2.0 na Motoroli Razr 60 (nowa nazwa i pakiet: odinstalować TaniToken) | u użytkownika |
-| 2 | Historia cen w snapshocie (np. 30 punktów na ofertę) pod wykresy w karcie modelu | pomysł |
+| 2 | Profile zużycia (makieta `mockups/usage.png`, warianty 1–3) | czeka na wybór |
 | 3 | Landing w stylu „Kolorowe kategorie” + wersje językowe | na końcu |
 | 4 | Linki partnerskie: zapis do Novita, CometAPI, WaveSpeedAI, AI/ML API, wklejenie `link` w `core/affiliates.js` (karty pojawią się same) | po stronie użytkownika |
 | 4b | Domena lighttokenz.com/.app, landing pod nową nazwą | po stronie użytkownika / na końcu |
 | 5 | Po merge'u: ręczne uruchomienie workflow „TaniToken snapshot” (tworzy gałąź `tanitoken-data`) | po merge'u |
 | 6 | Klucz release (keystore) do Google Play; obecny APK jest podpisany kluczem debug | przed publikacją |
+
+## 2026-10-14 – sesja 13: historia ceny w karcie modelu (wariant B)
+
+Wybór użytkownika z makiety `mockups/history.png`: wariant B (najtaniej gdziekolwiek vs Twój dostawca) + dodatki.
+- `core/history.js`: najniższa cena dziennie dla każdej oferty, 90 dni, zapisywane tylko zmiany ceny (`[dzień, wej., wyj.]`,
+  `[dzień, cena]`, `[dzień]` = oferta zniknęła). `recordPrices`, `mergeHistory`, `pruneHistory`, `priceSeries`.
+  Testy: `core/history.test.mjs` (4).
+- Serwer: `build-snapshot.mjs` dopisuje `data/history.json` (ok. 420 KB na start), workflow pobiera poprzednią i
+  publikuje ją obok `snapshot.json` na gałęzi `tanitoken-data`.
+- Telefon: `mobile/src/history.js` zapisuje ceny po każdym nowym zestawieniu (pełnym, częściowym, z GitHub), przy
+  pobraniu zestawienia z GitHub scala historię z serwera (nowy użytkownik od razu widzi wstecz). Plik osobno
+  (`lighttokenz-history-v1.json`), wczytywany dopiero w karcie modelu.
+- `mobile/src/PriceChart.js`: dwie linie schodkowe (#6a86f5 najtaniej, #d27818 Twój: oferta z „Używam…” albo
+  ulubieni; para sprawdzona walidatorem palety), legenda, 7 / 30 / 90 dni, dymek po dotknięciu (dzień, najtańszy
+  dostawca, Twoja cena), ceny na końcu linii, „Przepłacasz X za 1M tokenów, ok. Y / mies.”. Za mało danych:
+  „Zbieramy historię cen…”. Bez wybranego dostawcy: jedna linia i podpowiedź. Tryb Zwykły: tylko platformy.
+- Tłumaczenia `history.*` w 6 językach. Sprawdzone w podglądzie web 360 i 390 px (sztuczna historia 40 dni):
+  bez błędów JS i bez wychodzenia poza ekran.
 
 ## 2026-10-14 – sesja 12: poprawki wszystkich błędów z testów i przeglądu kodu
 
