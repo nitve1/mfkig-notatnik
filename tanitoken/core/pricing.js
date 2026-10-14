@@ -382,8 +382,8 @@ export function formatUsd(v) {
   if (v == null) return '–';
   if (v === 0) return money('0');
   if (v < 0.01) return money(formatNumber(+v.toFixed(4)));
-  if (v < 1) return money(formatNumber(+v.toFixed(3)));
-  if (v < 100) return money(formatNumber(v, 2));
+  if (v < 0.1) return money(formatNumber(+v.toFixed(3)));
+  if (v < 100) return money(formatNumber(v, 2)); // kwoty zawsze z groszami: 0,70 $, nie 0,7 $
   return money(formatNumber(Math.round(v)));
 }
 

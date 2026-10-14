@@ -6,6 +6,7 @@ const night = {
   dark: true,
   bg: '#0b0a12',
   card: 'rgba(11,10,18,0.55)', // równe przyciemnienie pod połyskiem: tekst min. 4,5:1 (WCAG AA) na każdym miejscu tła
+  cardRaised: 'rgba(38,35,56,0.82)', // ważniejsza sekcja: jaśniejsza powierzchnia (Material: wyżej = jaśniej)
   cardSolid: '#1a1730', // tam, gdzie pod spodem nie ma tła (np. stopka kreatora)
   ink: '#f3f1fb',
   ink2: '#c9c5dd', // 7,8:1 w najgorszym miejscu
@@ -26,6 +27,7 @@ const night = {
   infoSoft: 'rgba(109,140,255,0.16)',
   glassTint: 'rgba(11,10,18,0.62)', // pasek: mocniej przyciemniony, bo pod nim przewija się tekst
   glassLine: 'rgba(255,255,255,0.16)',
+  glassLineStrong: 'rgba(255,255,255,0.24)',
   glassActive: 'rgba(255,255,255,0.16)',
   // Wykresy: para sprawdzona walidatorem palety (tryb ciemny, daltonizm, kontrast 3:1).
   chartBest: '#6a86f5',

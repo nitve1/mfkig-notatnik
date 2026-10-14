@@ -49,7 +49,7 @@ function stepPath(points, key, x, y) {
   return d;
 }
 
-export default function PriceChart({ model, usage = DEFAULT_USAGE, used = null, isFav = null, favCount = 0, allow = null, pro = false }) {
+export default function PriceChart({ model, usage = DEFAULT_USAGE, used = null, isFav = null, favCount = 0, allow = null, pro = false, level }) {
   const t = useTheme();
   const history = useHistory();
   const [days, setDays] = useState(30);
@@ -74,7 +74,7 @@ export default function PriceChart({ model, usage = DEFAULT_USAGE, used = null, 
   // Za mało danych na wykres (np. tuż po instalacji, zanim serwer doda swoją historię).
   if (start == null || today - start < 1 || known < 2) {
     return (
-      <Card>
+      <Card level={level}>
         <T kind="strong">{tr('history.title')}</T>
         <T kind="small" color="ink2" style={{ marginTop: 4 }}>{tr('history.collecting')}</T>
       </Card>
@@ -124,7 +124,7 @@ export default function PriceChart({ model, usage = DEFAULT_USAGE, used = null, 
   }
 
   return (
-    <Card>
+    <Card level={level}>
       <T kind="strong">{tr('history.title')}</T>
       <T kind="tiny" color="ink3" style={{ marginTop: 2, marginBottom: 8 }}>{unitTxt}</T>
       <Segmented

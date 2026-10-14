@@ -332,4 +332,5 @@ export default {
   "history.unitShort.token": "za 1M tokenów",
   "history.unitShort.image": "za obraz",
   "history.unitShort.second": "za sekundę",
+  "model.monthlyAtUsage": "koszt miesięczny przy Twoim zużyciu",
 };

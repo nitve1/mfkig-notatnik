@@ -103,16 +103,23 @@ export function Segmented({ options, value, onChange, style }) {
 }
 
 // Karta z kolorowym paskiem po lewej.
-export function Card({ stripe, children, onPress, style, accessibilityLabel }) {
+// level: 'raised' = ważniejsza sekcja (jaśniejsza powierzchnia, jak wyższe piętro w ciemnym motywie),
+// 'flat' = drugorzędna (bez połysku i ramki). Domyślnie zwykłe szkło.
+export function Card({ stripe, children, onPress, style, accessibilityLabel, level }) {
   const t = useTheme();
   const body = (
     <>
-      <GlassFx radius={radius.lg} />
+      {level === 'flat' ? null : <GlassFx radius={radius.lg} />}
       {stripe ? <View style={[s.stripe, { backgroundColor: stripe }]} /> : null}
       {children}
     </>
   );
-  const base = [s.card, glassFrame(t, radius.lg), { backgroundColor: t.card, paddingLeft: stripe ? 18 : 14 }, style];
+  const surface = level === 'raised'
+    ? [glassFrame(t, radius.lg), { backgroundColor: t.cardRaised, borderColor: t.glassLineStrong }]
+    : level === 'flat'
+      ? { borderRadius: radius.lg, overflow: 'hidden', backgroundColor: t.card }
+      : [glassFrame(t, radius.lg), { backgroundColor: t.card }];
+  const base = [s.card, surface, { paddingLeft: stripe ? 18 : 14 }, style];
   if (!onPress) return <View style={base}>{body}</View>;
   return (
     <Pressable onPress={onPress} accessibilityRole="button" accessibilityLabel={accessibilityLabel} style={({ pressed }) => [...base, pressed && { opacity: 0.85 }]}>

@@ -1,16 +1,17 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Linking, Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
+import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
 import {
   formatContext, formatOfferPrice, formatUsd, isFreeOffer, liveOpenrouterOffers, offerCost,
   favoriteMatcher, offerKey, onePerPlatform, onePerProvider, platformOf, priceBeforeDiscount, sortOffers,
 } from '../../../core/pricing.js';
 import { isPro, modeFilter } from '../filters';
 import { offerLink } from '../../../core/affiliates.js';
-import { Button, Card, CatChip, IconButton, PctBadge, Row, Segmented, Stat, StatusBadge, T, MAX_FONT_SCALE } from '../ui';
+import { Button, Card, CatChip, IconButton, PctBadge, Row, Segmented, StatusBadge, T, MAX_FONT_SCALE } from '../ui';
 import Icon from '../icons';
 import { catLabel, authorName, daysLabel, shortName } from '../parts';
 import { t as tr } from '../../../core/i18n.js';
-import { font, radius, space, useBottomSpace, useTheme } from '../theme';
+import { font, mainCat, radius, space, tileColor, useBottomSpace, useTheme } from '../theme';
 import { useProfile } from '../profile';
 import PriceChart from '../PriceChart';
 
@@ -79,8 +80,9 @@ function About({ model: base }) {
   if (!model.desc && !uses.length) return null;
   return (
     <View style={{ gap: space[2] }}>
+      <T kind="h2" style={{ marginTop: space[3] }}>{tr('model.about')}</T>
       {model.desc ? (
-        <Card>
+        <Card level="flat">
           <T numberOfLines={open ? undefined : 4}>{model.desc}</T>
           <Row style={{ marginTop: space[2], justifyContent: 'space-between' }}>
             <T kind="tiny" color="ink3" style={{ flex: 1 }}>{tr('model.descNote')}</T>
@@ -94,16 +96,16 @@ function About({ model: base }) {
       ) : null}
       {uses.length ? (
         <>
-          <T kind="h2" style={{ marginTop: space[2] }}>{tr('model.uses')}</T>
+          <T kind="strong" style={{ marginTop: space[2] }}>{tr('model.uses')}</T>
           <View style={s.uses}>
             {uses.map(([icon, key, vars]) => (
-              <View key={key} style={[s.use, { backgroundColor: t.card, borderColor: t.glassLine }]}>
-                <Icon name={icon} size={15} color={t.ink2} />
-                <T kind="small" style={{ fontFamily: font.textSemi }}>{tr(key, vars)}</T>
+              <View key={key} style={s.use}>
+                <Icon name={icon} size={15} color={t.ink3} />
+                <T kind="small" color="ink2">{tr(key, vars)}</T>
               </View>
             ))}
           </View>
-          <Card>
+          <Card level="flat">
             <T kind="small" color="ink2"><T kind="small" style={{ fontFamily: font.textBold }}>{tr('model.example')}: </T>{tr(exampleKey(model))}</T>
           </Card>
         </>
@@ -165,45 +167,63 @@ export default function Model({ model: base, snapshot, onBack }) {
   const cats = model.cats.length > 1 ? model.cats.filter((c) => c !== 'text') : model.cats;
   const setUsage = (patch) => update({ usage: { ...usage, [model.unit]: { ...usage[model.unit], ...patch } } });
 
+  const cat = mainCat(model);
+  const tint = tileColor(cat) ?? t.text;
+  const bestCost = best ? offerCost(best, usage) : null;
+  const saving = best && worst ? offerCost(worst, usage) - bestCost : null;
+
   return (
     <ScrollView contentContainerStyle={{ padding: space[4], paddingBottom: bottomSpace, gap: space[3] }} keyboardShouldPersistTaps="handled">
-      <Row style={{ justifyContent: 'space-between' }}>
-        <View style={{ marginLeft: -10 }}><IconButton name="back" label={tr('common.back')} onPress={onBack} /></View>
-        <IconButton name="star" label={tr(item ? 'model.unwatch' : 'model.watch')} active={!!item} onPress={() => toggleWatch(model.id)} />
-      </Row>
-
-      <View style={{ gap: 4 }}>
-        <Row style={{ gap: space[3] }}>
-          {cats.map((c) => <CatChip key={c} cat={c} label={catLabel(c)} />)}
+      {/* Nagłówek w kolorze kategorii z ceną: jedyny wyróżniony element ekranu (wariant B, mockups/model-layout.png). */}
+      <View style={s.head}>
+        <Svg width="100%" height="100%" style={StyleSheet.absoluteFill} pointerEvents="none">
+          <Defs>
+            <LinearGradient id="lt-head" x1="0" y1="0" x2="0" y2="1">
+              <Stop offset="0" stopColor={tint} stopOpacity={0.6} />
+              <Stop offset="1" stopColor={tint} stopOpacity={0} />
+            </LinearGradient>
+          </Defs>
+          <Rect x="0" y="0" width="100%" height="100%" fill="url(#lt-head)" />
+        </Svg>
+        <Row style={{ justifyContent: 'space-between' }}>
+          <View style={{ marginLeft: -10 }}><IconButton name="back" label={tr('common.back')} onPress={onBack} /></View>
+          <IconButton name="star" label={tr(item ? 'model.unwatch' : 'model.watch')} active={!!item} onPress={() => toggleWatch(model.id)} />
         </Row>
-        <T kind="display">{shortName(model.name)}</T>
-        <T kind="small" color="ink2">
-          {[authorName(model), model.context ? tr('model.context', { ctx: formatContext(model.context) }) : null, tr('common.offers', { n: modeOnly ? model.offers.filter(modeOnly).length : model.offers.length })].filter(Boolean).join(', ')}
-        </T>
-        {model.freeId ? <StatusBadge tone="save" icon="check" label={tr('model.freeVariant', { id: model.freeId })} /> : null}
-        {model.expires ? <StatusBadge tone="deal" icon="warn" label={tr('model.expires', { date: model.expires })} /> : null}
+        <View style={{ gap: 4, marginTop: space[2] }}>
+          <Row style={{ gap: space[3] }}>
+            {cats.map((c) => <CatChip key={c} cat={c} label={catLabel(c)} />)}
+          </Row>
+          <T kind="display">{shortName(model.name)}</T>
+          <T kind="small" color="ink2">
+            {[authorName(model), model.context ? tr('model.context', { ctx: formatContext(model.context) }) : null, tr('common.offers', { n: modeOnly ? model.offers.filter(modeOnly).length : model.offers.length })].filter(Boolean).join(' · ')}
+          </T>
+          {model.freeId ? <StatusBadge tone="save" icon="check" label={tr('model.freeVariant', { id: model.freeId })} /> : null}
+          {model.expires ? <StatusBadge tone="deal" icon="warn" label={tr('model.expires', { date: model.expires })} /> : null}
+        </View>
+        <Row style={{ marginTop: space[4], justifyContent: 'space-between', alignItems: 'flex-end' }}>
+          <View style={{ flexShrink: 1 }}>
+            <T kind="small" color="ink2">{tr('model.cheapestMonthly')}</T>
+            <T kind="display" style={{ fontSize: 34, lineHeight: 40 }} numberOfLines={1} adjustsFontSizeToFit>{bestCost != null ? formatUsd(bestCost) : '–'}</T>
+            {best ? <T kind="small" color="ink2" numberOfLines={1}>{pro ? best.provider : platformOf(best) ?? best.provider}</T> : null}
+          </View>
+          {saving ? (
+            <View style={{ alignItems: 'flex-end', marginLeft: space[3] }}>
+              <T kind="small" color="ink2">{tr('common.youSave')}</T>
+              <T kind="num" style={{ color: t.save, fontSize: 22, lineHeight: 28 }}>{formatUsd(saving)}</T>
+              <T kind="tiny" color="ink2">{tr('model.vsWorst')}</T>
+            </View>
+          ) : null}
+        </Row>
       </View>
-
-      <About model={model} />
-
-      <Row style={{ alignItems: 'stretch', gap: space[2] }}>
-        <Stat label={tr('model.cheapestMonthly')} value={best ? formatUsd(offerCost(best, usage)) : '–'} sub={best?.provider} />
-        <Stat
-          label={tr('common.youSave')}
-          value={best && worst ? formatUsd(offerCost(worst, usage) - offerCost(best, usage)) : '–'}
-          sub={tr('model.vsWorst')}
-          color={t.save}
-        />
-      </Row>
 
       <Row style={{ gap: space[2] }}>
         <Button
           label={tr(item?.mode === 'use' ? 'model.using' : 'model.useEllipsis')}
           icon={item?.mode === 'use' ? 'check' : null}
-          kind={item?.mode === 'use' ? 'ink' : 'line'}
+          kind={item?.mode === 'use' || !item ? 'ink' : 'line'}
           onPress={() => setPicking(!picking)}
         />
-        <Button label={tr(item ? 'model.watching' : 'model.watch')} icon="star" kind={item ? 'ink' : 'line'} onPress={() => toggleWatch(model.id)} />
+        <Button label={tr(item ? 'model.watching' : 'model.watch')} icon="star" kind={item && item.mode !== 'use' ? 'ink' : 'line'} onPress={() => toggleWatch(model.id)} />
       </Row>
       {used && !picking ? (
         <Card stripe={t.text} style={{ paddingVertical: 10 }}>
@@ -222,9 +242,85 @@ export default function Model({ model: base, snapshot, onBack }) {
         </Card>
       ) : null}
 
-      <PriceChart model={model} usage={usage} used={used} isFav={isFav} favCount={favCount} allow={modeOnly} pro={pro} />
+      {/* Oferty: ważniejsza sekcja, jaśniejsza powierzchnia; w środku lista wierszy zamiast osobnych kart. */}
+      <Card level="raised" style={{ paddingVertical: space[3] }}>
+        <Row style={{ justifyContent: 'space-between' }}>
+          <T kind="h2">{tr('model.offers')}</T>
+          <T kind="tiny" color="ink3">{tr(live ? 'model.live' : 'model.fromSnapshot')}</T>
+        </Row>
+        <Segmented
+          style={{ marginTop: space[2] }}
+          value={scope}
+          onChange={setScope}
+          options={[
+            { value: 'all', label: tr('model.scopeAll') },
+            { value: 'fav', label: tr('model.scopeFav'), count: favCount ? model.offers.filter((o) => isFav(o) && (!modeOnly || modeOnly(o))).length : null },
+            { value: 'promo', label: tr('model.scopePromo'), count: promos.filter((p) => p.type !== 'free').length },
+          ]}
+        />
+        <T kind="tiny" color="ink3" style={{ marginTop: space[2] }}>{tr(`unitLabel.${model.unit}`)} · {tr('model.monthlyAtUsage')}</T>
+        {offers.map((o, i) => {
+          const k = offerKey(o);
+          const promo = promos.find((p) => p.key === k);
+          const before = priceBeforeDiscount(o);
+          const link = offerLink(model, o);
+          const isBest = o === best;
+          const isUsed = item?.offerKey === k;
+          const other = o.unit !== model.unit;
+          const canPick = picking && !other;
+          const body = (
+            <>
+              <Row style={{ alignItems: 'flex-start' }}>
+                <View style={{ flex: 1, gap: 2 }}>
+                  <Row style={{ gap: 6 }}>
+                    {canPick ? <Icon name={isUsed ? 'check' : 'plus'} size={16} color={t.text} /> : null}
+                    {isBest ? <Icon name="trophy" size={16} color={t.save} /> : null}
+                    {isUsed && !canPick ? <Icon name="check" size={16} color={t.text} /> : null}
+                    <T kind="strong" numberOfLines={1} style={{ flexShrink: 1 }}>{pro ? o.provider : platformOf(o)}</T>
+                    {isFav(o) ? <Icon name="star" size={14} color={t.video} fill={t.video} /> : null}
+                    {promo && promo.type !== 'free' ? <PctBadge pct={promo.pct} /> : null}
+                  </Row>
+                  <T kind="small" color="ink2">
+                    {before ? <T kind="small" color="ink3" style={{ textDecorationLine: 'line-through' }}>{formatOfferPrice(before)}  </T> : null}
+                    {formatOfferPrice(o)}
+                  </T>
+                </View>
+                <T kind="num" style={{ fontSize: 18 }}>{other ? '' : formatUsd(offerCost(o, usage))}</T>
+              </Row>
+              <Row style={{ marginTop: 2, justifyContent: 'space-between' }}>
+                <T kind="tiny" color="ink3" style={{ flex: 1 }} numberOfLines={1}>
+                  {[pro ? srcShort(o) : o.provider !== platformOf(o) ? tr('offer.viaShort', { provider: o.provider }) : null, o.quant, o.uptime != null ? tr('offer.uptime', { pct: o.uptime }) : null, promo ? tr('offer.promoSince', { since: daysLabel(promo) }) : null, other ? tr('offer.otherUnit') : null, isUsed ? tr('offer.youUse') : null].filter(Boolean).join(' · ')}
+                </T>
+                {!picking && link ? (
+                  <Pressable onPress={() => Linking.openURL(link.url)} accessibilityRole="link" hitSlop={8} style={s.link}>
+                    <T kind="tiny" style={{ color: t.text }}>{tr(link.sponsored ? 'offer.partner' : 'offer.open')}</T>
+                    <Icon name="external" size={13} color={t.text} />
+                  </Pressable>
+                ) : null}
+              </Row>
+            </>
+          );
+          const rowStyle = [s.offer, i > 0 && { borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: t.glassLine }, (isUsed || isBest) && { borderLeftWidth: 3, borderLeftColor: isUsed ? t.text : t.save, paddingLeft: 10 }];
+          return canPick ? (
+            <Pressable
+              key={k}
+              onPress={() => { setUsing(model.id, k); setPicking(false); }}
+              accessibilityRole="button"
+              accessibilityLabel={tr('model.useA11y', { name: pro ? o.provider : platformOf(o) })}
+              style={({ pressed }) => [...rowStyle, pressed && { opacity: 0.8 }]}
+            >
+              {body}
+            </Pressable>
+          ) : (
+            <View key={k} style={rowStyle}>{body}</View>
+          );
+        })}
+        {!offers.length ? (
+          <T color="ink2" style={{ marginTop: space[2] }}>{tr(scope === 'fav' ? 'model.noFav' : 'model.noPromo')}</T>
+        ) : null}
+      </Card>
 
-      <Card>
+      <Card level="flat">
         <T kind="strong" style={{ marginBottom: space[2] }}>{tr('model.usage')}</T>
         <Row>
           {model.unit === 'token' ? (
@@ -238,73 +334,10 @@ export default function Model({ model: base, snapshot, onBack }) {
         </Row>
       </Card>
 
-      <View style={{ gap: space[2], marginTop: space[2] }}>
-        <Row style={{ justifyContent: 'space-between' }}>
-          <T kind="h2">{tr('model.offers')}</T>
-          <T kind="tiny" color="ink3">{tr(live ? 'model.live' : 'model.fromSnapshot')}</T>
-        </Row>
-        <Segmented
-          value={scope}
-          onChange={setScope}
-          options={[
-            { value: 'all', label: tr('model.scopeAll') },
-            { value: 'fav', label: tr('model.scopeFav'), count: favCount ? model.offers.filter((o) => isFav(o) && (!modeOnly || modeOnly(o))).length : null },
-            { value: 'promo', label: tr('model.scopePromo'), count: promos.filter((p) => p.type !== 'free').length },
-          ]}
-        />
-        <T kind="tiny" color="ink3">{tr(`unitLabel.${model.unit}`)}</T>
-      </View>
+      <PriceChart model={model} usage={usage} used={used} isFav={isFav} favCount={favCount} allow={modeOnly} pro={pro} level="flat" />
 
-      {offers.map((o) => {
-        const k = offerKey(o);
-        const promo = promos.find((p) => p.key === k);
-        const before = priceBeforeDiscount(o);
-        const link = offerLink(model, o);
-        const isBest = o === best;
-        const isUsed = item?.offerKey === k;
-        const other = o.unit !== model.unit;
-        return (
-          <Card
-            key={k}
-            stripe={isUsed ? t.text : isBest ? t.save : t.line}
-            onPress={picking && !other ? () => { setUsing(model.id, k); setPicking(false); } : undefined}
-            accessibilityLabel={picking ? tr('model.useA11y', { name: pro ? o.provider : platformOf(o) }) : undefined}
-          >
-            <Row style={{ alignItems: 'flex-start' }}>
-              <View style={{ flex: 1, gap: 2 }}>
-                <Row style={{ gap: 6 }}>
-                  {picking && !other ? <Icon name={isUsed ? 'check' : 'plus'} size={16} color={t.text} /> : null}
-                  {isBest ? <Icon name="trophy" size={16} color={t.save} /> : null}
-                  <T kind="strong" numberOfLines={1} style={{ flexShrink: 1 }}>{pro ? o.provider : platformOf(o)}</T>
-                  {isFav(o) ? <Icon name="star" size={14} color={t.video} fill={t.video} /> : null}
-                </Row>
-                <T kind="small" color="ink2">
-                  {before ? <T kind="small" color="ink3" style={{ textDecorationLine: 'line-through' }}>{formatOfferPrice(before)}  </T> : null}
-                  {formatOfferPrice(o)}
-                </T>
-              </View>
-              <View style={{ alignItems: 'flex-end', gap: 4 }}>
-                <T kind="num">{other ? '' : formatUsd(offerCost(o, usage))}</T>
-                {promo && promo.type !== 'free' ? <PctBadge pct={promo.pct} /> : null}
-              </View>
-            </Row>
-            <Row style={{ marginTop: 8, justifyContent: 'space-between' }}>
-              <T kind="tiny" color="ink3" style={{ flex: 1 }} numberOfLines={1}>
-                {[pro ? srcShort(o) : o.provider !== platformOf(o) ? tr('offer.viaShort', { provider: o.provider }) : null, o.quant, o.uptime != null ? tr('offer.uptime', { pct: o.uptime }) : null, promo ? tr('offer.promoSince', { since: daysLabel(promo) }) : null, other ? tr('offer.otherUnit') : null, isUsed ? tr('offer.youUse') : null].filter(Boolean).join(' · ')}
-              </T>
-              {!picking && link ? (
-                <Pressable onPress={() => Linking.openURL(link.url)} accessibilityRole="link" hitSlop={8} style={s.link}>
-                  <T kind="tiny" style={{ color: t.text }}>{tr(link.sponsored ? 'offer.partner' : 'offer.open')}</T>
-                  <Icon name="external" size={13} color={t.text} />
-                </Pressable>
-              ) : null}
-            </Row>
-          </Card>
-        );
-      })}
-      {!offers.length ? (
-        <T color="ink2">{tr(scope === 'fav' ? 'model.noFav' : 'model.noPromo')}</T>
-      ) : null}
+      <About model={model} />
+
       <T kind="tiny" color="ink3">
         {tr('model.footnote')}
       </T>
@@ -314,7 +347,9 @@ export default function Model({ model: base, snapshot, onBack }) {
 
 const s = StyleSheet.create({
   uses: { flexDirection: 'row', flexWrap: 'wrap', gap: space[2] },
-  use: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 11, paddingVertical: 8, borderRadius: radius.sm, borderWidth: 1 },
+  use: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingRight: 10, paddingVertical: 4 },
+  head: { marginHorizontal: -space[4], marginTop: -space[4], paddingHorizontal: space[4], paddingTop: space[4], paddingBottom: space[2] },
+  offer: { paddingVertical: space[3] },
   input: { minHeight: 44, borderWidth: 1.5, borderRadius: radius.sm, paddingHorizontal: 12, paddingVertical: 9, fontSize: 17, fontFamily: font.textBold },
   link: { flexDirection: 'row', alignItems: 'center', gap: 4, marginLeft: 8, minHeight: 44, paddingHorizontal: 8 },
 });

@@ -26,6 +26,18 @@ Jedno miejsce z historią zmian, decyzjami i otwartymi zadaniami. Aktualizowane 
 | 5 | Po merge'u: ręczne uruchomienie workflow „TaniToken snapshot” (tworzy gałąź `tanitoken-data`) | po merge'u |
 | 6 | Klucz release (keystore) do Google Play; obecny APK jest podpisany kluczem debug | przed publikacją |
 
+## 2026-10-14 – sesja 14: czytelność karty modelu (wariant B)
+
+Uwaga użytkownika: w karcie modelu wszystko ma ten sam kolor i kartę, czytelność spada. Zalecenia (NN/g, Material
+dark theme): jeden dominujący element, maks. 3 poziomy wyróżnienia, ważniejsze = jaśniejsza powierzchnia, kolor
+tylko jako akcent, nie wszystko w kartach. Makieta `mockups/model-layout.png`, wybór: B.
+- Nagłówek w kolorze kategorii (gradient z koloru kafla), w nim duża cena miesięczna, platforma i „Oszczędzasz”.
+- `Card level="raised"` (jaśniejsza powierzchnia `cardRaised`, mocniejsza ramka) dla ofert; oferty jako wiersze
+  z liniami zamiast osobnych kart, wybrana / najtańsza oznaczone paskiem z lewej.
+- `Card level="flat"` (bez połysku i ramki) dla zużycia, historii ceny i opisu; „O modelu” przeniesione na dół,
+  zastosowania jako zwykły tekst z ikoną zamiast obramowanych chipów.
+- `formatUsd`: kwoty od 0,10 $ zawsze z dwoma miejscami (0,70 $ zamiast 0,7 $).
+
 ## 2026-10-14 – sesja 13: historia ceny w karcie modelu (wariant B)
 
 Wybór użytkownika z makiety `mockups/history.png`: wariant B (najtaniej gdziekolwiek vs Twój dostawca) + dodatki.
