@@ -1,65 +1,55 @@
 // Szkło LightTokenz (wybory użytkownika z 2026-10-14, makiety w mockups/bg, panels, glow):
 //
-// Backdrop: tło "Kolory kategorii", siatka czterech eliptycznych gradientów (tekst u góry z lewej,
-//   wideo z prawej, obraz z lewej niżej, kod na dole z prawej) na #0b0a12, płynnie, bez granic.
-// GlassFx: szkło "Połysk", połysk od góry płynnie zanikający w dół (0.16 → 0.06 → 0.03), bez ostrej
-//   linii. Web: pod panelem prawdziwe rozmycie tła (backdrop-filter blur + saturate).
+// Backdrop: tło "Kolory kategorii" stonowane do 40% (czytelność, audyt docs/czytelnosc-2026-10.md),
+//   jeden obrazek JPG zamiast SVG.
+// GlassFx / glassFrame: szkło "Połysk" na równym przyciemnieniu 55%. Rozmycia na kartach nie ma (lista
+//   przewija się szybciej), prawdziwe rozmycie tylko na pasku zakładek (Glass).
 // Glass: pasek nad przewijaną treścią; natywnie expo-blur (Android 12+), na webie backdrop-filter.
 // GlowBorder: obracająca się świecąca krawędź w kolorach kategorii (kafel podsumowania).
 import { forwardRef, useEffect, useRef, useState } from 'react';
-import { Animated, Easing, Platform, StyleSheet, View } from 'react-native';
+import { Animated, Easing, Image, Platform, StyleSheet, View } from 'react-native';
 import { BlurTargetView, BlurView } from 'expo-blur';
-import Svg, { Defs, Ellipse, LinearGradient, RadialGradient, Rect, Stop } from 'react-native-svg';
+import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
 import { useTheme } from './theme';
 
 export { BlurTargetView };
 
-// [kategoria, środek x, środek y, promień x, promień y, krycie]; jak CSS radial-gradient(70% 40% at x y).
-const MESH = [
-  ['text', '0%', '0%', '70%', '40%', 0.67],
-  ['video', '100%', '25%', '70%', '40%', 0.67],
-  ['image', '0%', '75%', '70%', '45%', 0.67],
-  ['coding', '100%', '100%', '70%', '40%', 0.53],
-];
-const MESH_COLORS = { text: '#3d63ff', video: '#ff8a00', image: '#ff4f8b', coding: '#8b3dff' };
+// Tło jako jeden obrazek (scripts/backdrop.mjs): siatka gradientów kategorii stonowana do 40%.
+const BACKDROP = require('../assets/backdrop.jpg');
 
 export function Backdrop() {
   const t = useTheme();
   return (
     <View style={[StyleSheet.absoluteFill, { backgroundColor: t.bg }]} pointerEvents="none">
-      <Svg width="100%" height="100%">
-        <Defs>
-          {MESH.map(([c, , , , , o], i) => (
-            <RadialGradient key={i} id={`mesh${i}`} cx="50%" cy="50%" r="50%">
-              <Stop offset="0" stopColor={MESH_COLORS[c]} stopOpacity={o} />
-              <Stop offset="0.6" stopColor={MESH_COLORS[c]} stopOpacity={0} />
-            </RadialGradient>
-          ))}
-        </Defs>
-        {MESH.map(([, cx, cy, rx, ry], i) => <Ellipse key={i} cx={cx} cy={cy} rx={rx} ry={ry} fill={`url(#mesh${i})`} />)}
-      </Svg>
+      <Image source={BACKDROP} style={StyleSheet.absoluteFill} resizeMode="cover" fadeDuration={0} />
     </View>
   );
 }
 
 const WEB_BLUR = 'blur(16px) saturate(1.5)';
 
-// Połysk panelu: pierwsze dziecko widoku z borderRadius i overflow hidden.
-export function GlassFx({ radius = 14, backdrop = true }) {
+// Połysk "C": płynnie od góry 0.12 → 0.05 → 0.03, bez ostrej linii.
+// Telefon: natywny gradient w stylu widoku (experimental_backgroundImage, nowa architektura RN), bez
+// dodatkowych warstw. Web: react-native-web go nie zna, więc tam rysuje go SVG w GlassFx.
+export const GLOSS = 'linear-gradient(180deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.05) 40%, rgba(255,255,255,0.03) 100%)';
+const nativeGloss = Platform.OS === 'web' ? null : { experimental_backgroundImage: GLOSS };
+
+export function GlassFx({ radius = 14, backdrop = false }) {
   const ref = useRef(null);
   useEffect(() => {
     if (Platform.OS !== 'web' || !ref.current || !backdrop) return;
     ref.current.style.backdropFilter = WEB_BLUR;
     ref.current.style.webkitBackdropFilter = WEB_BLUR;
   }, [backdrop]);
+  if (Platform.OS !== 'web') return null;
   return (
     <>
-      {Platform.OS === 'web' && backdrop ? <View ref={ref} pointerEvents="none" style={[StyleSheet.absoluteFill, { borderRadius: radius, zIndex: -1 }]} /> : null}
+      {backdrop ? <View ref={ref} pointerEvents="none" style={[StyleSheet.absoluteFill, { borderRadius: radius, zIndex: -1 }]} /> : null}
       <Svg width="100%" height="100%" style={StyleSheet.absoluteFill} pointerEvents="none">
         <Defs>
           <LinearGradient id="lt-gloss" x1="0" y1="0" x2="0" y2="1">
-            <Stop offset="0" stopColor="#ffffff" stopOpacity={0.16} />
-            <Stop offset="0.4" stopColor="#ffffff" stopOpacity={0.06} />
+            <Stop offset="0" stopColor="#ffffff" stopOpacity={0.12} />
+            <Stop offset="0.4" stopColor="#ffffff" stopOpacity={0.05} />
             <Stop offset="1" stopColor="#ffffff" stopOpacity={0.03} />
           </LinearGradient>
         </Defs>
@@ -75,6 +65,7 @@ export const glassFrame = (t, radius = 14) => ({
   overflow: 'hidden',
   borderWidth: 1,
   borderColor: t.glassLine,
+  ...nativeGloss,
 });
 
 export const Glass = forwardRef(function Glass({ style, radius = 18, blurTarget, intensity = 40, children, ...rest }, outerRef) {

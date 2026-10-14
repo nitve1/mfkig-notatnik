@@ -35,6 +35,12 @@ export async function getJson(url) {
   return r.json();
 }
 
+// Opisy modeli są w osobnym pliku (data/descriptions.json), nie w zestawieniu cen.
+function stripDesc(s) {
+  for (const m of s.models) delete m.desc;
+  return s;
+}
+
 const newer = (a, b) => !b || (a && Date.parse(a.generatedAt) > Date.parse(b.generatedAt));
 
 export async function fetchRemoteSnapshot() {
@@ -49,21 +55,29 @@ export async function fetchRemoteSnapshot() {
   return null;
 }
 
-// Czy wolno teraz zrobić pełne sprawdzenie (ustawienie "tylko Wi-Fi").
-export async function liveAllowed(wifiOnly) {
-  if (!CAN_LIVE) return false;
+// Stan sieci: czy jest internet i czy to Wi-Fi (albo kabel).
+export async function networkState() {
+  if (!CAN_LIVE) return { online: false, wifi: false };
   try {
     const st = await Network.getNetworkStateAsync();
-    if (st.isConnected === false || st.isInternetReachable === false) return false;
-    if (wifiOnly && st.type !== Network.NetworkStateType.WIFI && st.type !== Network.NetworkStateType.ETHERNET) return false;
-    return true;
+    const online = st.isConnected !== false && st.isInternetReachable !== false;
+    const wifi = st.type === Network.NetworkStateType.WIFI || st.type === Network.NetworkStateType.ETHERNET;
+    return { online, wifi };
   } catch {
-    return !wifiOnly;
+    return { online: true, wifi: false };
   }
 }
 
+// Zgodność ze starszym kodem: czy wolno zrobić pełne sprawdzenie.
+export async function liveAllowed(wifiOnly) {
+  const n = await networkState();
+  return n.online && (!wifiOnly || n.wifi);
+}
+
 // Jeden krok odświeżenia, wspólny dla apki i zadania w tle.
-export async function refreshPrices(current, { force = false, wifiOnly = false, onProgress, watchIds = null } = {}) {
+// Pełne sprawdzenie (ok. 430 zapytań, 3 MB) przy ustawieniu "tylko Wi-Fi" czeka na Wi-Fi; obserwowane
+// modele (kilka kB) sprawdzamy też na danych komórkowych.
+export async function refreshPrices(current, { force = false, wifiOnly = true, onProgress, watchIds = null } = {}) {
   const meta = await readMeta();
   const now = Date.now();
   let snap = current ?? (await readSnapshot()) ?? BUNDLED;
@@ -71,10 +85,13 @@ export async function refreshPrices(current, { force = false, wifiOnly = false, 
   let changed = false;
   let error = null;
 
+  const net = await networkState();
+  const canFull = net.online && (!wifiOnly || net.wifi);
+  const canPartial = net.online;
+
   // Zestawienie z GitHub: na start bez danych, potem co kilka godzin albo gdy nie wolno sprawdzać samemu.
-  const canLive = await liveAllowed(wifiOnly);
-  const remoteDue = !meta.remoteAt || now - meta.remoteAt > REMOTE_EVERY_MS || !canLive;
-  if (remoteDue && (force || !meta.remoteAt || now - (meta.remoteTryAt ?? 0) > 15 * 60 * 1000)) {
+  const remoteDue = !meta.remoteAt || now - meta.remoteAt > REMOTE_EVERY_MS || !canFull;
+  if (net.online && remoteDue && (force || !meta.remoteAt || now - (meta.remoteTryAt ?? 0) > 15 * 60 * 1000)) {
     await writeMeta({ remoteTryAt: now });
     const remote = await fetchRemoteSnapshot();
     if (remote) {
@@ -86,35 +103,32 @@ export async function refreshPrices(current, { force = false, wifiOnly = false, 
     }
   }
 
-  if (canLive) {
-    const fullDue = force || !meta.liveAt || now - meta.liveAt > LIVE_EVERY_MS;
-    try {
-      if (fullDue) {
-        snap = await buildSnapshot({ getJson, prev: snap, base: snap, includeDirect: false, concurrency: 8, onProgress });
-        snap.fullAt = snap.generatedAt;
-        await writeMeta({ liveAt: now });
-        changed = true;
-      } else if (watchIds?.length && (force || !meta.partialAt || now - meta.partialAt > PARTIAL_EVERY_MS)) {
-        // Między pełnymi sprawdzeniami: tylko obserwowane modele (kilka zapytań).
-        snap = await refreshModels(snap, watchIds, { getJson });
-        await writeMeta({ partialAt: now });
-        changed = true;
-      }
-    } catch (e) {
-      error = e.message;
+  try {
+    if (canFull && (force || !meta.liveAt || now - meta.liveAt > LIVE_EVERY_MS)) {
+      snap = stripDesc(await buildSnapshot({ getJson, prev: snap, base: snap, includeDirect: false, concurrency: 8, onProgress }));
+      snap.fullAt = snap.generatedAt;
+      await writeMeta({ liveAt: now });
+      changed = true;
+    } else if (canPartial && watchIds?.length && (force || !meta.partialAt || now - meta.partialAt > PARTIAL_EVERY_MS)) {
+      // Między pełnymi sprawdzeniami i na danych komórkowych: tylko obserwowane modele (kilka zapytań).
+      snap = await refreshModels(snap, watchIds, { getJson });
+      await writeMeta({ partialAt: now });
+      changed = true;
     }
-  } else if (!CAN_LIVE) {
-    error = null; // web: tylko zestawienie z pliku
-  } else {
-    error = wifiOnly ? 'wifi-only' : 'offline';
+  } catch (e) {
+    error = e.message;
+  }
+  if (!error && CAN_LIVE) {
+    if (!net.online) error = 'offline';
+    else if (!canFull) error = 'wifi-only';
   }
 
   if (changed) await writeSnapshot(snap);
-  return { snapshot: snap, changed, error, live: canLive };
+  return { snapshot: snap, changed, error, live: canFull };
 }
 
 // Stan cen w apce: od razu z pamięci telefonu, potem odświeżanie.
-export function useSnapshot({ wifiOnly = false, watchIds = [] } = {}) {
+export function useSnapshot({ wifiOnly = true, watchIds = [] } = {}) {
   const [snapshot, setSnapshot] = useState(null);
   const [error, setError] = useState(null);
   const [refreshing, setRefreshing] = useState(false);

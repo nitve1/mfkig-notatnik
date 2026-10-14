@@ -13,7 +13,7 @@ const KINDS = StyleSheet.create({
   body: { fontFamily: font.text, fontSize: 15, lineHeight: 21 },
   strong: { fontFamily: font.textBold, fontSize: 15.5, lineHeight: 21 },
   small: { fontFamily: font.textMedium, fontSize: 13, lineHeight: 18 },
-  tiny: { fontFamily: font.textSemi, fontSize: 11.5, lineHeight: 15 },
+  tiny: { fontFamily: font.textSemi, fontSize: 12.5, lineHeight: 16 }, // min. rozmiar tekstu (audyt czytelności)
 });
 
 // Duży tekst systemowy (Dynamic Type) skaluje się, ale najwyżej 1,3x, żeby nie rozsadzić układu.
@@ -264,7 +264,7 @@ const s = StyleSheet.create({
   btn: { flex: 1, minHeight: 48, paddingHorizontal: space[4], borderRadius: radius.lg, borderWidth: 1, alignItems: 'center', justifyContent: 'center', flexDirection: 'row', gap: 8 },
   seg: { flexDirection: 'row', padding: SEG_PAD },
   segPill: { position: 'absolute', top: SEG_PAD + SEG_INSET, bottom: SEG_PAD + SEG_INSET, left: SEG_PAD + SEG_INSET, borderRadius: radius.lg - SEG_PAD - SEG_INSET },
-  segItem: { flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 5, paddingVertical: 10 },
+  segItem: { flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 5, minHeight: 44 }, // + odstęp 3 = 50 dp celu dotyku
   card: { padding: 14 },
   stripe: { position: 'absolute', left: 0, top: 12, bottom: 12, width: 4, borderTopRightRadius: 4, borderBottomRightRadius: 4 },
   badge: { paddingHorizontal: 7, paddingVertical: 2, borderRadius: 6, alignSelf: 'flex-end' },
@@ -272,9 +272,9 @@ const s = StyleSheet.create({
   catChip: { flexDirection: 'row', alignItems: 'center', gap: 5, flexShrink: 1 },
   stat: { flex: 1, padding: 14 },
   progress: { height: 7, borderRadius: 9, overflow: 'hidden' },
-  pill: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 13, paddingVertical: 9, borderRadius: radius.md, borderWidth: 1, overflow: 'hidden' },
+  pill: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 14, minHeight: 44, borderRadius: radius.md, borderWidth: 1, overflow: 'hidden' },
   section: { paddingHorizontal: 14, paddingVertical: 4 },
-  iconBtn: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center' },
+  iconBtn: { width: 48, height: 48, alignItems: 'center', justifyContent: 'center' },
   dot: { position: 'absolute', right: 7, top: 7, width: 10, height: 10, borderRadius: 5, borderWidth: 2 },
   empty: { padding: space[5], alignItems: 'center', gap: space[2] },
   emptyIcon: { width: 48, height: 48, borderRadius: radius.md, alignItems: 'center', justifyContent: 'center', marginBottom: space[1] },

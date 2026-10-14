@@ -7,6 +7,7 @@ import { importProfile, useProfile } from '../profile';
 import { enableNotifications } from '../alerts';
 import ProviderPicker from './ProviderPicker';
 import { LanguagePicker, modeNote, modeOptions } from './Profile';
+import { TILE } from '../theme';
 import { GlassFx, glassFrame } from '../glass';
 import { t as tr } from '../../../core/i18n.js';
 
@@ -77,7 +78,7 @@ function Body({ snapshot, insets, draft, set, step, setStep, finish }) {
                 onPress={() => set({ cats: on ? draft.cats.filter((x) => x !== c.key) : [...draft.cats, c.key] })}
                 accessibilityRole="checkbox"
                 accessibilityState={{ checked: on }}
-                style={[s.tile, { backgroundColor: on ? t[c.key] : t.card, borderColor: t[c.key] }]}
+                style={[s.tile, { backgroundColor: on ? TILE[c.key] : t.card, borderColor: t[c.key] }]}
               >
                 <Row style={{ justifyContent: 'space-between' }}>
                   <Icon name={c.key} size={26} color={on ? '#fff' : t[c.key]} />

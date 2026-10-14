@@ -62,9 +62,17 @@ function exampleKey(model) {
   return 'example.text';
 }
 
-function About({ model }) {
+// Opisy wczytujemy dopiero przy pierwszym otwarciu karty modelu (szybszy start apki).
+let DESCS = null;
+const descOf = (id) => {
+  if (!DESCS) DESCS = require('../../../data/descriptions.json');
+  return DESCS[id] ?? null;
+};
+
+function About({ model: base }) {
   const t = useTheme();
   const [open, setOpen] = useState(false);
+  const model = { ...base, desc: base.desc ?? descOf(base.id) };
   const uses = modelUses(model);
   if (!model.desc && !uses.length) return null;
   return (

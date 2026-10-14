@@ -20,7 +20,7 @@ export const DEFAULT_PROFILE = {
   name: '',
   theme: 'system', // 'system' | 'light' | 'dark'
   language: 'system', // 'system' albo kod: en, pl, es, fr, it, de
-  refresh: { wifiOnly: false }, // pełne sprawdzenie cen (~3 MB) tylko przez Wi-Fi
+  refresh: { wifiOnly: true }, // pełne sprawdzenie cen (~3 MB) tylko przez Wi-Fi; obserwowane zawsze
   mode: 'simple', // 'simple' = tylko platformy, 'pro' = też ~200 dostawców bezpośrednich
   cats: ['all'],
   providers: [], // ulubieni dostawcy (nazwy jak w ofertach)

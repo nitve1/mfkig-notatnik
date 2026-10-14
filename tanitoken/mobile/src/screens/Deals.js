@@ -8,7 +8,8 @@ import Icon from '../icons';
 import { BellButton, catLabel, DealCard, Header, PriceStatus, priceParts, SponsorCard, styles } from '../parts';
 import { withSponsors } from '../../../core/affiliates.js';
 import { radius, space, tileColor, useBottomSpace, useTheme } from '../theme';
-import { GlassFx, GlowBorder } from '../glass';
+import { GLOSS, GlassFx, GlowBorder } from '../glass';
+import { Platform } from 'react-native';
 import { useProfile } from '../profile';
 
 const TYPES = ['discount', 'drop', 'free', 'cheapest'];
@@ -39,7 +40,7 @@ function cheapestDeals(snapshot, filter) {
 
 function Tile({ cat, count, best, type, on, dim, onPress, wide }) {
   const t = useTheme();
-  const bg = cat === 'all' ? t.hero : tileColor(t[cat]);
+  const bg = cat === 'all' ? t.hero : tileColor(cat);
   const solid = cat === 'all' ? t.ink : t[cat];
   const note = type === 'cheapest'
     ? (count ? tr('tile.from', { price: best }) : tr('tile.noModels'))
@@ -54,6 +55,7 @@ function Tile({ cat, count, best, type, on, dim, onPress, wide }) {
       accessibilityLabel={`${catLabel(cat)}, ${count}, ${note}`}
       style={({ pressed }) => [
         s.tile,
+        Platform.OS !== 'web' && { experimental_backgroundImage: GLOSS },
         wide && s.wide,
         { backgroundColor: bg, opacity: dim ? 0.45 : pressed ? 0.85 : 1, borderColor: wide ? 'transparent' : on ? 'rgba(255,255,255,0.85)' : t.glassLine },
         wide && { borderWidth: 0, borderRadius: radius.lg - 1.5 },

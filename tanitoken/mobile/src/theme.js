@@ -5,17 +5,17 @@ import { createContext, useContext } from 'react';
 const night = {
   dark: true,
   bg: '#0b0a12',
-  card: 'rgba(11,10,18,0.22)', // równe przyciemnienie pod połyskiem, żeby tekst był czytelny na kolorach tła
+  card: 'rgba(11,10,18,0.55)', // równe przyciemnienie pod połyskiem: tekst min. 4,5:1 (WCAG AA) na każdym miejscu tła
   cardSolid: '#1a1730', // tam, gdzie pod spodem nie ma tła (np. stopka kreatora)
   ink: '#f3f1fb',
-  ink2: '#b4b0cc',
-  ink3: '#7e7a98',
+  ink2: '#c9c5dd', // 7,8:1 w najgorszym miejscu
+  ink3: '#a29eba', // 5,1:1 w najgorszym miejscu
   line: 'rgba(255,255,255,0.10)',
   seg: 'rgba(255,255,255,0.06)',
   hero: 'rgba(255,255,255,0.10)', // kafel "Wszystkie promocje"
   heroInk: '#ffffff',
   onInk: '#100e1b', // tekst na jasnych przyciskach
-  text: '#6d8cff',
+  text: '#8aa2ff',
   coding: '#a875ff',
   image: '#ff6fa3',
   video: '#ffa23a',
@@ -24,15 +24,16 @@ const night = {
   save: '#33cf95',
   saveSoft: 'rgba(51,207,149,0.14)',
   infoSoft: 'rgba(109,140,255,0.16)',
-  glassTint: 'rgba(11,10,18,0.30)', // pasek: przyciemnienie pod rozmyciem
+  glassTint: 'rgba(11,10,18,0.62)', // pasek: mocniej przyciemniony, bo pod nim przewija się tekst
   glassLine: 'rgba(255,255,255,0.16)',
   glassActive: 'rgba(255,255,255,0.16)',
 };
 
 export const THEMES = { night };
 
-// Kolory kategorii na kaflach: lekko przezroczyste, żeby świecące tło przebijało przez szkło.
-export const tileColor = (c) => `${c}d9`;
+// Kafle kategorii: pełne, ciemniejsze tony, biały tekst ma na nich 5,2–5,9:1.
+export const TILE = { text: '#4a63d8', coding: '#7a3fe0', image: '#c2185b', video: '#a8530a', all: null };
+export const tileColor = (cat) => TILE[cat];
 
 export const font = {
   // Archivo (klasyczna szerokość) w całej apce, wybór użytkownika z 2026-10-14.

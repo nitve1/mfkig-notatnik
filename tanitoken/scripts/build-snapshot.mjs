@@ -9,11 +9,12 @@ import { buildSnapshot, snapshotSummary } from '../core/snapshot.js';
 
 const DATA_DIR = join(dirname(fileURLToPath(import.meta.url)), '..', 'data');
 const OUT = join(DATA_DIR, 'snapshot.json');
+const DESC = join(DATA_DIR, 'descriptions.json'); // opisy modeli osobno: apka wczytuje je dopiero w karcie modelu
 
 async function getJson(url, tries = 3) {
   for (let i = 1; ; i++) {
     try {
-      const r = await fetch(url, { headers: { 'User-Agent': 'TaniToken snapshot (github.com/nitve1/mfkig-notatnik)' } });
+      const r = await fetch(url, { headers: { 'User-Agent': 'LightTokenz snapshot (github.com/nitve1/mfkig-notatnik)' } });
       if (!r.ok) throw new Error(`HTTP ${r.status}`);
       return await r.json();
     } catch (e) {
@@ -44,6 +45,15 @@ try {
 for (const [name, st] of Object.entries(snapshot.sources)) if (!st.ok) console.warn(`! ${name}: ${st.error}`);
 
 await mkdir(DATA_DIR, { recursive: true });
+let descs = {};
+try { descs = JSON.parse(await readFile(DESC, 'utf8')); } catch { /* pierwszy raz */ }
+for (const m of snapshot.models) {
+  if (m.desc) descs[m.id] = m.desc;
+  delete m.desc;
+}
+const keep = new Set(snapshot.models.map((m) => m.id));
+for (const id of Object.keys(descs)) if (!keep.has(id)) delete descs[id];
+await writeFile(DESC, JSON.stringify(descs));
 const body = JSON.stringify(snapshot);
 await writeFile(OUT, body);
 

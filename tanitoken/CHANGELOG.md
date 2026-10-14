@@ -26,6 +26,23 @@ Jedno miejsce z historią zmian, decyzjami i otwartymi zadaniami. Aktualizowane 
 | 5 | Po merge'u: ręczne uruchomienie workflow „TaniToken snapshot” (tworzy gałąź `tanitoken-data`) | po merge'u |
 | 6 | Klucz release (keystore) do Google Play; obecny APK jest podpisany kluczem debug | przed publikacją |
 
+## 2026-10-14 – sesja 11: stonowane tło, czytelność (WCAG AA) i wydajność
+
+Wybór użytkownika: tło „1. Stonowane” (`mockups/tone.png`) + wszystkie zalecenia z `docs/czytelnosc-2026-10.md`.
+
+- Tło: siatka gradientów kategorii 40% (zamiast 67%) jako obrazek `mobile/assets/backdrop.jpg` (31 KB,
+  `scripts/backdrop.mjs`) zamiast SVG z elipsami.
+- Szkło: przyciemnienie paneli 55% (`card`), połysk 0.12 → 0.05 → 0.03, pasek 62%. Na telefonie połysk
+  to natywny gradient w stylu (`experimental_backgroundImage`, `GLOSS`), bez SVG na każdej karcie; na webie
+  SVG. Rozmycie tła tylko na pasku zakładek.
+- Kolory tekstu: `ink2` #c9c5dd, `ink3` #a29eba, `text` #8aa2ff. Kafle kategorii pełne i ciemniejsze
+  (`TILE`: #4a63d8, #7a3fe0, #c2185b, #a8530a), biały tekst 5,2–5,9:1. Najgorszy kontrast tekstu 5,1:1.
+- Rozmiary: najmniejszy tekst 12,5 px; cele dotyku: filtry 50 dp, pigułki 44, przyciski ikon 48.
+- Sieć: domyślnie pełne sprawdzenie cen tylko przez Wi-Fi; na danych komórkowych tylko obserwowane modele.
+- Start apki: opisy modeli w `data/descriptions.json` (160 KB), wczytywane przy pierwszym otwarciu karty
+  modelu; `build-snapshot.mjs` je wydziela, sprawdzenie na telefonie ich nie trzyma.
+- Podgląd w artefakcie (wersja 8). Testy 16/16.
+
 ## 2026-10-14 – sesja 10: wybór krok po kroku (tło, szkło, świecąca krawędź)
 
 Uwaga użytkownika: za dużo zmian naraz i bez pytania; panele wyglądały jak dwa nałożone kolory (połysk do
