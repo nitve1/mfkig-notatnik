@@ -32,7 +32,10 @@ Jedno miejsce z historią zmian, decyzjami i otwartymi zadaniami. Aktualizowane 
   szkle” (`mockups/fonts.mjs`, PNG `mockups/f1-gielda` … `f5-kantor`): Giełda (Big Shoulders Display + Barlow),
   Redakcja (Young Serif + Instrument Sans), Terminal (Chivo + Chivo Mono), Sygnał (Anybody szeroki +
   Atkinson Hyperlegible Next), Kantor (Gloock + Familjen Grotesk + Azeret Mono). Wszystkie mają polskie znaki
-  i paczki `@expo-google-fonts`. Czeka na wybór.
+  i paczki `@expo-google-fonts`. Użytkownik: „wszystkie słabe”.
+- Kolejne 10 par jako proste próbki (`mockups/fonts2.mjs`, `fonts2.png`): Doto, Zalando Sans Expanded,
+  Bitcount, Mozilla Headline/Text, Darker Grotesque + Spline Sans Mono, Tomorrow + Kode Mono, Bodoni Moda +
+  Reddit Mono, Michroma, Parkinsans + Google Sans Code, Sixtyfour (brak „ś”, do odrzucenia). Czeka na wybór.
 - Podgląd web opublikowany jako artefakt (ten sam adres, wersja 4).
 
 ## 2026-10-13 – sesja 7: LightTokenz 0.2.0 (nocne szkło, kompaktowe menu, opisy modeli)
