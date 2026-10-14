@@ -4,8 +4,8 @@ import { createContext, useContext } from 'react';
 
 const night = {
   dark: true,
-  bg: '#0c0a17',
-  card: 'rgba(30,26,52,0.55)', // szkło paneli: tło prześwituje
+  bg: '#0b0a12',
+  card: 'rgba(11,10,18,0.22)', // równe przyciemnienie pod połyskiem, żeby tekst był czytelny na kolorach tła
   cardSolid: '#1a1730', // tam, gdzie pod spodem nie ma tła (np. stopka kreatora)
   ink: '#f3f1fb',
   ink2: '#b4b0cc',
@@ -24,10 +24,8 @@ const night = {
   save: '#33cf95',
   saveSoft: 'rgba(51,207,149,0.14)',
   infoSoft: 'rgba(109,140,255,0.16)',
-  glassTint: 'rgba(30,26,52,0.38)', // pasek zakładek: ok. 15% bardziej przezroczysty niż wcześniej
-  glassEdge: 'rgba(255,255,255,0.32)', // 1 px jasnej krawędzi u góry: światło na grubej tafli
-  glassLine: 'rgba(255,255,255,0.10)',
-  glassSheen: 'rgba(255,255,255,0.045)', // połysk górnej połowy panelu
+  glassTint: 'rgba(11,10,18,0.30)', // pasek: przyciemnienie pod rozmyciem
+  glassLine: 'rgba(255,255,255,0.16)',
   glassActive: 'rgba(255,255,255,0.16)',
 };
 

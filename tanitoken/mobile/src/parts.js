@@ -89,7 +89,7 @@ export function SponsorCard({ sponsor }) {
         <T kind="strong">{sponsor.name}</T>
         <T kind="small" color="ink2" numberOfLines={2}>{tr(sponsor.tagline)}</T>
       </View>
-      <View style={{ paddingHorizontal: 12, paddingVertical: 8, borderRadius: radius.xs, backgroundColor: t.glassActive, borderTopWidth: 1, borderTopColor: t.glassEdge }}>
+      <View style={{ paddingHorizontal: 12, paddingVertical: 8, borderRadius: radius.xs, backgroundColor: t.glassActive }}>
         <T kind="small" style={{ fontFamily: font.textBold }}>{tr('ad.cta')}</T>
       </View>
     </Pressable>

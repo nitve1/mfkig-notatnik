@@ -37,7 +37,11 @@ połowy), tło bez prawdziwych gradientów. Od teraz: makieta opcji, wybór uży
   od góry bez ostrej granicy, blur 16 + saturate, ramka 1 px białe 16%, wewnętrzna poświata, miękki cień).
 - Krok 3, świecąca krawędź (`mockups/glow.mjs`, `glow.png`, w HTML prawdziwa animacja @property): gdzie
   (1 kafel podsumowania, 2 największa zniżka, 3 karta „Używam”, 4 aktywna zakładka) i kolor (a kategorie,
-  b kolor elementu, c srebro, d róż-pomarańcz). Czeka na wybór.
+  b kolor elementu, c srebro, d róż-pomarańcz). Wybrane **1a**: kafel podsumowania, kolory kategorii.
+- Wdrożone w apce (`src/glass.js`, `theme.js`): `Backdrop` = siatka elips z gradientem (jak makieta 6),
+  `GlassFx` = połysk 0.16 → 0.06 → 0.03 + ramka 1 px 16% + na webie blur 16; `GlowBorder` w kolorach kategorii.
+  Naprawiony błąd: SVG połysku na webie miało domyślną szerokość 300 px, stąd „dwa kolory” w kartach.
+  Podgląd w artefakcie (wersja 7).
 - Zmiany z sesji 9 (szkło, glow na kaflu) zostaną dostosowane do wyborów.
 
 ## 2026-10-14 – sesja 9: szkło bez „linii”, świecąca krawędź, animacje, mniej śladów AI
