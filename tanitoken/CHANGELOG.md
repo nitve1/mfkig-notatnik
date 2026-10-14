@@ -35,7 +35,10 @@ Jedno miejsce z historią zmian, decyzjami i otwartymi zadaniami. Aktualizowane 
   i paczki `@expo-google-fonts`. Użytkownik: „wszystkie słabe”.
 - Kolejne 10 par jako proste próbki (`mockups/fonts2.mjs`, `fonts2.png`): Doto, Zalando Sans Expanded,
   Bitcount, Mozilla Headline/Text, Darker Grotesque + Spline Sans Mono, Tomorrow + Kode Mono, Bodoni Moda +
-  Reddit Mono, Michroma, Parkinsans + Google Sans Code, Sixtyfour (brak „ś”, do odrzucenia). Czeka na wybór.
+  Reddit Mono, Michroma, Parkinsans + Google Sans Code, Sixtyfour (brak „ś”, do odrzucenia).
+- Użytkownik zaproponował Archivo: 4 warianty szerokości (`mockups/fonts3.mjs`, `fonts3.png`). Paczka
+  `@expo-google-fonts/archivo` ma tylko szerokość 100%; inne szerokości trzeba wyciąć z fontu zmiennego
+  (fontTools instancer) do `mobile/assets/fonts`, bo React Native nie obsługuje osi wdth. Czeka na wybór.
 - Podgląd web opublikowany jako artefakt (ten sam adres, wersja 4).
 
 ## 2026-10-13 – sesja 7: LightTokenz 0.2.0 (nocne szkło, kompaktowe menu, opisy modeli)
