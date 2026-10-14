@@ -181,3 +181,37 @@ test('karty partnerów: tylko z linkiem, co 10 pozycji, nigdy na początku', asy
     AFFILIATES.Novita.link = null;
   }
 });
+
+test('awaria Vercel/Requesty przy sprawdzaniu: oferty i modele z poprzedniego zestawienia zostają', async () => {
+  const { buildSnapshot } = await import('./snapshot.js');
+  const or = { data: [{ id: 'a/x', name: 'A: X', architecture: { output_modalities: ['text'] }, pricing: { prompt: '0.000001', completion: '0.000002' } }] };
+  const ep = { data: { endpoints: [{ provider_name: 'P', tag: 'p', pricing: { prompt: '0.000001', completion: '0.000002' } }] } };
+  const vid = { id: 'v/vid', key: 'vid', name: 'Vid', author: 'v', cats: ['video'], unit: 'second', offers: [{ src: 'vercel', provider: 'Vercel AI Gateway', tag: 'vercel/v/vid', unit: 'second', price: 0.1, discount: 0 }] };
+  const x = { id: 'a/x', key: 'x', name: 'A: X', cats: ['text'], unit: 'token', offers: [{ src: 'requesty', provider: 'Requesty (p)', tag: 'requesty/p/x', unit: 'token', in: 1, out: 2, discount: 0 }] };
+  const prev = { v: 2, generatedAt: '2026-10-01T00:00:00Z', models: [x, vid], promos: {}, ended: [], drops: [], history: [] };
+  const getJson = async (url) => {
+    if (url.includes('/endpoints')) return ep;
+    if (url.includes('openrouter.ai')) return or;
+    throw new Error('down');
+  };
+  const s = await buildSnapshot({ getJson, prev, includeDirect: false, now: '2026-10-02T00:00:00Z' });
+  assert.ok(s.models.find((m) => m.id === 'v/vid')?.offers.some((o) => o.src === 'vercel'));
+  assert.ok(s.models.find((m) => m.id === 'a/x').offers.some((o) => o.src === 'requesty'));
+});
+
+test('odświeżenie obserwowanych nie udaje pełnego sprawdzenia', async () => {
+  const { refreshModels } = await import('./snapshot.js');
+  const snap = { v: 2, generatedAt: '2026-10-01T00:00:00Z', models: [], promos: {}, ended: [], drops: [], history: [] };
+  const next = await refreshModels(snap, [], { getJson: async () => ({}), now: '2026-10-01T05:00:00Z' });
+  assert.equal(next.generatedAt, '2026-10-01T00:00:00Z');
+  assert.equal(next.partialAt, '2026-10-01T05:00:00Z');
+  assert.equal(next.updatedAt, '2026-10-01T05:00:00Z');
+});
+
+test('id alertów bez dat i cen (ta sama promocja z telefonu i z serwera to jeden alert)', () => {
+  const o = tok('openrouter', 'P', 0.5, 1, { discount: 0.5 });
+  const model = { id: 'a/x', name: 'X', unit: 'token', cats: ['text'], offers: [o] };
+  const promo = (since) => ({ modelId: 'a/x', key: offerKey(o), provider: 'P', type: 'discount', pct: 50, since, sinceKnown: true });
+  const ids = (since) => computeAlerts({ models: [model], promos: { p: promo(since) }, ended: [], promoStats: {} }, [{ modelId: 'a/x', mode: 'watch', since: '2026-01-01T00:00:00Z' }]).map((a) => a.id);
+  assert.deepEqual(ids('2026-10-01T22:30:00Z'), ids('2026-10-01T23:00:00Z'));
+});

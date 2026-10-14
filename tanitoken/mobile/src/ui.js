@@ -217,10 +217,17 @@ export function Section({ title, children, style }) {
   );
 }
 
+// Cały wiersz przełącza (cel dotyku na pełną szerokość, nie tylko mały suwak).
 export function ToggleRow({ title, body, value, onChange, last }) {
   const t = useTheme();
   return (
-    <Row style={{ paddingVertical: space[3], alignItems: 'flex-start', borderBottomWidth: last ? 0 : StyleSheet.hairlineWidth, borderBottomColor: t.line }}>
+    <Pressable
+      onPress={() => onChange(!value)}
+      accessibilityRole="switch"
+      accessibilityState={{ checked: !!value }}
+      accessibilityLabel={title}
+      style={{ paddingVertical: space[3], minHeight: 56, flexDirection: 'row', alignItems: 'flex-start', gap: space[3], borderBottomWidth: last ? 0 : StyleSheet.hairlineWidth, borderBottomColor: t.line }}
+    >
       <View style={{ flex: 1 }}>
         <T kind="strong">{title}</T>
         {body ? <T kind="small" color="ink2" style={{ marginTop: 2 }}>{body}</T> : null}
@@ -230,9 +237,9 @@ export function ToggleRow({ title, body, value, onChange, last }) {
         onValueChange={onChange}
         trackColor={{ true: t.text, false: t.seg }}
         thumbColor="#ffffff"
-        accessibilityLabel={title}
+        importantForAccessibility="no"
       />
-    </Row>
+    </Pressable>
   );
 }
 

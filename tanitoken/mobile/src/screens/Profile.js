@@ -179,6 +179,6 @@ export default function Profile({ snapshot, priceStatus, onRefresh }) {
 }
 
 const s = StyleSheet.create({
-  input: { borderWidth: 1.5, borderRadius: radius.sm, paddingHorizontal: 12, paddingVertical: 10, fontSize: 16, fontFamily: font.textMedium },
+  input: { minHeight: 44, borderWidth: 1.5, borderRadius: radius.sm, paddingHorizontal: 12, paddingVertical: 10, fontSize: 16, fontFamily: font.textMedium },
   wrap: { flexDirection: 'row', flexWrap: 'wrap', gap: space[2] },
 });

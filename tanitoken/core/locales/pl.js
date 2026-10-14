@@ -30,6 +30,7 @@ export default {
   'sort.offers': 'Najwięcej ofert',
 
   'unit.perMIn': '/ 1M wej.',
+  'unit.perMonth': '/ mies.',
   'unit.perMOut': '/ 1M wyj.',
   'unit.perImage': 'za obraz',
   'unit.perSecond': 'za s',

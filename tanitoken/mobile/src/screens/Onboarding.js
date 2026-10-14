@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Alert, KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
+import { useEffect, useState } from 'react';
+import { Alert, BackHandler, KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
 import { Button, Row, Section, Segmented, T, ToggleRow, MAX_FONT_SCALE } from '../ui';
 import Icon from '../icons';
 import { ThemeContext, font, radius, space, useTheme } from '../theme';
@@ -59,7 +59,7 @@ function Body({ snapshot, insets, draft, set, step, setStep, finish }) {
           />
           <T kind="small" color="ink2">{tr('onb.nameNote')}</T>
         </View>
-        <Pressable onPress={onImport} accessibilityRole="button" style={{ marginTop: space[4], alignSelf: 'flex-start' }}>
+        <Pressable onPress={onImport} accessibilityRole="button" hitSlop={8} style={{ marginTop: space[3], alignSelf: 'flex-start', minHeight: 44, justifyContent: 'center' }}>
           <T kind="small" style={{ color: t.text, fontFamily: font.textBold }}>{tr('onb.haveFile')}</T>
         </Pressable>
       </>
@@ -173,8 +173,22 @@ export default function Onboarding({ snapshot, insets }) {
   const [step, setStep] = useState(0);
   const [draft, setDraft] = useState(() => ({ ...profile, cats: profile.cats.filter((c) => c !== 'all') }));
   const set = (patch) => setDraft((d) => ({ ...d, ...patch }));
-  const finish = (imported) =>
-    update(imported ?? { ...draft, cats: draft.cats.length ? draft.cats : ['all'], onboarded: true });
+  // Język wybrany w 1. kroku jest już zapisany w profilu (zmienia się od razu), więc nie nadpisujemy go
+  // kopią z chwili otwarcia kreatora.
+  const finish = (imported) => {
+    if (imported) return update(imported);
+    const { language: _lang, ...rest } = draft;
+    return update({ ...rest, cats: draft.cats.length ? draft.cats : ['all'], onboarded: true });
+  };
+
+  // Wstecz na Androidzie cofa krok kreatora zamiast zamykać apkę.
+  useEffect(() => {
+    const sub = BackHandler.addEventListener('hardwareBackPress', () => {
+      if (step > 0) { setStep(step - 1); return true; }
+      return false;
+    });
+    return () => sub.remove();
+  }, [step]);
 
   // Wybrany w kroku 4 motyw widać od razu.
   return (
@@ -187,7 +201,7 @@ export default function Onboarding({ snapshot, insets }) {
 const s = StyleSheet.create({
   page: { padding: space[4], paddingBottom: space[7] },
   card: { padding: space[4], gap: space[2] },
-  input: { borderWidth: 1.5, borderRadius: radius.sm, paddingHorizontal: 14, paddingVertical: 12, fontSize: 17, fontFamily: font.textMedium },
+  input: { minHeight: 44, borderWidth: 1.5, borderRadius: radius.sm, paddingHorizontal: 14, paddingVertical: 12, fontSize: 17, fontFamily: font.textMedium },
   grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10, marginTop: space[5] },
   tile: { width: '48.4%', minHeight: 130, borderRadius: radius.lg, padding: 14, justifyContent: 'space-between', borderWidth: 2 },
   check: { width: 22, height: 22, borderRadius: 7, borderWidth: 2, alignItems: 'center', justifyContent: 'center' },

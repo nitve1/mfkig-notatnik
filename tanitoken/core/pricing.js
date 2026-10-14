@@ -278,6 +278,10 @@ export function onePerProvider(offers, keepKey = null) {
 
 // Zdarzenia do powiadomień. Id jest stabilne, apka pamięta już wysłane.
 // filter: ograniczenie porównań (np. do ulubionych dostawców).
+// Id alertów są stałe (bez dat i cen): ta sama promocja wykryta przez telefon i przez serwer to jeden alert,
+// a drobna zmiana ceny nie daje nowego powiadomienia. Powtórkę po czasie pozwala ALERT_QUIET_MS.
+export const ALERT_QUIET_MS = 7 * DAY;
+
 export function computeAlerts(snapshot, watchlist, usage = DEFAULT_USAGE, { now = Date.now(), filter = null } = {}) {
   const alerts = [];
   for (const item of watchlist) {
@@ -289,7 +293,7 @@ export function computeAlerts(snapshot, watchlist, usage = DEFAULT_USAGE, { now 
       if (item.offerKey && p.key !== item.offerKey && p.type !== 'free') continue;
       if (!p.sinceKnown || Date.parse(p.since) < watchedSince) continue; // trwała już wcześniej, widać ją w apce
       alerts.push({
-        id: `start|${p.modelId}|${p.key}|${p.since}`,
+        id: `start|${p.modelId}|${p.key}`,
         kind: 'promo-start',
         modelId: s.model.id,
         title: p.type === 'free' ? t('alertText.freeTitle', { name }) : t('alertText.startTitle', { name, pct: p.pct, provider: p.provider }),
@@ -299,7 +303,7 @@ export function computeAlerts(snapshot, watchlist, usage = DEFAULT_USAGE, { now 
     for (const e of s.ended) {
       if (Date.parse(e.endedAt) < watchedSince) continue;
       alerts.push({
-        id: `end|${e.modelId}|${e.key}|${e.endedAt}`,
+        id: `end|${e.modelId}|${e.key}`,
         kind: 'promo-end',
         modelId: s.model.id,
         urgent: item.mode === 'use',
@@ -311,7 +315,7 @@ export function computeAlerts(snapshot, watchlist, usage = DEFAULT_USAGE, { now 
     }
     if (s.usedPromo && s.typicalDays && promoAgeDays(s.usedPromo, now) >= s.typicalDays * 0.8) {
       alerts.push({
-        id: `aging|${s.model.id}|${s.usedPromo.key}|${s.usedPromo.since}`,
+        id: `aging|${s.model.id}|${s.usedPromo.key}`,
         kind: 'promo-aging',
         modelId: s.model.id,
         urgent: true,
@@ -321,7 +325,7 @@ export function computeAlerts(snapshot, watchlist, usage = DEFAULT_USAGE, { now 
     }
     if (item.mode === 'use' && s.used && s.overpayPct >= 20 && s.best) {
       alerts.push({
-        id: `cheaper|${s.model.id}|${offerKey(s.best)}|${Math.round(unitPrice(s.best) * 1e4)}`,
+        id: `cheaper|${s.model.id}|${offerKey(s.best)}`,
         kind: 'cheaper',
         modelId: s.model.id,
         title: t('alertText.cheaperTitle', { name, pct: s.overpayPct }),

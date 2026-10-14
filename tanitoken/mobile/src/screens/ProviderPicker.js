@@ -100,7 +100,7 @@ export default function ProviderPicker({ snapshot, selected, onToggle, pro = tru
 
 const s = StyleSheet.create({
   platform: { flexDirection: 'row', alignItems: 'center', gap: space[3], borderWidth: 1, borderRadius: radius.md, padding: 12 },
-  search: { flexDirection: 'row', alignItems: 'center', gap: 8, borderWidth: 1.5, borderRadius: radius.sm, paddingHorizontal: 12 },
-  input: { flex: 1, paddingVertical: 10, fontSize: 16, fontFamily: font.textMedium },
+  search: { minHeight: 44, flexDirection: 'row', alignItems: 'center', gap: 8, borderWidth: 1.5, borderRadius: radius.sm, paddingHorizontal: 12 },
+  input: { minHeight: 44, flex: 1, paddingVertical: 10, fontSize: 16, fontFamily: font.textMedium },
   wrap: { flexDirection: 'row', flexWrap: 'wrap', gap: space[2] },
 });

@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { FlatList, StyleSheet, TextInput, View } from 'react-native';
-import { cheapest, formatContext, formatUsd, searchModels, unitPrice } from '../../../core/pricing.js';
+import { cheapest, formatContext, formatUsd, offerCost, searchModels } from '../../../core/pricing.js';
 import { viewFilter } from '../filters';
 import { t as tr } from '../../../core/i18n.js';
 import { Card, CatChip, Empty, PctBadge, Row, Segmented, T, MAX_FONT_SCALE } from '../ui';
@@ -41,7 +41,10 @@ export default function Search({ snapshot, onOpen }) {
     });
     if (favs) models = models.filter((r) => r.best || r.m.freeId);
     if (!q.trim()) {
-      if (sort === 'cheap') models.sort((a, b) => (unitPrice(a.best) ?? Infinity) - (unitPrice(b.best) ?? Infinity));
+      // Najpierw jednostka (tokeny, obrazy, sekundy wideo), potem koszt miesięczny przy zużyciu z profilu.
+      const U = { token: 0, image: 1, second: 2 };
+      const cost = (x) => (x.best ? offerCost(x.best, profile.usage) : Infinity);
+      if (sort === 'cheap') models.sort((a, b) => (U[a.best?.unit] ?? 9) - (U[b.best?.unit] ?? 9) || cost(a) - cost(b));
       if (sort === 'offers') models.sort((a, b) => b.count - a.count);
     }
     return models;
@@ -108,6 +111,6 @@ export default function Search({ snapshot, onOpen }) {
 }
 
 const s = StyleSheet.create({
-  search: { flexDirection: 'row', alignItems: 'center', gap: 10, borderWidth: 1.5, borderRadius: radius.md, paddingHorizontal: 14 },
-  input: { flex: 1, paddingVertical: 13, fontSize: 16, fontFamily: font.textMedium },
+  search: { minHeight: 44, flexDirection: 'row', alignItems: 'center', gap: 10, borderWidth: 1.5, borderRadius: radius.md, paddingHorizontal: 14 },
+  input: { minHeight: 44, flex: 1, paddingVertical: 13, fontSize: 16, fontFamily: font.textMedium },
 });

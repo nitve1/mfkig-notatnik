@@ -86,7 +86,9 @@ export async function buildSnapshot({
   for (const m of models) if (!byKey.has(m.key)) byKey.set(m.key, m);
 
   // 2. Vercel: oferty i modele, których OpenRouter nie ma (np. wideo za sekundę).
-  for (const e of vercelEntries(vercel?.data)) {
+  // Gdy Vercel chwilowo nie odpowiada, zostają jego oferty (i modele tylko z Vercel) z poprzedniego zestawienia,
+  // żeby nie znikały z katalogu i nie dawały fałszywych alertów "koniec promocji".
+  for (const e of vercel ? vercelEntries(vercel.data) : keptOffers(prev, 'vercel')) {
     let m = byKey.get(e.key);
     if (!m) {
       m = {
@@ -129,7 +131,7 @@ export async function buildSnapshot({
       m.offers.push(offer);
     }
   };
-  attach(requestyEntries(requesty?.data));
+  attach(requesty ? requestyEntries(requesty.data) : keptOffers(prev, 'requesty'));
   if (modelsDev) {
     attach(modelsDevEntries(modelsDev));
   } else {
@@ -186,7 +188,8 @@ export function finalize(prev, catalog, now, sources) {
   const history = [...newlyEnded.map(({ now: _n, from: _f, ...e }) => e), ...(prev?.history ?? [])].slice(0, HISTORY_MAX);
   return {
     v: 2,
-    generatedAt: now,
+    generatedAt: now, // ostatnie PEŁNE sprawdzenie (częściowe odświeżenie go nie zmienia, patrz refreshModels)
+    updatedAt: now, // ostatnia jakakolwiek zmiana cen
     sources,
     models: catalog,
     promos,
@@ -214,8 +217,11 @@ export async function refreshModels(snapshot, ids, { getJson, now = new Date().t
     }
   });
   const next = finalize(snapshot, models, now, status);
-  // Pełne zestawienie zostaje "pełne": zapamiętujemy, kiedy był ostatni pełny przebieg.
+  // Częściowe odświeżenie nie udaje pełnego: generatedAt zostaje z ostatniego pełnego zestawienia, więc
+  // nowsze zestawienie z GitHub nadal wygrywa; czas tego odświeżenia trzymamy w partialAt / updatedAt.
+  next.generatedAt = snapshot.generatedAt;
   next.fullAt = snapshot.fullAt ?? snapshot.generatedAt;
+  next.partialAt = now;
   return next;
 }
 

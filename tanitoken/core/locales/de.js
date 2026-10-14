@@ -30,6 +30,7 @@ export default {
   'sort.offers': 'Meiste Angebote',
 
   'unit.perMIn': '/ 1M Eingabe',
+  'unit.perMonth': '/ Monat',
   'unit.perMOut': '/ 1M Ausgabe',
   'unit.perImage': 'pro Bild',
   'unit.perSecond': 'pro Sekunde',
@@ -44,9 +45,9 @@ export default {
   'ago.min': 'vor {n} Min.',
   'ago.h': 'vor {n} Std.',
   'ago.d': { one: 'vor {n} Tag', other: 'vor {n} Tagen' },
-  'age.lasts': 'läuft seit {age}',
+  'age.lasts': 'läuft bereits {age}',
   'age.fromFirst': 'aktiv seit der ersten Prüfung',
-  'age.atLeast': 'läuft seit mindestens {age}',
+  'age.atLeast': 'läuft bereits mindestens {age}',
 
   'promo.sinceStart': 'seit Beginn der Messung',
   'promo.sinceHours': 'seit {n} Std.',
@@ -159,7 +160,7 @@ export default {
   'alertText.endBody': 'Jetzt am günstigsten: {provider}, {price}.',
   'alertText.endBodyNone': 'Prüfe die aktuellen Preise.',
   'alertText.agingTitle': '{name}: Angebot endet vielleicht bald',
-  'alertText.agingBody': 'Läuft seit {age}; bei {provider} dauern Angebote meist etwa {typical}.',
+  'alertText.agingBody': 'Läuft bereits {age}; bei {provider} dauern Angebote meist etwa {typical}.',
   'alertText.cheaperTitle': '{name}: {pct} % günstiger',
   'alertText.cheaperBody': '{provider} bietet {price}.',
   'alertText.expiresTitle': '{name}: Modell wird abgeschaltet',
@@ -181,7 +182,7 @@ export default {
   'mine.insteadOf': '{provider}: {best} statt {used} pro Monat',
   'mine.promoAt': 'Angebot bei {provider}',
   'mine.freeVariant': 'kostenlose Variante',
-  'mine.promoLasts': 'Angebot läuft seit {age}',
+  'mine.promoLasts': 'Angebot läuft bereits {age}',
 
   'profile.kicker': 'Nur auf diesem Telefon gespeichert',
   'profile.language': 'Sprache',

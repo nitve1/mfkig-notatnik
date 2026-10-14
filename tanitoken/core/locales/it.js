@@ -30,6 +30,7 @@ export default {
   'sort.offers': 'Più offerte',
 
   'unit.perMIn': '/ 1M input',
+  'unit.perMonth': '/ mese',
   'unit.perMOut': '/ 1M output',
   'unit.perImage': 'per immagine',
   'unit.perSecond': 'al secondo',

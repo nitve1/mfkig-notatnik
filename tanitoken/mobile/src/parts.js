@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { Linking, Pressable, StyleSheet, View } from 'react-native';
 import { formatUsd, platformOf, promoAgeDays, timeAgo } from '../../core/pricing.js';
 import { t as tr } from '../../core/i18n.js';
@@ -33,13 +34,14 @@ export function daysLabel(p) {
 }
 
 // Karta promocji: pasek w kolorze kategorii, nazwa, cena, kategoria i dostawca, zniżka.
-export function DealCard({ deal, onPress, watched, pro = true }) {
+// Karta oferty; memo, żeby lista nie przerysowywała kart przy zmianach, które ich nie dotyczą.
+export const DealCard = memo(function DealCard({ deal, onOpen, onPress, watched, pro = true }) {
   const t = useTheme();
   const m = deal.model;
   const cat = mainCat(m);
   const p = priceParts(deal.offer);
   return (
-    <Card stripe={t[cat]} onPress={onPress} accessibilityLabel={`${m.name}, ${deal.type === 'free' ? tr('deal.free') : deal.type === 'cheapest' ? `${p.main} ${p.unit}` : `−${deal.pct}%`}`}>
+    <Card stripe={t[cat]} onPress={onPress ?? (() => onOpen?.(deal.modelId))} accessibilityLabel={`${m.name}, ${deal.type === 'free' ? tr('deal.free') : deal.type === 'cheapest' ? `${formatUsd(deal.cost)} ${tr('unit.perMonth')}` : `−${deal.pct}%`}`}>
       <Row style={{ alignItems: 'flex-start' }}>
         <View style={{ flex: 1, gap: 4 }}>
           <T kind="strong" numberOfLines={2}>
@@ -51,24 +53,26 @@ export function DealCard({ deal, onPress, watched, pro = true }) {
         <View style={{ alignItems: 'flex-end', gap: 4 }}>
           {deal.type === 'free' ? (
             <T kind="num" style={{ color: t.save }}>{formatUsd(0)}</T>
+          ) : deal.type === 'cheapest' ? (
+            <T kind="num">{formatUsd(deal.cost)}</T>
           ) : (
             <T kind="num">{p.main}</T>
           )}
           {deal.type === 'free' ? (
             <T kind="tiny" color="save">{tr('deal.free')}</T>
           ) : deal.type === 'cheapest' ? (
-            <T kind="tiny" color="ink2">{tr('deal.offers', { n: deal.count })}</T>
+            <T kind="tiny" color="ink2">{tr('unit.perMonth')}</T>
           ) : (
             <PctBadge pct={deal.pct} />
           )}
         </View>
       </Row>
       <T kind="tiny" color="ink3" style={{ marginTop: 6 }}>
-        {deal.type === 'free' ? tr('deal.variant', { id: m.freeId }) : deal.type === 'cheapest' ? tr('deal.cheapestLine', { unit: p.unit }) : tr(deal.type === 'drop' ? 'deal.dropLine' : 'deal.discountLine', { unit: p.unit, since: daysLabel(deal) })}
+        {deal.type === 'free' ? tr('deal.variant', { id: m.freeId }) : deal.type === 'cheapest' ? `${tr('deal.cheapestLine', { unit: `${p.main} ${p.unit}` })} · ${tr('deal.offers', { n: deal.count })}` : tr(deal.type === 'drop' ? 'deal.dropLine' : 'deal.discountLine', { unit: p.unit, since: daysLabel(deal) })}
       </T>
     </Card>
   );
-}
+});
 
 // Karta partnera między ofertami: wyraźnie oznaczona, osobny wygląd (nie udaje wiersza cennika).
 export function SponsorCard({ sponsor }) {

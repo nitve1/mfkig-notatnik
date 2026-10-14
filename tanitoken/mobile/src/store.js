@@ -32,11 +32,14 @@ export async function writeSnapshot(snapshot) {
     const json = JSON.stringify(snapshot);
     if (Platform.OS === 'web') {
       await AsyncStorage.setItem(WEB_KEY, json);
+      await writeMeta({ snapAt: Date.parse(snapshot.updatedAt ?? snapshot.generatedAt) || Date.now() });
       return;
     }
     const f = file();
     if (!f.exists) f.create();
     f.write(json);
+    // Znacznik dla apki: zadanie w tle zapisało nowsze ceny niż te w pamięci.
+    await writeMeta({ snapAt: Date.parse(snapshot.updatedAt ?? snapshot.generatedAt) || Date.now() });
   } catch {
     // brak miejsca albo zapis zablokowany: apka działa dalej na danych w pamięci
   }

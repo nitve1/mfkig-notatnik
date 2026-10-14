@@ -26,6 +26,27 @@ Jedno miejsce z historią zmian, decyzjami i otwartymi zadaniami. Aktualizowane 
 | 5 | Po merge'u: ręczne uruchomienie workflow „TaniToken snapshot” (tworzy gałąź `tanitoken-data`) | po merge'u |
 | 6 | Klucz release (keystore) do Google Play; obecny APK jest podpisany kluczem debug | przed publikacją |
 
+## 2026-10-14 – sesja 12: poprawki wszystkich błędów z testów i przeglądu kodu
+
+Raport: `docs/testy-2026-10-14.md`. Poprawione:
+- Świeżość cen: odświeżenie obserwowanych nie zmienia `generatedAt` (nowe pola `updatedAt`, `partialAt`), więc
+  nowsze zestawienie z GitHub nadal wygrywa; awaria Vercel/Requesty przy sprawdzaniu zostawia ich oferty i modele
+  z poprzedniego zestawienia (koniec fałszywych „koniec promocji”); apka czyta zestawienie zapisane przez zadanie
+  w tle (`snapAt` w meta); postęp sprawdzania co 5% zamiast przy każdym z ~430 zapytań.
+- Powiadomienia: `syncNotifications` przy starcie (zgoda systemu, kanały, zadanie w tle; bez zgody wyłącza);
+  `runAlerts` z blokadą, na świeżym profilu z dysku, najpierw zapis „wysłane”, potem powiadomienie; stałe id alertów
+  (bez dat i cen) + 7 dni ciszy (`ALERT_QUIET_MS`); kropka nowych alertów z `alertsSeenAt`; po otwarciu z
+  powiadomienia `clearLastNotificationResponseAsync`; model z powiadomienia, którego nie ma, nie blokuje Wstecz.
+- Profil: kolejka zapisów (`flushProfile`), przeładowanie po powrocie bierze z dysku tylko alerty i „wysłane”;
+  `merge` z kontrolą typów (zepsuty import nie wywraca apki).
+- UI: język z 1. kroku kreatora zostaje; Wstecz cofa krok kreatora; karta modelu odświeża ceny po nowym
+  zestawieniu; puste/0 zużycie nie zeruje kosztów; Najtaniej i wyszukiwarka sortują po koszcie miesięcznym przy
+  zużyciu z profilu, w obrębie jednostki; karta Najtaniej pokazuje koszt „/ mies.”; DE „läuft bereits …”.
+- Wydajność listy: `useMemo` liczników i danych, `React.memo(DealCard)`, stały `renderItem`.
+- Cele dotyku: cały wiersz przełącza (nie tylko suwak), link „Otwórz” i „Mam plik profilu” 44 px, pola 44 px.
+- Testy: 19/19 (nowe: awaria Vercel/Requesty, częściowe odświeżenie, stałe id alertów), testy przeglądarkowe na 360
+  i 412 px bez błędów, kontrole regresji 7/7. Podgląd w artefakcie (wersja 9).
+
 ## 2026-10-14 – sesja 11: stonowane tło, czytelność (WCAG AA) i wydajność
 
 Wybór użytkownika: tło „1. Stonowane” (`mockups/tone.png`) + wszystkie zalecenia z `docs/czytelnosc-2026-10.md`.

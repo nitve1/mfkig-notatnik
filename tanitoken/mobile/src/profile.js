@@ -31,14 +31,43 @@ export const DEFAULT_PROFILE = {
   watchlist: [], // { modelId, mode: 'watch' | 'use', offerKey, since }
   sent: {}, // id alertu -> data wysłania
   alerts: [], // ostatnie alerty do wyświetlenia w apce
+  alertsSeenAt: null, // kiedy użytkownik ostatnio otworzył Moje (kropka nowych alertów)
 };
 
+const isObj = (v) => v != null && typeof v === 'object' && !Array.isArray(v);
+const arr = (v, d) => (Array.isArray(v) ? v : d);
+const obj = (v) => (isObj(v) ? v : {});
+
+// Scalenie z domyślnym profilem z kontrolą typów: stary albo obcy plik (np. "watchlist": null)
+// nie może wywrócić apki przy każdym starcie.
 function merge(raw) {
-  const p = { ...DEFAULT_PROFILE, ...raw };
-  p.notify = { ...DEFAULT_PROFILE.notify, ...(raw?.notify ?? {}) };
-  p.refresh = { ...DEFAULT_PROFILE.refresh, ...(raw?.refresh ?? {}) };
-  p.usage = { ...DEFAULT_USAGE, ...(raw?.usage ?? {}) };
+  const r = obj(raw);
+  const p = { ...DEFAULT_PROFILE, ...r };
+  p.notify = { ...DEFAULT_PROFILE.notify, ...obj(r.notify) };
+  p.refresh = { ...DEFAULT_PROFILE.refresh, ...obj(r.refresh) };
+  p.usage = { ...DEFAULT_USAGE };
+  for (const [k, v] of Object.entries(obj(r.usage))) if (isObj(v)) p.usage[k] = { ...DEFAULT_USAGE[k], ...v };
+  p.cats = arr(r.cats, DEFAULT_PROFILE.cats).filter((c) => typeof c === 'string');
+  if (!p.cats.length) p.cats = ['all'];
+  p.providers = arr(r.providers, []).filter((x) => typeof x === 'string');
+  p.watchlist = arr(r.watchlist, []).filter((w) => isObj(w) && typeof w.modelId === 'string');
+  p.alerts = arr(r.alerts, []).filter(isObj);
+  p.sent = obj(r.sent);
+  p.name = typeof r.name === 'string' ? r.name : '';
   return p;
+}
+
+// Zapisy profilu w toku: przeładowanie z dysku i alerty czekają na nie, żeby nie czytać starego stanu.
+let pending = Promise.resolve();
+let inFlight = 0;
+export const profileWritesPending = () => inFlight > 0;
+export function flushProfile() {
+  return pending;
+}
+function queueWrite(p) {
+  inFlight++;
+  pending = pending.then(() => writeProfile(p)).catch(() => {}).finally(() => { inFlight--; });
+  return pending;
 }
 
 export async function readProfile() {
@@ -98,6 +127,15 @@ export async function importProfile() {
   return merge({ ...json.profile, onboarded: true });
 }
 
+// Lista alertów bez powtórek (po id), najnowsze pierwsze, max 50.
+export function mergeAlerts(a = [], b = []) {
+  const seen = new Set();
+  return [...a, ...b]
+    .sort((x, y) => String(y.at).localeCompare(String(x.at)))
+    .filter((x) => (seen.has(x.id) ? false : seen.add(x.id)))
+    .slice(0, 50);
+}
+
 const Ctx = createContext(null);
 
 export function ProfileProvider({ children }) {
@@ -105,14 +143,21 @@ export function ProfileProvider({ children }) {
   const latest = useRef(null);
 
   useEffect(() => {
-    const load = () =>
-      readProfile().then((p) => {
-        latest.current = p;
-        setProfile(p);
-      });
+    // Po powrocie do apki: z dysku bierzemy tylko to, co mogło dopisać zadanie w tle (alerty, wysłane),
+    // a nie cały profil, bo mógłby nadpisać świeże zmiany użytkownika (np. zgodę na powiadomienia).
+    const load = async (first) => {
+      await flushProfile();
+      if (profileWritesPending()) return;
+      const disk = await readProfile();
+      const cur = latest.current;
+      const next = first || !cur ? disk : { ...cur, sent: { ...cur.sent, ...disk.sent }, alerts: mergeAlerts(disk.alerts, cur.alerts) };
+      latest.current = next;
+      setProfile(next);
+    };
+    load(true);
     load();
     // Zadanie w tle mogło dopisać alerty do zapisu, więc po powrocie do apki czytamy go ponownie.
-    const sub = AppState.addEventListener('change', (st) => st === 'active' && load());
+    const sub = AppState.addEventListener('change', (st) => st === 'active' && load(false));
     return () => sub.remove();
   }, []);
 
@@ -121,7 +166,7 @@ export function ProfileProvider({ children }) {
     const next = typeof patch === 'function' ? patch(base) : { ...base, ...patch };
     latest.current = next;
     setProfile(next);
-    writeProfile(next).catch(() => {});
+    queueWrite(next);
     return next;
   }, []);
 

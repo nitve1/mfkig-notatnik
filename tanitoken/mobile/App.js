@@ -17,7 +17,8 @@ import { Button, T } from './src/ui';
 import Icon from './src/icons';
 import { useSnapshot } from './src/data';
 import { ProfileProvider, useProfile } from './src/profile';
-import { checkAndNotify } from './src/alerts';
+import { runAlerts, syncNotifications } from './src/alerts';
+import { mergeAlerts } from './src/profile';
 import { BottomSpaceContext, ThemeContext, font, radius, space, useTheme } from './src/theme';
 import { Backdrop, BlurTargetView, Glass } from './src/glass';
 import { setLanguage, t as tr } from '../core/i18n.js';
@@ -79,23 +80,33 @@ function Main() {
   const [intro, setIntro] = useState(true);
   const [tab, setTab] = useState('deals');
   const [openId, setOpenId] = useState(null);
-  const [seenAlerts, setSeenAlerts] = useState(null);
   const blurTarget = useRef(null);
   const ready = profile && snapshot;
   const endIntro = useCallback(() => setIntro(false), []);
 
   useEffect(() => {
     if (profile) SplashScreen.hideAsync().catch(() => {});
-    if (profile && seenAlerts == null) setSeenAlerts(profile.alerts.length);
-  }, [profile, seenAlerts]);
+  }, [profile]);
 
-  // Alerty przy każdym nowym zestawieniu cen (w tle robi to zadanie z alerts.js).
+  // Raz po starcie: "powiadomienia włączone" musi oznaczać zgodę systemu, kanały i zadanie w tle.
+  const synced = useRef(false);
+  useEffect(() => {
+    if (!profile || synced.current) return;
+    synced.current = true;
+    if (!profile.notify.enabled) return;
+    syncNotifications(true).then((ok) => {
+      if (!ok) update((cur) => ({ ...cur, notify: { ...cur.notify, enabled: false } }));
+    });
+  }, [profile]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Alerty przy każdej zmianie cen (także po odświeżeniu samych obserwowanych); w tle robi to zadanie z alerts.js.
+  const priceStamp = snapshot?.updatedAt ?? snapshot?.generatedAt;
   useEffect(() => {
     if (!ready || !profile.onboarded || !profile.watchlist.length) return;
-    checkAndNotify(snapshot, profile).then((next) => {
-      if (next !== profile) update((cur) => ({ ...cur, sent: next.sent, alerts: next.alerts }));
+    runAlerts(snapshot).then((saved) => {
+      if (saved) update((cur) => ({ ...cur, sent: { ...cur.sent, ...saved.sent }, alerts: mergeAlerts(saved.alerts, cur.alerts) }));
     });
-  }, [snapshot?.generatedAt, profile?.watchlist, profile?.onboarded]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [priceStamp, profile?.watchlist, profile?.onboarded]); // eslint-disable-line react-hooks/exhaustive-deps
 
 
   // Dotknięcie powiadomienia otwiera model (także gdy apka startuje z powiadomienia).
@@ -105,6 +116,7 @@ function Main() {
       if (id) {
         setTab('mine');
         setOpenId(id);
+        Notifications.clearLastNotificationResponseAsync?.().catch(() => {});
       }
     };
     let sub;
@@ -126,12 +138,18 @@ function Main() {
     return () => sub.remove();
   }, [openId, tab]);
 
+  // Model z powiadomienia, którego nie ma w zestawieniu: nie trzymamy go "otwartego" (Wstecz nie znika w próżni).
+  useEffect(() => {
+    if (openId && snapshot && !snapshot.models.some((m) => m.id === openId)) setOpenId(null);
+  }, [openId, snapshot]);
+
   const changeTab = useCallback((k) => {
     setOpenId(null);
     setTab(k);
-    if (k === 'mine') setSeenAlerts(profile?.alerts.length ?? 0);
-  }, [profile?.alerts.length]);
-  const newAlerts = (profile?.alerts.length ?? 0) > (seenAlerts ?? 0);
+    if (k === 'mine') update({ alertsSeenAt: new Date().toISOString() });
+  }, [update]);
+  // Kropka: najnowszy alert jest nowszy niż ostatnie wejście do Moje (działa też dla alertów z tła i po limicie 50).
+  const newAlerts = !!profile?.alerts[0]?.at && profile.alerts[0].at > (profile.alertsSeenAt ?? '');
 
   const onboarding = !!(profile && snapshot && !profile.onboarded);
   let body = null;

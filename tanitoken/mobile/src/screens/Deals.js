@@ -1,6 +1,6 @@
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { FlatList, Pressable, RefreshControl, StyleSheet, View } from 'react-native';
-import { cheapest, collectDeals, formatUsd, PLATFORMS, unitPrice } from '../../../core/pricing.js';
+import { cheapest, collectDeals, formatUsd, offerCost, PLATFORMS, unitPrice } from '../../../core/pricing.js';
 import { t as tr } from '../../../core/i18n.js';
 import { isPro, viewFilter } from '../filters';
 import { Button, Empty, Segmented, T } from '../ui';
@@ -21,19 +21,19 @@ const UNIT_ORDER = {
 };
 const byPrice = (cat) => {
   const order = UNIT_ORDER[cat] ?? UNIT_ORDER.other;
-  // Tokeny: najpierw po cenie wejścia, bo tę pokazuje karta; przy remisie po cenie łącznej.
-  const shown = (o) => (o.unit !== 'token' ? o.price : o.in > 0 ? o.in : o.out);
-  return (a, b) => order[a.offer.unit] - order[b.offer.unit] || shown(a.offer) - shown(b.offer) || unitPrice(a.offer) - unitPrice(b.offer);
+  // W obrębie jednostki po koszcie miesięcznym (ten pokazuje karta "Najtaniej").
+  return (a, b) => order[a.offer.unit] - order[b.offer.unit] || a.cost - b.cost || unitPrice(a.offer) - unitPrice(b.offer);
 };
 
 // "Najtaniej": każdy model z kategorii z najtańszą ofertą (także bez promocji, np. obrazy i wideo).
-function cheapestDeals(snapshot, filter) {
+// Koszt liczony przy zużyciu z profilu (tak samo jak w karcie modelu i w wyszukiwarce).
+function cheapestDeals(snapshot, filter, usage) {
   const out = [];
   for (const m of snapshot.models) {
-    const offer = cheapest(m, undefined, filter);
+    const offer = cheapest(m, usage, filter);
     if (!offer) continue;
     const n = m.offers.filter((o) => o.unit === m.unit && (!filter || filter(o))).length;
-    out.push({ model: m, modelId: m.id, offer, key: `${offer.src}:${offer.tag ?? offer.provider}`, type: 'cheapest', pct: 0, count: n });
+    out.push({ model: m, modelId: m.id, offer, key: `${offer.src}:${offer.tag ?? offer.provider}`, type: 'cheapest', pct: 0, count: n, cost: offerCost(offer, usage) });
   }
   return out.sort(byPrice('other'));
 }
@@ -104,23 +104,34 @@ export default function Deals({ snapshot, refreshing, onRefresh, onOpen, onBell,
   );
   const watched = useMemo(() => new Set(profile.watchlist.map((w) => w.modelId)), [profile.watchlist]);
 
+  const usage = profile.usage;
   const all = useMemo(() => collectDeals(snapshot), [snapshot]);
-  const cheap = useMemo(() => cheapestDeals(snapshot, favs), [snapshot, favs]);
+  const cheap = useMemo(() => cheapestDeals(snapshot, favs, usage), [snapshot, favs, usage]);
   const visible = useMemo(() => all.filter((d) => !favs || d.type === 'free' || favs(d.offer)), [all, favs]);
-  const ofType = type === 'cheapest' ? cheap : visible.filter((d) => d.type === type);
+  const ofType = useMemo(() => (type === 'cheapest' ? cheap : visible.filter((d) => d.type === type)), [type, cheap, visible]);
   const inCat = (d, c) => c === 'all' || d.model.cats.includes(c);
   const platformCount = useMemo(() => new Set(cheap.flatMap((d) => d.model.offers.filter((o) => !favs || favs(o)).map((o) => o.src === 'direct' ? o.provider : o.src))).size, [cheap, favs]);
-  const stat = (c) => {
+  // Liczniki kafli liczone raz na zmianę danych, a nie przy każdym przerysowaniu (np. postępie sprawdzania).
+  const stats = useMemo(() => Object.fromEntries(['all', 'text', 'coding', 'image', 'video'].map((c) => {
     const list = ofType.filter((d) => inCat(d, c));
     if (type === 'cheapest') {
-      if (c === 'all') return { count: list.length, best: platformCount };
+      if (c === 'all') return [c, { count: list.length, best: platformCount }];
       const top = [...list].sort(byPrice(c))[0];
-      return { count: list.length, best: top ? `${priceParts(top.offer).main}${priceParts(top.offer).unitShort}` : null };
+      return [c, { count: list.length, best: top ? `${priceParts(top.offer).main}${priceParts(top.offer).unitShort}` : null }];
     }
-    return { count: list.length, best: list.reduce((m, d) => Math.max(m, d.pct), 0) };
-  };
-  const list = type === 'cheapest' ? ofType.filter((d) => inCat(d, cat)).sort(byPrice(cat)) : ofType.filter((d) => inCat(d, cat));
-  const typeCounts = Object.fromEntries(TYPES.map((x) => [x, x === 'cheapest' ? null : visible.filter((d) => d.type === x).length]));
+    return [c, { count: list.length, best: list.reduce((m, d) => Math.max(m, d.pct), 0) }];
+  })), [ofType, type, platformCount]);
+  const stat = (c) => stats[c];
+  const data = useMemo(() => {
+    const list = type === 'cheapest' ? ofType.filter((d) => inCat(d, cat)).sort(byPrice(cat)) : ofType.filter((d) => inCat(d, cat));
+    return withSponsors(list, cat);
+  }, [ofType, type, cat]);
+  const typeCounts = useMemo(() => Object.fromEntries(TYPES.map((x) => [x, x === 'cheapest' ? null : visible.filter((d) => d.type === x).length])), [visible]);
+  const pro = isPro(profile);
+  const renderItem = useCallback(
+    ({ item }) => (item.type === 'sponsor' ? <SponsorCard sponsor={item.sponsor} /> : <DealCard deal={item} pro={pro} watched={watched.has(item.modelId)} onOpen={onOpen} />),
+    [pro, watched, onOpen],
+  );
   const pick = (c) => setCat(cat === c ? 'all' : c);
 
   const header = (
@@ -148,9 +159,9 @@ export default function Deals({ snapshot, refreshing, onRefresh, onOpen, onBell,
 
   return (
     <FlatList
-      data={withSponsors(list, cat)}
+      data={data}
       keyExtractor={(d) => (d.type === 'sponsor' ? d.key : `${d.modelId}|${d.key}|${d.type}`)}
-      renderItem={({ item }) => item.type === 'sponsor' ? <SponsorCard sponsor={item.sponsor} /> : <DealCard deal={item} pro={isPro(profile)} watched={watched.has(item.modelId)} onPress={() => onOpen(item.modelId)} />}
+      renderItem={renderItem}
       contentContainerStyle={[styles.list, { paddingBottom: bottomSpace }]}
       initialNumToRender={10}
       refreshControl={<RefreshControl refreshing={false} onRefresh={onRefresh} tintColor={t.ink2} colors={[t.text]} />}

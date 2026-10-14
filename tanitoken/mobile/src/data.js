@@ -41,7 +41,9 @@ function stripDesc(s) {
   return s;
 }
 
+// Porównanie świeżości po ostatnim PEŁNYM sprawdzeniu (częściowe odświeżenie nie udaje pełnego).
 const newer = (a, b) => !b || (a && Date.parse(a.generatedAt) > Date.parse(b.generatedAt));
+const stamp = (s) => Date.parse(s?.updatedAt ?? s?.generatedAt) || 0;
 
 export async function fetchRemoteSnapshot() {
   for (const url of SNAPSHOT_URLS) {
@@ -80,7 +82,10 @@ export async function liveAllowed(wifiOnly) {
 export async function refreshPrices(current, { force = false, wifiOnly = true, onProgress, watchIds = null } = {}) {
   const meta = await readMeta();
   const now = Date.now();
-  let snap = current ?? (await readSnapshot()) ?? BUNDLED;
+  let snap = current;
+  // Zadanie w tle mogło zapisać nowsze ceny, niż mamy w pamięci: wtedy bierzemy plik z dysku.
+  if (!snap || (meta.snapAt && meta.snapAt > stamp(snap))) snap = (await readSnapshot()) ?? snap;
+  snap = snap ?? BUNDLED;
   if (newer(BUNDLED, snap)) snap = BUNDLED;
   let changed = false;
   let error = null;
@@ -136,19 +141,25 @@ export function useSnapshot({ wifiOnly = true, watchIds = [] } = {}) {
   const [meta, setMeta] = useState({});
   const busy = useRef(false);
   const current = useRef(null);
+  const lastStep = useRef(-1);
   const opts = useRef({ wifiOnly, watchIds });
   opts.current = { wifiOnly, watchIds };
 
   const refresh = useCallback(async (force = false) => {
     if (busy.current) return;
     busy.current = true;
+    lastStep.current = -1;
     setRefreshing(true);
     try {
       const res = await refreshPrices(current.current, {
         force,
         wifiOnly: opts.current.wifiOnly,
         watchIds: opts.current.watchIds,
-        onProgress: (p) => setProgress(p),
+        // Postęp co 5%, a nie przy każdym z ~430 zapytań (inaczej cały ekran przerysowuje się setki razy).
+        onProgress: (p) => {
+          const step = Math.floor(p * 20) / 20;
+          if (step !== lastStep.current) { lastStep.current = step; setProgress(step); }
+        },
       });
       if (res.changed || !current.current) {
         current.current = res.snapshot;

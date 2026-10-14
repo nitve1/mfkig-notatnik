@@ -28,7 +28,8 @@ function UsageInput({ label, value, onChange }) {
         onChangeText={(v) => {
           setText(v);
           const n = Number(v.replace(',', '.'));
-          if (Number.isFinite(n) && n >= 0) onChange(n);
+          // Puste pole albo 0 nie zeruje wszystkich kosztów: czekamy na sensowną liczbę.
+          if (v.trim() !== '' && Number.isFinite(n) && n > 0 && n < 1e7) onChange(n);
         }}
         keyboardType="decimal-pad"
         accessibilityLabel={label}
@@ -125,6 +126,9 @@ export default function Model({ model: base, snapshot, onBack }) {
 
   // Oferty OpenRouter na żywo, co minutę; reszta źródeł ze snapshotu.
   useEffect(() => {
+    // Nowe ceny ze zestawienia (np. po odświeżeniu) od razu w otwartej karcie, także bez ofert OpenRouter.
+    setModel(base);
+    setLive(false);
     if (!base.offers.some((o) => o.src === 'openrouter')) return undefined;
     let alive = true;
     const load = () =>
@@ -286,7 +290,7 @@ export default function Model({ model: base, snapshot, onBack }) {
                 {[pro ? srcShort(o) : o.provider !== platformOf(o) ? tr('offer.viaShort', { provider: o.provider }) : null, o.quant, o.uptime != null ? tr('offer.uptime', { pct: o.uptime }) : null, promo ? tr('offer.promoSince', { since: daysLabel(promo) }) : null, other ? tr('offer.otherUnit') : null, isUsed ? tr('offer.youUse') : null].filter(Boolean).join(' · ')}
               </T>
               {!picking && link ? (
-                <Pressable onPress={() => Linking.openURL(link.url)} accessibilityRole="link" hitSlop={10} style={s.link}>
+                <Pressable onPress={() => Linking.openURL(link.url)} accessibilityRole="link" hitSlop={8} style={s.link}>
                   <T kind="tiny" style={{ color: t.text }}>{tr(link.sponsored ? 'offer.partner' : 'offer.open')}</T>
                   <Icon name="external" size={13} color={t.text} />
                 </Pressable>
@@ -308,6 +312,6 @@ export default function Model({ model: base, snapshot, onBack }) {
 const s = StyleSheet.create({
   uses: { flexDirection: 'row', flexWrap: 'wrap', gap: space[2] },
   use: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 11, paddingVertical: 8, borderRadius: radius.sm, borderWidth: 1 },
-  input: { borderWidth: 1.5, borderRadius: radius.sm, paddingHorizontal: 12, paddingVertical: 9, fontSize: 17, fontFamily: font.textBold },
-  link: { flexDirection: 'row', alignItems: 'center', gap: 4, marginLeft: 8 },
+  input: { minHeight: 44, borderWidth: 1.5, borderRadius: radius.sm, paddingHorizontal: 12, paddingVertical: 9, fontSize: 17, fontFamily: font.textBold },
+  link: { flexDirection: 'row', alignItems: 'center', gap: 4, marginLeft: 8, minHeight: 44, paddingHorizontal: 8 },
 });
