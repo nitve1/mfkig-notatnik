@@ -12,7 +12,7 @@ const BG = `data:image/jpeg;base64,${b64('assets/backdrop.jpg')}`;
 const BLUE = '#6a86f5', ORANGE = '#d27818';
 
 const css = `${fontFace(400, '400Regular')}${fontFace(500, '500Medium')}${fontFace(600, '600SemiBold')}${fontFace(700, '700Bold')}${fontFace(800, '800ExtraBold')}
-*{box-sizing:border-box;margin:0}body{background:#0b0a12;font-family:A;color:#f3f1fb;padding:28px;display:flex;gap:22px;flex-wrap:wrap;width:max-content}
+*{box-sizing:border-box;margin:0}body{background:#0b0a12;font-family:A;color:#f3f1fb;padding:28px;display:flex;gap:22px;flex-wrap:wrap;width:822px}
 .col{width:372px}.vt{font:800 22px A;margin-bottom:4px}.vn{font:400 14px/1.4 A;color:#c9c5dd;margin-bottom:12px;min-height:40px}
 .ph{width:372px;border-radius:22px;padding:16px;background:#0b0a12 url(${BG}) center/cover;border:1px solid #2a2638}
 .card{border-radius:14px;border:1px solid rgba(255,255,255,.16);background:linear-gradient(180deg,rgba(255,255,255,.12),rgba(255,255,255,.05) 40%,rgba(255,255,255,.03)),rgba(11,10,18,.55);padding:14px;margin-bottom:10px}
@@ -34,7 +34,7 @@ const days = 30;
 const low = Array.from({ length: days }, (_, d) => (d >= 7 && d < 12 ? 0.14 : d >= 22 ? 0.2 : 0.28));
 const yours = Array.from({ length: days }, (_, d) => (d >= 18 ? 0.3 : 0.35));
 const promos = [[7, 12, 'Promo DeepInfra'], [22, 30, 'Promo Novita']];
-const W = 338, H = 130, PL = 34, PB = 18, PT = 8;
+const W = 306, H = 130, PL = 34, PB = 18, PT = 8;
 const x = (d) => PL + (d / (days - 1)) * (W - PL - 6);
 const y = (v) => PT + (1 - v / 0.4) * (H - PT - PB);
 const zl = (v) => v.toFixed(2).replace('.', ',');
@@ -50,7 +50,7 @@ const seg = `<div class="seg"><span>7 dni</span><span class="on">30 dni</span><s
 const A = `${head}<div class="card"><div class="sec">Najniższa cena, 30 dni</div>${seg}
 <div style="position:relative">${svg(`${axes()}${promos.map(([a, b]) => `<rect x="${x(a)}" y="${PT}" width="${x(Math.min(b, 29)) - x(a)}" height="${H - PT - PB}" fill="rgba(51,207,149,.10)"/>`).join('')}
 <path d="${step(low)}" fill="none" stroke="${BLUE}" stroke-width="2"/>${cross(9, 0.14)}
-<text x="${x(29) - 2}" y="${y(0.2) - 7}" text-anchor="end" fill="#f3f1fb" font-size="12" font-weight="700">0,20 $</text>`)}
+<text x="${x(29) - 2}" y="${y(0.2) + 16}" text-anchor="end" fill="#f3f1fb" font-size="12" font-weight="700">0,20 $</text>`)}
 <div class="tip" style="left:${x(9) + 8}px;top:20px">2 paź · 0,14 $ · DeepInfra<br><span class="save">promocja −50%</span></div></div>
 <div class="i3" style="margin-top:6px">Zielone pasy: promocje. Dotknij wykresu, by zobaczyć dzień.</div></div>`;
 
@@ -70,9 +70,9 @@ const C = `${head}<div class="card"><div class="row"><div><div class="i3">Najtan
 <div class="i3">Pełny wykres po dotknięciu kafla.</div>`;
 
 const prov = [['DeepInfra', [[7, 12, '−50%']]], ['Novita', [[22, 30, '−29%']]], ['OpenRouter', [[18, 30, '−14%']]], ['Together', []], ['Fireworks', [[2, 5, '−20%']]]];
-const tx = (d) => 92 + (d / 30) * 226;
+const tx = (d) => 92 + (d / 30) * 210;
 const D = `${head}<div class="card"><div class="sec">Promocje, 30 dni</div>${seg}
-${svg(prov.map(([n, ps], i) => { const yy = 6 + i * 28; return `<text x="0" y="${yy + 15}" fill="#c9c5dd" font-size="12.5">${n}</text><rect x="92" y="${yy + 4}" width="226" height="16" rx="4" fill="rgba(255,255,255,.06)"/>${ps.map(([a, b, l]) => `<rect x="${tx(a)}" y="${yy + 4}" width="${tx(b) - tx(a)}" height="16" rx="4" fill="${BLUE}"/><text x="${tx(a) + 6}" y="${yy + 16}" fill="#fff" font-size="11.5" font-weight="700">${l}</text>`).join('')}`; }).join('') + `<text x="92" y="160" fill="#a29eba" font-size="11">15 wrz</text><text x="318" y="160" text-anchor="end" fill="#a29eba" font-size="11">dziś</text>`, 166)}
+${svg(prov.map(([n, ps], i) => { const yy = 6 + i * 28; return `<text x="0" y="${yy + 15}" fill="#c9c5dd" font-size="12.5">${n}</text><rect x="92" y="${yy + 4}" width="210" height="16" rx="4" fill="rgba(255,255,255,.06)"/>${ps.map(([a, b, l]) => `<rect x="${tx(a)}" y="${yy + 4}" width="${tx(b) - tx(a)}" height="16" rx="4" fill="${BLUE}"/><text x="${tx(b) - tx(a) < 40 ? tx(b) + 6 : tx(a) + 6}" y="${yy + 16}" fill="#fff" font-size="11.5" font-weight="700">${l}</text>`).join('')}`; }).join('') + `<text x="92" y="160" fill="#a29eba" font-size="11">15 wrz</text><text x="302" y="160" text-anchor="end" fill="#a29eba" font-size="11">dziś</text>`, 166)}
 <div class="i3" style="margin-top:4px">Kto i kiedy dawał zniżki. Dobre, by zgadnąć następną promocję.</div></div>`;
 
 const HIST = [
