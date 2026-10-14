@@ -1,0 +1,75 @@
+// Krok 2: 6 rodzajów szkła/połysku na tle "Kolory kategorii" (wybór z kroku 1).
+//   node tanitoken/mockups/panels.mjs -> mockups/panels.png
+import { writeFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath, pathToFileURL } from 'node:url';
+const DIR = dirname(fileURLToPath(import.meta.url));
+const BG = 'radial-gradient(70% 40% at 0% 0%,#3d63ffaa 0%,transparent 60%),radial-gradient(70% 40% at 100% 25%,#ff8a00aa 0%,transparent 60%),radial-gradient(70% 45% at 0% 75%,#ff4f8baa 0%,transparent 60%),radial-gradient(70% 40% at 100% 100%,#8b3dff88 0%,transparent 60%),linear-gradient(180deg,#0b0a12,#0b0a12)';
+const S = [
+  ['A. Matowe szkło', 'Jednolite, lekko mleczne. Rozmycie i cienka jasna ramka. Spokojne, czytelne.', 'mat'],
+  ['B. Liquid glass', 'Jak iOS 26: tło pod spodem się ugina, światło na brzegach (góra-lewo jasno, dół-prawo cień). Bez wypełnienia.', 'liquid'],
+  ['C. Połysk', 'Szkło z płynnym połyskiem od góry (bez ostrej granicy) i miękkim cieniem. Bardziej „błyszczące”.', 'gloss'],
+  ['D. Przydymione', 'Ciemniejsze szkło z jasną krawędzią w gradiencie. Mocny kontrast, elegancko.', 'smoke'],
+  ['E. Sama ramka', 'Prawie przezroczyste, cały efekt robi ramka z gradientem światła. Najlżejsze.', 'rim'],
+  ['F. Kolorowe szkło', 'Panel zabarwiony kolorem swojej kategorii (tekst, wideo...), jak kolorowa tafla.', 'tint'],
+];
+const phone = ([name, note, k]) => `<div><div class="ph"><div class="in ${k}">
+  <div class="h">Co dziś tanieje?</div>
+  <div class="seg g"><i class="on">Zniżki</i><i>Obniżki</i><i>Najtaniej</i></div>
+  <div class="card g c-text"><div class="r"><div><b>GLM 5.2</b><small>OpenRouter, przez Decart</small></div><div class="p">0,273 $<span>−58%</span></div></div></div>
+  <div class="card g c-video"><div class="r"><div><b>Veo 3.1 Fast</b><small>fal.ai</small></div><div class="p">0,10 $</div></div></div>
+  <div class="card g c-image"><div class="r"><div><b>FLUX.2 Pro</b><small>Vercel AI Gateway</small></div><div class="p">0,03 $</div></div></div>
+  <div class="nav g"><i class="on">Promocje</i><i>◎</i><i>☆</i><i>◯</i></div></div></div>
+  <p class="n"><b>${name}</b><br>${note}</p></div>`;
+const html = `<!doctype html><meta charset="utf-8"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800&display=block">
+<svg width="0" height="0" style="position:absolute"><filter id="lens" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="0.012 0.018" numOctaves="2" seed="7" result="n"/><feGaussianBlur in="n" stdDeviation="2" result="s"/><feDisplacementMap in="SourceGraphic" in2="s" scale="40" xChannelSelector="R" yChannelSelector="G"/></filter></svg>
+<style>
+body{margin:0;padding:18px;background:#e7e5ee;font-family:Archivo;width:1180px}
+.grid{display:grid;grid-template-columns:repeat(6,1fr);gap:14px}
+.ph{height:440px;border-radius:24px;overflow:hidden;background:${BG};color:#f5f3fb}
+.in{height:100%;padding:16px 12px;position:relative;box-sizing:border-box}
+.h{font:800 21px Archivo;margin:6px 4px 12px}
+.g{border-radius:14px}
+.card{padding:10px 11px;margin-top:8px}
+.r{display:flex;justify-content:space-between;align-items:center;gap:6px}
+b{font-weight:700;font-size:13px;display:block}small{font-size:10.5px;opacity:.72}
+.p{font:800 15px Archivo;text-align:right;white-space:nowrap}.p span{display:block;font-size:10px;background:#ff5c63;border-radius:5px;padding:1px 4px;margin-top:3px}
+.seg{display:flex;padding:3px;font-size:11px}.seg i{flex:1;font-style:normal;text-align:center;padding:6px 0;opacity:.7}.seg i.on{opacity:1;font-weight:700;border-radius:11px;margin:1px}
+.nav{position:absolute!important;left:10px;right:10px;bottom:12px;height:44px;border-radius:16px;display:flex;align-items:center;gap:3px;padding:4px;box-sizing:border-box}
+.nav i{font-style:normal;font-size:11px;width:30px;text-align:center;opacity:.75}.nav i.on{flex:1;height:100%;border-radius:12px;display:grid;place-items:center;opacity:1;font-weight:700}
+.n{font-size:12px;color:#3a3750;margin:8px 2px 0}.n b{display:inline;font-size:13px}
+/* A mat */
+.mat .g{background:rgba(255,255,255,.08);backdrop-filter:blur(18px) saturate(1.4);border:1px solid rgba(255,255,255,.14)}
+.mat .on{background:rgba(255,255,255,.16)}
+/* B liquid */
+.liquid .g{background:rgba(255,255,255,.02);backdrop-filter:blur(3px) url(#lens) saturate(1.8) brightness(1.08);
+  box-shadow:inset 1.5px 1.5px 0 rgba(255,255,255,.55),inset -1px -1px 0 rgba(255,255,255,.12),inset 0 0 18px rgba(255,255,255,.08),0 8px 24px rgba(0,0,0,.35)}
+.liquid .on{background:rgba(255,255,255,.14);box-shadow:inset 1px 1px 0 rgba(255,255,255,.5)}
+/* C gloss */
+.gloss .g{background:linear-gradient(180deg,rgba(255,255,255,.16) 0%,rgba(255,255,255,.06) 40%,rgba(255,255,255,.03) 100%);backdrop-filter:blur(16px) saturate(1.5);
+  border:1px solid rgba(255,255,255,.16);box-shadow:inset 0 1px 12px rgba(255,255,255,.07),0 10px 26px rgba(0,0,0,.4)}
+.gloss .on{background:linear-gradient(180deg,rgba(255,255,255,.3),rgba(255,255,255,.12))}
+/* D smoke */
+.smoke .g{position:relative;background:rgba(8,6,16,.45);backdrop-filter:blur(20px) saturate(1.3)}
+.smoke .g::after{content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;background:linear-gradient(135deg,rgba(255,255,255,.55),rgba(255,255,255,.04) 45%,rgba(255,255,255,.18));-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
+.smoke .on{background:rgba(255,255,255,.12)}
+/* E rim */
+.rim .g{position:relative;background:rgba(255,255,255,.015);backdrop-filter:blur(8px)}
+.rim .g::after{content:"";position:absolute;inset:0;border-radius:inherit;padding:1.2px;background:linear-gradient(160deg,rgba(255,255,255,.7),rgba(255,255,255,.05) 40%,rgba(255,255,255,.05) 70%,rgba(255,255,255,.35));-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
+.rim .on{background:rgba(255,255,255,.1)}
+/* F tint */
+.tint .g{background:rgba(255,255,255,.06);backdrop-filter:blur(18px) saturate(1.5);border:1px solid rgba(255,255,255,.14)}
+.tint .c-text{background:linear-gradient(135deg,rgba(109,140,255,.32),rgba(109,140,255,.08))}
+.tint .c-video{background:linear-gradient(135deg,rgba(255,162,58,.32),rgba(255,162,58,.08))}
+.tint .c-image{background:linear-gradient(135deg,rgba(255,111,163,.32),rgba(255,111,163,.08))}
+.tint .on{background:rgba(255,255,255,.16)}
+</style><div class="grid">${S.map(phone).join('')}</div>`;
+const file = join(DIR, 'panels.html');
+writeFileSync(file, html);
+const { chromium } = await import(process.env.PLAYWRIGHT_MODULE ?? 'playwright');
+const b = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium' });
+const p = await b.newPage({ viewport: { width: 1216, height: 580 }, deviceScaleFactor: 1.5 });
+await p.goto(pathToFileURL(file).href, { waitUntil: 'networkidle' });
+await p.evaluate(() => document.fonts.ready);
+await p.screenshot({ path: file.replace('.html', '.png'), fullPage: true });
+await b.close();
